@@ -267,6 +267,59 @@ export const currentUser = {
   followers: 47,
 };
 
+export const investments = [
+  {
+    id: 1,
+    name: "Green Solar Bamenda",
+    industry: "Renewable Energy",
+    fundingNeed: "5M FCFA",
+    verified: true,
+    status: "Open for Partnerships",
+    owner: "Fonguh Mark",
+  },
+  {
+    id: 2,
+    name: "Quick Mart",
+    industry: "Retail",
+    fundingNeed: "3M FCFA",
+    verified: false,
+    status: "Seeking Co-Investor",
+    owner: "Tabi Brenda",
+  },
+];
+
+export const stocks = [
+  {
+    id: 1,
+    company: "GLOW Water Ltd.",
+    shares: "200 Available",
+    pricePerShare: "25,000 FCFA",
+    verified: true,
+    location: "Upstation Bamenda",
+  },
+];
+
+export const verifiedBusinesses = [
+  {
+    id: 1,
+    name: "EmmaTech Gadgets",
+    type: "Electronics",
+    location: "Main Market",
+    trustCount: 300,
+    verified: true,
+    owner: "Emmanuel Ngwa",
+  },
+  {
+    id: 2,
+    name: "Njang Credit Union",
+    type: "Financial Services",
+    location: "Ntarikon",
+    trustCount: 185,
+    verified: true,
+    owner: "Mbuh Anita",
+  },
+];
+
 export const stats = {
   businesses: "150+",
   markets: "12",

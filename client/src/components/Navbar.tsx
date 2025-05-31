@@ -53,6 +53,16 @@ export default function Navbar() {
                     </div>
                   </Link>
                   <hr className="my-2" />
+                  <a href="/investments" className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg">
+                    <span className="text-sm">💼 Investments</span>
+                  </a>
+                  <a href="/stocks" className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg">
+                    <span className="text-sm">📈 Stocks</span>
+                  </a>
+                  <a href="/verified" className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg">
+                    <span className="text-sm">✅ Verified Directory</span>
+                  </a>
+                  <hr className="my-2" />
                   <a href="#" className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg">
                     <Settings size={18} className="text-gray-600" />
                     <span className="text-sm">Settings & Privacy</span>

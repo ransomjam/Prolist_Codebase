@@ -1,0 +1,182 @@
+Continue building the ProList React (Vite) + Tailwind MVP.
+
+Now build the final three pages: Investments, Stocks, and Verified Businesses.
+
+✅ TASK 1: Add Data to demoData.js
+jsx
+Copy
+Edit
+export const investments = [
+  {
+    id: 1,
+    name: "Green Solar Bamenda",
+    industry: "Renewable Energy",
+    fundingNeed: "5M FCFA",
+    verified: true,
+    status: "Open for Partnerships",
+    owner: "Fonguh Mark",
+  },
+  {
+    id: 2,
+    name: "Quick Mart",
+    industry: "Retail",
+    fundingNeed: "3M FCFA",
+    verified: false,
+    status: "Seeking Co-Investor",
+    owner: "Tabi Brenda",
+  },
+];
+
+export const stocks = [
+  {
+    id: 1,
+    company: "GLOW Water Ltd.",
+    shares: "200 Available",
+    pricePerShare: "25,000 FCFA",
+    verified: true,
+    location: "Upstation Bamenda",
+  },
+];
+
+export const verifiedBusinesses = [
+  {
+    id: 1,
+    name: "EmmaTech Gadgets",
+    type: "Electronics",
+    location: "Main Market",
+    trustCount: 300,
+    verified: true,
+    owner: "Emmanuel Ngwa",
+  },
+  {
+    id: 2,
+    name: "Njang Credit Union",
+    type: "Financial Services",
+    location: "Ntarikon",
+    trustCount: 185,
+    verified: true,
+    owner: "Mbuh Anita",
+  },
+];
+✅ TASK 2: Create Generic Card Component
+Create /src/components/InfoCard.jsx:
+
+jsx
+Copy
+Edit
+export default function InfoCard({ title, subtitle, extra, verified, owner }) {
+  return (
+    <div className="bg-white p-4 rounded-xl shadow-neonBlue hover:shadow-neonGreen transition hover:scale-105">
+      <h3 className="text-xl font-bold text-primary">{title}</h3>
+      <p className="text-sm text-gray-600">{subtitle}</p>
+      {extra && <p className="text-sm text-emerald mt-1">{extra}</p>}
+      {owner && <p className="text-sm text-gray-500">👤 {owner}</p>}
+      {verified && <p className="text-xs text-white bg-emerald inline-block mt-2 px-2 py-1 rounded-full">✔ Verified</p>}
+    </div>
+  );
+}
+✅ TASK 3: Build 3 Pages
+Investments.jsx
+
+jsx
+Copy
+Edit
+import { investments } from '../demoData';
+import InfoCard from '../components/InfoCard';
+
+export default function Investments() {
+  return (
+    <div className="p-6">
+      <h2 className="text-3xl font-bold text-primary mb-4">💼 Investment Opportunities</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {investments.map((inv) => (
+          <InfoCard
+            key={inv.id}
+            title={inv.name}
+            subtitle={`${inv.industry} • ${inv.status}`}
+            extra={`Need: ${inv.fundingNeed}`}
+            owner={inv.owner}
+            verified={inv.verified}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+Stocks.jsx
+
+jsx
+Copy
+Edit
+import { stocks } from '../demoData';
+import InfoCard from '../components/InfoCard';
+
+export default function Stocks() {
+  return (
+    <div className="p-6">
+      <h2 className="text-3xl font-bold text-primary mb-4">📈 Stocks & Shares</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {stocks.map((s) => (
+          <InfoCard
+            key={s.id}
+            title={s.company}
+            subtitle={`Shares: ${s.shares} @ ${s.pricePerShare}`}
+            extra={s.location}
+            verified={s.verified}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+VerifiedDirectory.jsx
+
+jsx
+Copy
+Edit
+import { verifiedBusinesses } from '../demoData';
+import InfoCard from '../components/InfoCard';
+
+export default function VerifiedDirectory() {
+  return (
+    <div className="p-6">
+      <h2 className="text-3xl font-bold text-primary mb-4">✅ Verified Businesses</h2>
+      <p className="mb-4 text-gray-600">All businesses listed below are officially verified on ProList.</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {verifiedBusinesses.map((biz) => (
+          <InfoCard
+            key={biz.id}
+            title={biz.name}
+            subtitle={`${biz.type} – ${biz.location}`}
+            owner={biz.owner}
+            verified={biz.verified}
+            extra={`Trust Count: ${biz.trustCount}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+✅ TASK 4: Add Routes to App.jsx
+In App.jsx:
+
+jsx
+Copy
+Edit
+import Investments from './pages/Investments';
+import Stocks from './pages/Stocks';
+import VerifiedDirectory from './pages/VerifiedDirectory';
+
+...
+<Route path="/investments" element={<Investments />} />
+<Route path="/stocks" element={<Stocks />} />
+<Route path="/verified" element={<VerifiedDirectory />} />
+✅ TASK 5: Add to Navbar Dropdown (Optional)
+In Navbar.jsx, add:
+
+jsx
+Copy
+Edit
+<a href="/investments" className="block px-4 py-2 hover:bg-gray-100">Investments</a>
+<a href="/stocks" className="block px-4 py-2 hover:bg-gray-100">Stocks</a>
+<a href="/verified" className="block px-4 py-2 hover:bg-gray-100">Verified Directory</a>

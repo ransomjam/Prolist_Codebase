@@ -14,6 +14,9 @@ import RealEstate from "./pages/RealEstate";
 import Auctions from "./pages/Auctions";
 import Profile from "./pages/Profile";
 import NewListing from "./pages/NewListing";
+import Investments from "./pages/Investments";
+import Stocks from "./pages/Stocks";
+import VerifiedDirectory from "./pages/VerifiedDirectory";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -27,6 +30,9 @@ function Router() {
       <Route path="/auctions" component={Auctions} />
       <Route path="/profile" component={Profile} />
       <Route path="/new-listing" component={NewListing} />
+      <Route path="/investments" component={Investments} />
+      <Route path="/stocks" component={Stocks} />
+      <Route path="/verified" component={VerifiedDirectory} />
       <Route component={NotFound} />
     </Switch>
   );
