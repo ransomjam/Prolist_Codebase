@@ -1,63 +1,53 @@
 export const markets = [
   {
     id: 1,
-    name: "Main Market Bamenda",
-    description: "Central marketplace with fresh produce, textiles, and local crafts. Over 200 vendors serving the community.",
-    image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300",
-    location: "Commercial Avenue, Bamenda",
-    rating: 4.8,
-    reviews: 245,
-    hours: "6 AM - 8 PM",
-    verified: true,
-    categories: ["Fresh Produce", "Textiles", "Electronics", "Crafts"]
+    name: 'Main Market Bamenda',
+    image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300',
+    shops: [
+      { id: 1, name: 'Fashion House', category: 'Clothes', verified: true, trustCount: 85 },
+      { id: 2, name: 'ElectroHub', category: 'Electronics', verified: false, trustCount: 45 },
+      { id: 3, name: 'Mobile Palace', category: 'Phones', verified: true, trustCount: 120 },
+      { id: 4, name: 'Beauty Corner', category: 'Cosmetics', verified: true, trustCount: 67 },
+    ],
+    importers: [
+      { id: 1, name: 'Bamenda Imports Ltd.', category: 'Electronics', verified: true, trustCount: 78 },
+      { id: 2, name: 'Global Trade Co.', category: 'Fashion', verified: true, trustCount: 92 },
+    ],
+    vendors: [
+      { id: 1, name: 'Paul Shoe Vendor', category: 'Shoes', verified: true, trustCount: 90 },
+      { id: 2, name: 'Mary\'s Food Stall', category: 'Food', verified: false, trustCount: 56 },
+      { id: 3, name: 'Tech Repair Guy', category: 'Services', verified: true, trustCount: 73 },
+    ],
   },
   {
     id: 2,
-    name: "Nkwen Craft Market",
-    description: "Authentic traditional crafts and pottery made by local artisans. Each piece tells a story of Cameroon's rich cultural heritage.",
-    image: "https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300",
-    location: "Nkwen Village, Bamenda",
-    rating: 4.9,
-    reviews: 128,
-    hours: "7 AM - 6 PM",
-    verified: true,
-    categories: ["Pottery", "Wood Crafts", "Textiles", "Jewelry"]
+    name: 'Nkwen Market',
+    image: 'https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300',
+    shops: [
+      { id: 3, name: 'Phone World', category: 'Phones', verified: true, trustCount: 67 },
+      { id: 4, name: 'Fresh Produce Store', category: 'Food', verified: false, trustCount: 34 },
+    ],
+    importers: [
+      { id: 3, name: 'Nkwen Imports', category: 'Food', verified: true, trustCount: 45 },
+    ],
+    vendors: [
+      { id: 4, name: 'Local Craft Vendor', category: 'Crafts', verified: false, trustCount: 29 },
+    ],
   },
   {
     id: 3,
-    name: "Ntarikon Market",
-    description: "Fresh produce and organic farming products. Direct from local farmers with quality guaranteed.",
-    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300",
-    location: "Ntarikon, Bamenda",
-    rating: 4.6,
-    reviews: 89,
-    hours: "5 AM - 7 PM",
-    verified: true,
-    categories: ["Organic Produce", "Fruits", "Vegetables", "Herbs"]
-  },
-  {
-    id: 4,
-    name: "Textile Junction",
-    description: "Specialized textile market featuring traditional African fabrics, modern clothing, and tailoring services.",
-    image: "https://images.unsplash.com/photo-1554866585-cd94860890b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300",
-    location: "Ntarikon Park, Bamenda",
-    rating: 4.5,
-    reviews: 156,
-    hours: "8 AM - 7 PM",
-    verified: true,
-    categories: ["Traditional Fabrics", "Modern Clothing", "Tailoring", "Accessories"]
-  },
-  {
-    id: 5,
-    name: "Tech Plaza",
-    description: "Modern electronics marketplace with phones, computers, accessories, and tech services.",
-    image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300",
-    location: "Up Station, Bamenda",
-    rating: 4.7,
-    reviews: 203,
-    hours: "9 AM - 8 PM",
-    verified: true,
-    categories: ["Electronics", "Mobile Phones", "Computers", "Accessories"]
+    name: 'Ntarikon Market',
+    image: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300',
+    shops: [
+      { id: 5, name: 'Tech Central', category: 'Electronics', verified: true, trustCount: 110 },
+      { id: 6, name: 'Computer Zone', category: 'Computers', verified: true, trustCount: 89 },
+    ],
+    importers: [
+      { id: 4, name: 'Digital Imports', category: 'Electronics', verified: true, trustCount: 156 },
+    ],
+    vendors: [
+      { id: 5, name: 'Accessory Corner', category: 'Accessories', verified: false, trustCount: 42 },
+    ],
   }
 ];
 

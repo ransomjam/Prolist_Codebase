@@ -1,0 +1,161 @@
+Continue clearly developing your React (Vite) + Tailwind "ProList" web app.
+
+✅ TASK 1: Update demoData.js (Detailed Market Data)
+Clearly update /src/demoData.js:
+
+jsx
+Copy
+Edit
+export const markets = [
+  {
+    id: 1,
+    name: 'Main Market Bamenda',
+    image: '/assets/bamenda-market.jpg',
+    shops: [
+      { id: 1, name: 'Fashion House', category: 'Clothes', verified: true, trustCount: 85 },
+      { id: 2, name: 'ElectroHub', category: 'Electronics', verified: false, trustCount: 45 },
+    ],
+    importers: [
+      { id: 1, name: 'Bamenda Imports Ltd.', category: 'Electronics', verified: true, trustCount: 78 },
+    ],
+    vendors: [
+      { id: 1, name: 'Paul Shoe Vendor', category: 'Shoes', verified: true, trustCount: 90 },
+    ],
+  },
+  {
+    id: 2,
+    name: 'Nkwen Market',
+    image: '/assets/bamenda-market.jpg',
+    shops: [
+      { id: 3, name: 'Phone World', category: 'Phones', verified: true, trustCount: 67 },
+    ],
+    importers: [],
+    vendors: [],
+  },
+];
+✅ TASK 2: Create MarketCard Component
+Clearly create /src/components/MarketCard.jsx:
+
+jsx
+Copy
+Edit
+import { Link } from 'react-router-dom';
+
+export default function MarketCard({ market }) {
+  return (
+    <Link to={`/markets/${market.id}`}>
+      <div className="bg-white rounded-xl overflow-hidden shadow-neonGreen hover:shadow-neonBlue transition-shadow cursor-pointer">
+        <img src={market.image} alt={market.name} className="h-48 w-full object-cover" />
+        <div className="p-4">
+          <h3 className="font-bold text-primary">{market.name}</h3>
+        </div>
+      </div>
+    </Link>
+  );
+}
+✅ TASK 3: Build Markets.jsx Page
+Create /src/pages/Markets.jsx clearly:
+
+jsx
+Copy
+Edit
+import { markets } from '../demoData';
+import MarketCard from '../components/MarketCard';
+
+export default function Markets() {
+  return (
+    <div className="p-6">
+      <h2 className="text-3xl font-bold text-primary mb-4">Markets in Bamenda</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {markets.map(market => (
+          <MarketCard key={market.id} market={market} />
+        ))}
+      </div>
+    </div>
+  );
+}
+✅ TASK 4: Market Details Page
+Clearly create /src/pages/MarketDetails.jsx:
+
+jsx
+Copy
+Edit
+import { useParams } from 'react-router-dom';
+import { markets } from '../demoData';
+import Card from '../components/Card';
+import { useState } from 'react';
+
+export default function MarketDetails() {
+  const { id } = useParams();
+  const market = markets.find(mkt => mkt.id === parseInt(id));
+  const [tab, setTab] = useState('shops');
+
+  const items = market[tab];
+
+  return (
+    <div className="p-6">
+      <h2 className="text-3xl font-bold text-primary mb-4">{market.name}</h2>
+
+      <div className="flex gap-4 mb-4">
+        {['shops', 'importers', 'vendors'].map(category => (
+          <button
+            key={category}
+            onClick={() => setTab(category)}
+            className={`px-4 py-2 rounded-lg font-semibold capitalize ${tab === category ? 'bg-primary text-white shadow-neonBlue' : 'bg-gray-200 text-gray-600'}`}
+          >
+            {category}
+          </button>
+        ))}
+      </div>
+
+      {items.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {items.map(item => (
+            <Card
+              key={item.id}
+              title={item.name}
+              description={`Category: ${item.category}`}
+              image="/assets/default-shop.png"
+              neonColor={item.verified ? 'green' : 'blue'}
+            />
+          ))}
+        </div>
+      ) : (
+        <p className="text-gray-500">No listings available in this category yet.</p>
+      )}
+    </div>
+  );
+}
+✅ TASK 5: Update App.jsx (Routing Clearly)
+Clearly update App.jsx:
+
+jsx
+Copy
+Edit
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Sidebar from './components/Sidebar';
+import Navbar from './components/Navbar';
+import Homepage from './pages/Homepage';
+import Listings from './pages/Listings';
+import Markets from './pages/Markets';
+import MarketDetails from './pages/MarketDetails';
+
+function App() {
+  return (
+    <Router>
+      <div className="flex">
+        <Sidebar />
+        <div className="flex-1">
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Homepage />} />
+            <Route path="/listings" element={<Listings />} />
+            <Route path="/markets" element={<Markets />} />
+            <Route path="/markets/:id" element={<MarketDetails />} />
+          </Routes>
+        </div>
+      </div>
+    </Router>
+  );
+}
+export default App;

@@ -8,6 +8,7 @@ import Navbar from './components/Navbar';
 import Footer from "./components/Footer";
 import Homepage from './pages/Homepage';
 import Markets from "./pages/Markets";
+import MarketDetails from "./pages/MarketDetails";
 import Listings from "./pages/Listings";
 import RealEstate from "./pages/RealEstate";
 import Auctions from "./pages/Auctions";
@@ -19,6 +20,7 @@ function Router() {
     <Switch>
       <Route path="/" component={Homepage} />
       <Route path="/markets" component={Markets} />
+      <Route path="/markets/:id" component={MarketDetails} />
       <Route path="/listings" component={Listings} />
       <Route path="/realestate" component={RealEstate} />
       <Route path="/auctions" component={Auctions} />
