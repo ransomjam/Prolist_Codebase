@@ -2,7 +2,7 @@ import { Compass, Store, MapPin, Building, Gavel, Utensils, Shirt, Laptop, Wrenc
 import Card from "../components/Card";
 import Button from "../components/Button";
 import { markets } from "../data/demoData";
-import heroImage from "@assets/20250520_0330_Contemporary Cameroonian Hotel Design_simple_compose_01jvpkske3fr7bycqw9n2k38pv.png";
+import heroImage from "@assets/download (2).jfif";
 
 export default function Homepage() {
   const stats = [
