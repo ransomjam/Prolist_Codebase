@@ -16,8 +16,11 @@ interface ListingCardProps {
 }
 
 export default function ListingCard({ listing }: ListingCardProps) {
+  const [showComments, setShowComments] = useState(false);
+
   return (
-    <div className="bg-white rounded-xl overflow-hidden shadow-neonBlue transition-transform hover:scale-105 cursor-pointer">
+    <>
+      <div className="bg-white rounded-xl overflow-hidden shadow-neonBlue transition-transform hover:scale-105 cursor-pointer">
       <img src={listing.image} alt={listing.title} className="h-48 w-full object-cover"/>
       <div className="p-4">
         <h3 className="font-bold text-primary">{listing.title}</h3>
@@ -29,7 +32,10 @@ export default function ListingCard({ listing }: ListingCardProps) {
             <a href={`https://wa.me/237670000000`} target="_blank" className="text-green-600 hover:underline text-sm font-medium">
               WhatsApp
             </a>
-            <button className="text-blue-600 text-sm flex items-center gap-1 font-medium hover:text-blue-700">
+            <button 
+              onClick={() => setShowComments(true)}
+              className="text-blue-600 text-sm flex items-center gap-1 font-medium hover:text-blue-700"
+            >
               <MessageSquare className="h-4 w-4" /> Comments
             </button>
             <button className="text-gray-600 text-sm flex items-center gap-1 hover:text-gray-700">
@@ -49,7 +55,15 @@ export default function ListingCard({ listing }: ListingCardProps) {
             </span>
           </div>
         )}
+        </div>
       </div>
-    </div>
+      
+      <CommentsSection
+        listingId={listing.id.toString()}
+        listingType="listing"
+        isOpen={showComments}
+        onClose={() => setShowComments(false)}
+      />
+    </>
   );
 }

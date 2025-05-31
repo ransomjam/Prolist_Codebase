@@ -22,18 +22,20 @@ export default function CommentsSection({ listingId, listingType, isOpen, onClos
   const [username, setUsername] = useState("");
   const queryClient = useQueryClient();
 
-  const { data: comments = [], isLoading } = useQuery({
+  const { data: comments = [], isLoading } = useQuery<Comment[]>({
     queryKey: ['/api/comments', listingType, listingId],
     enabled: isOpen,
   });
 
   const addCommentMutation = useMutation({
     mutationFn: async (commentData: { listingId: string; listingType: string; username: string; content: string }) => {
-      return await apiRequest(`/api/comments`, {
+      const response = await fetch('/api/comments', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(commentData),
       });
+      if (!response.ok) throw new Error('Failed to post comment');
+      return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/comments', listingType, listingId] });
