@@ -20,6 +20,22 @@ export default function NewListing() {
     <div className="p-6">
       <h2 className="text-3xl font-bold text-primary mb-4">📦 New Listing</h2>
 
+      {/* Verification Banner */}
+      <div className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white p-4 rounded-lg mb-6 shadow-lg">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="font-bold text-lg">Get Your Business Verified!</h3>
+            <p className="text-sm opacity-90">Verified listings get 3x more views and higher customer trust</p>
+          </div>
+          <a 
+            href="/apply-verification"
+            className="bg-white text-orange-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-all"
+          >
+            Apply Now
+          </a>
+        </div>
+      </div>
+
       {!canPost && (
         <div className="bg-red-100 text-red-700 p-4 rounded-lg mb-6 shadow">
           You've reached your free weekly limit. Upgrade to premium to post more listings.

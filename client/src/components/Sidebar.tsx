@@ -68,6 +68,20 @@ export default function Sidebar() {
             </span>
           </Link>
         </div>
+
+        {/* Verification Banner in Sidebar */}
+        <div className={`mt-6 mx-4 transition-all duration-300 ${expanded ? 'opacity-100' : 'opacity-0'}`}>
+          <div className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white p-3 rounded-lg shadow-lg">
+            <h4 className="font-bold text-sm mb-1">Get Verified</h4>
+            <p className="text-xs opacity-90 mb-2">Boost your business credibility</p>
+            <a 
+              href="/apply-verification"
+              className="block bg-white text-orange-600 text-center py-1 px-2 rounded text-xs font-semibold hover:bg-gray-100 transition-all"
+            >
+              Apply Now
+            </a>
+          </div>
+        </div>
       </nav>
     </>
   );

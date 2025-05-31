@@ -27,6 +27,17 @@ export default function Navbar() {
 
           {/* Right: 3 Icons */}
           <div className="flex items-center gap-2">
+            {/* Verification Button for Vendors */}
+            {isAuthenticated && (
+              <Link 
+                href="/apply-verification"
+                className="flex items-center gap-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-4 py-2 rounded-lg font-semibold hover:from-yellow-600 hover:to-orange-600 transition-all shadow-lg text-sm"
+              >
+                <Shield size={16} />
+                <span className="hidden sm:inline">Get Verified</span>
+              </Link>
+            )}
+
             {/* List Button */}
             <Link href="/new-listing" className="flex items-center gap-1 bg-gray-200 hover:bg-gray-300 rounded-full px-3 py-2 transition-colors">
               <Plus className="text-gray-700" size={16} />
@@ -57,6 +68,18 @@ export default function Navbar() {
                     </div>
                   </Link>
                   <hr className="my-2" />
+                  
+                  {/* Verification Button for Mobile */}
+                  {isAuthenticated && (
+                    <Link 
+                      href="/apply-verification"
+                      className="flex items-center gap-3 p-2 hover:bg-yellow-50 rounded-lg bg-gradient-to-r from-yellow-500 to-orange-500 text-white mb-2"
+                    >
+                      <Shield size={18} />
+                      <span className="text-sm font-medium">Get Verified</span>
+                    </Link>
+                  )}
+                  
                   <div className="grid grid-cols-2 gap-2 p-2">
                     <a href="/listings" className="p-3 rounded-lg border border-gradient-to-r from-blue-200 to-emerald-200 hover:from-blue-300 hover:to-emerald-300 transition-all text-center">
                       <div className="text-sm font-medium">📋 Listings</div>
