@@ -24,10 +24,10 @@ export default function Navbar() {
           {/* Right: 3 Icons */}
           <div className="flex items-center gap-2">
             {/* List Button */}
-            <button className="flex items-center gap-1 bg-gray-200 hover:bg-gray-300 rounded-full px-3 py-2 transition-colors">
+            <Link href="/new-listing" className="flex items-center gap-1 bg-gray-200 hover:bg-gray-300 rounded-full px-3 py-2 transition-colors">
               <Plus className="text-gray-700" size={16} />
               <span className="text-sm font-medium text-gray-700 hidden sm:inline">List</span>
-            </button>
+            </Link>
             
             {/* Search Button */}
             <button 
