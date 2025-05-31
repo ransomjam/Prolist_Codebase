@@ -46,6 +46,14 @@ export default function LandingPage() {
               Join ProList
             </a>
           </div>
+          <div className="mt-4">
+            <p className="text-white/80 text-sm">
+              Already have an account?{' '}
+              <a href="/login" className="text-neonGreen hover:text-green-300 font-medium underline">
+                Sign in here
+              </a>
+            </p>
+          </div>
         </div>
       </div>
 

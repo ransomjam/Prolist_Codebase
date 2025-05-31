@@ -7,6 +7,7 @@ import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 import Footer from "./components/Footer";
 import LandingPage from './pages/LandingPage';
+import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Homepage from './pages/Homepage';
 import Markets from "./pages/Markets";
@@ -25,6 +26,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={LandingPage} />
+      <Route path="/login" component={Login} />
       <Route path="/signup" component={Signup} />
       <Route path="/app" component={Homepage} />
       <Route path="/markets" component={Markets} />
