@@ -36,10 +36,10 @@ export default function Homepage() {
             <p className="text-lg lg:text-xl mb-6 opacity-90">
               Connect with trusted local markets, vendors, and services in your community
             </p>
-            <Button variant="neon" size="lg">
+            <a href="/markets" className="inline-flex items-center bg-gradient-to-r from-neonBlue to-emerald text-white px-6 py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-green-600 transition-all">
               <Compass className="mr-2" size={20} />
               Explore Now
-            </Button>
+            </a>
           </div>
         </div>
       </div>
@@ -67,18 +67,19 @@ export default function Homepage() {
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {markets.slice(0, 3).map((market) => (
-            <Card
-              key={market.id}
-              title={market.name}
-              description={`${market.shops.length} shops, ${market.importers.length} importers, ${market.vendors.length} vendors`}
-              image={market.image}
-              neonColor={market.id % 2 === 0 ? 'green' : 'blue'}
-              verified={true}
-              rating={4.8}
-              reviews={120}
-              badge="Open Now"
-              badgeColor="bg-emerald"
-            />
+            <a key={market.id} href={`/markets/${market.id}`} className="block">
+              <Card
+                title={market.name}
+                description={`${market.shops.length} shops, ${market.importers.length} importers, ${market.vendors.length} vendors`}
+                image={market.image}
+                neonColor={market.id % 2 === 0 ? 'green' : 'blue'}
+                verified={true}
+                rating={4.8}
+                reviews={120}
+                badge="Open Now"
+                badgeColor="bg-emerald"
+              />
+            </a>
           ))}
         </div>
       </section>
@@ -90,16 +91,17 @@ export default function Homepage() {
           {categories.map((category, index) => {
             const Icon = category.icon;
             return (
-              <div 
+              <a 
                 key={index}
-                className="bg-white rounded-xl p-4 text-center shadow-sm hover:shadow-neonBlue transition-all duration-300 transform hover:scale-105 cursor-pointer"
+                href="/listings"
+                className="bg-white rounded-xl p-4 text-center shadow-sm hover:shadow-neonBlue transition-all duration-300 transform hover:scale-105 cursor-pointer block"
               >
                 <div className={`w-12 h-12 bg-gradient-to-br ${category.color} rounded-lg mx-auto mb-3 flex items-center justify-center`}>
                   <Icon className="text-white" size={20} />
                 </div>
                 <h3 className="font-semibold text-gray-800">{category.label}</h3>
                 <p className="text-xs text-gray-500 mt-1">{category.count}</p>
-              </div>
+              </a>
             );
           })}
         </div>
