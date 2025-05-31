@@ -1,4 +1,4 @@
-import { Shield } from "lucide-react";
+import { Shield, MessageCircle, Phone } from "lucide-react";
 
 interface ListingCardProps {
   listing: {
@@ -22,17 +22,31 @@ export default function ListingCard({ listing }: ListingCardProps) {
         <p className="text-sm text-gray-700">{listing.category}</p>
         <p className="font-bold text-primary mt-2">{listing.price}</p>
         <p className="text-xs text-gray-500">{listing.location}</p>
-        <div className="flex items-center mt-2">
-          {listing.verified && (
-            <span className="bg-emerald text-white px-2 py-1 rounded-full text-xs flex items-center gap-1">
-              <Shield size={12} />
-              Verified
-            </span>
-          )}
-          <div className="ml-auto flex items-center text-emerald font-semibold">
+        <div className="flex items-center justify-between mt-3">
+          <div className="flex gap-2">
+            <a href={`https://wa.me/237670000000`} target="_blank" className="text-green-600 hover:underline text-sm font-medium">
+              WhatsApp
+            </a>
+            <button className="text-blue-600 text-sm flex items-center gap-1 font-medium hover:text-blue-700">
+              <MessageCircle className="h-4 w-4" /> Chat
+            </button>
+            <button className="text-gray-600 text-sm flex items-center gap-1 hover:text-gray-700">
+              <Phone className="h-4 w-4" /> Call
+            </button>
+          </div>
+          <div className="flex items-center text-emerald font-semibold">
             <span className="mr-1">🛡️</span>{listing.trustCount}
           </div>
         </div>
+        
+        {listing.verified && (
+          <div className="mt-2">
+            <span className="bg-emerald text-white px-2 py-1 rounded-full text-xs flex items-center gap-1 w-fit">
+              <Shield size={12} />
+              Verified
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );

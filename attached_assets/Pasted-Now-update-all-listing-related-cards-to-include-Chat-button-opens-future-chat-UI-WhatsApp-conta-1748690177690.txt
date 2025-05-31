@@ -1,0 +1,58 @@
+Now update all listing-related cards to include:
+
+Chat button (opens future chat UI)
+
+WhatsApp contact (opens user's number if available)
+
+Phone icon (placeholder now)
+
+Update Example: ListingCard.jsx
+
+jsx
+Copy
+Edit
+import { ChatBubbleLeftRightIcon, PhoneIcon } from '@heroicons/react/24/outline';
+
+export default function ListingCard({ listing }) {
+  return (
+    <div className="bg-white rounded-xl overflow-hidden shadow-neonBlue hover:scale-105 transition-transform cursor-pointer">
+      <img src={listing.image} alt={listing.title} className="h-48 w-full object-cover" />
+      <div className="p-4">
+        <h3 className="font-bold text-primary">{listing.title}</h3>
+        <p className="text-sm text-gray-600">{listing.category}</p>
+        <p className="font-bold text-primary mt-2">{listing.price}</p>
+        <p className="text-xs text-gray-500">{listing.location}</p>
+
+        <div className="flex justify-between items-center mt-3">
+          <div className="flex gap-2">
+            <a href={`https://wa.me/237670000000`} target="_blank" className="text-green-600 hover:underline text-sm">WhatsApp</a>
+            <button className="text-blue-600 text-sm flex items-center gap-1">
+              <ChatBubbleLeftRightIcon className="h-4 w-4" /> Chat
+            </button>
+          </div>
+          <div className="flex items-center text-primary font-semibold">
+            <span className="mr-1">🛡️</span>{listing.trustCount}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+🟢 Do the same for:
+
+RealEstateCard.jsx
+
+AuctionCard.jsx
+
+VerifiedDirectory.jsx (add owner's name, WhatsApp icon, and clickable chat)
+
+Profile.jsx (show personal contact info at top)
+
+✅ Bonus Prompt: Add Contact Info to Profile
+In Profile.jsx, under user details:
+
+jsx
+Copy
+Edit
+<p className="text-sm text-gray-700 mt-2">📞 Phone: <span className="text-blue-500">+237 670000000</span></p>
+<p className="text-sm text-green-600">💬 WhatsApp: <a href="https://wa.me/237670000000" className="underline">Chat on WhatsApp</a></p>

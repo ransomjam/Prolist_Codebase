@@ -1,6 +1,6 @@
 import { verifiedBusinesses } from '../data/demoData';
 import { useState } from 'react';
-import { Search, Shield, MapPin, Eye } from 'lucide-react';
+import { Search, Shield, MapPin, Eye, MessageCircle, Phone } from 'lucide-react';
 
 export default function VerifiedDirectory() {
   const [searchTerm, setSearchTerm] = useState('');
