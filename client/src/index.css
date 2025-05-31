@@ -62,15 +62,15 @@
 
 /* Custom neon glow utilities */
 .neon-glow-blue {
-  box-shadow: 0 0 5px #4D77FF, 0 0 10px #4D77FF, 0 0 15px #4D77FF;
+  box-shadow: 0 0 3px rgba(77, 119, 255, 0.4), 0 0 6px rgba(77, 119, 255, 0.2);
 }
 
 .neon-glow-green {
-  box-shadow: 0 0 5px #29FFBF, 0 0 10px #29FFBF, 0 0 15px #29FFBF;
+  box-shadow: 0 0 3px rgba(41, 255, 191, 0.4), 0 0 6px rgba(41, 255, 191, 0.2);
 }
 
 .neon-glow-yellow {
-  box-shadow: 0 0 5px #FFD600, 0 0 10px #FFD600, 0 0 15px #FFD600;
+  box-shadow: 0 0 3px rgba(255, 214, 0, 0.5), 0 0 6px rgba(255, 214, 0, 0.3);
 }
 
 /* Sidebar transition animations */

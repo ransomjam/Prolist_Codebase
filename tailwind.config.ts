@@ -69,10 +69,10 @@ export default {
         grayLight: '#F7FAFC',
       },
       boxShadow: {
-        neonBlue: '0 0 10px #4D77FF, 0 0 20px #4D77FF',
-        neonGreen: '0 0 10px #29FFBF, 0 0 20px #29FFBF',
-        neonYellow: '0 0 8px #FFD600, 0 0 16px #FFD600',
-        softGlow: '0 4px 20px rgba(77, 119, 255, 0.15)',
+        neonBlue: '0 0 5px rgba(77, 119, 255, 0.3), 0 0 10px rgba(77, 119, 255, 0.2)',
+        neonGreen: '0 0 5px rgba(41, 255, 191, 0.3), 0 0 10px rgba(41, 255, 191, 0.2)',
+        neonYellow: '0 0 4px rgba(255, 214, 0, 0.4), 0 0 8px rgba(255, 214, 0, 0.2)',
+        softGlow: '0 4px 20px rgba(77, 119, 255, 0.1)',
       },
       fontFamily: {
         inter: ['Inter', 'sans-serif'],
