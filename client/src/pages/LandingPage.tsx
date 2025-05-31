@@ -5,7 +5,7 @@ export default function LandingPage() {
   return (
     <div className="bg-white text-primary">
       {/* Hero Section */}
-      <div className="h-screen relative flex flex-col justify-center items-center text-white text-center">
+      <div className="h-[70vh] sm:h-[80vh] relative flex flex-col justify-center items-center text-white text-center">
         <img 
           src={heroImage} 
           alt="Bamenda cityscape" 
