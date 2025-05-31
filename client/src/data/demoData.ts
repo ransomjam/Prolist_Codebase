@@ -191,6 +191,69 @@ export const realEstate = [
   }
 ];
 
+export const auctions = [
+  {
+    id: 1,
+    title: "HP Laptop – Core i7, 16GB RAM",
+    originalPrice: "400,000 FCFA",
+    discountPrice: "250,000 FCFA",
+    location: "Food Market Bamenda",
+    timeLeft: "2 days",
+    image: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300",
+    verified: true,
+    trustCount: 101,
+    premium: true,
+  },
+  {
+    id: 2,
+    title: "Men's Designer Shoes",
+    originalPrice: "80,000 FCFA",
+    discountPrice: "45,000 FCFA",
+    location: "Nkwen Market",
+    timeLeft: "12 hours",
+    image: "https://images.unsplash.com/photo-1549298916-b41d501d3772?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300",
+    verified: false,
+    trustCount: 48,
+    premium: false,
+  },
+  {
+    id: 3,
+    title: "Samsung Galaxy S23 Ultra",
+    originalPrice: "800,000 FCFA",
+    discountPrice: "650,000 FCFA",
+    location: "Commercial Avenue",
+    timeLeft: "6 hours",
+    image: "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300",
+    verified: true,
+    trustCount: 156,
+    premium: true,
+  },
+  {
+    id: 4,
+    title: "Traditional Kaba Dress",
+    originalPrice: "50,000 FCFA",
+    discountPrice: "30,000 FCFA",
+    location: "Main Market Bamenda",
+    timeLeft: "1 day",
+    image: "https://images.unsplash.com/photo-1554866585-cd94860890b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300",
+    verified: true,
+    trustCount: 67,
+    premium: false,
+  },
+  {
+    id: 5,
+    title: "Gaming Chair - RGB Lighting",
+    originalPrice: "180,000 FCFA",
+    discountPrice: "120,000 FCFA",
+    location: "Up Station",
+    timeLeft: "3 hours",
+    image: "https://images.unsplash.com/photo-1586953208448-b95a79798f07?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300",
+    verified: true,
+    trustCount: 89,
+    premium: true,
+  }
+];
+
 export const stats = {
   businesses: "150+",
   markets: "12",
