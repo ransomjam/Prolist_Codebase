@@ -1,0 +1,88 @@
+Continue building your React (Vite) + Tailwind app “ProList”.
+
+Now build a listing submission page with account-type logic.
+
+✅ TASK 1: Create NewListing.jsx
+Create /src/pages/NewListing.jsx:
+
+jsx
+Copy
+Edit
+import { useState } from 'react';
+import { currentUser } from '../demoData';
+
+export default function NewListing() {
+  const [form, setForm] = useState({
+    title: '',
+    category: '',
+    price: '',
+    location: '',
+    image: '',
+  });
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const canPost = currentUser.accountType === 'premium' || currentUser.listingsPosted < 1;
+
+  return (
+    <div className="p-6">
+      <h2 className="text-3xl font-bold text-primary mb-4">📦 New Listing</h2>
+
+      {!canPost && (
+        <div className="bg-red-100 text-red-700 p-4 rounded-lg mb-6 shadow">
+          You’ve reached your free weekly limit. Upgrade to premium to post more listings.
+        </div>
+      )}
+
+      <form className="bg-white rounded-xl shadow-md p-6 grid gap-4 w-full max-w-xl">
+        <input name="title" onChange={handleChange} placeholder="Title" className="border p-2 rounded"/>
+
+        <select name="category" onChange={handleChange} className="border p-2 rounded">
+          <option value="">Select Category</option>
+          <option value="Phones">Phones</option>
+          <option value="Shoes">Shoes</option>
+          <option value="Clothes">Clothes</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Assets">Assets</option>
+          <option value="Real Estate">Real Estate</option>
+          <option value="Services">Professional Services</option>
+        </select>
+
+        <input name="price" onChange={handleChange} placeholder="Price (CFA)" className="border p-2 rounded"/>
+        <input name="location" onChange={handleChange} placeholder="Location (e.g. Main Market)" className="border p-2 rounded"/>
+        <input name="image" onChange={handleChange} placeholder="Image URL" className="border p-2 rounded"/>
+
+        <button
+          type="submit"
+          className={`bg-gradient-to-r from-blue-500 to-emerald-400 text-white py-2 px-4 rounded-xl font-semibold shadow-neonBlue hover:shadow-neonGreen disabled:opacity-50`}
+          disabled={!canPost}
+        >
+          Submit Listing
+        </button>
+      </form>
+    </div>
+  );
+}
+✅ TASK 2: Add Route to App.jsx
+Update App.jsx:
+
+jsx
+Copy
+Edit
+import NewListing from './pages/NewListing';
+...
+<Route path="/new-listing" element={<NewListing />} />
+✅ TASK 3: Add “+ Add Listing” Button to Navbar or Profile
+In Navbar.jsx or Profile.jsx (bottom of page), add:
+
+jsx
+Copy
+Edit
+<a
+  href="/new-listing"
+  className="inline-block mt-4 bg-gradient-to-r from-blue-500 to-emerald-400 text-white px-4 py-2 rounded-xl shadow-neonBlue hover:shadow-neonGreen"
+>
+  + Add New Listing
+</a>

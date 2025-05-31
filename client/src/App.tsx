@@ -13,6 +13,7 @@ import Listings from "./pages/Listings";
 import RealEstate from "./pages/RealEstate";
 import Auctions from "./pages/Auctions";
 import Profile from "./pages/Profile";
+import NewListing from "./pages/NewListing";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -25,6 +26,7 @@ function Router() {
       <Route path="/realestate" component={RealEstate} />
       <Route path="/auctions" component={Auctions} />
       <Route path="/profile" component={Profile} />
+      <Route path="/new-listing" component={NewListing} />
       <Route component={NotFound} />
     </Switch>
   );

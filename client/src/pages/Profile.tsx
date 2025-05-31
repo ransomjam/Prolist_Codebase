@@ -32,6 +32,13 @@ export default function Profile() {
         </div>
       </div>
 
+      <a
+        href="/new-listing"
+        className="inline-block mt-4 bg-gradient-to-r from-blue-500 to-emerald-400 text-white px-4 py-2 rounded-xl shadow-neonBlue hover:shadow-neonGreen"
+      >
+        + Add New Listing
+      </a>
+
       {showUpgrade && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl p-6 w-96 shadow-neonBlue">
