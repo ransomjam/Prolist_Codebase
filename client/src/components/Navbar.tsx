@@ -4,11 +4,13 @@ import { Search, Plus, User, Settings, Heart, LogOut, Menu, Shield, Users, Messa
 import { HomeIcon, BuildingStorefrontIcon, TagIcon, HomeModernIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
 import NotificationDropdown from "./NotificationDropdown";
 import SearchDropdown from "./SearchDropdown";
+import { useAuth } from "../hooks/useAuth";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [location] = useLocation();
+  const { logout, isAuthenticated, user } = useAuth();
 
   return (
     <header className="bg-white sticky top-0 z-50 border-b border-gray-200">
@@ -88,10 +90,13 @@ export default function Navbar() {
                     <span className="text-sm">Help & Support</span>
                   </a>
                   <hr className="my-2" />
-                  <a href="#" className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg text-gray-700">
+                  <button 
+                    onClick={logout}
+                    className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg text-gray-700 w-full text-left"
+                  >
                     <LogOut size={18} />
                     <span className="text-sm">Log Out</span>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>

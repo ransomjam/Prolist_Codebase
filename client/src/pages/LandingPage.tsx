@@ -1,7 +1,20 @@
 import { Shield, Star, Gavel } from "lucide-react";
 import heroImage from "@assets/upstation-hill.jpg";
+import { useAuth } from "../hooks/useAuth";
 
 export default function LandingPage() {
+  const { login, isAuthenticated } = useAuth();
+
+  const handleTestLogin = () => {
+    // Simulate login for testing logout functionality
+    login({
+      id: 1,
+      username: "testuser",
+      name: "Test User"
+    });
+    window.location.href = "/app";
+  };
+
   return (
     <div className="bg-white text-primary">
       {/* Hero Section */}
@@ -26,12 +39,12 @@ export default function LandingPage() {
             >
               Browse Listings
             </a>
-            <a 
-              href="/markets" 
+            <button
+              onClick={handleTestLogin}
               className="bg-white/10 backdrop-blur-sm text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-white/20 transition-all border-2 border-white/30"
             >
-              Explore Markets
-            </a>
+              Login to Test
+            </button>
           </div>
         </div>
       </div>
