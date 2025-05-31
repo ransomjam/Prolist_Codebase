@@ -39,12 +39,12 @@ export default function LandingPage() {
             >
               Browse Listings
             </a>
-            <button
-              onClick={handleTestLogin}
+            <a
+              href="/signup"
               className="bg-white/10 backdrop-blur-sm text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-white/20 transition-all border-2 border-white/30"
             >
-              Login to Test
-            </button>
+              Join ProList
+            </a>
           </div>
         </div>
       </div>

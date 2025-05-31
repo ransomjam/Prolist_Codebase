@@ -1,0 +1,65 @@
+Create /src/pages/Signup.jsx
+It should support Vendor, User, and Investor account types.
+Show sub-options only when "Vendor" is selected.
+
+jsx
+Copy
+Edit
+import { useState } from 'react';
+
+export default function Signup() {
+  const [form, setForm] = useState({
+    fullName: '',
+    username: '',
+    userType: '',
+    vendorType: '',
+    location: '',
+    password: '',
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+  };
+
+  return (
+    <div className="p-6 max-w-xl mx-auto">
+      <h2 className="text-3xl font-bold text-primary mb-4">📝 Create Your ProList Account</h2>
+
+      <form className="grid gap-4 bg-white p-6 rounded-xl shadow">
+        <input name="fullName" onChange={handleChange} placeholder="Full Name" className="border p-2 rounded" />
+        <input name="username" onChange={handleChange} placeholder="Username" className="border p-2 rounded" />
+
+        <select name="userType" onChange={handleChange} className="border p-2 rounded">
+          <option value="">Select User Type</option>
+          <option value="vendor">Vendor</option>
+          <option value="user">User</option>
+          <option value="investor">Investor</option>
+        </select>
+
+        {/* Show only if Vendor selected */}
+        {form.userType === 'vendor' && (
+          <select name="vendorType" onChange={handleChange} className="border p-2 rounded">
+            <option value="">Select Vendor Type</option>
+            <option value="online">Online Vendor</option>
+            <option value="shop">Shop Owner</option>
+          </select>
+        )}
+
+        <input name="location" onChange={handleChange} placeholder="Location (e.g. Nkwen Market)" className="border p-2 rounded" />
+        <input name="password" type="password" onChange={handleChange} placeholder="Password" className="border p-2 rounded" />
+
+        <button type="submit" className="bg-gradient-to-r from-blue-500 to-emerald-400 text-white py-2 px-4 rounded-xl shadow-neonBlue hover:shadow-neonGreen">
+          Register
+        </button>
+      </form>
+    </div>
+  );
+}
+✅ Add Route in App.jsx
+jsx
+Copy
+Edit
+import Signup from './pages/Signup';
+...
+<Route path="/signup" element={<Signup />} />
