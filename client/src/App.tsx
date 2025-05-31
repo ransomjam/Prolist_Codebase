@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 import Footer from "./components/Footer";
+import LandingPage from './pages/LandingPage';
 import Homepage from './pages/Homepage';
 import Markets from "./pages/Markets";
 import MarketDetails from "./pages/MarketDetails";
@@ -22,6 +23,7 @@ import NotFound from "@/pages/not-found";
 function Router() {
   return (
     <Switch>
+      <Route path="/landing" component={LandingPage} />
       <Route path="/" component={Homepage} />
       <Route path="/markets" component={Markets} />
       <Route path="/markets/:id" component={MarketDetails} />

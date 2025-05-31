@@ -1,0 +1,58 @@
+Create /src/pages/LandingPage.jsx with a clean ProList intro.
+Use a Bamenda-style market image, neon borders, and CTA buttons.
+
+jsx
+Copy
+Edit
+export default function LandingPage() {
+  return (
+    <div className="bg-white text-primary">
+      {/* Hero Section */}
+      <div className="h-screen bg-[url('/assets/bamenda-market.jpg')] bg-cover bg-center flex flex-col justify-center items-center text-white text-center shadow-neonBlue">
+        <h1 className="text-5xl font-bold drop-shadow-lg">Welcome to ProList</h1>
+        <p className="mt-4 text-xl">Cameroon's #1 Digital Marketplace for Trust & Growth</p>
+        <div className="mt-6 flex gap-4">
+          <a href="/listings" className="bg-emerald px-6 py-3 rounded-lg text-white font-semibold hover:bg-green-600 shadow-neonGreen">Browse Listings</a>
+          <a href="/signup" className="bg-white text-primary px-6 py-3 rounded-lg font-semibold hover:bg-gray-200">Join Now</a>
+        </div>
+      </div>
+
+      {/* Features */}
+      <div className="py-12 px-6 bg-gray-100 text-center">
+        <h2 className="text-2xl font-bold mb-6">Why ProList?</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+          <div className="bg-white p-4 rounded-xl shadow-md">
+            <h3 className="text-xl font-bold">✔ Verified Businesses</h3>
+            <p className="text-gray-600 mt-2">Real people, real shops, real trust.</p>
+          </div>
+          <div className="bg-white p-4 rounded-xl shadow-md">
+            <h3 className="text-xl font-bold">🛡️ Trust System</h3>
+            <p className="text-gray-600 mt-2">Shoppers trust vendors with high ratings.</p>
+          </div>
+          <div className="bg-white p-4 rounded-xl shadow-md">
+            <h3 className="text-xl font-bold">🔥 Auctions</h3>
+            <p className="text-gray-600 mt-2">Cheapest deals & discounts, only on ProList.</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="bg-primary text-white text-center py-4 mt-12">
+        ProList © 2024 • Powered by Bamenda Entrepreneurs
+      </footer>
+    </div>
+  );
+}
+✅ Update App.jsx to Include Route
+In App.jsx, add the route:
+
+jsx
+Copy
+Edit
+import LandingPage from './pages/LandingPage';
+...
+<Route path="/" element={<LandingPage />} />
+🧠 Pro Tip:
+If you want users to go directly to Listings if logged in, you can later add an auth check.
+
+Make sure /assets/bamenda-market.jpg exists and is visible!
