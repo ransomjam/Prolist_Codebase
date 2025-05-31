@@ -5,6 +5,7 @@ import { HomeIcon, BuildingStorefrontIcon, TagIcon, HomeModernIcon, CurrencyDoll
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [location] = useLocation();
 
   return (
@@ -12,17 +13,27 @@ export default function Navbar() {
       {/* Top Bar - Facebook style with blue text */}
       <div className="px-4 py-3">
         <div className="flex items-center justify-between">
-          {/* Left: Logo */}
+          {/* Left: Logo with Shield */}
           <div className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+              <Shield className="text-white" size={16} />
+            </div>
             <span className="font-bold text-2xl text-primary">ProList</span>
           </div>
 
           {/* Right: 3 Icons */}
           <div className="flex items-center gap-2">
-            <button className="w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center transition-colors">
-              <Plus className="text-gray-700" size={20} />
+            {/* List Button */}
+            <button className="flex items-center gap-1 bg-gray-200 hover:bg-gray-300 rounded-full px-3 py-2 transition-colors">
+              <Plus className="text-gray-700" size={16} />
+              <span className="text-sm font-medium text-gray-700 hidden sm:inline">List</span>
             </button>
-            <button className="w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center transition-colors">
+            
+            {/* Search Button */}
+            <button 
+              className="w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center transition-colors"
+              onClick={() => setIsSearchOpen(!isSearchOpen)}
+            >
               <Search className="text-gray-700" size={20} />
             </button>
             
@@ -60,43 +71,48 @@ export default function Navbar() {
             </div>
           </div>
         </div>
+        
+        {/* Search Bar */}
+        {isSearchOpen && (
+          <div className="mt-3">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+              <input 
+                type="text" 
+                placeholder="Search businesses, markets, properties..." 
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                autoFocus
+              />
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Navigation Icons Row - Facebook Lite style */}
       <div className="bg-white px-4 py-2 border-t border-gray-100">
         <div className="flex items-center justify-between max-w-6xl mx-auto">
-          {/* Home with notification badge */}
+          {/* Home */}
           <Link 
             href="/"
-            className={`relative flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 ${
+            className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 ${
               location === '/' 
                 ? 'text-primary' 
                 : 'text-gray-600 hover:bg-gray-100'
             }`}
           >
-            <div className="relative">
-              <HomeIcon className="h-7 w-7" />
-              <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
-                15+
-              </div>
-            </div>
+            <HomeIcon className="h-7 w-7" />
           </Link>
 
-          {/* Listings with notification badge */}
+          {/* Listings */}
           <Link 
             href="/listings"
-            className={`relative flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 ${
+            className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 ${
               location === '/listings' 
                 ? 'text-primary' 
                 : 'text-gray-600 hover:bg-gray-100'
             }`}
           >
-            <div className="relative">
-              <TagIcon className="h-7 w-7" />
-              <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
-                4
-              </div>
-            </div>
+            <TagIcon className="h-7 w-7" />
           </Link>
 
           {/* Markets */}
@@ -126,18 +142,28 @@ export default function Navbar() {
           {/* Auctions */}
           <Link 
             href="/auctions"
-            className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 ${
+            className={`relative flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 ${
               location === '/auctions' 
                 ? 'text-primary' 
                 : 'text-gray-600 hover:bg-gray-100'
             }`}
           >
-            <CurrencyDollarIcon className="h-7 w-7" />
+            <div className="relative">
+              <CurrencyDollarIcon className="h-7 w-7" />
+              <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                3
+              </div>
+            </div>
           </Link>
 
           {/* Notifications */}
-          <button className="flex flex-col items-center gap-1 px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-all duration-200">
-            <Bell className="h-7 w-7" />
+          <button className="relative flex flex-col items-center gap-1 px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-all duration-200">
+            <div className="relative">
+              <Bell className="h-7 w-7" />
+              <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                7
+              </div>
+            </div>
           </button>
         </div>
       </div>
