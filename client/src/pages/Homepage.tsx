@@ -23,7 +23,7 @@ export default function Homepage() {
       {/* Hero Section */}
       <div className="relative rounded-2xl overflow-hidden h-64 lg:h-80">
         <img 
-          src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=800" 
+          src="https://images.unsplash.com/photo-1578662015715-186b6794ea33?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=800" 
           alt="Bamenda local market scene" 
           className="w-full h-full object-cover"
         />
