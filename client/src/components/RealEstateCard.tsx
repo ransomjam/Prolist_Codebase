@@ -1,4 +1,4 @@
-import { Shield, MessageCircle, Phone } from "lucide-react";
+import { Shield, MessageSquare, Phone } from "lucide-react";
 
 interface RealEstateCardProps {
   data: {
@@ -26,7 +26,7 @@ export default function RealEstateCard({ data }: RealEstateCardProps) {
               WhatsApp
             </a>
             <button className="text-blue-600 text-sm flex items-center gap-1 font-medium hover:text-blue-700">
-              <MessageCircle className="h-4 w-4" /> Chat
+              <MessageSquare className="h-4 w-4" /> Comments
             </button>
             <button className="text-gray-600 text-sm flex items-center gap-1 hover:text-gray-700">
               <Phone className="h-4 w-4" /> Call

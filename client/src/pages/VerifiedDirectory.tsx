@@ -1,6 +1,6 @@
 import { verifiedBusinesses } from '../data/demoData';
 import { useState } from 'react';
-import { Search, Shield, MapPin, Eye, MessageCircle, Phone } from 'lucide-react';
+import { Search, Shield, MapPin, Eye, MessageSquare, Phone } from 'lucide-react';
 
 export default function VerifiedDirectory() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -59,7 +59,7 @@ export default function VerifiedDirectory() {
                 WhatsApp
               </a>
               <button className="text-blue-600 text-sm flex items-center gap-1 font-medium hover:text-blue-700">
-                <MessageCircle className="h-4 w-4" /> Chat
+                <MessageSquare className="h-4 w-4" /> Comments
               </button>
               <button className="text-gray-600 text-sm flex items-center gap-1 hover:text-gray-700">
                 <Phone className="h-4 w-4" /> Call
