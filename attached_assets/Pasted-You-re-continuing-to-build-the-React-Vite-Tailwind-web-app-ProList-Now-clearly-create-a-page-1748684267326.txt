@@ -1,0 +1,140 @@
+You're continuing to build the React (Vite) + Tailwind web app "ProList".
+
+Now clearly create a page called Listings.jsx under /src/pages/.
+
+✅ TASK 1: Extend demoData.js (Clearly add listings)
+Update /src/demoData.js clearly:
+
+jsx
+Copy
+Edit
+export const listings = [
+  {
+    id: 1,
+    title: "Samsung Galaxy S23 Ultra",
+    category: "Phones",
+    price: "700,000 FCFA",
+    location: "Nkwen, Bamenda",
+    image: "/assets/samsung.jpg",
+    verified: true,
+    trustCount: 120,
+  },
+  {
+    id: 2,
+    title: "Nike Airforce 1",
+    category: "Shoes",
+    price: "45,000 FCFA",
+    location: "Main Market Bamenda",
+    image: "/assets/nike.jpg",
+    verified: false,
+    trustCount: 55,
+  },
+  {
+    id: 3,
+    title: "Duplex for Sale",
+    category: "Real Estate",
+    price: "60,000,000 FCFA",
+    location: "Commercial Avenue",
+    image: "/assets/duplex.jpg",
+    verified: true,
+    trustCount: 95,
+  },
+  // Add more clearly similar listings here...
+];
+✅ TASK 2: Create ListingCard Component
+Clearly create ListingCard.jsx in /src/components/:
+
+jsx
+Copy
+Edit
+export default function ListingCard({ listing }) {
+  return (
+    <div className="bg-white rounded-xl overflow-hidden shadow-neonBlue transition-transform hover:scale-105 cursor-pointer">
+      <img src={listing.image} alt={listing.title} className="h-48 w-full object-cover"/>
+      <div className="p-4">
+        <h3 className="font-bold text-primary">{listing.title}</h3>
+        <p className="text-sm text-gray-700">{listing.category}</p>
+        <p className="font-bold text-primary mt-2">{listing.price}</p>
+        <p className="text-xs text-gray-500">{listing.location}</p>
+        <div className="flex items-center mt-2">
+          {listing.verified && (
+            <span className="bg-emerald text-white px-2 py-1 rounded-full text-xs">✔ Verified</span>
+          )}
+          <div className="ml-auto flex items-center text-emerald font-semibold">
+            <span className="mr-1">🛡️</span>{listing.trustCount}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+✅ TASK 3: Build Listings.jsx Page
+Clearly create Listings.jsx under /src/pages/:
+
+jsx
+Copy
+Edit
+import { useState } from 'react';
+import { listings } from '../demoData';
+import ListingCard from '../components/ListingCard';
+
+export default function Listings() {
+  const [category, setCategory] = useState("All");
+
+  const filteredListings = category === "All"
+    ? listings
+    : listings.filter(item => item.category === category);
+
+  return (
+    <div className="p-6">
+      <h2 className="text-3xl font-bold text-primary mb-4">Explore Listings</h2>
+
+      <div className="flex gap-4 mb-4 overflow-x-auto">
+        {["All", "Phones", "Shoes", "Clothes", "Electronics", "Assets", "Real Estate", "Services"].map(cat => (
+          <button
+            key={cat}
+            onClick={() => setCategory(cat)}
+            className={`px-4 py-2 rounded-lg font-semibold ${category === cat ? 'bg-primary text-white shadow-neonBlue' : 'bg-gray-200 text-gray-600'}`}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredListings.map(listing => (
+          <ListingCard key={listing.id} listing={listing} />
+        ))}
+      </div>
+    </div>
+  );
+}
+✅ TASK 4: Update App.jsx (Integrate Listings Page)
+Update your App.jsx to clearly add routing for Listings page:
+
+jsx
+Copy
+Edit
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Sidebar from './components/Sidebar';
+import Navbar from './components/Navbar';
+import Homepage from './pages/Homepage';
+import Listings from './pages/Listings';
+
+function App() {
+  return (
+    <Router>
+      <div className="flex">
+        <Sidebar />
+        <div className="flex-1">
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Homepage />} />
+            <Route path="/listings" element={<Listings />} />
+          </Routes>
+        </div>
+      </div>
+    </Router>
+  );
+}
+export default App;
