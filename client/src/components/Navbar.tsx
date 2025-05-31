@@ -104,14 +104,14 @@ export default function Navbar() {
                     </a>
                   </div>
                   <hr className="my-2" />
-                  <a href="#" className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg">
+                  <Link href="/settings" className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg">
                     <Settings size={18} className="text-gray-600" />
                     <span className="text-sm">Settings & Privacy</span>
-                  </a>
-                  <a href="#" className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg">
+                  </Link>
+                  <Link href="/help" className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg">
                     <Heart size={18} className="text-gray-600" />
                     <span className="text-sm">Help & Support</span>
-                  </a>
+                  </Link>
                   <hr className="my-2" />
                   <button 
                     onClick={logout}
