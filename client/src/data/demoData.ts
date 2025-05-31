@@ -254,6 +254,19 @@ export const auctions = [
   }
 ];
 
+export const currentUser = {
+  id: 1,
+  name: "Jam Ransom",
+  username: "jamprolist",
+  location: "Centre des Handicapes, Bamenda",
+  accountType: "free", // or "premium"
+  listingsPosted: 3,
+  realEstatePosted: 1,
+  auctionsPosted: 0,
+  trustCount: 210,
+  followers: 47,
+};
+
 export const stats = {
   businesses: "150+",
   markets: "12",

@@ -1,4 +1,32 @@
-import { currentUser } from '../data/demoData';
+Continue building your React (Vite) + Tailwind ProList web app.
+
+Now build the User Profile Page with account controls.
+
+✅ TASK 1: Add User Info to demoData.js
+Add this to /src/demoData.js:
+
+jsx
+Copy
+Edit
+export const currentUser = {
+  id: 1,
+  name: "Jam Ransom",
+  username: "jamprolist",
+  location: "Centre des Handicapes, Bamenda",
+  accountType: "free", // or "premium"
+  listingsPosted: 3,
+  realEstatePosted: 1,
+  auctionsPosted: 0,
+  trustCount: 210,
+  followers: 47,
+};
+✅ TASK 2: Create Profile.jsx Page
+Create /src/pages/Profile.jsx:
+
+jsx
+Copy
+Edit
+import { currentUser } from '../demoData';
 import { useState } from 'react';
 
 export default function Profile() {
@@ -36,12 +64,28 @@ export default function Profile() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl p-6 w-96 shadow-neonBlue">
             <h3 className="text-xl font-bold text-primary mb-2">🎉 Upgrade to Premium</h3>
-            <p className="text-sm mb-4">You'll enjoy 1 Month FREE because <strong>ProList Cares</strong>.</p>
+            <p className="text-sm mb-4">You’ll enjoy 1 Month FREE because <strong>ProList Cares</strong>.</p>
             <button className="bg-emerald text-white px-4 py-2 rounded-lg w-full hover:bg-green-700">Confirm Upgrade</button>
-            <button className="mt-2 text-sm text-red-600 underline w-full" onClick={() => setShowUpgrade(false)}>Cancel</button>
+            <button className="mt-2 text-sm text-red-600 underline" onClick={() => setShowUpgrade(false)}>Cancel</button>
           </div>
         </div>
       )}
     </div>
   );
 }
+✅ TASK 3: Add Route in App.jsx
+Update App.jsx:
+
+jsx
+Copy
+Edit
+import Profile from './pages/Profile';
+...
+<Route path="/profile" element={<Profile />} />
+✅ TASK 4: Add “Profile” to Dropdown (Navbar.jsx)
+In Navbar.jsx, add to dropdown:
+
+jsx
+Copy
+Edit
+<a href="/profile" className="block px-4 py-2 hover:bg-gray-100">My Profile</a>
