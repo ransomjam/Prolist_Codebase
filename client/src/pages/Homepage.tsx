@@ -26,7 +26,7 @@ export default function Homepage() {
         <img 
           src={heroImage} 
           alt="ProList - Contemporary Cameroonian Business Center" 
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover object-top"
         />
         <div className="absolute inset-0 bg-black bg-opacity-40"></div>
         <div className="absolute inset-0 flex items-center justify-center text-center text-white">
