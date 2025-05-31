@@ -30,15 +30,15 @@ export default function Homepage() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/50 to-black/70"></div>
         <div className="absolute inset-0 flex items-center justify-center text-center text-white">
-          <div className="max-w-2xl px-4">
-            <h1 className="text-3xl lg:text-5xl font-bold mb-4 drop-shadow-lg">
+          <div className="max-w-4xl px-4 sm:px-6 lg:px-8">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-3 sm:mb-4 drop-shadow-lg leading-tight">
               Discover Local Businesses in <span className="text-neonGreen">Bamenda</span>
             </h1>
-            <p className="text-lg lg:text-xl mb-6 opacity-90">
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl mb-4 sm:mb-6 opacity-90 max-w-3xl mx-auto leading-relaxed">
               Connect with trusted local markets, vendors, and services in your community
             </p>
-            <a href="/markets" className="inline-flex items-center bg-gradient-to-r from-neonBlue to-emerald text-white px-6 py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-green-600 transition-all">
-              <Compass className="mr-2" size={20} />
+            <a href="/markets" className="inline-flex items-center bg-gradient-to-r from-neonBlue to-emerald text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-green-600 transition-all text-sm sm:text-base">
+              <Compass className="mr-2" size={16} />
               Explore Now
             </a>
           </div>
