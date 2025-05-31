@@ -21,6 +21,8 @@ import NewListing from "./pages/NewListing";
 import Investments from "./pages/Investments";
 import Stocks from "./pages/Stocks";
 import VerifiedDirectory from "./pages/VerifiedDirectory";
+import Settings from "./pages/Settings";
+import HelpSupport from "./pages/HelpSupport";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -41,6 +43,8 @@ function Router() {
       <Route path="/investments" component={Investments} />
       <Route path="/stocks" component={Stocks} />
       <Route path="/verified" component={VerifiedDirectory} />
+      <Route path="/settings" component={Settings} />
+      <Route path="/help" component={HelpSupport} />
       <Route component={NotFound} />
     </Switch>
   );
