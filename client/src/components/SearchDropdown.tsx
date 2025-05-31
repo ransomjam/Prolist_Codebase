@@ -54,7 +54,6 @@ export default function SearchDropdown() {
       // Search in verified businesses
       const matchingBusinesses = verifiedBusinesses.filter(item => 
         item.name.toLowerCase().includes(query) ||
-        item.category.toLowerCase().includes(query) ||
         item.location.toLowerCase().includes(query)
       ).slice(0, 2).map(item => ({ ...item, type: 'business' }));
 
@@ -180,9 +179,9 @@ export default function SearchDropdown() {
                         <span className="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded capitalize">
                           {result.type}
                         </span>
-                        {result.category && (
+                        {(result.category || result.type === 'business') && (
                           <span className="text-xs text-gray-500">
-                            {result.category}
+                            {result.category || 'Business'}
                           </span>
                         )}
                       </div>

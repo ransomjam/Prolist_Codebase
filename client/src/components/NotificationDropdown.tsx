@@ -1,13 +1,19 @@
 import { useState, useRef, useEffect } from "react";
 import { Bell, X, Check, CheckCheck } from "lucide-react";
-import { notifications } from "../data/demoData";
+import { useNotifications } from "../hooks/useNotifications";
 
 export default function NotificationDropdown() {
   const [isOpen, setIsOpen] = useState(false);
-  const [notificationList, setNotificationList] = useState(notifications);
+  const { 
+    notifications: notificationList, 
+    unreadCount, 
+    markAsRead, 
+    markAllAsRead, 
+    removeNotification,
+    requestNotificationPermission,
+    isConnected
+  } = useNotifications();
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  const unreadCount = notificationList.filter(n => !n.read).length;
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -22,24 +28,12 @@ export default function NotificationDropdown() {
     };
   }, []);
 
-  const markAsRead = (id: number) => {
-    setNotificationList(prev => 
-      prev.map(notification => 
-        notification.id === id 
-          ? { ...notification, read: true }
-          : notification
-      )
-    );
-  };
-
-  const markAllAsRead = () => {
-    setNotificationList(prev => 
-      prev.map(notification => ({ ...notification, read: true }))
-    );
-  };
-
-  const removeNotification = (id: number) => {
-    setNotificationList(prev => prev.filter(n => n.id !== id));
+  // Request notification permission on first click
+  const handleBellClick = async () => {
+    if (!isOpen) {
+      await requestNotificationPermission();
+    }
+    setIsOpen(!isOpen);
   };
 
   const getNotificationColor = (type: string) => {
@@ -51,6 +45,9 @@ export default function NotificationDropdown() {
       case 'new_follower': return 'border-l-purple-500 bg-purple-50';
       case 'payment_received': return 'border-l-emerald-500 bg-emerald-50';
       case 'listing_featured': return 'border-l-yellow-500 bg-yellow-50';
+      case 'new_bid': return 'border-l-orange-500 bg-orange-50';
+      case 'message_reply': return 'border-l-blue-500 bg-blue-50';
+      case 'auction_won': return 'border-l-green-500 bg-green-50';
       default: return 'border-l-gray-500 bg-gray-50';
     }
   };
@@ -58,7 +55,7 @@ export default function NotificationDropdown() {
   return (
     <div className="relative" ref={dropdownRef}>
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleBellClick}
         className="relative p-2 text-white hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
       >
         <Bell size={20} />
@@ -66,6 +63,9 @@ export default function NotificationDropdown() {
           <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
             {unreadCount > 9 ? '9+' : unreadCount}
           </span>
+        )}
+        {isConnected && (
+          <div className="absolute top-0 right-0 w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
         )}
       </button>
 
