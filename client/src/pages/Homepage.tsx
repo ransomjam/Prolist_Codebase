@@ -28,7 +28,7 @@ export default function Homepage() {
           alt="Bamenda cityscape from Upstation Hill" 
           className="w-full h-full object-cover object-center"
         />
-        <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/50 to-black/70"></div>
         <div className="absolute inset-0 flex items-center justify-center text-center text-white">
           <div className="max-w-2xl px-4">
             <h1 className="text-3xl lg:text-5xl font-bold mb-4 drop-shadow-lg">
