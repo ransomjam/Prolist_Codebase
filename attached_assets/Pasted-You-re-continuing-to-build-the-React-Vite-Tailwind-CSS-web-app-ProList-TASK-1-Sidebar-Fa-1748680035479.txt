@@ -1,0 +1,131 @@
+You're continuing to build the React (Vite) + Tailwind CSS web app "ProList".
+
+✅ TASK 1: Sidebar (Facebook Lite style)
+Instructions:
+Create a React component called Sidebar.jsx in /src/components/:
+
+jsx
+Copy
+Edit
+import { useState } from 'react';
+import { HomeIcon, BuildingStorefrontIcon, TagIcon, HomeModernIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
+
+export default function Sidebar() {
+  const [expanded, setExpanded] = useState(false);
+
+  const links = [
+    { icon: HomeIcon, label: 'Home' },
+    { icon: TagIcon, label: 'Listings' },
+    { icon: BuildingStorefrontIcon, label: 'Markets' },
+    { icon: HomeModernIcon, label: 'Real Estate' },
+    { icon: CurrencyDollarIcon, label: 'Auctions' },
+  ];
+
+  return (
+    <nav
+      onMouseEnter={() => setExpanded(true)}
+      onMouseLeave={() => setExpanded(false)}
+      className="bg-primary h-screen text-white flex flex-col items-center p-3 shadow-md"
+    >
+      {links.map(({ icon: Icon, label }) => (
+        <div key={label} className="flex items-center gap-2 hover:bg-neonBlue p-2 rounded-lg cursor-pointer w-full transition-colors">
+          <Icon className="h-6 w-6" />
+          {expanded && <span className="text-sm font-semibold">{label}</span>}
+        </div>
+      ))}
+    </nav>
+  );
+}
+Test it visually: Make sure icons expand clearly on hover, exactly like Facebook Lite.
+
+✅ TASK 2: Navbar (with dropdown menu)
+Instructions:
+Create a component called Navbar.jsx in /src/components/:
+
+jsx
+Copy
+Edit
+import { useState } from 'react';
+
+export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <nav className="bg-white shadow-md flex justify-between items-center p-4">
+      <img src="/assets/logo.svg" alt="ProList Logo" className="h-8"/>
+
+      <div className="relative">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="bg-primary text-white px-4 py-2 rounded-lg shadow-neonBlue"
+        >
+          Menu ▼
+        </button>
+
+        {isOpen && (
+          <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-xl z-20">
+            <a href="#" className="block px-4 py-2 hover:bg-gray-100">Profile</a>
+            <a href="#" className="block px-4 py-2 hover:bg-gray-100">My Listings</a>
+            <a href="#" className="block px-4 py-2 hover:bg-gray-100">Settings</a>
+            <a href="#" className="block px-4 py-2 hover:bg-gray-100">Logout</a>
+          </div>
+        )}
+      </div>
+    </nav>
+  );
+}
+Test: Dropdown should clearly appear and vanish on click.
+
+✅ TASK 3: Homepage (Bamenda Market Cards with Neon Glow)
+Instructions:
+Create a component named Homepage.jsx in /src/pages/:
+
+jsx
+Copy
+Edit
+import Card from '../components/Card';
+import { markets } from '../demoData';
+
+export default function Homepage() {
+  return (
+    <div className="p-6">
+      <h1 className="text-3xl font-bold text-primary mb-4">Welcome to ProList Bamenda</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {markets.map(market => (
+          <Card
+            key={market.id}
+            title={market.name}
+            description="Explore verified shops and vendors."
+            image={market.image}
+            neonColor="blue"
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+Ensure visually: Each card must have a neon blue shadow and scale slightly on hover.
+
+✅ TASK 4: Update App.jsx (Layout Setup)
+Update your App.jsx to integrate Sidebar, Navbar, and Homepage correctly:
+
+jsx
+Copy
+Edit
+import Sidebar from './components/Sidebar';
+import Navbar from './components/Navbar';
+import Homepage from './pages/Homepage';
+
+function App() {
+  return (
+    <div className="flex">
+      <Sidebar />
+      <div className="flex-1">
+        <Navbar />
+        <Homepage />
+      </div>
+    </div>
+  );
+}
+
+export default App;
