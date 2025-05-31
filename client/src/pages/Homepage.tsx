@@ -2,10 +2,8 @@ import { Compass, Store, MapPin, Building, Gavel, Utensils, Shirt, Laptop, Wrenc
 import Card from "../components/Card";
 import Button from "../components/Button";
 import { markets } from "../data/demoData";
-import { useState } from "react";
 
 export default function Homepage() {
-  const [showExploreMenu, setShowExploreMenu] = useState(false);
   const stats = [
     { label: "Local Businesses", value: "150+", color: "text-primary" },
     { label: "Active Markets", value: "12", color: "text-emerald" },
@@ -38,51 +36,10 @@ export default function Homepage() {
             <p className="text-lg lg:text-xl mb-6 opacity-90">
               Connect with trusted local markets, vendors, and services in your community
             </p>
-            <div className="relative">
-              <Button 
-                variant="neon" 
-                size="lg"
-                onClick={() => setShowExploreMenu(!showExploreMenu)}
-              >
-                <Compass className="mr-2" size={20} />
-                Explore Now
-              </Button>
-
-              {showExploreMenu && (
-                <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-4 bg-white rounded-xl shadow-xl border z-50 w-80">
-                  <div className="grid grid-cols-2 gap-2 p-4">
-                    <a href="/listings" className="p-3 rounded-lg border border-gradient-to-r from-blue-200 to-emerald-200 hover:from-blue-300 hover:to-emerald-300 transition-all text-center">
-                      <div className="text-sm font-medium text-gray-700">📋 Listings</div>
-                    </a>
-                    <a href="/markets" className="p-3 rounded-lg border border-gradient-to-r from-blue-200 to-emerald-200 hover:from-blue-300 hover:to-emerald-300 transition-all text-center">
-                      <div className="text-sm font-medium text-gray-700">🏪 Markets</div>
-                    </a>
-                    <a href="/realestate" className="p-3 rounded-lg border border-gradient-to-r from-blue-200 to-emerald-200 hover:from-blue-300 hover:to-emerald-300 transition-all text-center">
-                      <div className="text-sm font-medium text-gray-700">🏠 Real Estate</div>
-                    </a>
-                    <a href="/auctions" className="p-3 rounded-lg border border-gradient-to-r from-blue-200 to-emerald-200 hover:from-blue-300 hover:to-emerald-300 transition-all text-center">
-                      <div className="text-sm font-medium text-gray-700">🔥 Auctions</div>
-                    </a>
-                    <a href="/investments" className="p-3 rounded-lg border border-gradient-to-r from-blue-200 to-emerald-200 hover:from-blue-300 hover:to-emerald-300 transition-all text-center">
-                      <div className="text-sm font-medium text-gray-700">💼 Investments</div>
-                    </a>
-                    <a href="/stocks" className="p-3 rounded-lg border border-gradient-to-r from-blue-200 to-emerald-200 hover:from-blue-300 hover:to-emerald-300 transition-all text-center">
-                      <div className="text-sm font-medium text-gray-700">📈 Stocks</div>
-                    </a>
-                    <a href="/verified" className="p-3 rounded-lg border border-gradient-to-r from-blue-200 to-emerald-200 hover:from-blue-300 hover:to-emerald-300 transition-all text-center col-span-2">
-                      <div className="text-sm font-medium text-gray-700">✅ Verified Directory</div>
-                    </a>
-                  </div>
-                </div>
-              )}
-
-              {showExploreMenu && (
-                <div 
-                  className="fixed inset-0 z-40" 
-                  onClick={() => setShowExploreMenu(false)}
-                />
-              )}
-            </div>
+            <Button variant="neon" size="lg">
+              <Compass className="mr-2" size={20} />
+              Explore Now
+            </Button>
           </div>
         </div>
       </div>
