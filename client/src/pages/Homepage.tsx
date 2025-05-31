@@ -70,12 +70,12 @@ export default function Homepage() {
             <Card
               key={market.id}
               title={market.name}
-              description={market.description}
+              description={`${market.shops.length} shops, ${market.importers.length} importers, ${market.vendors.length} vendors`}
               image={market.image}
               neonColor={market.id % 2 === 0 ? 'green' : 'blue'}
-              verified={market.verified}
-              rating={market.rating}
-              reviews={market.reviews}
+              verified={true}
+              rating={4.8}
+              reviews={120}
               badge="Open Now"
               badgeColor="bg-emerald"
             />
