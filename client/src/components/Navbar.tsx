@@ -82,16 +82,6 @@ export default function Navbar() {
             </div>
           </Link>
 
-          {/* Friends/Users */}
-          <button className="flex flex-col items-center gap-1 px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-all duration-200">
-            <Users className="h-7 w-7" />
-          </button>
-
-          {/* Messages */}
-          <button className="flex flex-col items-center gap-1 px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-all duration-200">
-            <MessageCircle className="h-7 w-7" />
-          </button>
-
           {/* Listings with notification badge */}
           <Link 
             href="/listings"
@@ -109,22 +99,46 @@ export default function Navbar() {
             </div>
           </Link>
 
+          {/* Markets */}
+          <Link 
+            href="/markets"
+            className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 ${
+              location === '/markets' 
+                ? 'text-primary' 
+                : 'text-gray-600 hover:bg-gray-100'
+            }`}
+          >
+            <BuildingStorefrontIcon className="h-7 w-7" />
+          </Link>
+
+          {/* Real Estate */}
+          <Link 
+            href="/realestate"
+            className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 ${
+              location === '/realestate' 
+                ? 'text-primary' 
+                : 'text-gray-600 hover:bg-gray-100'
+            }`}
+          >
+            <HomeModernIcon className="h-7 w-7" />
+          </Link>
+
+          {/* Auctions */}
+          <Link 
+            href="/auctions"
+            className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 ${
+              location === '/auctions' 
+                ? 'text-primary' 
+                : 'text-gray-600 hover:bg-gray-100'
+            }`}
+          >
+            <CurrencyDollarIcon className="h-7 w-7" />
+          </Link>
+
           {/* Notifications */}
           <button className="flex flex-col items-center gap-1 px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-all duration-200">
             <Bell className="h-7 w-7" />
           </button>
-
-          {/* Analytics */}
-          <button className="flex flex-col items-center gap-1 px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-all duration-200">
-            <TrendingUp className="h-7 w-7" />
-          </button>
-
-          {/* Hidden links for other pages */}
-          <div className="hidden">
-            <Link href="/markets" />
-            <Link href="/realestate" />
-            <Link href="/auctions" />
-          </div>
         </div>
       </div>
       
