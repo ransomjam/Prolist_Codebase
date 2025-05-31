@@ -21,15 +21,13 @@ export default function Homepage() {
   return (
     <div className="space-y-8">
       {/* Hero Section */}
-      <div className="relative rounded-2xl overflow-hidden h-64 lg:h-80 bg-gradient-to-r from-green-600 via-yellow-500 to-red-600">
-        <div className="absolute inset-0 bg-black bg-opacity-30"></div>
-        {/* Decorative market elements */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-4 left-4 w-8 h-8 bg-white rounded-full"></div>
-          <div className="absolute top-8 right-8 w-6 h-6 bg-white rounded-full"></div>
-          <div className="absolute bottom-4 left-8 w-10 h-10 bg-white rounded-full"></div>
-          <div className="absolute bottom-8 right-4 w-4 h-4 bg-white rounded-full"></div>
-        </div>
+      <div className="relative rounded-2xl overflow-hidden h-64 lg:h-80">
+        <img 
+          src="/attached_assets/20250520_0330_Contemporary Cameroonian Hotel Design_simple_compose_01jvpkske3fr7bycqw9n2k38pv.png" 
+          alt="ProList - Contemporary Cameroonian Business Center" 
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black bg-opacity-40"></div>
         <div className="absolute inset-0 flex items-center justify-center text-center text-white">
           <div className="max-w-2xl px-4">
             <h1 className="text-3xl lg:text-5xl font-bold mb-4 drop-shadow-lg">
