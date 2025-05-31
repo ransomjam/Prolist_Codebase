@@ -20,7 +20,14 @@ export default function Profile() {
         <h3 className="text-xl font-bold text-primary">{currentUser.name}</h3>
         <p className="text-gray-600">@{currentUser.username}</p>
         <p className="text-gray-600">{currentUser.location}</p>
-        <p className="mt-2 text-sm">Account: <strong className="text-emerald">{currentUser.accountType}</strong></p>
+        
+        {/* Contact Information */}
+        <div className="mt-3 pt-3 border-t border-gray-100">
+          <p className="text-sm text-gray-700 mt-2">📞 Phone: <span className="text-blue-500">+237 670000000</span></p>
+          <p className="text-sm text-green-600">💬 WhatsApp: <a href="https://wa.me/237670000000" className="underline">Chat on WhatsApp</a></p>
+        </div>
+        
+        <p className="mt-3 text-sm">Account: <strong className="text-emerald">{currentUser.accountType}</strong></p>
         <div className="mt-4 flex gap-6 text-sm">
           <span>Listings: {currentUser.listingsPosted}</span>
           <span>Real Estate: {currentUser.realEstatePosted}</span>

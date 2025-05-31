@@ -54,6 +54,18 @@ export default function VerifiedDirectory() {
               <span className="text-xs text-white bg-emerald px-2 py-1 rounded-full">✔ Verified</span>
             </div>
             
+            <div className="flex gap-2 mb-3">
+              <a href={`https://wa.me/237670000000`} target="_blank" className="text-green-600 hover:underline text-sm font-medium">
+                WhatsApp
+              </a>
+              <button className="text-blue-600 text-sm flex items-center gap-1 font-medium hover:text-blue-700">
+                <MessageCircle className="h-4 w-4" /> Chat
+              </button>
+              <button className="text-gray-600 text-sm flex items-center gap-1 hover:text-gray-700">
+                <Phone className="h-4 w-4" /> Call
+              </button>
+            </div>
+            
             <button className="w-full bg-primary text-white py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
               <Eye size={16} />
               View Business
