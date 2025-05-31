@@ -1,0 +1,225 @@
+You're a professional React developer creating a modern, visually appealing, mobile-friendly web app called "ProList".
+
+Stack: React (Vite), Tailwind CSS
+Region: Bamenda, Cameroon
+Focus: Local businesses, markets, vendors, real estate, auctions
+Style: Facebook Lite-like navigation, neon/gradient highlights, premium graphics
+Colors (strictly follow):
+
+Primary Blue: #1B4DB1
+
+Neon Blue: #4D77FF (for glows/highlights)
+
+Emerald Green: #25AE60
+
+Neon Green: #29FFBF (accent glow)
+
+Bright Yellow: #FFD600 (only badges/tags, not backgrounds)
+
+Background: White (#FFFFFF) and Light Gray (#F7FAFC)
+
+Icons: All SVG (no PNG), clear, neon-colored
+
+Verification Icon: Blue shield with a checkmark
+
+Trust Icon: Green neon shield
+
+Assets (use placeholders if needed):
+
+/assets/logo.svg (ProList text with verification shield icon)
+
+/assets/bamenda-market.jpg (hero image, market photos)
+
+/assets/default-shop.png, /assets/default-user.png
+
+Project Structure (must follow exactly):
+
+bash
+Copy
+Edit
+/src
+  /assets (images & icons)
+  /components
+    Navbar.jsx
+    Sidebar.jsx
+    Footer.jsx
+    Card.jsx (neon styled)
+    Button.jsx (gradient neon)
+  /pages
+    Homepage.jsx
+    Markets.jsx
+    Listings.jsx
+    RealEstate.jsx
+    Auctions.jsx
+    Profile.jsx
+    Admin.jsx
+    Login.jsx
+    Signup.jsx
+  demoData.js
+  App.jsx
+  index.css (import Tailwind)
+  main.jsx
+Implementation Steps (exactly follow these):
+
+✅ Step 1: Setup React & Tailwind
+
+Create React (Vite) project
+
+Install and configure Tailwind exactly as:
+
+shell
+Copy
+Edit
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+✅ Step 2: Tailwind Config (copy exactly)
+
+js
+Copy
+Edit
+export default {
+  content: ["./src/**/*.{js,jsx}"],
+  theme: {
+    extend: {
+      colors: {
+        primary: '#1B4DB1',
+        emerald: '#25AE60',
+        neonBlue: '#4D77FF',
+        neonGreen: '#29FFBF',
+        neonYellow: '#FFD600',
+        grayLight: '#F7FAFC',
+      },
+      boxShadow: {
+        neonBlue: '0 0 10px #4D77FF, 0 0 20px #4D77FF',
+        neonGreen: '0 0 10px #29FFBF, 0 0 20px #29FFBF',
+      },
+    },
+  },
+}
+✅ Step 3: Import Tailwind in CSS
+/src/index.css:
+
+css
+Copy
+Edit
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #F7FAFC;
+}
+✅ Step 4: Reusable Neon Card Component
+/src/components/Card.jsx:
+
+jsx
+Copy
+Edit
+export default function Card({ title, description, image, neonColor }) {
+  const neonShadows = {
+    blue: 'shadow-neonBlue',
+    green: 'shadow-neonGreen',
+  };
+  return (
+    <div className={`bg-white rounded-xl overflow-hidden ${neonShadows[neonColor]} transition-transform hover:scale-105`}>
+      <img src={image} className="h-48 w-full object-cover" alt={title}/>
+      <div className="p-4">
+        <h3 className="text-primary font-bold">{title}</h3>
+        <p className="text-gray-700 text-sm">{description}</p>
+      </div>
+    </div>
+  );
+}
+✅ Step 5: Sidebar (Facebook Lite style)
+/src/components/Sidebar.jsx (icons-only expand on hover):
+
+jsx
+Copy
+Edit
+import { useState } from 'react';
+import { HomeIcon, BuildingStorefrontIcon, TagIcon, HomeModernIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
+export default function Sidebar() {
+  const [expanded, setExpanded] = useState(false);
+  const links = [
+    { icon: HomeIcon, label: 'Home' },
+    { icon: TagIcon, label: 'Listings' },
+    { icon: BuildingStorefrontIcon, label: 'Markets' },
+    { icon: HomeModernIcon, label: 'Real Estate' },
+    { icon: CurrencyDollarIcon, label: 'Auctions' },
+  ];
+  return (
+    <nav onMouseEnter={() => setExpanded(true)} onMouseLeave={() => setExpanded(false)} className="bg-primary text-white p-2 flex flex-col items-center">
+      {links.map(({icon: Icon, label}) => (
+        <a key={label} className="flex items-center gap-2 p-2 hover:bg-neonBlue rounded-lg cursor-pointer w-full">
+          <Icon className="h-6 w-6"/>
+          {expanded && <span>{label}</span>}
+        </a>
+      ))}
+    </nav>
+  );
+}
+✅ Step 6: Navbar & Dropdown
+/src/components/Navbar.jsx (top-right dropdown):
+
+jsx
+Copy
+Edit
+export default function Navbar() {
+  return (
+    <nav className="bg-white shadow p-4 flex justify-between">
+      <img src="/assets/logo.svg" className="h-8" alt="ProList"/>
+      <div className="relative">
+        <button className="bg-primary text-white px-4 py-2 rounded-lg">Menu ▼</button>
+        <div className="absolute right-0 bg-white shadow rounded-lg mt-2 hidden group-hover:block">
+          <a href="#">Profile</a>
+          <a href="#">Settings</a>
+          <a href="#">Logout</a>
+        </div>
+      </div>
+    </nav>
+  );
+}
+✅ Step 7: Homepage & Markets (Strict local data)
+/src/demoData.js:
+
+jsx
+Copy
+Edit
+export const markets = [
+  { id: 1, name: 'Main Market Bamenda', image: '/assets/bamenda-market.jpg' },
+  { id: 2, name: 'Nkwen Market', image: '/assets/bamenda-market.jpg' },
+];
+Homepage must use Card component with neon glow to show these clearly.
+
+✅ Step 8: Footer (include "ProList Cares")
+/src/components/Footer.jsx:
+
+jsx
+Copy
+Edit
+export default function Footer() {
+  return (
+    <footer className="bg-primary text-white p-4 text-center">
+      ProList ©2024 • <span className="text-emerald">ProList Cares</span>
+    </footer>
+  );
+}
+✅ Step 9: Routing Setup (use React Router DOM)
+
+shell
+Copy
+Edit
+npm install react-router-dom
+Implement routes clearly for Homepage, Markets, Listings, Auctions, etc.
+
+✅ Project Expectations
+Neon/glow effects subtle & professional (Tailwind shadows)
+
+Fully responsive & fast-loading
+
+Local Bamenda content (real names/images)
+
+Icons always SVG
+
+Clear, easy-to-follow navigation (Facebook Lite style
