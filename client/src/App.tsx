@@ -9,6 +9,7 @@ import Footer from "./components/Footer";
 import LandingPage from './pages/LandingPage';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import Verification from './pages/Verification';
 import Homepage from './pages/Homepage';
 import Markets from "./pages/Markets";
 import MarketDetails from "./pages/MarketDetails";
@@ -28,6 +29,7 @@ function Router() {
       <Route path="/" component={LandingPage} />
       <Route path="/login" component={Login} />
       <Route path="/signup" component={Signup} />
+      <Route path="/apply-verification" component={Verification} />
       <Route path="/app" component={Homepage} />
       <Route path="/markets" component={Markets} />
       <Route path="/markets/:id" component={MarketDetails} />

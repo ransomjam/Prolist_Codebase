@@ -1,0 +1,78 @@
+Add a vendor verification request system to ProList.
+Store submission in state and show “Pending Verification” in profile.
+
+✅ TASK 1: Add Verification.jsx Page
+Create /src/pages/Verification.jsx:
+
+jsx
+Copy
+Edit
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+export default function Verification({ onSubmit }) {
+  const [form, setForm] = useState({
+    businessName: '',
+    location: '',
+    reason: '',
+  });
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(form); // pass to App state
+    navigate('/profile');
+  };
+
+  return (
+    <div className="p-6 max-w-xl mx-auto">
+      <h2 className="text-3xl font-bold text-primary mb-4">📋 Apply for Verification</h2>
+      <form onSubmit={handleSubmit} className="bg-white p-6 rounded-xl shadow grid gap-4">
+        <input name="businessName" onChange={handleChange} placeholder="Business Name" className="border p-2 rounded" />
+        <input name="location" onChange={handleChange} placeholder="Shop or Market Location" className="border p-2 rounded" />
+        <textarea name="reason" onChange={handleChange} placeholder="Why should we verify you?" className="border p-2 rounded" rows="3" />
+        <button type="submit" className="bg-emerald text-white px-4 py-2 rounded-lg shadow-neonBlue hover:shadow-neonGreen">Submit Application</button>
+      </form>
+    </div>
+  );
+}
+✅ TASK 2: Add State in App.jsx to Hold Requests
+In App.jsx:
+
+jsx
+Copy
+Edit
+const [verificationRequests, setVerificationRequests] = useState([]);
+const [userSession, setUserSession] = useState(null);
+
+const handleVerificationSubmit = (data) => {
+  setVerificationRequests([...verificationRequests, { ...data, status: 'pending', submittedBy: userSession?.username }]);
+};
+✅ TASK 3: Add Route
+In App.jsx routes:
+
+jsx
+Copy
+Edit
+import Verification from './pages/Verification';
+...
+<Route path="/apply-verification" element={<Verification onSubmit={handleVerificationSubmit} />} />
+✅ TASK 4: Show Status in Profile.jsx
+In Profile.jsx, add below “Account”:
+
+jsx
+Copy
+Edit
+{currentUser.accountType === 'vendor' && (
+  <p className="mt-2 text-sm">
+    Verification Status: <strong className="text-yellow-600">Pending Verification</strong>
+    <a href="/apply-verification" className="ml-4 text-blue-600 underline">Apply</a>
+  </p>
+)}
+✅ TASK 5 (Optional): Admin View (Later)
+Create a future /AdminVerificationPanel.jsx to review requests.

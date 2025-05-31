@@ -259,7 +259,7 @@ export const currentUser = {
   name: "Jam Ransom",
   username: "jamprolist",
   location: "Centre des Handicapes, Bamenda",
-  accountType: "free", // or "premium"
+  accountType: "vendor", // or "premium", "user", "investor"
   listingsPosted: 3,
   realEstatePosted: 1,
   auctionsPosted: 0,

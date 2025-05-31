@@ -1,9 +1,21 @@
 import { currentUser } from '../data/demoData';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '../hooks/useAuth';
 
 export default function Profile() {
   const [showUpgrade, setShowUpgrade] = useState(false);
+  const [verificationStatus, setVerificationStatus] = useState<string>('none');
+  const { user } = useAuth();
   const isPremium = currentUser.accountType === 'premium';
+
+  useEffect(() => {
+    // Check for pending verification requests
+    const requests = JSON.parse(localStorage.getItem('verificationRequests') || '[]');
+    const userRequest = requests.find((req: any) => req.submittedBy === user?.username);
+    if (userRequest) {
+      setVerificationStatus(userRequest.status);
+    }
+  }, [user]);
 
   return (
     <div className="p-6">
@@ -28,6 +40,30 @@ export default function Profile() {
         </div>
         
         <p className="mt-3 text-sm">Account: <strong className="text-emerald">{currentUser.accountType}</strong></p>
+        
+        {/* Verification Status for Vendors */}
+        {currentUser.accountType === 'vendor' && (
+          <div className="mt-3 p-3 bg-gray-50 rounded-lg">
+            <p className="text-sm">
+              Verification Status: {' '}
+              {verificationStatus === 'pending' ? (
+                <span className="text-yellow-600 font-medium">⏳ Pending Verification</span>
+              ) : verificationStatus === 'verified' ? (
+                <span className="text-green-600 font-medium">✓ Verified</span>
+              ) : (
+                <span className="text-gray-600">Not Verified</span>
+              )}
+            </p>
+            {verificationStatus === 'none' && (
+              <a 
+                href="/apply-verification" 
+                className="inline-block mt-2 text-primary hover:text-blue-700 font-medium underline text-sm"
+              >
+                Apply for Verification
+              </a>
+            )}
+          </div>
+        )}
         <div className="mt-4 flex gap-6 text-sm">
           <span>Listings: {currentUser.listingsPosted}</span>
           <span>Real Estate: {currentUser.realEstatePosted}</span>
