@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { Search, Plus, User, Settings, Heart, LogOut, Menu, Shield, Users, MessageCircle, Monitor, Bell, TrendingUp } from "lucide-react";
+import { Search, Plus, User, Settings, Heart, LogOut, Menu, Shield, Users, MessageCircle, Monitor, TrendingUp, Bell } from "lucide-react";
 import { HomeIcon, BuildingStorefrontIcon, TagIcon, HomeModernIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
+import NotificationDropdown from "./NotificationDropdown";
+import SearchDropdown from "./SearchDropdown";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -181,14 +183,7 @@ export default function Navbar() {
           </Link>
 
           {/* Notifications */}
-          <button className="relative flex flex-col items-center gap-1 px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-all duration-200">
-            <div className="relative">
-              <Bell className="h-7 w-7" />
-              <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
-                7
-              </div>
-            </div>
-          </button>
+          <NotificationDropdown />
         </div>
       </div>
       
@@ -256,6 +251,13 @@ export default function Navbar() {
               <CurrencyDollarIcon className="h-6 w-6" />
               <span className="font-medium">Auctions</span>
             </Link>
+            
+            {/* Mobile Notifications */}
+            <div className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700">
+              <Bell className="h-6 w-6" />
+              <span className="font-medium">Notifications</span>
+              <span className="ml-auto bg-red-500 text-white text-xs rounded-full px-2 py-1">4</span>
+            </div>
           </div>
         </div>
       )}

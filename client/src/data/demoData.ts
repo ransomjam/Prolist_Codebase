@@ -320,6 +320,72 @@ export const verifiedBusinesses = [
   },
 ];
 
+export const notifications = [
+  {
+    id: 1,
+    type: "bid_confirmed",
+    title: "Bid Confirmed",
+    message: "Your bid of 250,000 FCFA on HP Laptop has been confirmed",
+    time: "2 min ago",
+    read: false,
+    icon: "🔥"
+  },
+  {
+    id: 2,
+    type: "listing_reply",
+    title: "New Reply",
+    message: "Someone replied to your Samsung Galaxy listing",
+    time: "15 min ago",
+    read: false,
+    icon: "💬"
+  },
+  {
+    id: 3,
+    type: "account_verified",
+    title: "Account Verified",
+    message: "Your business EmmaTech Gadgets has been verified",
+    time: "1 hour ago",
+    read: true,
+    icon: "✅"
+  },
+  {
+    id: 4,
+    type: "auction_ending",
+    title: "Auction Ending Soon",
+    message: "Men's Designer Shoes auction ends in 30 minutes",
+    time: "2 hours ago",
+    read: false,
+    icon: "⏰"
+  },
+  {
+    id: 5,
+    type: "new_follower",
+    title: "New Follower",
+    message: "Mbuh Anita started following you",
+    time: "3 hours ago",
+    read: true,
+    icon: "👥"
+  },
+  {
+    id: 6,
+    type: "payment_received",
+    title: "Payment Received",
+    message: "You received 45,000 FCFA for Nike Airforce 1",
+    time: "1 day ago",
+    read: true,
+    icon: "💰"
+  },
+  {
+    id: 7,
+    type: "listing_featured",
+    title: "Listing Featured",
+    message: "Your Traditional Kaba listing is now featured",
+    time: "2 days ago",
+    read: true,
+    icon: "⭐"
+  }
+];
+
 export const stats = {
   businesses: "150+",
   markets: "12",
