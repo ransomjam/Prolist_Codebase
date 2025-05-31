@@ -134,6 +134,63 @@ export const listings = [
   }
 ];
 
+export const realEstate = [
+  {
+    id: 1,
+    title: "Duplex for Sale – Commercial Avenue",
+    price: "60,000,000 FCFA",
+    location: "Commercial Avenue, Bamenda",
+    image: "https://images.unsplash.com/photo-1613545325278-f24b0cae1224?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300",
+    verified: true,
+    trustCount: 85,
+  },
+  {
+    id: 2,
+    title: "2-Bedroom Apartment – Ntarikon",
+    price: "150,000 FCFA/month",
+    location: "Ntarikon, Bamenda",
+    image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300",
+    verified: false,
+    trustCount: 45,
+  },
+  {
+    id: 3,
+    title: "3-Bedroom House – Up Station",
+    price: "45,000,000 FCFA",
+    location: "Up Station, Bamenda",
+    image: "https://images.unsplash.com/photo-1572120360610-d971b9d7767c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300",
+    verified: true,
+    trustCount: 120,
+  },
+  {
+    id: 4,
+    title: "Studio Apartment – Nkwen",
+    price: "80,000 FCFA/month",
+    location: "Nkwen, Bamenda",
+    image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300",
+    verified: true,
+    trustCount: 67,
+  },
+  {
+    id: 5,
+    title: "Commercial Building – Main Market",
+    price: "120,000,000 FCFA",
+    location: "Main Market Area, Bamenda",
+    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300",
+    verified: true,
+    trustCount: 95,
+  },
+  {
+    id: 6,
+    title: "Land for Sale – Bambili",
+    price: "8,000,000 FCFA",
+    location: "Bambili, Bamenda",
+    image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300",
+    verified: false,
+    trustCount: 34,
+  }
+];
+
 export const stats = {
   businesses: "150+",
   markets: "12",

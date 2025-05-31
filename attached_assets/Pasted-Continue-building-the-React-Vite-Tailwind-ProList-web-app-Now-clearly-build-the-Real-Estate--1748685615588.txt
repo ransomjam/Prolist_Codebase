@@ -1,0 +1,94 @@
+Continue building the React (Vite) + Tailwind “ProList” web app.
+
+Now clearly build the Real Estate section.
+
+✅ TASK 1: Extend demoData.js with Real Estate Listings
+Add to /src/demoData.js:
+
+jsx
+Copy
+Edit
+export const realEstate = [
+  {
+    id: 1,
+    title: "Duplex for Sale – Commercial Avenue",
+    price: "60,000,000 FCFA",
+    location: "Commercial Avenue, Bamenda",
+    image: "/assets/duplex.jpg",
+    verified: true,
+    trustCount: 85,
+  },
+  {
+    id: 2,
+    title: "2-Bedroom Apartment – Ntarikon",
+    price: "150,000 FCFA/month",
+    location: "Ntarikon, Bamenda",
+    image: "/assets/apartment.jpg",
+    verified: false,
+    trustCount: 45,
+  },
+];
+✅ TASK 2: Create RealEstateCard Component
+Create /src/components/RealEstateCard.jsx:
+
+jsx
+Copy
+Edit
+export default function RealEstateCard({ data }) {
+  return (
+    <div className="bg-white rounded-xl overflow-hidden shadow-neonGreen hover:shadow-neonBlue transition-transform hover:scale-105 cursor-pointer">
+      <img src={data.image} alt={data.title} className="h-48 w-full object-cover" />
+      <div className="p-4">
+        <h3 className="font-bold text-primary">{data.title}</h3>
+        <p className="text-sm text-gray-700 mt-1">{data.location}</p>
+        <p className="font-bold text-emerald mt-2">{data.price}</p>
+        <div className="flex items-center mt-3">
+          {data.verified && (
+            <span className="bg-emerald text-white px-2 py-1 rounded-full text-xs">✔ Verified</span>
+          )}
+          <div className="ml-auto flex items-center text-primary font-semibold">
+            <span className="mr-1">🛡️</span>{data.trustCount}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+✅ TASK 3: Build RealEstate.jsx Page
+Create /src/pages/RealEstate.jsx:
+
+jsx
+Copy
+Edit
+import { realEstate } from '../demoData';
+import RealEstateCard from '../components/RealEstateCard';
+
+export default function RealEstate() {
+  return (
+    <div className="p-6">
+      <h2 className="text-3xl font-bold text-primary mb-4">Available Properties in Bamenda</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {realEstate.map((property) => (
+          <RealEstateCard key={property.id} data={property} />
+        ))}
+      </div>
+    </div>
+  );
+}
+✅ TASK 4: Update App.jsx to Include Route
+Update App.jsx:
+
+jsx
+Copy
+Edit
+import RealEstate from './pages/RealEstate';
+...
+<Route path="/real-estate" element={<RealEstate />} />
+✅ TASK 5: Add Real Estate Icon to Sidebar
+In Sidebar.jsx, add to the icon links:
+
+js
+Copy
+Edit
+{ icon: HomeModernIcon, label: 'Real Estate', path: '/real-estate' }
+Ensure it links to /real-estate.
