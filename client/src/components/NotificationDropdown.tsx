@@ -56,17 +56,19 @@ export default function NotificationDropdown() {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={handleBellClick}
-        className="relative p-2 text-white hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
+        className="relative flex flex-col items-center gap-1 px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-all duration-200"
       >
-        <Bell size={20} />
-        {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
-            {unreadCount > 9 ? '9+' : unreadCount}
-          </span>
-        )}
-        {isConnected && (
-          <div className="absolute top-0 right-0 w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-        )}
+        <div className="relative">
+          <Bell className="h-7 w-7" />
+          {unreadCount > 0 && (
+            <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+              {unreadCount > 9 ? '9+' : unreadCount}
+            </div>
+          )}
+          {isConnected && (
+            <div className="absolute top-0 right-0 w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+          )}
+        </div>
       </button>
 
       {isOpen && (
