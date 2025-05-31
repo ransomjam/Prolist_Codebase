@@ -2,7 +2,7 @@ import { Compass, Store, MapPin, Building, Gavel, Utensils, Shirt, Laptop, Wrenc
 import Card from "../components/Card";
 import Button from "../components/Button";
 import { markets } from "../data/demoData";
-import heroImage from "@assets/download (2).jfif";
+import heroImage from "@assets/upstation-hill.jpg";
 
 export default function Homepage() {
   const stats = [
@@ -25,8 +25,8 @@ export default function Homepage() {
       <div className="relative rounded-2xl overflow-hidden h-64 lg:h-80">
         <img 
           src={heroImage} 
-          alt="ProList - Contemporary Cameroonian Business Center" 
-          className="w-full h-full object-cover object-top"
+          alt="Bamenda cityscape from Upstation Hill" 
+          className="w-full h-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-black bg-opacity-40"></div>
         <div className="absolute inset-0 flex items-center justify-center text-center text-white">
