@@ -53,15 +53,29 @@ export default function Navbar() {
                     </div>
                   </Link>
                   <hr className="my-2" />
-                  <a href="/investments" className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg">
-                    <span className="text-sm">💼 Investments</span>
-                  </a>
-                  <a href="/stocks" className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg">
-                    <span className="text-sm">📈 Stocks</span>
-                  </a>
-                  <a href="/verified" className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg">
-                    <span className="text-sm">✅ Verified Directory</span>
-                  </a>
+                  <div className="grid grid-cols-2 gap-2 p-2">
+                    <a href="/listings" className="p-3 rounded-lg border border-gradient-to-r from-blue-200 to-emerald-200 hover:from-blue-300 hover:to-emerald-300 transition-all text-center">
+                      <div className="text-sm font-medium">📋 Listings</div>
+                    </a>
+                    <a href="/markets" className="p-3 rounded-lg border border-gradient-to-r from-blue-200 to-emerald-200 hover:from-blue-300 hover:to-emerald-300 transition-all text-center">
+                      <div className="text-sm font-medium">🏪 Markets</div>
+                    </a>
+                    <a href="/realestate" className="p-3 rounded-lg border border-gradient-to-r from-blue-200 to-emerald-200 hover:from-blue-300 hover:to-emerald-300 transition-all text-center">
+                      <div className="text-sm font-medium">🏠 Real Estate</div>
+                    </a>
+                    <a href="/auctions" className="p-3 rounded-lg border border-gradient-to-r from-blue-200 to-emerald-200 hover:from-blue-300 hover:to-emerald-300 transition-all text-center">
+                      <div className="text-sm font-medium">🔥 Auctions</div>
+                    </a>
+                    <a href="/investments" className="p-3 rounded-lg border border-gradient-to-r from-blue-200 to-emerald-200 hover:from-blue-300 hover:to-emerald-300 transition-all text-center">
+                      <div className="text-sm font-medium">💼 Investments</div>
+                    </a>
+                    <a href="/stocks" className="p-3 rounded-lg border border-gradient-to-r from-blue-200 to-emerald-200 hover:from-blue-300 hover:to-emerald-300 transition-all text-center">
+                      <div className="text-sm font-medium">📈 Stocks</div>
+                    </a>
+                    <a href="/verified" className="p-3 rounded-lg border border-gradient-to-r from-blue-200 to-emerald-200 hover:from-blue-300 hover:to-emerald-300 transition-all text-center col-span-2">
+                      <div className="text-sm font-medium">✅ Verified Directory</div>
+                    </a>
+                  </div>
                   <hr className="my-2" />
                   <a href="#" className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg">
                     <Settings size={18} className="text-gray-600" />
