@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { Search, Plus, User, Settings, Heart, LogOut, Menu, Shield, Users, MessageCircle, Monitor, TrendingUp, Bell } from "lucide-react";
+import { Search, Plus, User, Settings, Heart, LogOut, Menu, Shield, Users, MessageCircle, Monitor, TrendingUp, Bell, ShoppingBag } from "lucide-react";
 import { HomeIcon, BuildingStorefrontIcon, TagIcon, HomeModernIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
 import NotificationDropdown from "./NotificationDropdown";
 import SearchDropdown from "./SearchDropdown";
@@ -149,16 +149,16 @@ export default function Navbar() {
             <HomeIcon className="h-7 w-7" />
           </Link>
 
-          {/* Sales Stats */}
+          {/* Marketplace */}
           <Link 
-            href="/vendor-orders"
+            href="/products"
             className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 ${
-              location === '/vendor-orders' 
+              location === '/products' 
                 ? 'text-primary' 
                 : 'text-gray-600 hover:bg-gray-100'
             }`}
           >
-            <TrendingUp className="h-7 w-7" />
+            <ShoppingBag className="h-7 w-7" />
           </Link>
 
           {/* Listings */}
