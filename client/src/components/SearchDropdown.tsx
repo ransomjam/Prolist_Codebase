@@ -66,7 +66,7 @@ export default function SearchDropdown() {
 
   const getResultLink = (result: any) => {
     switch (result.type) {
-      case 'listing': return '/listings';
+      case 'listing': return '/products';
       case 'market': return `/markets/${result.id}`;
       case 'realestate': return '/realestate';
       case 'auction': return '/auctions';
@@ -215,7 +215,7 @@ export default function SearchDropdown() {
                 className="w-full text-center text-blue-600 hover:text-blue-700 text-sm font-medium"
                 onClick={() => {
                   setIsOpen(false);
-                  window.location.href = `/listings?search=${encodeURIComponent(searchQuery)}`;
+                  window.location.href = `/products?search=${encodeURIComponent(searchQuery)}`;
                 }}
               >
                 View all results for "{searchQuery}"

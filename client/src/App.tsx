@@ -48,7 +48,7 @@ function Router() {
       <Route path="/app" component={Homepage} />
       <Route path="/markets" component={Markets} />
       <Route path="/markets/:id" component={MarketDetails} />
-      <Route path="/listings" component={Listings} />
+      <Route path="/listings" component={ProductFeed} />
       <Route path="/realestate" component={RealEstate} />
       <Route path="/auctions" component={Auctions} />
       <Route path="/profile" component={Profile} />

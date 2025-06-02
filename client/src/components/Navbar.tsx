@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Search, Plus, User, Settings, Heart, LogOut, Menu, Shield, Users, MessageCircle, Monitor, TrendingUp, Bell, ShoppingBag } from "lucide-react";
-import { HomeIcon, BuildingStorefrontIcon, TagIcon, HomeModernIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
+import { HomeIcon, BuildingStorefrontIcon, HomeModernIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
 import NotificationDropdown from "./NotificationDropdown";
 import SearchDropdown from "./SearchDropdown";
 import { useAuth } from "../hooks/useAuth";
@@ -161,17 +161,7 @@ export default function Navbar() {
             <ShoppingBag className="h-7 w-7" />
           </Link>
 
-          {/* Listings */}
-          <Link 
-            href="/listings"
-            className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 ${
-              location === '/listings' 
-                ? 'text-primary' 
-                : 'text-gray-600 hover:bg-gray-100'
-            }`}
-          >
-            <TagIcon className="h-7 w-7" />
-          </Link>
+
 
           {/* Markets */}
           <Link 
