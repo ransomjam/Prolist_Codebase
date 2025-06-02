@@ -307,6 +307,51 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get('/api/orders/all', async (req, res) => {
+    try {
+      // Get all orders from all vendors
+      const allOrders = [];
+      
+      // Get all users to find vendors
+      const users = await storage.getAllUsers();
+      const vendors = users.filter(user => user.accountType === 'vendor');
+      
+      for (const vendor of vendors) {
+        const vendorOrders = await storage.getOrdersByVendor(vendor.id);
+        allOrders.push(...vendorOrders);
+      }
+      
+      // Also get orders from other sources if needed
+      const buyerOrders = await storage.getOrdersByBuyer(1); // Get sample buyer orders
+      const uniqueOrders = [...new Map([...allOrders, ...buyerOrders].map(order => [order.id, order])).values()];
+      
+      res.json(uniqueOrders);
+    } catch (error) {
+      console.error("Error fetching all orders:", error);
+      res.status(500).json({ message: "Failed to fetch all orders" });
+    }
+  });
+
+  app.patch('/api/orders/:id/release-funds', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      
+      const updatedOrder = await storage.updateOrderStatus(id, {
+        paymentStatus: 'released'
+      });
+      
+      if (!updatedOrder) {
+        return res.status(404).json({ message: "Order not found" });
+      }
+      
+      console.log(`Funds released for Order ${id}`);
+      res.json(updatedOrder);
+    } catch (error) {
+      console.error("Error releasing funds:", error);
+      res.status(500).json({ message: "Failed to release funds" });
+    }
+  });
+
   app.patch('/api/orders/:id/status', async (req, res) => {
     try {
       const id = parseInt(req.params.id);

@@ -28,6 +28,7 @@ export interface IStorage {
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   updateUser(id: number, updates: Partial<User>): Promise<User | undefined>;
+  getAllUsers(): Promise<User[]>;
   
   // Comment methods
   getComments(listingId: string, listingType: string): Promise<Comment[]>;

@@ -1,0 +1,80 @@
+Create /src/pages/AdminEscrowPanel.jsx.
+Admin can:
+
+View orders marked as delivered and confirmed by buyers.
+
+Each order clearly shows product, buyer, vendor, and current status.
+
+Button clearly labeled "💳 Release Funds".
+
+Clicking releases escrow, marks order "Completed", and increments vendor sales count.
+Style with Tailwind: clean, professional, and clear UI.
+
+💻 AdminEscrowPanel.jsx
+jsx
+Copy
+Edit
+export default function AdminEscrowPanel({ orders, updateOrder, incrementVendorSales }) {
+  const handleReleaseFunds = (index, vendorUsername) => {
+    updateOrder(index, { status: 'Completed - Funds Released' });
+    incrementVendorSales(vendorUsername);
+  };
+
+  const readyOrders = orders.filter(
+    (order) => order.deliveryConfirmedByVendor && order.receivedConfirmedByBuyer && order.status !== 'Completed - Funds Released'
+  );
+
+  return (
+    <div className="p-6 max-w-3xl mx-auto">
+      <h2 className="text-3xl font-bold text-primary mb-6">💼 Escrow Release Dashboard</h2>
+
+      {readyOrders.length === 0 ? (
+        <p className="text-gray-600">No orders ready for escrow release.</p>
+      ) : (
+        readyOrders.map((order, index) => (
+          <div key={index} className="bg-white rounded-xl shadow-neonBlue p-4 mb-4">
+            <div className="flex gap-4">
+              <img src={order.product.image1} alt={order.product.title} className="w-24 h-24 object-cover rounded" />
+              <div>
+                <h3 className="font-bold text-lg">{order.product.title}</h3>
+                <p className="text-emerald-600 font-bold">{order.product.price} CFA</p>
+                <p className="text-sm text-gray-500">Vendor: {order.product.postedBy}</p>
+                <p className="text-sm text-gray-500">Buyer: {order.buyer}</p>
+                <p className="text-sm text-gray-500">Status: {order.status}</p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => handleReleaseFunds(index, order.product.postedBy)}
+              className="mt-4 bg-gradient-to-r from-blue-500 to-emerald-400 text-white py-2 px-4 rounded-lg shadow-neonGreen hover:scale-105 transition"
+            >
+              💳 Release Funds
+            </button>
+          </div>
+        ))
+      )}
+    </div>
+  );
+}
+✅ Integration in App.jsx:
+Update your existing state clearly to handle sales increment:
+
+jsx
+Copy
+Edit
+const incrementVendorSales = (vendorUsername) => {
+  // This should ideally update vendor data in your vendors array/state
+  console.log(`Increment sales for vendor: ${vendorUsername}`);
+  // Future implementation: actually increment vendor sales in vendor profiles
+};
+Add route clearly:
+
+jsx
+Copy
+Edit
+import AdminEscrowPanel from './pages/AdminEscrowPanel';
+
+<Route
+  path="/admin-escrow"
+  element={<AdminEscrowPanel orders={orders} updateOrder={updateOrder} incrementVendorSales={incrementVendorSales} />}
+/>

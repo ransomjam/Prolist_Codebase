@@ -34,6 +34,7 @@ import Checkout from "./pages/Checkout";
 import OrderConfirmed from "./pages/OrderConfirmed";
 import BuyerOrders from "./pages/BuyerOrders";
 import VendorOrders from "./pages/VendorOrders";
+import AdminEscrowPanel from "./pages/AdminEscrowPanel";
 import Marketplace from "./pages/Marketplace";
 import NotFound from "@/pages/not-found";
 
@@ -68,6 +69,7 @@ function Router() {
       <Route path="/order-confirmed/:id" component={OrderConfirmed} />
       <Route path="/buyer-orders" component={BuyerOrders} />
       <Route path="/vendor-orders" component={VendorOrders} />
+      <Route path="/admin-escrow" component={AdminEscrowPanel} />
       <Route path="/marketplace" component={Marketplace} />
       <Route component={NotFound} />
     </Switch>
