@@ -124,28 +124,12 @@ export default function RealEstate() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Professional Header */}
+      {/* Compact Header */}
       <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
-        <div className="px-4 py-8">
+        <div className="px-4 py-4">
           <div className="max-w-7xl mx-auto">
-            <h1 className="text-3xl md:text-4xl font-bold mb-2">Premium Real Estate</h1>
-            <p className="text-blue-100 text-lg">Discover exceptional properties in Bamenda's prime locations</p>
-            
-            {/* Hero Stats */}
-            <div className="grid grid-cols-3 gap-4 mt-6">
-              <div className="text-center">
-                <div className="text-2xl font-bold">{realEstate.length}</div>
-                <div className="text-blue-200 text-sm">Premium Properties</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold">5+</div>
-                <div className="text-blue-200 text-sm">Prime Locations</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold">100%</div>
-                <div className="text-blue-200 text-sm">Verified Listings</div>
-              </div>
-            </div>
+            <h1 className="text-2xl font-bold mb-1">Verified Real Estate</h1>
+            <p className="text-blue-100 text-sm">Trusted properties in Bamenda</p>
           </div>
         </div>
       </div>
@@ -165,22 +149,23 @@ export default function RealEstate() {
             />
           </div>
 
-          {/* Quick Filter Tabs */}
+          {/* Category and Controls */}
           <div className="flex items-center justify-between mb-4">
-            <div className="flex gap-2 overflow-x-auto pb-2">
-              {propertyTypes.map((type) => (
-                <button
-                  key={type.id}
-                  onClick={() => setSelectedType(type.id)}
-                  className={`flex-shrink-0 px-4 py-2 rounded-lg text-sm font-medium transition ${
-                    selectedType === type.id
-                      ? 'bg-blue-600 text-white shadow-md'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
+            <div className="flex items-center gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Property Type</label>
+                <select
+                  value={selectedType}
+                  onChange={(e) => setSelectedType(e.target.value)}
+                  className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                 >
-                  {type.label} ({type.count})
-                </button>
-              ))}
+                  {propertyTypes.map((type) => (
+                    <option key={type.id} value={type.id}>
+                      {type.label} ({type.count})
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
             
             <div className="flex items-center gap-2">
@@ -289,33 +274,11 @@ export default function RealEstate() {
 
       {/* Results Section */}
       <div className="max-w-7xl mx-auto px-4 py-6">
-        {/* Results Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900">
-              {filteredProperties.length > 0 ? `${filteredProperties.length} Properties Found` : 'No Properties Found'}
-            </h2>
-            {filteredProperties.length > 0 && (
-              <p className="text-gray-600 mt-1">
-                {selectedType !== 'all' && `${propertyTypes.find(t => t.id === selectedType)?.label} • `}
-                {selectedLocation !== 'all' && `${locations.find(l => l.id === selectedLocation)?.label} • `}
-                Premium listings in Bamenda
-              </p>
-            )}
-          </div>
-          
-          {filteredProperties.length > 0 && (
-            <div className="flex items-center gap-4 text-sm text-gray-600">
-              <div className="flex items-center gap-1">
-                <TrendingUp size={16} />
-                <span>Market trends available</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Eye size={16} />
-                <span>{filteredProperties.reduce((sum, p) => sum + (p.trustCount || 0), 0)} total views</span>
-              </div>
-            </div>
-          )}
+        {/* Simple Results Counter */}
+        <div className="mb-6">
+          <h2 className="text-xl font-semibold text-gray-900">
+            {filteredProperties.length > 0 ? `${filteredProperties.length} Properties Available` : 'No Properties Found'}
+          </h2>
         </div>
 
         {/* Properties Display */}
