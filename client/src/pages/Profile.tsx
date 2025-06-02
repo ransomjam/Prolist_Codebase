@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import { Heart, Eye, MessageCircle, Share2, Star, Settings, User, MapPin, Calendar, Phone, Mail, Grid3X3, Bookmark, UserCheck, Plus } from 'lucide-react';
+import { Heart, Eye, MessageCircle, Share2, Star, Settings, User, MapPin, Calendar, Phone, Mail, Grid3X3, Bookmark, UserCheck, Plus, TrendingUp, Package, DollarSign, Award, Clock, CheckCircle, XCircle, Shield } from 'lucide-react';
 import { currentUser } from '../data/demoData';
 import { useAuth } from '../hooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
-import { Shield, CheckCircle, Clock, XCircle } from 'lucide-react';
 
 interface VendorApplication {
   id: number;
@@ -14,10 +13,11 @@ interface VendorApplication {
 
 export default function Profile() {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState("posts");
+  const [activeTab, setActiveTab] = useState("overview");
   const [showUpgrade, setShowUpgrade] = useState(false);
 
   const profileUser = user || currentUser;
+  const isPremium = currentUser.accountType === 'premium';
 
   // Fetch user's vendor application status
   const { data: vendorApplication } = useQuery({
@@ -29,6 +29,30 @@ export default function Profile() {
         if (response.status === 404) return null;
         throw new Error('Failed to fetch application');
       }
+      return response.json();
+    },
+    enabled: !!user?.id
+  });
+
+  // Fetch vendor stats
+  const { data: vendorStats } = useQuery({
+    queryKey: ['/api/vendor/stats', user?.id],
+    queryFn: async () => {
+      if (!user?.id) return null;
+      const response = await fetch(`/api/vendor/stats/${user.id}`);
+      if (!response.ok) return null;
+      return response.json();
+    },
+    enabled: !!user?.id
+  });
+
+  // Fetch user's products
+  const { data: userProducts = [] } = useQuery({
+    queryKey: ['/api/products/vendor', user?.id],
+    queryFn: async () => {
+      if (!user?.id) return [];
+      const response = await fetch(`/api/products/vendor/${user.id}`);
+      if (!response.ok) return [];
       return response.json();
     },
     enabled: !!user?.id
@@ -73,179 +97,294 @@ export default function Profile() {
     }
   ];
 
-  const getVerificationStatus = () => {
-    if (!vendorApplication) return "Not Verified";
-    return vendorApplication.status || "Pending";
+  const getVerificationBadge = () => {
+    if (!vendorApplication) {
+      return (
+        <div className="flex items-center gap-2 bg-gray-100 text-gray-600 px-3 py-1 rounded-full">
+          <Shield size={16} />
+          <span className="text-sm font-medium">Not Verified</span>
+        </div>
+      );
+    }
+
+    switch (vendorApplication.status) {
+      case 'Basic Verified':
+        return (
+          <div className="flex items-center gap-2 bg-green-100 text-green-800 px-3 py-1 rounded-full">
+            <CheckCircle size={16} />
+            <span className="text-sm font-medium">Basic Verified</span>
+          </div>
+        );
+      case 'Rejected':
+        return (
+          <div className="flex items-center gap-2 bg-red-100 text-red-800 px-3 py-1 rounded-full">
+            <XCircle size={16} />
+            <span className="text-sm font-medium">Rejected</span>
+          </div>
+        );
+      default:
+        return (
+          <div className="flex items-center gap-2 bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full">
+            <Clock size={16} />
+            <span className="text-sm font-medium">Pending Review</span>
+          </div>
+        );
+    }
+  };
+
+  const getNotificationMessage = () => {
+    if (!vendorApplication) return null;
+
+    if (vendorApplication.status === 'Basic Verified') {
+      return (
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+          <div className="flex items-center gap-3">
+            <CheckCircle className="text-green-600" size={24} />
+            <div>
+              <h3 className="font-semibold text-green-900">Congratulations! Your application was approved</h3>
+              <p className="text-green-700 text-sm">You now have Basic Verified status and can start listing products on ProList.</p>
+              <p className="text-green-600 text-xs mt-1">
+                Verified on: {new Date(vendorApplication.verifiedAt || vendorApplication.submittedAt).toLocaleDateString()}
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    if (vendorApplication.status === 'Rejected') {
+      return (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+          <div className="flex items-center gap-3">
+            <XCircle className="text-red-600" size={24} />
+            <div>
+              <h3 className="font-semibold text-red-900">Application Not Approved</h3>
+              <p className="text-red-700 text-sm">Your vendor application was rejected. Please review your documents and submit a new application.</p>
+              <a href="/vendor-register" className="text-red-600 underline text-sm hover:text-red-800 mt-1 inline-block">
+                Submit New Application
+              </a>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+        <div className="flex items-center gap-3">
+          <Clock className="text-blue-600" size={24} />
+          <div>
+            <h3 className="font-semibold text-blue-900">Application Under Review</h3>
+            <p className="text-blue-700 text-sm">Your vendor application is being reviewed by our team. You'll be notified once a decision is made.</p>
+            <p className="text-blue-600 text-xs mt-1">
+              Submitted on: {new Date(vendorApplication.submittedAt).toLocaleDateString()}
+            </p>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   return (
-    <div className="max-w-4xl mx-auto bg-white min-h-screen">
+    <div className="max-w-6xl mx-auto bg-white min-h-screen">
+      {/* Notification Messages */}
+      {getNotificationMessage()}
+
       {/* Profile Header */}
-      <div className="px-4 py-6">
-        <div className="flex items-center gap-8 mb-6">
+      <div className="px-6 py-8">
+        <div className="flex flex-col lg:flex-row items-start gap-8 mb-8">
           {/* Profile Image */}
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 mx-auto lg:mx-0">
             <img
-              src={currentUser.avatar || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150"}
+              src={currentUser.avatar}
               alt={profileUser.name || profileUser.username}
-              className="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover"
+              className="w-40 h-40 rounded-full object-cover shadow-lg"
             />
           </div>
 
           {/* Profile Info */}
-          <div className="flex-1 min-w-0">
-            <div className="flex flex-col md:flex-row md:items-center gap-4 mb-4">
-              <h1 className="text-xl md:text-2xl font-light">{profileUser.name || profileUser.username}</h1>
-              <div className="flex gap-2">
-                <button className="bg-blue-500 text-white px-6 py-1.5 rounded-md text-sm font-semibold hover:bg-blue-600 transition">
-                  Edit profile
-                </button>
-                <button className="border border-gray-300 px-6 py-1.5 rounded-md text-sm font-semibold hover:bg-gray-50 transition">
-                  Share profile
-                </button>
-                <button className="border border-gray-300 p-1.5 rounded-md hover:bg-gray-50 transition">
-                  <Settings size={16} />
-                </button>
+          <div className="flex-1 text-center lg:text-left">
+            <div className="flex flex-col lg:flex-row lg:items-center gap-4 mb-6">
+              <h1 className="text-3xl font-bold text-gray-900">{profileUser.name || profileUser.username}</h1>
+              <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
+                {getVerificationBadge()}
+                {isPremium && (
+                  <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1 rounded-full">
+                    <span className="text-sm font-medium">Premium Member</span>
+                  </div>
+                )}
               </div>
             </div>
 
             {/* Stats */}
-            <div className="flex gap-8 mb-4">
-              <div className="text-center md:text-left">
-                <span className="font-semibold">{currentUser.listingsPosted || 24}</span>
-                <span className="text-gray-600 ml-1">posts</span>
+            <div className="flex flex-wrap justify-center lg:justify-start gap-8 mb-6">
+              <div className="text-center">
+                <span className="text-2xl font-bold text-gray-900">{currentUser.listingsPosted}</span>
+                <span className="text-gray-600 block text-sm">Posts</span>
               </div>
-              <div className="text-center md:text-left">
-                <span className="font-semibold">{currentUser.followers || 1234}</span>
-                <span className="text-gray-600 ml-1">followers</span>
+              <div className="text-center">
+                <span className="text-2xl font-bold text-gray-900">{currentUser.followers}</span>
+                <span className="text-gray-600 block text-sm">Followers</span>
               </div>
-              <div className="text-center md:text-left">
-                <span className="font-semibold">{currentUser.following || 567}</span>
-                <span className="text-gray-600 ml-1">following</span>
+              <div className="text-center">
+                <span className="text-2xl font-bold text-gray-900">{currentUser.following}</span>
+                <span className="text-gray-600 block text-sm">Following</span>
+              </div>
+              <div className="text-center">
+                <span className="text-2xl font-bold text-gray-900">{currentUser.trustCount}</span>
+                <span className="text-gray-600 block text-sm">Trust Score</span>
               </div>
             </div>
 
-            {/* Bio */}
-            <div className="text-sm">
-              <div className="font-semibold mb-1">{profileUser.name || 'ProList Vendor'}</div>
-              <div className="text-gray-600 mb-1">🏪 Local Business Owner in {currentUser.location}</div>
-              <div className="text-gray-600 mb-1">📍 Nkwen Market, Commercial Avenue</div>
-              <div className="text-gray-600 mb-1">✨ {getVerificationStatus()}</div>
-              <div className="text-gray-600">📞 +237 670000000</div>
+            {/* Bio & Contact */}
+            <div className="text-gray-700 mb-6 max-w-2xl">
+              <p className="font-medium mb-2">{currentUser.bio}</p>
+              <div className="flex flex-wrap gap-4 text-sm">
+                <span className="flex items-center gap-1">
+                  <MapPin size={16} />
+                  {currentUser.location}
+                </span>
+                <span className="flex items-center gap-1">
+                  <Phone size={16} />
+                  {currentUser.phone}
+                </span>
+                <span className="flex items-center gap-1">
+                  <Mail size={16} />
+                  {currentUser.email}
+                </span>
+                <span className="flex items-center gap-1">
+                  <Calendar size={16} />
+                  Joined {currentUser.joinDate}
+                </span>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
+              <a
+                href="/add-listing"
+                className="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
+              >
+                Add New Listing
+              </a>
+              <button className="border border-gray-300 px-6 py-2 rounded-lg font-semibold hover:bg-gray-50 transition">
+                Edit Profile
+              </button>
+              {!vendorApplication && (
+                <a
+                  href="/vendor-register"
+                  className="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition"
+                >
+                  Get Verified
+                </a>
+              )}
+              {!isPremium && (
+                <button
+                  onClick={() => setShowUpgrade(true)}
+                  className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition"
+                >
+                  Upgrade to Premium
+                </button>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex gap-2 mb-6">
-          <a
-            href="/add-listing"
-            className="flex-1 bg-blue-500 text-white py-2 px-4 rounded-lg text-center font-semibold hover:bg-blue-600 transition"
-          >
-            Add Listing
-          </a>
-          {!vendorApplication && (
-            <a
-              href="/vendor-register"
-              className="flex-1 bg-gray-200 text-gray-800 py-2 px-4 rounded-lg text-center font-semibold hover:bg-gray-300 transition"
-            >
-              Get Verified
-            </a>
-          )}
-        </div>
-
-        {/* Highlights/Stories */}
-        <div className="flex gap-4 overflow-x-auto pb-2">
-          <div className="flex-shrink-0 text-center">
-            <div className="w-16 h-16 rounded-full border-2 border-gray-300 flex items-center justify-center mb-1">
-              <Plus size={20} className="text-gray-400" />
+        {/* Sales Performance */}
+        {vendorStats && (
+          <div className="bg-gradient-to-r from-blue-50 to-green-50 rounded-xl p-6 mb-8">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <TrendingUp size={20} />
+              Sales Performance
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="bg-white rounded-lg p-4 text-center shadow-sm">
+                <DollarSign className="text-green-600 mx-auto mb-2" size={24} />
+                <div className="text-2xl font-bold text-gray-900">{vendorStats.totalRevenue?.toLocaleString() || 0}</div>
+                <div className="text-sm text-gray-600">Total Revenue (CFA)</div>
+              </div>
+              <div className="bg-white rounded-lg p-4 text-center shadow-sm">
+                <Package className="text-blue-600 mx-auto mb-2" size={24} />
+                <div className="text-2xl font-bold text-gray-900">{vendorStats.totalSales || 0}</div>
+                <div className="text-sm text-gray-600">Total Sales</div>
+              </div>
+              <div className="bg-white rounded-lg p-4 text-center shadow-sm">
+                <Star className="text-yellow-600 mx-auto mb-2" size={24} />
+                <div className="text-2xl font-bold text-gray-900">{vendorStats.averageRating || currentUser.rating}</div>
+                <div className="text-sm text-gray-600">Average Rating</div>
+              </div>
+              <div className="bg-white rounded-lg p-4 text-center shadow-sm">
+                <Award className="text-purple-600 mx-auto mb-2" size={24} />
+                <div className="text-2xl font-bold text-gray-900">{userProducts.length}</div>
+                <div className="text-sm text-gray-600">Active Products</div>
+              </div>
             </div>
-            <div className="text-xs text-gray-600">New</div>
           </div>
-          <div className="flex-shrink-0 text-center">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 p-0.5">
-              <img 
-                src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" 
-                className="w-full h-full rounded-full object-cover border-2 border-white"
-                alt="Products"
-              />
-            </div>
-            <div className="text-xs text-gray-600">Products</div>
-          </div>
-          <div className="flex-shrink-0 text-center">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 p-0.5">
-              <img 
-                src="https://images.unsplash.com/photo-1551963831-b3b1ca40c98e?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" 
-                className="w-full h-full rounded-full object-cover border-2 border-white"
-                alt="Market"
-              />
-            </div>
-            <div className="text-xs text-gray-600">Market</div>
-          </div>
-          <div className="flex-shrink-0 text-center">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-blue-400 via-green-500 to-teal-500 p-0.5">
-              <img 
-                src="https://images.unsplash.com/photo-1586953208448-b95a79798f07?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" 
-                className="w-full h-full rounded-full object-cover border-2 border-white"
-                alt="Services"
-              />
-            </div>
-            <div className="text-xs text-gray-600">Services</div>
-          </div>
-        </div>
+        )}
       </div>
 
       {/* Tab Navigation */}
       <div className="border-t border-gray-200">
         <div className="flex">
           <button
-            onClick={() => setActiveTab("posts")}
-            className={`flex-1 py-3 text-center text-sm font-medium transition-colors ${
-              activeTab === "posts"
-                ? 'text-gray-900 border-t-2 border-gray-900'
-                : 'text-gray-500'
+            onClick={() => setActiveTab("overview")}
+            className={`flex-1 py-3 px-4 text-center text-sm font-medium transition-colors ${
+              activeTab === "overview"
+                ? 'text-blue-600 border-t-2 border-blue-600 bg-blue-50'
+                : 'text-gray-500 hover:text-gray-700'
             }`}
           >
             <Grid3X3 size={16} className="mx-auto mb-1" />
-            POSTS
+            OVERVIEW
           </button>
           <button
-            onClick={() => setActiveTab("saved")}
-            className={`flex-1 py-3 text-center text-sm font-medium transition-colors ${
-              activeTab === "saved"
-                ? 'text-gray-900 border-t-2 border-gray-900'
-                : 'text-gray-500'
+            onClick={() => setActiveTab("products")}
+            className={`flex-1 py-3 px-4 text-center text-sm font-medium transition-colors ${
+              activeTab === "products"
+                ? 'text-blue-600 border-t-2 border-blue-600 bg-blue-50'
+                : 'text-gray-500 hover:text-gray-700'
             }`}
           >
-            <Bookmark size={16} className="mx-auto mb-1" />
-            SAVED
+            <Package size={16} className="mx-auto mb-1" />
+            PRODUCTS
           </button>
           <button
-            onClick={() => setActiveTab("tagged")}
-            className={`flex-1 py-3 text-center text-sm font-medium transition-colors ${
-              activeTab === "tagged"
-                ? 'text-gray-900 border-t-2 border-gray-900'
-                : 'text-gray-500'
+            onClick={() => setActiveTab("activity")}
+            className={`flex-1 py-3 px-4 text-center text-sm font-medium transition-colors ${
+              activeTab === "activity"
+                ? 'text-blue-600 border-t-2 border-blue-600 bg-blue-50'
+                : 'text-gray-500 hover:text-gray-700'
             }`}
           >
-            <UserCheck size={16} className="mx-auto mb-1" />
-            TAGGED
+            <TrendingUp size={16} className="mx-auto mb-1" />
+            ACTIVITY
+          </button>
+          <button
+            onClick={() => setActiveTab("reviews")}
+            className={`flex-1 py-3 px-4 text-center text-sm font-medium transition-colors ${
+              activeTab === "reviews"
+                ? 'text-blue-600 border-t-2 border-blue-600 bg-blue-50'
+                : 'text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            <Star size={16} className="mx-auto mb-1" />
+            REVIEWS
           </button>
         </div>
       </div>
 
-      {/* Posts Grid */}
-      <div className="bg-white">
-        {activeTab === "posts" && (
+      {/* Tab Content */}
+      <div className="bg-white p-6">
+        {activeTab === "overview" && (
           <div className="grid grid-cols-3 gap-1">
             {posts.map((post) => (
               <div key={post.id} className="aspect-square relative group cursor-pointer">
                 <img
                   src={post.image}
                   alt=""
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover rounded-lg"
                 />
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-200 flex items-center justify-center">
+                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-200 flex items-center justify-center rounded-lg">
                   <div className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex gap-4">
                     <div className="flex items-center gap-1">
                       <Heart size={20} fill="white" />
@@ -262,30 +401,107 @@ export default function Profile() {
           </div>
         )}
 
-        {activeTab === "saved" && (
-          <div className="py-12 text-center text-gray-500">
-            <Bookmark size={48} className="mx-auto mb-4" />
-            <p className="text-lg font-semibold mb-2">Save posts you want to see again</p>
-            <p className="text-sm">When you save posts, they'll appear here.</p>
+        {activeTab === "products" && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {userProducts.length > 0 ? (
+              userProducts.map((product: any) => (
+                <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                  <img
+                    src={product.imageUrl || "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300"}
+                    alt={product.title}
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="p-4">
+                    <h3 className="font-semibold text-gray-900 mb-2">{product.title}</h3>
+                    <p className="text-lg font-bold text-green-600 mb-2">{parseInt(product.price).toLocaleString()} CFA</p>
+                    <p className="text-gray-600 text-sm mb-3">{product.description}</p>
+                    <div className="flex items-center justify-between text-sm text-gray-500">
+                      <span>Views: {product.viewCount || 0}</span>
+                      <span className="text-green-600">Active</span>
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="col-span-full text-center py-12">
+                <Package size={48} className="mx-auto mb-4 text-gray-300" />
+                <p className="text-lg font-semibold mb-2">No products yet</p>
+                <p className="text-gray-600 mb-4">Start selling by adding your first product</p>
+                <a
+                  href="/add-listing"
+                  className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
+                >
+                  Add Product
+                </a>
+              </div>
+            )}
           </div>
         )}
 
-        {activeTab === "tagged" && (
-          <div className="py-12 text-center text-gray-500">
-            <UserCheck size={48} className="mx-auto mb-4" />
-            <p className="text-lg font-semibold mb-2">Photos of you</p>
-            <p className="text-sm">When people tag you in photos, they'll appear here.</p>
+        {activeTab === "activity" && (
+          <div className="space-y-6">
+            <div className="bg-gray-50 rounded-lg p-6">
+              <h3 className="font-semibold text-gray-900 mb-4">Platform Activity</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-blue-600">{currentUser.listingsPosted}</div>
+                  <div className="text-sm text-gray-600">Listings Posted</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-green-600">{currentUser.realEstatePosted}</div>
+                  <div className="text-sm text-gray-600">Real Estate</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-orange-600">{currentUser.auctionsPosted}</div>
+                  <div className="text-sm text-gray-600">Auctions</div>
+                </div>
+              </div>
+            </div>
+            <div className="text-center py-8">
+              <TrendingUp size={48} className="mx-auto mb-4 text-gray-300" />
+              <p className="text-gray-600">Detailed activity history will appear here</p>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "reviews" && (
+          <div className="text-center py-12">
+            <Star size={48} className="mx-auto mb-4 text-gray-300" />
+            <p className="text-lg font-semibold mb-2">No reviews yet</p>
+            <p className="text-gray-600">Customer reviews will appear here once you start selling</p>
           </div>
         )}
       </div>
 
+      {/* Upgrade Modal */}
       {showUpgrade && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 w-96 shadow-lg">
-            <h3 className="text-xl font-bold text-primary mb-2">🎉 Upgrade to Premium</h3>
-            <p className="text-sm mb-4">You'll enjoy 1 Month FREE because <strong>ProList Cares</strong>.</p>
-            <button className="bg-emerald text-white px-4 py-2 rounded-lg w-full hover:bg-green-700">Confirm Upgrade</button>
-            <button className="mt-2 text-sm text-red-600 underline w-full" onClick={() => setShowUpgrade(false)}>Cancel</button>
+          <div className="bg-white rounded-xl p-8 w-96 shadow-2xl">
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">Upgrade to Premium</h3>
+            <p className="text-gray-600 mb-6">Unlock advanced features and boost your business visibility on ProList.</p>
+            <div className="space-y-3 mb-6">
+              <div className="flex items-center gap-2 text-sm">
+                <CheckCircle size={16} className="text-green-600" />
+                <span>Priority product listing</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <CheckCircle size={16} className="text-green-600" />
+                <span>Advanced analytics</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <CheckCircle size={16} className="text-green-600" />
+                <span>Premium badge</span>
+              </div>
+            </div>
+            <button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-lg w-full font-semibold hover:from-purple-700 hover:to-pink-700 transition">
+              Upgrade Now
+            </button>
+            <button 
+              className="mt-3 text-gray-500 hover:text-gray-700 w-full text-center text-sm" 
+              onClick={() => setShowUpgrade(false)}
+            >
+              Maybe later
+            </button>
           </div>
         </div>
       )}
