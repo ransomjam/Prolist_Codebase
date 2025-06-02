@@ -269,6 +269,62 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get('/api/orders/buyer/:buyerId', async (req, res) => {
+    try {
+      const buyerId = parseInt(req.params.buyerId);
+      const orders = await storage.getOrdersByBuyer(buyerId);
+      res.json(orders);
+    } catch (error) {
+      console.error("Error fetching buyer orders:", error);
+      res.status(500).json({ message: "Failed to fetch buyer orders" });
+    }
+  });
+
+  app.patch('/api/orders/:id/status', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const { status } = req.body;
+      
+      if (!status) {
+        return res.status(400).json({ message: "Status is required" });
+      }
+      
+      let updateData: any = {};
+      
+      // Map status to appropriate fields
+      switch (status) {
+        case 'buyer_confirmed':
+          updateData = {
+            buyerConfirmed: true,
+            deliveryStatus: 'confirmed',
+            paymentStatus: 'released',
+            confirmedAt: new Date()
+          };
+          break;
+        case 'delivered':
+          updateData = { deliveryStatus: 'delivered' };
+          break;
+        case 'payment_confirmed':
+          updateData = { paymentStatus: 'escrowed' };
+          break;
+        default:
+          updateData = { paymentStatus: status };
+      }
+      
+      const updatedOrder = await storage.updateOrderStatus(id, updateData);
+      
+      if (!updatedOrder) {
+        return res.status(404).json({ message: "Order not found" });
+      }
+      
+      console.log(`Order ${id} status updated:`, updateData);
+      res.json(updatedOrder);
+    } catch (error) {
+      console.error("Error updating order status:", error);
+      res.status(500).json({ message: "Failed to update order status" });
+    }
+  });
+
   // Product routes
   app.post('/api/products', async (req, res) => {
     try {

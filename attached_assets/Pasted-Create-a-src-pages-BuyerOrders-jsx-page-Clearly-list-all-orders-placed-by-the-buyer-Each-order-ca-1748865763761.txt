@@ -1,0 +1,101 @@
+Create a /src/pages/BuyerOrders.jsx page:
+Clearly list all orders placed by the buyer.
+Each order card shows:
+
+Product image, title, price.
+
+Order status (Escrow - Pending, Delivered, Confirmed).
+
+Checkbox clearly labeled "I received my order."
+
+Button to upload a photo proof of received item (simulated URL upload).
+After checking box and uploading photo, status updates clearly to "Buyer Confirmed".
+Use clean Tailwind cards, responsive layout, and neon accents.
+
+💻 BuyerOrders.jsx
+jsx
+Copy
+Edit
+import { useState } from 'react';
+
+export default function BuyerOrders({ orders, updateOrder }) {
+  const [photoURL, setPhotoURL] = useState('');
+
+  const handleConfirm = (index) => {
+    if (!photoURL) {
+      alert('Please upload a photo URL first.');
+      return;
+    }
+    updateOrder(index, {
+      receivedConfirmedByBuyer: true,
+      buyerProofPhoto: photoURL,
+      status: 'Buyer Confirmed - Awaiting Funds Release'
+    });
+    setPhotoURL('');
+  };
+
+  return (
+    <div className="p-6 max-w-3xl mx-auto">
+      <h2 className="text-3xl font-bold text-primary mb-6">📦 My Orders</h2>
+
+      {orders.length === 0 ? (
+        <p className="text-gray-600">No active orders yet.</p>
+      ) : (
+        orders.map((order, index) => (
+          <div key={index} className="bg-white rounded-xl shadow-neonBlue p-4 mb-4">
+            <div className="flex gap-4">
+              <img src={order.product.image1} alt={order.product.title} className="w-24 h-24 object-cover rounded" />
+              <div>
+                <h3 className="font-bold text-lg">{order.product.title}</h3>
+                <p className="text-emerald-600 font-bold">{order.product.price} CFA</p>
+                <p className="text-sm text-gray-500 mt-1">Status: {order.status}</p>
+              </div>
+            </div>
+
+            {!order.receivedConfirmedByBuyer && (
+              <div className="mt-4">
+                <input
+                  type="text"
+                  placeholder="Upload product photo URL"
+                  value={photoURL}
+                  onChange={(e) => setPhotoURL(e.target.value)}
+                  className="border rounded p-2 w-full mb-2"
+                />
+                <button
+                  onClick={() => handleConfirm(index)}
+                  className="bg-gradient-to-r from-blue-500 to-emerald-400 text-white py-2 px-4 rounded-lg shadow-neonGreen hover:scale-105 transition"
+                >
+                  ✅ Confirm Receipt
+                </button>
+              </div>
+            )}
+
+            {order.receivedConfirmedByBuyer && (
+              <p className="text-green-600 font-semibold mt-2">✔️ Receipt confirmed! Awaiting funds release.</p>
+            )}
+          </div>
+        ))
+      )}
+    </div>
+  );
+}
+✅ Update in App.jsx:
+Add this clearly:
+
+jsx
+Copy
+Edit
+const updateOrder = (index, updatedInfo) => {
+  const updatedOrders = orders.map((order, i) =>
+    i === index ? { ...order, ...updatedInfo } : order
+  );
+  setOrders(updatedOrders);
+};
+And add clearly to your routes:
+
+jsx
+Copy
+Edit
+import BuyerOrders from './pages/BuyerOrders';
+
+<Route path="/buyer-orders" element={<BuyerOrders orders={orders} updateOrder={updateOrder} />} />
