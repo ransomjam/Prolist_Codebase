@@ -28,7 +28,7 @@ export default function NewListing() {
             <p className="text-sm opacity-90">Verified listings get 3x more views and higher customer trust</p>
           </div>
           <a 
-            href="/apply-verification"
+            href="/vendor-register"
             className="bg-white text-orange-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-all"
           >
             Apply Now

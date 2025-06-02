@@ -76,7 +76,7 @@ export default function Sidebar() {
             <h4 className="font-bold text-sm mb-1">Get Verified</h4>
             <p className="text-xs opacity-90 mb-2">Boost your business credibility</p>
             <a 
-              href="/apply-verification"
+              href="/vendor-register"
               className="block bg-white text-orange-600 text-center py-1 px-2 rounded text-xs font-semibold hover:bg-gray-100 transition-all"
             >
               Apply Now

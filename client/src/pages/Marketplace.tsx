@@ -224,7 +224,7 @@ export default function Marketplace() {
               <div className="text-center">
                 <p className="text-sm text-gray-600 mb-2">Want to sell here?</p>
                 <a
-                  href="/vendor/register"
+                  href="/vendor-register"
                   className="bg-gradient-to-r from-blue-600 to-emerald-600 text-white px-4 py-2 rounded-lg font-semibold hover:from-blue-700 hover:to-emerald-700 transition-all"
                 >
                   Become a Vendor
