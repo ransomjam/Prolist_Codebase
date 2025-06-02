@@ -40,14 +40,34 @@ export default function Signup() {
       return;
     }
 
-    // Simulate account creation and login
-    const userData = {
-      id: Date.now(), // Simple ID generation
+    // Check if username already exists
+    const registeredUsers = JSON.parse(localStorage.getItem('prolist_registered_users') || '[]');
+    const userExists = registeredUsers.find((u: any) => u.username === form.username);
+    
+    if (userExists) {
+      alert('Username already exists. Please choose a different username.');
+      return;
+    }
+
+    // Save user to localStorage
+    const newUser = {
+      id: Date.now(),
       username: form.username,
       name: form.fullName,
       userType: form.userType,
       vendorType: form.vendorType,
-      location: form.location
+      location: form.location,
+      password: form.password
+    };
+
+    registeredUsers.push(newUser);
+    localStorage.setItem('prolist_registered_users', JSON.stringify(registeredUsers));
+
+    // Auto-login the new user
+    const userData = {
+      id: newUser.id,
+      username: newUser.username,
+      name: newUser.name
     };
 
     login(userData);

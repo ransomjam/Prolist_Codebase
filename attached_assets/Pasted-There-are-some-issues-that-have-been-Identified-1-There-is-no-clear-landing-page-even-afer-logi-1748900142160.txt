@@ -1,0 +1,10 @@
+There are some issues that have been Identified; 
+1.	There is no clear landing page, even afer login, the home page still shows login / explore now, create a clear distinct and smooth pages
+2.	Even after creating a new account, there is no way to login (message says; invalid credentials and only suggest but the demo details you provided. Please make it work well
+3.	The “My Profile page is not well designed, please use Instagram profile layout style
+4.	On the auctions, When a bid is placed, it does not update on the current bid, put a live button (written place bid on every card on the auction), which opens the card details
+5.	Change the 🔥 emoji in front of the “Live auctions to a more representative icon, also change the auctions icon on the navigation bar to something more representative of auctions
+6.	Also change the layout of the “Available Properties in Bamenda” page to be similar to that of the “marketplace”, except that in place of place just leave but the chat button”, since we can’t handle sale of real estate, rentals and related. Also add filters for the common and global catergories of real estate
+7.	On the vendors registration please make it such that if someone chooses shop owner, automatically, the list of markets found on the Markets page should popup and with a scroll bar to scroll the shops numbers, and shed numbers
+8.	Make the Change the “Markets in Bamenda” to “Local Markets”, Design beautiful cards with and write on the cards “Verified shops number, Status: Opened or Closed, Active shops etc, Then add a button to explore. When the explore button is opened, show wide variety of cards small beautiful cards, showing the various categories, there should also be a section to search by shop number or name, show and option of cards “Shops on sale and on rent”. When a shop is opened, it should directly to link to the the vendors profile who registered with that particular shop number and name. 
+Also put a roller icon to select a particular shop of choice, generate dummy shop codes e.g “shed B1” up to 100, shed M1 etc 

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
+import { Gavel } from "lucide-react";
 import { auctions } from '../data/demoData';
 
 interface Countdown {
@@ -39,7 +40,10 @@ export default function Auctions() {
 
   return (
     <div className="p-6">
-      <h2 className="text-3xl font-bold text-primary mb-6">🔥 Live Auctions</h2>
+      <div className="flex items-center gap-3 mb-6">
+        <Gavel className="text-primary" size={32} />
+        <h2 className="text-3xl font-bold text-primary">Live Auctions</h2>
+      </div>
       <p className="text-sm text-gray-600 mb-6">Only Premium Users Can Post Deals. All Prices Are in CFA.</p>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

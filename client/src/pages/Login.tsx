@@ -12,9 +12,15 @@ export default function Login() {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simulate authentication with demo user
-    if (username === currentUser.username && password === "1234") {
-      const userData = {
+    // Check if user exists in localStorage (registered users)
+    const registeredUsers = JSON.parse(localStorage.getItem('prolist_registered_users') || '[]');
+    const foundUser = registeredUsers.find((u: any) => u.username === username && u.password === password);
+    
+    // Also check demo user
+    const isDemoUser = username === currentUser.username && password === "1234";
+
+    if (foundUser || isDemoUser) {
+      const userData = foundUser || {
         id: currentUser.id,
         username: currentUser.username,
         name: currentUser.name
@@ -23,7 +29,7 @@ export default function Login() {
       login(userData);
       window.location.href = '/app';
     } else {
-      alert("Invalid credentials. Try username: 'jamprolist' and password: '1234'");
+      alert("Invalid credentials. Please check your username and password, or sign up for a new account.");
     }
     
     setIsLoading(false);

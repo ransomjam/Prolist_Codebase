@@ -3,17 +3,13 @@ import heroImage from "@assets/upstation-hill.jpg";
 import { useAuth } from "../hooks/useAuth";
 
 export default function LandingPage() {
-  const { login, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
 
-  const handleTestLogin = () => {
-    // Simulate login for testing logout functionality
-    login({
-      id: 1,
-      username: "testuser",
-      name: "Test User"
-    });
+  // Redirect authenticated users to their dashboard
+  if (isAuthenticated) {
     window.location.href = "/app";
-  };
+    return null;
+  }
 
   return (
     <div className="bg-white text-primary">
