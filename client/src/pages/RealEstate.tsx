@@ -123,8 +123,10 @@ export default function RealEstate() {
   };
 
   const handleViewProfile = (property) => {
-    console.log('Viewing seller profile for property:', property.title);
-    // Navigate to seller/vendor profile page - would integrate with routing
+    // Close the property modal first
+    setShowPropertyModal(false);
+    // Navigate to profile page with vendor info
+    window.location.href = '/profile';
   };
 
   return (
