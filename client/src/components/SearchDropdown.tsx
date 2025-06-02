@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Search, X, MapPin, Star, Shield } from "lucide-react";
-import { products, markets, realEstate, auctions, verifiedBusinesses } from "../data/demoData";
+import { listings, markets, realEstate, auctions, verifiedBusinesses } from "../data/demoData";
 
 export default function SearchDropdown() {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,12 +27,12 @@ export default function SearchDropdown() {
       const query = searchQuery.toLowerCase();
       const results = [];
 
-      // Search in products
-      const matchingProducts = products.filter(item => 
+      // Search in listings
+      const matchingListings = listings.filter(item => 
         item.title.toLowerCase().includes(query) ||
         item.category.toLowerCase().includes(query) ||
         item.location.toLowerCase().includes(query)
-      ).slice(0, 3).map(item => ({ ...item, type: 'product' }));
+      ).slice(0, 3).map(item => ({ ...item, type: 'listing' }));
 
       // Search in markets
       const matchingMarkets = markets.filter(item => 
@@ -57,7 +57,7 @@ export default function SearchDropdown() {
         item.location.toLowerCase().includes(query)
       ).slice(0, 2).map(item => ({ ...item, type: 'business' }));
 
-      results.push(...matchingProducts, ...matchingMarkets, ...matchingRealEstate, ...matchingAuctions, ...matchingBusinesses);
+      results.push(...matchingListings, ...matchingMarkets, ...matchingRealEstate, ...matchingAuctions, ...matchingBusinesses);
       setSearchResults(results);
     } else {
       setSearchResults([]);
@@ -66,7 +66,7 @@ export default function SearchDropdown() {
 
   const getResultLink = (result: any) => {
     switch (result.type) {
-      case 'product': return '/products';
+      case 'listing': return '/listings';
       case 'market': return `/markets/${result.id}`;
       case 'realestate': return '/realestate';
       case 'auction': return '/auctions';
@@ -77,7 +77,7 @@ export default function SearchDropdown() {
 
   const getResultIcon = (type: string) => {
     switch (type) {
-      case 'product': return '🏷️';
+      case 'listing': return '🏷️';
       case 'market': return '🏪';
       case 'realestate': return '🏠';
       case 'auction': return '🔥';

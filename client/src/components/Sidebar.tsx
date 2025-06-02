@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from "wouter";
 import { HomeIcon, BuildingStorefrontIcon, TagIcon, HomeModernIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
-import { User, Shield, ShoppingBag } from "lucide-react";
+import { User, Shield, ShoppingBag, Package } from "lucide-react";
 
 export default function Sidebar() {
   const [expanded, setExpanded] = useState(false);
@@ -9,9 +9,8 @@ export default function Sidebar() {
 
   const links = [
     { icon: HomeIcon, label: 'Home', path: '/app' },
-    { icon: ShoppingBag, label: 'Products', path: '/products' },
-    { icon: ShoppingBag, label: 'Marketplace', path: '/marketplace' },
-    { icon: TagIcon, label: 'Listings', path: '/listings' },
+    { icon: Package, label: 'Products', path: '/products' },
+    { icon: Shield, label: 'Verified Listings', path: '/marketplace' },
     { icon: BuildingStorefrontIcon, label: 'Markets', path: '/markets' },
     { icon: HomeModernIcon, label: 'Real Estate', path: '/realestate' },
     { icon: CurrencyDollarIcon, label: 'Auctions', path: '/auctions' },
