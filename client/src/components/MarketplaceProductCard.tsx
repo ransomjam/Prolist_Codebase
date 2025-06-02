@@ -1,6 +1,7 @@
 import { Shield, Eye, ShoppingCart, Star, MapPin, Clock, CheckCircle } from 'lucide-react';
 import { useState } from 'react';
 import QuickShareButton from './QuickShareButton';
+import VendorSalesStats from './VendorSalesStats';
 
 interface Product {
   id: number;
@@ -159,6 +160,13 @@ export default function MarketplaceProductCard({ product, onViewProduct, onAddTo
             {product.category}
           </div>
         </div>
+
+        {/* Vendor Sales Stats */}
+        <VendorSalesStats 
+          vendorId={product.vendor.id} 
+          compact={true}
+          className="mb-3"
+        />
 
         {/* Action Button */}
         <button

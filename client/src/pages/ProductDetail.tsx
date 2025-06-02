@@ -16,6 +16,7 @@ import {
   MapPin
 } from 'lucide-react';
 import ShareButton from '@/components/ShareButton';
+import VendorSalesStats from '@/components/VendorSalesStats';
 
 interface Product {
   id: number;
@@ -310,6 +311,12 @@ export default function ProductDetail() {
                 </button>
               </div>
             </div>
+
+            {/* Sales Statistics */}
+            <VendorSalesStats 
+              vendorId={product.vendorId} 
+              className="mb-4"
+            />
 
             {/* View Profile Button */}
             <button

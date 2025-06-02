@@ -352,6 +352,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get('/api/vendor/stats/:vendorId', async (req, res) => {
+    try {
+      const vendorId = parseInt(req.params.vendorId);
+      
+      // Get all orders for this vendor
+      const orders = await storage.getOrdersByVendor(vendorId);
+      
+      // Calculate sales statistics
+      const completedOrders = orders.filter(order => order.buyerConfirmed);
+      const totalSales = completedOrders.length;
+      const totalRevenue = completedOrders.reduce((sum, order) => sum + parseInt(order.totalAmount), 0);
+      
+      // Get average rating for this vendor
+      const averageRating = await storage.getAverageRating(vendorId);
+      
+      const stats = {
+        totalSales,
+        totalRevenue,
+        averageRating,
+        completedOrders: completedOrders.length
+      };
+      
+      res.json(stats);
+    } catch (error) {
+      console.error("Error fetching vendor stats:", error);
+      res.status(500).json({ message: "Failed to fetch vendor stats" });
+    }
+  });
+
   app.patch('/api/orders/:id/status', async (req, res) => {
     try {
       const id = parseInt(req.params.id);
