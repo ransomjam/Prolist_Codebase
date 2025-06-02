@@ -7,7 +7,7 @@ export default function Stocks() {
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-3xl font-bold text-primary">📈 Stocks & Shares</h2>
         <button 
-          onClick={() => window.location.href = '/new-listing'}
+          onClick={() => window.location.href = '/product-listing'}
           className="bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
         >
           📈 List Shares
