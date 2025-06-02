@@ -76,14 +76,19 @@ export default function ProductFeed() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <ShoppingBag className="text-blue-600" size={32} />
-          <h2 className="text-3xl font-bold text-blue-600">Marketplace</h2>
+          <div className="p-2 bg-blue-100 rounded-lg">
+            <ShoppingBag className="text-blue-600" size={24} />
+          </div>
+          <div>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight">Verified Listings</h2>
+            <p className="text-gray-600 text-sm mt-1">Trusted products from verified vendors</p>
+          </div>
         </div>
         <button 
           onClick={() => window.location.href = '/product-listing'}
-          className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium shadow-sm hover:shadow-md transition-all duration-200 flex items-center gap-2 text-sm"
         >
-          <ShoppingBag size={20} />
+          <ShoppingBag size={16} />
           Sell Product
         </button>
       </div>
