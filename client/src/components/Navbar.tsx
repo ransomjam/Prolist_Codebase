@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { Search, Plus, User, Settings, Heart, LogOut, Menu, Shield, Users, MessageCircle, Monitor, TrendingUp, Bell, ShoppingBag } from "lucide-react";
+import { Search, Plus, User, Settings, Heart, LogOut, Menu, Shield, Users, MessageCircle, Monitor, TrendingUp, Bell, ShoppingBag, List, Building2, Home, Flame, Briefcase, TrendingUp as StockIcon, CheckCircle, Tag } from "lucide-react";
 import { HomeIcon, BuildingStorefrontIcon, HomeModernIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
 import NotificationDropdown from "./NotificationDropdown";
 import SearchDropdown from "./SearchDropdown";
@@ -80,27 +80,34 @@ export default function Navbar() {
                     </Link>
                   )}
                   
-                  <div className="grid grid-cols-2 gap-2 p-2">
-                    <a href="/listings" className="p-3 rounded-lg border border-gradient-to-r from-blue-200 to-emerald-200 hover:from-blue-300 hover:to-emerald-300 transition-all text-center">
-                      <div className="text-sm font-medium">📋 Listings</div>
+                  <div className="grid grid-cols-2 gap-3 p-3">
+                    <a href="/listings" className="group flex flex-col items-center gap-2 p-3 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 transition-all duration-200 border border-blue-200">
+                      <List className="w-6 h-6 text-blue-600 group-hover:scale-110 transition-transform" />
+                      <div className="text-xs font-semibold text-blue-800">Listings</div>
                     </a>
-                    <a href="/markets" className="p-3 rounded-lg border border-gradient-to-r from-blue-200 to-emerald-200 hover:from-blue-300 hover:to-emerald-300 transition-all text-center">
-                      <div className="text-sm font-medium">🏪 Markets</div>
+                    <a href="/markets" className="group flex flex-col items-center gap-2 p-3 rounded-xl bg-gradient-to-br from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 transition-all duration-200 border border-green-200">
+                      <Building2 className="w-6 h-6 text-green-600 group-hover:scale-110 transition-transform" />
+                      <div className="text-xs font-semibold text-green-800">Markets</div>
                     </a>
-                    <a href="/realestate" className="p-3 rounded-lg border border-gradient-to-r from-blue-200 to-emerald-200 hover:from-blue-300 hover:to-emerald-300 transition-all text-center">
-                      <div className="text-sm font-medium">🏠 Real Estate</div>
+                    <a href="/realestate" className="group flex flex-col items-center gap-2 p-3 rounded-xl bg-gradient-to-br from-purple-50 to-purple-100 hover:from-purple-100 hover:to-purple-200 transition-all duration-200 border border-purple-200">
+                      <Home className="w-6 h-6 text-purple-600 group-hover:scale-110 transition-transform" />
+                      <div className="text-xs font-semibold text-purple-800">Real Estate</div>
                     </a>
-                    <a href="/auctions" className="p-3 rounded-lg border border-gradient-to-r from-blue-200 to-emerald-200 hover:from-blue-300 hover:to-emerald-300 transition-all text-center">
-                      <div className="text-sm font-medium">🔥 Auctions</div>
+                    <a href="/auctions" className="group flex flex-col items-center gap-2 p-3 rounded-xl bg-gradient-to-br from-red-50 to-red-100 hover:from-red-100 hover:to-red-200 transition-all duration-200 border border-red-200">
+                      <Flame className="w-6 h-6 text-red-600 group-hover:scale-110 transition-transform" />
+                      <div className="text-xs font-semibold text-red-800">Auctions</div>
                     </a>
-                    <a href="/investments" className="p-3 rounded-lg border border-gradient-to-r from-blue-200 to-emerald-200 hover:from-blue-300 hover:to-emerald-300 transition-all text-center">
-                      <div className="text-sm font-medium">💼 Investments</div>
+                    <a href="/investments" className="group flex flex-col items-center gap-2 p-3 rounded-xl bg-gradient-to-br from-yellow-50 to-yellow-100 hover:from-yellow-100 hover:to-yellow-200 transition-all duration-200 border border-yellow-200">
+                      <Briefcase className="w-6 h-6 text-yellow-600 group-hover:scale-110 transition-transform" />
+                      <div className="text-xs font-semibold text-yellow-800">Investments</div>
                     </a>
-                    <a href="/stocks" className="p-3 rounded-lg border border-gradient-to-r from-blue-200 to-emerald-200 hover:from-blue-300 hover:to-emerald-300 transition-all text-center">
-                      <div className="text-sm font-medium">📈 Stocks</div>
+                    <a href="/stocks" className="group flex flex-col items-center gap-2 p-3 rounded-xl bg-gradient-to-br from-indigo-50 to-indigo-100 hover:from-indigo-100 hover:to-indigo-200 transition-all duration-200 border border-indigo-200">
+                      <StockIcon className="w-6 h-6 text-indigo-600 group-hover:scale-110 transition-transform" />
+                      <div className="text-xs font-semibold text-indigo-800">Stocks</div>
                     </a>
-                    <a href="/verified" className="p-3 rounded-lg border border-gradient-to-r from-blue-200 to-emerald-200 hover:from-blue-300 hover:to-emerald-300 transition-all text-center col-span-2">
-                      <div className="text-sm font-medium">✅ Verified Directory</div>
+                    <a href="/verified" className="group flex flex-col items-center gap-2 p-3 rounded-xl bg-gradient-to-br from-emerald-50 to-emerald-100 hover:from-emerald-100 hover:to-emerald-200 transition-all duration-200 border border-emerald-200 col-span-2">
+                      <CheckCircle className="w-6 h-6 text-emerald-600 group-hover:scale-110 transition-transform" />
+                      <div className="text-xs font-semibold text-emerald-800">Verified Directory</div>
                     </a>
                   </div>
                   <hr className="my-2" />
@@ -233,7 +240,7 @@ export default function Navbar() {
               }`}
               onClick={() => setIsMenuOpen(false)}
             >
-              <TagIcon className="h-6 w-6" />
+              <Tag className="h-6 w-6" />
               <span className="font-medium">Listings</span>
             </Link>
             <Link 

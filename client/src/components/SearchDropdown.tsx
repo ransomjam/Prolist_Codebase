@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Search, X, MapPin, Star, Shield } from "lucide-react";
+import { Search, X, MapPin, Star, Shield, List, Building2, Home, Flame, Briefcase } from "lucide-react";
 import { listings, markets, realEstate, auctions, verifiedBusinesses } from "../data/demoData";
 
 export default function SearchDropdown() {
@@ -77,12 +77,12 @@ export default function SearchDropdown() {
 
   const getResultIcon = (type: string) => {
     switch (type) {
-      case 'listing': return '🏷️';
-      case 'market': return '🏪';
-      case 'realestate': return '🏠';
-      case 'auction': return '🔥';
-      case 'business': return '✅';
-      default: return '📍';
+      case 'listing': return <List className="w-5 h-5 text-blue-600" />;
+      case 'market': return <Building2 className="w-5 h-5 text-green-600" />;
+      case 'realestate': return <Home className="w-5 h-5 text-purple-600" />;
+      case 'auction': return <Flame className="w-5 h-5 text-red-600" />;
+      case 'business': return <Briefcase className="w-5 h-5 text-yellow-600" />;
+      default: return <MapPin className="w-5 h-5 text-gray-600" />;
     }
   };
 
@@ -161,7 +161,7 @@ export default function SearchDropdown() {
                           className="w-12 h-12 rounded-lg object-cover"
                         />
                       ) : (
-                        <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center text-lg">
+                        <div className="w-12 h-12 bg-gray-50 rounded-lg flex items-center justify-center border border-gray-200">
                           {getResultIcon(result.type)}
                         </div>
                       )}
