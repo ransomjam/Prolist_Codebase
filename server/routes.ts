@@ -93,6 +93,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // User creation route
+  app.post('/api/users', async (req, res) => {
+    try {
+      const user = await storage.createUser(req.body);
+      res.status(201).json(user);
+    } catch (error) {
+      console.error("Error creating user:", error);
+      res.status(500).json({ message: "Failed to create user" });
+    }
+  });
+
   app.post('/api/vendor/register', async (req, res) => {
     try {
       const { userId, fullName, phone, location, shopType, businessName, verificationSlot, idCardUrl, shopPhotoUrl } = req.body;
