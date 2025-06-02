@@ -75,14 +75,9 @@ export default function ProductFeed() {
     <div className="p-4 max-w-7xl mx-auto">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-blue-100 rounded-lg">
-            <ShoppingBag className="text-blue-600" size={24} />
-          </div>
-          <div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight">Verified Listings</h2>
-            <p className="text-gray-600 text-sm mt-1">Trusted products from verified vendors</p>
-          </div>
+        <div>
+          <h2 className="text-2xl sm:text-3xl font-bold text-blue-600 leading-tight">Listings</h2>
+          <p className="text-gray-600 text-sm mt-1">Trusted products from verified vendors</p>
         </div>
         <button 
           onClick={() => window.location.href = '/product-listing'}
