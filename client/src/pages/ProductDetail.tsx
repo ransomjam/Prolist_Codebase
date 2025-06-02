@@ -397,7 +397,7 @@ export default function ProductDetail() {
           <div className="bg-white rounded-xl p-6 shadow-lg">
             <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
               <RefreshCw size={24} />
-              Similar Listings
+              Similar Products
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {similarProducts.map((item: Product) => (
