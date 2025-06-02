@@ -1,0 +1,77 @@
+REPLIT PROMPT — Build /src/components/AuctionPostProcess.jsx + admin & winner flow
+Create a component /src/components/AuctionPostProcess.jsx that:
+
+Monitors auctions to auto-close expired ones
+
+Marks auction status to "Closed"
+
+Identifies highest bidder as winner
+
+Shows notification UI to winner & vendor (simulate with alerts or modal)
+
+Offers winner a button to proceed to checkout (/checkout/:auctionId)
+
+Updates admin panel with closed auctions for fund release
+
+Increments vendor sales count after successful payment (simulated)
+Use React hooks, Tailwind, and local state.
+
+💻 Sample Skeleton for AuctionPostProcess.jsx
+jsx
+Copy
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+export default function AuctionPostProcess({ auctions, setAuctions, userSession, incrementVendorSales }) {
+  const [closedAuctions, setClosedAuctions] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const now = new Date().getTime();
+    auctions.forEach((auction) => {
+      const end = new Date(auction.endTime).getTime();
+
+      if (end <= now && auction.status !== 'Closed') {
+        // Close auction
+        const updatedAuctions = auctions.map(a =>
+          a.id === auction.id ? { ...a, status: 'Closed' } : a
+        );
+        setAuctions(updatedAuctions);
+        setClosedAuctions((prev) => [...prev, auction]);
+
+        // Notify winner & vendor (simulate)
+        if (userSession?.username === auction.highestBidder) {
+          alert(`Congrats! You won the auction for ${auction.product.title}. Proceed to checkout.`);
+          navigate(`/checkout/${auction.id}`);
+        } else if (userSession?.username === auction.vendor) {
+          alert(`Auction ended for ${auction.product.title}. Awaiting winner payment.`);
+        }
+      }
+    });
+  }, [auctions, userSession, navigate, setAuctions]);
+
+  // Admin fund release simulation (to be built separately)
+
+  return null; // This is a background component
+}
+✅ Integrate in App.jsx
+Import and include:
+
+jsx
+Copy
+import AuctionPostProcess from './components/AuctionPostProcess';
+
+<AuctionPostProcess
+  auctions={auctions}
+  setAuctions={setAuctions}
+  userSession={userSession}
+  incrementVendorSales={incrementVendorSales}
+/>
+Place this once inside your main App or Layout component to constantly monitor auctions.
+
+✅ Admin Panel Enhancement
+Add a section in your Admin Dashboard showing:
+
+Closed auctions awaiting fund release
+
+Buttons to Release funds and Confirm sales count increment

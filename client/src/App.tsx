@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { Switch, Route } from "wouter";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/queryClient";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { auctions as initialAuctions } from "./data/demoData";
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 import Footer from "./components/Footer";
@@ -37,6 +39,7 @@ import VendorOrders from "./pages/VendorOrders";
 import AdminEscrowPanel from "./pages/AdminEscrowPanel";
 import Marketplace from "./pages/Marketplace";
 import AuctionDetail from "./pages/AuctionDetail";
+import AuctionPostProcess from "./components/AuctionPostProcess";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -79,6 +82,19 @@ function Router() {
 }
 
 function App() {
+  const [auctions, setAuctions] = useState(initialAuctions);
+  
+  // Simulate current user session
+  const userSession = {
+    username: "gamer_pro_bda", // This matches one of the highest bidders
+    role: "user" // Change to "admin" to test admin features
+  };
+
+  const incrementVendorSales = (vendorId: string) => {
+    console.log(`Incrementing sales for vendor: ${vendorId}`);
+    // In a real app, this would make an API call to update vendor stats
+  };
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -90,6 +106,12 @@ function App() {
             </main>
             <Footer />
           </div>
+          <AuctionPostProcess
+            auctions={auctions}
+            setAuctions={setAuctions}
+            userSession={userSession}
+            incrementVendorSales={incrementVendorSales}
+          />
         </div>
         <Toaster />
       </TooltipProvider>

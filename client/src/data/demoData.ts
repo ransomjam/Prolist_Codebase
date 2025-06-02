@@ -204,6 +204,8 @@ export const auctions = [
     startingPrice: 200000,
     currentBid: 250000,
     endTime: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
+    status: 'Active',
+    highestBidder: 'tech_buyer_bda',
   },
   {
     id: 2,
@@ -217,6 +219,8 @@ export const auctions = [
     startingPrice: 35000,
     currentBid: 45000,
     endTime: new Date(Date.now() + 12 * 60 * 60 * 1000).toISOString(),
+    status: 'Active',
+    highestBidder: 'fashion_lover_bda',
   },
   {
     id: 3,
@@ -230,6 +234,8 @@ export const auctions = [
     startingPrice: 600000,
     currentBid: 650000,
     endTime: new Date(Date.now() + 6 * 60 * 60 * 1000).toISOString(),
+    status: 'Active',
+    highestBidder: 'mobile_enthusiast_bda',
   },
   {
     id: 4,
@@ -243,6 +249,8 @@ export const auctions = [
     startingPrice: 25000,
     currentBid: 30000,
     endTime: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+    status: 'Active',
+    highestBidder: 'culture_lover_bda',
   },
   {
     id: 5,
@@ -256,6 +264,8 @@ export const auctions = [
     startingPrice: 100000,
     currentBid: 120000,
     endTime: new Date(Date.now() + 3 * 60 * 60 * 1000).toISOString(),
+    status: 'Active',
+    highestBidder: 'gamer_pro_bda',
   }
 ];
 
