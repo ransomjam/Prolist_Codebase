@@ -15,9 +15,11 @@ export default function Profile() {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState("overview");
   const [showUpgrade, setShowUpgrade] = useState(false);
+  const [showCongrats, setShowCongrats] = useState(false);
+  const [isPremiumUser, setIsPremiumUser] = useState(currentUser.accountType === 'premium');
 
   const profileUser = user || currentUser;
-  const isPremium = currentUser.accountType === 'premium';
+  const isPremium = isPremiumUser;
 
   // Fetch user's vendor application status
   const { data: vendorApplication } = useQuery({
@@ -286,7 +288,7 @@ export default function Profile() {
             )}
           </div>
           
-          {!isPremium && (
+          {!isPremium ? (
             <button
               onClick={() => setShowUpgrade(true)}
               className="relative w-full bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 text-gray-900 py-3 rounded-lg text-sm font-bold transition-all duration-300 transform hover:scale-105 hover:shadow-2xl border border-yellow-300 overflow-hidden group"
@@ -305,6 +307,11 @@ export default function Profile() {
               {/* Glow effect */}
               <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 opacity-0 group-hover:opacity-75 blur-sm transform scale-110 transition-all duration-300"></div>
             </button>
+          ) : (
+            <div className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 rounded-lg text-sm font-bold flex items-center justify-center gap-2 border border-purple-400">
+              <CheckCircle size={16} />
+              <span>ProList Premium</span>
+            </div>
           )}
         </div>
 
@@ -472,8 +479,8 @@ export default function Profile() {
 
       {/* Upgrade Modal */}
       {showUpgrade && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-8 w-96 shadow-2xl">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl p-8 w-full max-w-md shadow-2xl">
             <h3 className="text-2xl font-bold text-gray-900 mb-4">Upgrade to Premium</h3>
             <p className="text-gray-600 mb-6">Unlock advanced features and boost your business visibility on ProList.</p>
             <div className="space-y-3 mb-6">
@@ -489,15 +496,59 @@ export default function Profile() {
                 <CheckCircle size={16} className="text-green-600" />
                 <span>Premium badge</span>
               </div>
+              <div className="flex items-center gap-2 text-sm">
+                <CheckCircle size={16} className="text-green-600" />
+                <span>Enhanced customer support</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <CheckCircle size={16} className="text-green-600" />
+                <span>Exclusive marketplace features</span>
+              </div>
             </div>
-            <button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-lg w-full font-semibold hover:from-purple-700 hover:to-pink-700 transition">
-              Upgrade Now
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+              <p className="text-green-800 text-sm font-semibold mb-1">Special Offer!</p>
+              <p className="text-green-700 text-sm">Get 1 month FREE because ProList cares about our community.</p>
+            </div>
+            <button 
+              onClick={() => {
+                setShowUpgrade(false);
+                setShowCongrats(true);
+              }}
+              className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-lg w-full font-semibold hover:from-purple-700 hover:to-pink-700 transition"
+            >
+              Claim Free Month
             </button>
             <button 
               className="mt-3 text-gray-500 hover:text-gray-700 w-full text-center text-sm" 
               onClick={() => setShowUpgrade(false)}
             >
               Maybe later
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Congratulations Modal */}
+      {showCongrats && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl p-8 w-full max-w-md shadow-2xl text-center">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <CheckCircle size={32} className="text-green-600" />
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">Congratulations!</h3>
+            <p className="text-gray-600 mb-6">You'll enjoy one month free because ProList cares.</p>
+            <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-4 mb-6">
+              <p className="text-purple-800 font-semibold text-sm">Welcome to ProList Premium!</p>
+              <p className="text-purple-700 text-sm mt-1">Your premium features are now active.</p>
+            </div>
+            <button 
+              onClick={() => {
+                setShowCongrats(false);
+                setIsPremiumUser(true);
+              }}
+              className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-lg w-full font-semibold hover:from-purple-700 hover:to-pink-700 transition"
+            >
+              Continue
             </button>
           </div>
         </div>
