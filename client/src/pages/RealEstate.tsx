@@ -11,6 +11,9 @@ export default function RealEstate() {
   const [priceRange, setPriceRange] = useState('all');
   const [sortBy, setSortBy] = useState('newest');
   const [selectedLocation, setSelectedLocation] = useState('all');
+  const [selectedProperty, setSelectedProperty] = useState(null);
+  const [showPropertyModal, setShowPropertyModal] = useState(false);
+  const [favoriteProperties, setFavoriteProperties] = useState(new Set());
 
   const propertyTypes = [
     { id: 'all', label: 'All Properties', count: realEstate.length },
@@ -76,6 +79,48 @@ export default function RealEstate() {
     
     return matchesSearch && matchesType && matchesLocation && matchesPrice;
   });
+
+  const handleViewProperty = (property) => {
+    setSelectedProperty(property);
+    setShowPropertyModal(true);
+  };
+
+  const handleToggleFavorite = (propertyId) => {
+    const newFavorites = new Set(favoriteProperties);
+    if (newFavorites.has(propertyId)) {
+      newFavorites.delete(propertyId);
+    } else {
+      newFavorites.add(propertyId);
+    }
+    setFavoriteProperties(newFavorites);
+  };
+
+  const handleShare = (property) => {
+    if (navigator.share) {
+      navigator.share({
+        title: property.title,
+        text: `Check out this property: ${property.title} - ${property.price}`,
+        url: window.location.href
+      });
+    } else {
+      navigator.clipboard.writeText(`${property.title} - ${property.price} - ${window.location.href}`);
+      // Could add a toast notification here
+    }
+  };
+
+  const handleContactOwner = (property) => {
+    // Simulate contacting property owner
+    const message = `Hi, I'm interested in your property: ${property.title}. Could you please provide more details?`;
+    const whatsappUrl = `https://wa.me/237670000000?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
+  const handleScheduleViewing = (property) => {
+    // Simulate scheduling a viewing
+    const message = `Hi, I would like to schedule a viewing for: ${property.title}. When would be a convenient time?`;
+    const whatsappUrl = `https://wa.me/237670000000?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -297,8 +342,14 @@ export default function RealEstate() {
                             Verified
                           </span>
                         )}
-                        <button className="bg-white/90 hover:bg-white p-2 rounded-full transition-colors">
-                          <Heart size={16} className="text-gray-600" />
+                        <button 
+                          onClick={() => handleToggleFavorite(property.id)}
+                          className="bg-white/90 hover:bg-white p-2 rounded-full transition-colors"
+                        >
+                          <Heart 
+                            size={16} 
+                            className={favoriteProperties.has(property.id) ? "text-red-500 fill-current" : "text-gray-600"} 
+                          />
                         </button>
                       </div>
                       <div className="absolute bottom-3 left-3 bg-black/70 text-white px-3 py-1 rounded-full text-sm font-semibold">
@@ -325,10 +376,16 @@ export default function RealEstate() {
                         </div>
                         
                         <div className="flex gap-2">
-                          <button className="p-2 text-gray-400 hover:text-blue-600 transition-colors">
+                          <button 
+                            onClick={() => handleShare(property)}
+                            className="p-2 text-gray-400 hover:text-blue-600 transition-colors"
+                          >
                             <Share2 size={16} />
                           </button>
-                          <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
+                          <button 
+                            onClick={() => handleViewProperty(property)}
+                            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
+                          >
                             View Details
                           </button>
                         </div>
@@ -357,10 +414,19 @@ export default function RealEstate() {
                       <div className="flex justify-between items-start mb-3">
                         <h3 className="font-bold text-xl text-gray-900">{property.title}</h3>
                         <div className="flex gap-2">
-                          <button className="p-2 text-gray-400 hover:text-red-500 transition-colors">
-                            <Heart size={18} />
+                          <button 
+                            onClick={() => handleToggleFavorite(property.id)}
+                            className="p-2 text-gray-400 hover:text-red-500 transition-colors"
+                          >
+                            <Heart 
+                              size={18} 
+                              className={favoriteProperties.has(property.id) ? "text-red-500 fill-current" : "text-gray-400"} 
+                            />
                           </button>
-                          <button className="p-2 text-gray-400 hover:text-blue-600 transition-colors">
+                          <button 
+                            onClick={() => handleShare(property)}
+                            className="p-2 text-gray-400 hover:text-blue-600 transition-colors"
+                          >
                             <Share2 size={18} />
                           </button>
                         </div>
@@ -381,7 +447,10 @@ export default function RealEstate() {
                             <Eye size={16} />
                             <span>{property.trustCount} views</span>
                           </div>
-                          <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                          <button 
+                            onClick={() => handleViewProperty(property)}
+                            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+                          >
                             View Property
                           </button>
                         </div>
@@ -429,16 +498,176 @@ export default function RealEstate() {
               Get personalized assistance for your property search.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
+              <button 
+                onClick={() => handleContactOwner(filteredProperties[0])}
+                className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
+              >
                 Contact Property Owner
               </button>
-              <button className="bg-blue-500 hover:bg-blue-400 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
+              <button 
+                onClick={() => handleScheduleViewing(filteredProperties[0])}
+                className="bg-blue-500 hover:bg-blue-400 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
+              >
                 Schedule Viewing
               </button>
             </div>
           </div>
         )}
       </div>
+
+      {/* Property Detail Modal */}
+      {showPropertyModal && selectedProperty && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            {/* Modal Header */}
+            <div className="relative">
+              <img 
+                src={selectedProperty.image} 
+                alt={selectedProperty.title}
+                className="w-full h-64 md:h-80 object-cover rounded-t-2xl"
+              />
+              <button 
+                onClick={() => setShowPropertyModal(false)}
+                className="absolute top-4 right-4 bg-white/90 hover:bg-white p-2 rounded-full transition-colors"
+              >
+                <div className="w-6 h-6 flex items-center justify-center">×</div>
+              </button>
+              <div className="absolute top-4 left-4 flex gap-2">
+                {selectedProperty.verified && (
+                  <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
+                    <Shield size={14} />
+                    Verified Property
+                  </span>
+                )}
+                <button 
+                  onClick={() => handleToggleFavorite(selectedProperty.id)}
+                  className="bg-white/90 hover:bg-white p-2 rounded-full transition-colors"
+                >
+                  <Heart 
+                    size={20} 
+                    className={favoriteProperties.has(selectedProperty.id) ? "text-red-500 fill-current" : "text-gray-600"} 
+                  />
+                </button>
+              </div>
+              <div className="absolute bottom-4 left-4 bg-black/80 text-white px-4 py-2 rounded-full">
+                <span className="text-2xl font-bold">{selectedProperty.price}</span>
+              </div>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6">
+              <div className="flex justify-between items-start mb-4">
+                <h2 className="text-3xl font-bold text-gray-900">{selectedProperty.title}</h2>
+                <button 
+                  onClick={() => handleShare(selectedProperty)}
+                  className="p-2 text-gray-400 hover:text-blue-600 transition-colors"
+                >
+                  <Share2 size={20} />
+                </button>
+              </div>
+
+              <div className="flex items-center text-gray-600 mb-6">
+                <LocationIcon size={18} className="mr-2" />
+                <span className="text-lg">{selectedProperty.location}</span>
+              </div>
+
+              {/* Property Features */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-4">Property Details</h3>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between py-2 border-b border-gray-100">
+                      <span className="text-gray-600">Property Type</span>
+                      <span className="font-semibold">
+                        {selectedProperty.title.toLowerCase().includes('apartment') ? 'Apartment' :
+                         selectedProperty.title.toLowerCase().includes('duplex') ? 'Duplex' :
+                         selectedProperty.title.toLowerCase().includes('house') ? 'House' :
+                         selectedProperty.title.toLowerCase().includes('studio') ? 'Studio' :
+                         selectedProperty.title.toLowerCase().includes('commercial') ? 'Commercial' : 'Property'}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between py-2 border-b border-gray-100">
+                      <span className="text-gray-600">Listing Type</span>
+                      <span className="font-semibold">
+                        {selectedProperty.price.includes('month') ? 'For Rent' : 'For Sale'}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between py-2 border-b border-gray-100">
+                      <span className="text-gray-600">Views</span>
+                      <span className="font-semibold">{selectedProperty.trustCount} views</span>
+                    </div>
+                    <div className="flex items-center justify-between py-2 border-b border-gray-100">
+                      <span className="text-gray-600">Verification Status</span>
+                      <span className={`font-semibold ${selectedProperty.verified ? 'text-green-600' : 'text-gray-500'}`}>
+                        {selectedProperty.verified ? 'Verified' : 'Unverified'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-4">Features & Amenities</h3>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                      <Wifi size={16} className="text-blue-600" />
+                      <span className="text-sm">WiFi Ready</span>
+                    </div>
+                    <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                      <Car size={16} className="text-green-600" />
+                      <span className="text-sm">Parking</span>
+                    </div>
+                    <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                      <Building size={16} className="text-purple-600" />
+                      <span className="text-sm">Modern Design</span>
+                    </div>
+                    <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                      <Shield size={16} className="text-orange-600" />
+                      <span className="text-sm">Security</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Description */}
+              <div className="mb-8">
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">Description</h3>
+                <p className="text-gray-700 leading-relaxed">
+                  This beautiful property in {selectedProperty.location} offers modern living with excellent accessibility to local amenities. 
+                  The property features contemporary design elements and is situated in one of Bamenda's most sought-after neighborhoods. 
+                  Perfect for those seeking quality accommodation in a prime location with easy access to markets, schools, and transportation.
+                </p>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="border-t border-gray-200 pt-6">
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <button 
+                    onClick={() => handleContactOwner(selectedProperty)}
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2"
+                  >
+                    <span>Contact Property Owner</span>
+                  </button>
+                  <button 
+                    onClick={() => handleScheduleViewing(selectedProperty)}
+                    className="flex-1 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2"
+                  >
+                    <Calendar size={18} />
+                    <span>Schedule Viewing</span>
+                  </button>
+                </div>
+                <div className="flex justify-center mt-4">
+                  <button 
+                    onClick={() => setShowPropertyModal(false)}
+                    className="text-gray-500 hover:text-gray-700 px-4 py-2 text-sm"
+                  >
+                    Close Details
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
