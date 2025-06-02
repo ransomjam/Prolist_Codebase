@@ -406,7 +406,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getRatingsByUser(userId: number): Promise<Rating[]> {
-    return await db.select().from(ratings).where(eq(ratings.ratedId, userId));
+    return await db.select().from(ratings).where(eq(ratings.userId, userId));
   }
 
   async getAverageRating(userId: number): Promise<number> {

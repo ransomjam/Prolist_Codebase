@@ -48,7 +48,7 @@ export default function MarketDetails() {
           ))}
         </div>
       ) : (
-        <p className="text-gray-500">No products available in this category yet.</p>
+        <p className="text-gray-500">No listings available in this category yet.</p>
       )}
     </div>
   );

@@ -171,10 +171,10 @@ export default function Profile() {
       </div>
 
       <a
-        href="/add-listing"
+        href="/new-listing"
         className="inline-block mt-4 bg-gradient-to-r from-blue-500 to-emerald-400 text-white px-4 py-2 rounded-xl shadow-neonBlue hover:shadow-neonGreen"
       >
-        + Add New Product
+        + Add New Listing
       </a>
 
       {showUpgrade && (
