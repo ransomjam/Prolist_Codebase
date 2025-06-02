@@ -280,6 +280,15 @@ export const currentUser = {
   auctionsPosted: 0,
   trustCount: 210,
   followers: 47,
+  following: 123,
+  avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150",
+  bio: "Local entrepreneur passionate about community development in Bamenda",
+  posts: 24,
+  email: "jam.ransom@prolist.cm",
+  phone: "+237 670000000",
+  joinDate: "March 2023",
+  rating: 4.8,
+  profileViews: 1250
 };
 
 export const investments = [
