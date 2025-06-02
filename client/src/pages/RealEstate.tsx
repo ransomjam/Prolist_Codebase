@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MapPin, Filter, Search, Home, Building, Calendar, SlidersHorizontal, Grid3X3, List, Eye, Heart, Share2, Wifi, Car, Bath, Bed, MapPin as LocationIcon, DollarSign, TrendingUp } from 'lucide-react';
+import { MapPin, Filter, Search, Home, Building, Calendar, SlidersHorizontal, Grid3X3, List, Eye, Heart, Share2, Wifi, Car, Bath, Bed, MapPin as LocationIcon, DollarSign, TrendingUp, Shield } from 'lucide-react';
 import { realEstate } from '../data/demoData';
 import RealEstateCard from '../components/RealEstateCard';
 

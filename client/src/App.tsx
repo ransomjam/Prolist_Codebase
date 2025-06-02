@@ -53,6 +53,7 @@ function Router() {
       <Route path="/markets" component={Markets} />
       <Route path="/markets/:id" component={MarketDetails} />
       <Route path="/listings" component={ProductFeed} />
+      <Route path="/real-estate" component={RealEstate} />
       <Route path="/realestate" component={RealEstate} />
       <Route path="/auctions" component={Auctions} />
       <Route path="/profile" component={Profile} />
