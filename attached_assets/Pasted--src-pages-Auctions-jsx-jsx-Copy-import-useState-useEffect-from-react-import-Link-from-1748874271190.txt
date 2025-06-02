@@ -1,21 +1,16 @@
+🟦 src/pages/Auctions.jsx
+jsx
+Copy
 import { useState, useEffect } from "react";
-import { Link } from "wouter";
-import { auctions } from '../data/demoData';
+import { Link } from "react-router-dom";
 
-interface Countdown {
-  days: number;
-  hours: number;
-  minutes: number;
-  seconds: number;
-}
-
-export default function Auctions() {
-  const [countdowns, setCountdowns] = useState<{ [key: number]: Countdown | null }>({});
+export default function Auctions({ auctions }) {
+  const [countdowns, setCountdowns] = useState({});
 
   useEffect(() => {
     const interval = setInterval(() => {
       const now = new Date().getTime();
-      const newCountdowns: { [key: number]: Countdown | null } = {};
+      const newCountdowns = {};
 
       auctions.forEach(({ id, endTime }) => {
         const distance = new Date(endTime).getTime() - now;
@@ -35,20 +30,18 @@ export default function Auctions() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [auctions]);
 
   return (
     <div className="p-6">
       <h2 className="text-3xl font-bold text-primary mb-6">🔥 Live Auctions</h2>
-      <p className="text-sm text-gray-600 mb-6">Only Premium Users Can Post Deals. All Prices Are in CFA.</p>
-      
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {auctions.map((auction) => {
           const timer = countdowns[auction.id];
           const ended = timer === null;
           return (
             <Link
-              href={`/auction/${auction.id}`}
+              to={`/auction/${auction.id}`}
               key={auction.id}
               className="bg-white rounded-xl shadow-neonBlue hover:shadow-neonGreen transition p-4 cursor-pointer flex flex-col"
             >
@@ -84,12 +77,10 @@ export default function Auctions() {
               {ended ? (
                 <p className="text-red-600 font-semibold">Auction Ended</p>
               ) : (
-                timer && (
-                  <p className="text-gray-700 font-mono text-sm">
-                    Time Left:{" "}
-                    {timer.days}d {timer.hours}h {timer.minutes}m {timer.seconds}s
-                  </p>
-                )
+                <p className="text-gray-700 font-mono">
+                  Time Left:{" "}
+                  {timer.days}d {timer.hours}h {timer.minutes}m {timer.seconds}s
+                </p>
               )}
             </Link>
           );
@@ -98,3 +89,27 @@ export default function Auctions() {
     </div>
   );
 }
+Notes:
+This expects an auctions prop with data structured like:
+
+js
+Copy
+[
+  {
+    id: 1,
+    product: {
+      title: "Samsung Galaxy S23",
+      description: "Brand new sealed box",
+      image: "https://i.postimg.cc/XYZ/samsung.jpg",
+    },
+    vendor: "vendor_john",
+    verified: true,
+    startingPrice: 300000,
+    currentBid: 320000,
+    endTime: "2024-07-15T18:00:00Z",
+  },
+  // more auctions...
+]
+Usage:
+Pass your auction data to <Auctions auctions={yourAuctionsArray} />
+Ensure routing set up so clicking leads to /auction/:id details page.

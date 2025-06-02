@@ -47,8 +47,8 @@ export default function SearchDropdown() {
 
       // Search in auctions
       const matchingAuctions = auctions.filter(item => 
-        item.title.toLowerCase().includes(query) ||
-        item.location.toLowerCase().includes(query)
+        item.product.title.toLowerCase().includes(query) ||
+        item.vendor.toLowerCase().includes(query)
       ).slice(0, 2).map(item => ({ ...item, type: 'auction' }));
 
       // Search in verified businesses
