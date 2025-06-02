@@ -81,33 +81,33 @@ export default function Navbar() {
                   )}
                   
                   <div className="grid grid-cols-2 gap-3 p-3">
-                    <a href="/listings" className="group flex flex-col items-center gap-2 p-3 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 transition-all duration-200 border border-blue-200">
-                      <List className="w-6 h-6 text-blue-600 group-hover:scale-110 transition-transform" />
-                      <div className="text-xs font-semibold text-blue-800">Listings</div>
+                    <a href="/products" className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-blue-50 via-blue-100 to-blue-150 hover:from-blue-100 hover:via-blue-150 hover:to-blue-200 transition-all duration-300 border border-blue-200 shadow-sm hover:shadow-md">
+                      <ShoppingBag className="w-7 h-7 text-blue-600 group-hover:scale-110 transition-transform duration-200" />
+                      <div className="text-xs font-semibold text-blue-800 text-center">Marketplace</div>
                     </a>
-                    <a href="/markets" className="group flex flex-col items-center gap-2 p-3 rounded-xl bg-gradient-to-br from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 transition-all duration-200 border border-green-200">
-                      <Building2 className="w-6 h-6 text-green-600 group-hover:scale-110 transition-transform" />
-                      <div className="text-xs font-semibold text-green-800">Markets</div>
+                    <a href="/markets" className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-green-50 via-green-100 to-green-150 hover:from-green-100 hover:via-green-150 hover:to-green-200 transition-all duration-300 border border-green-200 shadow-sm hover:shadow-md">
+                      <BuildingStorefrontIcon className="w-7 h-7 text-green-600 group-hover:scale-110 transition-transform duration-200" />
+                      <div className="text-xs font-semibold text-green-800 text-center">Markets</div>
                     </a>
-                    <a href="/realestate" className="group flex flex-col items-center gap-2 p-3 rounded-xl bg-gradient-to-br from-purple-50 to-purple-100 hover:from-purple-100 hover:to-purple-200 transition-all duration-200 border border-purple-200">
-                      <Home className="w-6 h-6 text-purple-600 group-hover:scale-110 transition-transform" />
-                      <div className="text-xs font-semibold text-purple-800">Real Estate</div>
+                    <a href="/realestate" className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-purple-50 via-purple-100 to-purple-150 hover:from-purple-100 hover:via-purple-150 hover:to-purple-200 transition-all duration-300 border border-purple-200 shadow-sm hover:shadow-md">
+                      <HomeModernIcon className="w-7 h-7 text-purple-600 group-hover:scale-110 transition-transform duration-200" />
+                      <div className="text-xs font-semibold text-purple-800 text-center">Real Estate</div>
                     </a>
-                    <a href="/auctions" className="group flex flex-col items-center gap-2 p-3 rounded-xl bg-gradient-to-br from-red-50 to-red-100 hover:from-red-100 hover:to-red-200 transition-all duration-200 border border-red-200">
-                      <Flame className="w-6 h-6 text-red-600 group-hover:scale-110 transition-transform" />
-                      <div className="text-xs font-semibold text-red-800">Auctions</div>
+                    <a href="/auctions" className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-red-50 via-red-100 to-red-150 hover:from-red-100 hover:via-red-150 hover:to-red-200 transition-all duration-300 border border-red-200 shadow-sm hover:shadow-md">
+                      <CurrencyDollarIcon className="w-7 h-7 text-red-600 group-hover:scale-110 transition-transform duration-200" />
+                      <div className="text-xs font-semibold text-red-800 text-center">Auctions</div>
                     </a>
-                    <a href="/investments" className="group flex flex-col items-center gap-2 p-3 rounded-xl bg-gradient-to-br from-yellow-50 to-yellow-100 hover:from-yellow-100 hover:to-yellow-200 transition-all duration-200 border border-yellow-200">
-                      <Briefcase className="w-6 h-6 text-yellow-600 group-hover:scale-110 transition-transform" />
-                      <div className="text-xs font-semibold text-yellow-800">Investments</div>
+                    <a href="/investments" className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-yellow-50 via-yellow-100 to-yellow-150 hover:from-yellow-100 hover:via-yellow-150 hover:to-yellow-200 transition-all duration-300 border border-yellow-200 shadow-sm hover:shadow-md">
+                      <Briefcase className="w-7 h-7 text-yellow-600 group-hover:scale-110 transition-transform duration-200" />
+                      <div className="text-xs font-semibold text-yellow-800 text-center">Investments</div>
                     </a>
-                    <a href="/stocks" className="group flex flex-col items-center gap-2 p-3 rounded-xl bg-gradient-to-br from-indigo-50 to-indigo-100 hover:from-indigo-100 hover:to-indigo-200 transition-all duration-200 border border-indigo-200">
-                      <StockIcon className="w-6 h-6 text-indigo-600 group-hover:scale-110 transition-transform" />
-                      <div className="text-xs font-semibold text-indigo-800">Stocks</div>
+                    <a href="/stocks" className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-indigo-50 via-indigo-100 to-indigo-150 hover:from-indigo-100 hover:via-indigo-150 hover:to-indigo-200 transition-all duration-300 border border-indigo-200 shadow-sm hover:shadow-md">
+                      <StockIcon className="w-7 h-7 text-indigo-600 group-hover:scale-110 transition-transform duration-200" />
+                      <div className="text-xs font-semibold text-indigo-800 text-center">Stocks</div>
                     </a>
-                    <a href="/verified" className="group flex flex-col items-center gap-2 p-3 rounded-xl bg-gradient-to-br from-emerald-50 to-emerald-100 hover:from-emerald-100 hover:to-emerald-200 transition-all duration-200 border border-emerald-200 col-span-2">
-                      <CheckCircle className="w-6 h-6 text-emerald-600 group-hover:scale-110 transition-transform" />
-                      <div className="text-xs font-semibold text-emerald-800">Verified Directory</div>
+                    <a href="/verified" className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-emerald-50 via-emerald-100 to-emerald-150 hover:from-emerald-100 hover:via-emerald-150 hover:to-emerald-200 transition-all duration-300 border border-emerald-200 shadow-sm hover:shadow-md col-span-2">
+                      <CheckCircle className="w-7 h-7 text-emerald-600 group-hover:scale-110 transition-transform duration-200" />
+                      <div className="text-xs font-semibold text-emerald-800 text-center">Verified Directory</div>
                     </a>
                   </div>
                   <hr className="my-2" />

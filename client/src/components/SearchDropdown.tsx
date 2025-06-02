@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-import { Search, X, MapPin, Star, Shield, List, Building2, Home, Flame, Briefcase } from "lucide-react";
+import { Search, X, MapPin, Star, Shield, ShoppingBag } from "lucide-react";
+import { BuildingStorefrontIcon, HomeModernIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
 import { listings, markets, realEstate, auctions, verifiedBusinesses } from "../data/demoData";
 
 export default function SearchDropdown() {
@@ -77,11 +78,11 @@ export default function SearchDropdown() {
 
   const getResultIcon = (type: string) => {
     switch (type) {
-      case 'listing': return <List className="w-5 h-5 text-blue-600" />;
-      case 'market': return <Building2 className="w-5 h-5 text-green-600" />;
-      case 'realestate': return <Home className="w-5 h-5 text-purple-600" />;
-      case 'auction': return <Flame className="w-5 h-5 text-red-600" />;
-      case 'business': return <Briefcase className="w-5 h-5 text-yellow-600" />;
+      case 'listing': return <ShoppingBag className="w-5 h-5 text-blue-600" />;
+      case 'market': return <BuildingStorefrontIcon className="w-5 h-5 text-green-600" />;
+      case 'realestate': return <HomeModernIcon className="w-5 h-5 text-purple-600" />;
+      case 'auction': return <CurrencyDollarIcon className="w-5 h-5 text-red-600" />;
+      case 'business': return <Shield className="w-5 h-5 text-yellow-600" />;
       default: return <MapPin className="w-5 h-5 text-gray-600" />;
     }
   };
