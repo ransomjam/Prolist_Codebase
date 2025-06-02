@@ -95,101 +95,159 @@ export default function AuctionDetail() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white rounded-xl shadow-neonBlue mt-10">
-      <h2 className="text-3xl font-bold text-primary mb-4">{auction.product.title}</h2>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
-        <img 
-          src={auction.product.image} 
-          alt={auction.product.title} 
-          className="w-full h-64 object-cover rounded-lg shadow-lg" 
-        />
-        
-        <div className="space-y-4">
-          <p className="text-lg text-emerald-600 font-bold">
-            Starting Price: {auction.startingPrice.toLocaleString()} CFA
-          </p>
-          <p className="text-lg text-yellow-600 font-bold">
-            Current Highest Bid: {currentBid.toLocaleString()} CFA
-          </p>
-
-          {!auctionEnded ? (
-            <>
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="font-semibold text-gray-800 mb-2">
-                  Time Left: {countdown.days}d {countdown.hours}h {countdown.minutes}m {countdown.seconds}s
-                </p>
-                <div className="flex gap-2 items-center mb-2">
-                  <input
-                    type="number"
-                    placeholder="Enter your bid (CFA)"
-                    className="border border-gray-300 p-2 rounded flex-grow focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={bidAmount}
-                    onChange={(e) => setBidAmount(e.target.value)}
-                    min={auction.currentBid + 1}
-                  />
-                  <button
-                    onClick={handleBidSubmit}
-                    disabled={isPlacingBid}
-                    className="bg-gradient-to-r from-blue-600 to-emerald-500 text-white px-4 py-2 rounded-xl shadow-neonGreen hover:scale-105 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {isPlacingBid ? 'Placing...' : 'Place Bid'}
-                  </button>
-                </div>
-                {error && <p className="text-red-600 text-sm">{error}</p>}
-              </div>
-            </>
-          ) : (
-            <div className="bg-red-50 p-4 rounded-lg">
-              <p className="text-red-600 font-bold">
-                Auction Ended
-              </p>
-              <p className="text-gray-600">
-                Winning bid: {auction.currentBid.toLocaleString()} CFA
-              </p>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Bid History */}
-      <div className="bg-gray-50 p-4 rounded-lg mb-6">
-        <h3 className="font-semibold text-gray-800 mb-3">Recent Bids</h3>
-        <div className="space-y-2">
-          {bidHistory.map((bid, index) => (
-            <div key={index} className="flex justify-between items-center py-2 px-3 bg-white rounded-lg">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-green-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
-                  {bid.bidder.charAt(0)}
-                </div>
-                <span className="font-medium text-gray-800">{bid.bidder}</span>
-              </div>
-              <div className="text-right">
-                <div className="font-semibold text-green-600">{bid.amount.toLocaleString()} CFA</div>
-                <div className="text-xs text-gray-500">{bid.time}</div>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-6xl mx-auto p-4 sm:p-6">
+        {/* Header */}
+        <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex-1">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight mb-2">
+                {auction.product.title}
+              </h1>
+              <div className="flex items-center gap-4 text-sm text-gray-500">
+                <span>Auction #{auction.id}</span>
+                <span>•</span>
+                <span>Vendor: <span className="font-medium text-gray-700">{auction.vendor}</span></span>
+                {auction.verified && (
+                  <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
+                    Verified
+                  </span>
+                )}
               </div>
             </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="bg-gray-50 p-4 rounded-lg mb-6">
-        <h3 className="font-semibold text-gray-800 mb-2">Product Description</h3>
-        <p className="text-gray-700">{auction.product.description}</p>
-      </div>
-
-      <div className="border-t pt-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm text-gray-600">
-              Vendor: <strong className="text-gray-800">{auction.vendor}</strong>
-              {auction.verified && (
-                <span className="text-blue-600 ml-2">🛡️ Verified</span>
-              )}
-            </p>
           </div>
-          <div className="text-right">
-            <p className="text-sm text-gray-500">Auction #{auction.id}</p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Main Content */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Product Image and Description */}
+            <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+              <img 
+                src={auction.product.image} 
+                alt={auction.product.title} 
+                className="w-full h-80 object-cover" 
+              />
+              <div className="p-6">
+                <h2 className="text-xl font-semibold text-gray-900 mb-3">Product Description</h2>
+                <p className="text-gray-700 leading-relaxed">{auction.product.description}</p>
+              </div>
+            </div>
+
+            {/* Bid History */}
+            <div className="bg-white rounded-xl shadow-sm p-6">
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Recent Bids</h3>
+              <div className="space-y-3">
+                {bidHistory.map((bid, index) => (
+                  <div key={index} className="flex justify-between items-center py-3 px-4 bg-gray-50 rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">
+                        {bid.bidder.charAt(0)}
+                      </div>
+                      <div>
+                        <div className="font-medium text-gray-900">{bid.bidder}</div>
+                        <div className="text-sm text-gray-500">{bid.time}</div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-lg font-bold text-green-600">{bid.amount.toLocaleString()} CFA</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Sidebar - Bidding Panel */}
+          <div className="space-y-6">
+            {/* Pricing Information */}
+            <div className="bg-white rounded-xl shadow-sm p-6">
+              <div className="space-y-4">
+                <div className="text-center pb-4 border-b border-gray-200">
+                  <div className="text-sm text-gray-500 uppercase tracking-wide mb-1">Starting Price</div>
+                  <div className="text-xl font-bold text-emerald-600">
+                    {auction.startingPrice.toLocaleString()} CFA
+                  </div>
+                </div>
+                
+                <div className="text-center pb-4 border-b border-gray-200">
+                  <div className="text-sm text-gray-500 uppercase tracking-wide mb-1">Current Highest Bid</div>
+                  <div className="text-2xl font-bold text-yellow-600">
+                    {currentBid.toLocaleString()} CFA
+                  </div>
+                </div>
+
+                {!auctionEnded && (
+                  <div className="bg-red-50 p-4 rounded-lg text-center">
+                    <div className="text-sm text-red-600 font-medium mb-2">Time Remaining</div>
+                    <div className="text-xl font-mono font-bold text-red-700">
+                      {countdown.days}d {countdown.hours}h {countdown.minutes}m {countdown.seconds}s
+                    </div>
+                  </div>
+                )}
+
+                {auctionEnded && (
+                  <div className="bg-gray-100 p-4 rounded-lg text-center">
+                    <div className="text-gray-600 font-semibold mb-1">Auction Ended</div>
+                    <div className="text-sm text-gray-500">
+                      Winning bid: {auction.currentBid.toLocaleString()} CFA
+                    </div>
+                  </div>
+                )}
+
+                {!auctionEnded && (
+                  <div className="space-y-3 pt-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-700">Your Bid Amount</label>
+                      <div className="space-y-2">
+                        <input
+                          type="number"
+                          value={bidAmount}
+                          onChange={(e) => setBidAmount(e.target.value)}
+                          placeholder={`Min: ${(currentBid + 100).toLocaleString()}`}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          min={currentBid + 1}
+                        />
+                        <div className="flex items-center justify-between text-xs text-gray-500">
+                          <span>Minimum bid: {(currentBid + 100).toLocaleString()} CFA</span>
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      onClick={handleBidSubmit}
+                      disabled={isPlacingBid}
+                      className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white px-6 py-3 rounded-lg font-semibold transition-colors disabled:cursor-not-allowed"
+                    >
+                      {isPlacingBid ? 'Placing Bid...' : 'Place Bid'}
+                    </button>
+                    {error && (
+                      <div className="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-lg text-sm">
+                        {error}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Seller Information */}
+            <div className="bg-white rounded-xl shadow-sm p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Seller Information</h3>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                  {auction.vendor.charAt(0)}
+                </div>
+                <div className="flex-1">
+                  <div className="font-medium text-gray-900">{auction.vendor}</div>
+                  {auction.verified && (
+                    <div className="text-sm text-blue-600 font-medium">Verified Seller</div>
+                  )}
+                </div>
+              </div>
+              <button className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors">
+                View Seller Profile
+              </button>
+            </div>
           </div>
         </div>
       </div>
