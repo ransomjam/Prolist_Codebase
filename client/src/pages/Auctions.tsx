@@ -40,9 +40,15 @@ export default function Auctions() {
 
   return (
     <div className="p-6">
-      <div className="flex items-center gap-3 mb-6">
-        <Gavel className="text-primary" size={32} />
-        <h2 className="text-3xl font-bold text-primary">Live Auctions</h2>
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <Gavel className="text-primary" size={32} />
+          <h2 className="text-3xl font-bold text-primary">Live Auctions</h2>
+        </div>
+        <button className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2">
+          <Gavel size={20} />
+          Post New Auction
+        </button>
       </div>
       <p className="text-sm text-gray-600 mb-6">Only Premium Users Can Post Deals. All Prices Are in CFA.</p>
       

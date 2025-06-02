@@ -13,8 +13,19 @@ export default function VerifiedDirectory() {
 
   return (
     <div className="p-6">
-      <h2 className="text-3xl font-bold text-primary mb-4">✅ Verified Businesses</h2>
-      <p className="mb-4 text-gray-600">All businesses listed below are officially verified on ProList.</p>
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <h2 className="text-3xl font-bold text-primary">✅ Verified Businesses</h2>
+          <p className="text-gray-600">All businesses listed below are officially verified on ProList.</p>
+        </div>
+        <button 
+          onClick={() => window.location.href = '/vendor-register'}
+          className="bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
+        >
+          <Shield size={20} />
+          Get Verified
+        </button>
+      </div>
       
       {/* Search Bar */}
       <div className="mb-6">

@@ -4,7 +4,15 @@ import InfoCard from '../components/InfoCard';
 export default function Stocks() {
   return (
     <div className="p-6">
-      <h2 className="text-3xl font-bold text-primary mb-4">📈 Stocks & Shares</h2>
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-3xl font-bold text-primary">📈 Stocks & Shares</h2>
+        <button 
+          onClick={() => window.location.href = '/new-listing'}
+          className="bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
+        >
+          📈 List Shares
+        </button>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {stocks.map((s) => (
           <InfoCard

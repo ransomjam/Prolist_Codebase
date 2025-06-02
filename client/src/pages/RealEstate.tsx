@@ -134,9 +134,15 @@ export default function RealEstate() {
       {/* Compact Header */}
       <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
         <div className="px-4 py-4">
-          <div className="max-w-7xl mx-auto">
-            <h1 className="text-2xl font-bold mb-1">Verified Real Estate</h1>
-            <p className="text-blue-100 text-sm">Trusted properties in Bamenda</p>
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold mb-1">Verified Real Estate</h1>
+              <p className="text-blue-100 text-sm">Trusted properties in Bamenda</p>
+            </div>
+            <button className="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 border border-white/30">
+              <Building size={20} />
+              List Property
+            </button>
           </div>
         </div>
       </div>

@@ -74,9 +74,18 @@ export default function ProductFeed() {
   return (
     <div className="p-4 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-6">
-        <ShoppingBag className="text-blue-600" size={32} />
-        <h2 className="text-3xl font-bold text-blue-600">Marketplace</h2>
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <ShoppingBag className="text-blue-600" size={32} />
+          <h2 className="text-3xl font-bold text-blue-600">Marketplace</h2>
+        </div>
+        <button 
+          onClick={() => window.location.href = '/product-listing'}
+          className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
+        >
+          <ShoppingBag size={20} />
+          Sell Product
+        </button>
       </div>
 
       {/* Filter Bar */}
