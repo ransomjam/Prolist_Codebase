@@ -191,132 +191,118 @@ export default function Profile() {
       {getNotificationMessage()}
 
       {/* Profile Header */}
-      <div className="px-6 py-8">
-        <div className="flex flex-col lg:flex-row items-start gap-8 mb-8">
-          {/* Profile Image */}
-          <div className="flex-shrink-0 mx-auto lg:mx-0">
+      <div className="px-4 py-4">
+        {/* Top Row - Profile pic, name, edit button */}
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex items-center gap-3">
             <img
-              src={currentUser.avatar}
+              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100"
               alt={profileUser.name || profileUser.username}
-              className="w-40 h-40 rounded-full object-cover shadow-lg"
+              className="w-16 h-16 rounded-full object-cover"
             />
-          </div>
-
-          {/* Profile Info */}
-          <div className="flex-1 text-center lg:text-left">
-            <div className="flex flex-col lg:flex-row lg:items-center gap-4 mb-6">
-              <h1 className="text-3xl font-bold text-gray-900">{profileUser.name || profileUser.username}</h1>
-              <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
+            <div>
+              <h1 className="text-xl font-bold text-gray-900">{profileUser.name || profileUser.username}</h1>
+              <div className="flex items-center gap-2 mt-1">
                 {getVerificationBadge()}
-                {isPremium && (
-                  <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1 rounded-full">
-                    <span className="text-sm font-medium">Premium Member</span>
-                  </div>
-                )}
               </div>
             </div>
+          </div>
+          <button className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition">
+            Edit Profile
+          </button>
+        </div>
 
-            {/* Stats */}
-            <div className="flex flex-wrap justify-center lg:justify-start gap-8 mb-6">
-              <div className="text-center">
-                <span className="text-2xl font-bold text-gray-900">{currentUser.listingsPosted}</span>
-                <span className="text-gray-600 block text-sm">Posts</span>
+        {/* Stats Row */}
+        <div className="grid grid-cols-4 gap-2 mb-4">
+          <div className="text-center">
+            <span className="text-lg font-bold text-gray-900">{currentUser.listingsPosted}</span>
+            <span className="text-gray-600 block text-xs">Posts</span>
+          </div>
+          <div className="text-center">
+            <span className="text-lg font-bold text-gray-900">{currentUser.followers}</span>
+            <span className="text-gray-600 block text-xs">Followers</span>
+          </div>
+          <div className="text-center">
+            <span className="text-lg font-bold text-gray-900">{currentUser.following}</span>
+            <span className="text-gray-600 block text-xs">Following</span>
+          </div>
+          <div className="text-center">
+            <span className="text-lg font-bold text-gray-900">{vendorStats?.totalSales || 0}</span>
+            <span className="text-gray-600 block text-xs">Sales</span>
+          </div>
+        </div>
+
+        {/* Trust Score Box */}
+        <div className="bg-gradient-to-r from-green-100 to-blue-100 rounded-lg p-4 mb-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <Shield className="text-green-600" size={18} />
+                <span className="font-semibold text-gray-900">Trust Score</span>
               </div>
-              <div className="text-center">
-                <span className="text-2xl font-bold text-gray-900">{currentUser.followers}</span>
-                <span className="text-gray-600 block text-sm">Followers</span>
-              </div>
-              <div className="text-center">
-                <span className="text-2xl font-bold text-gray-900">{currentUser.following}</span>
-                <span className="text-gray-600 block text-sm">Following</span>
-              </div>
-              <div className="text-center">
-                <span className="text-2xl font-bold text-gray-900">{currentUser.trustCount}</span>
-                <span className="text-gray-600 block text-sm">Trust Score</span>
-              </div>
+              <div className="text-2xl font-bold text-green-600">{currentUser.trustCount}</div>
             </div>
-
-            {/* Bio & Contact */}
-            <div className="text-gray-700 mb-6 max-w-2xl">
-              <p className="font-medium mb-2">{currentUser.bio}</p>
-              <div className="flex flex-wrap gap-4 text-sm">
-                <span className="flex items-center gap-1">
-                  <MapPin size={16} />
-                  {currentUser.location}
-                </span>
-                <span className="flex items-center gap-1">
-                  <Phone size={16} />
-                  {currentUser.phone}
-                </span>
-                <span className="flex items-center gap-1">
-                  <Mail size={16} />
-                  {currentUser.email}
-                </span>
-                <span className="flex items-center gap-1">
-                  <Calendar size={16} />
-                  Joined {currentUser.joinDate}
-                </span>
+            <div className="text-right">
+              <div className="text-sm text-gray-600">Rating</div>
+              <div className="flex items-center gap-1">
+                <Star className="text-yellow-500 fill-current" size={16} />
+                <span className="font-semibold">{vendorStats?.averageRating || currentUser.rating}</span>
               </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
-              <a
-                href="/add-listing"
-                className="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
-              >
-                Add New Listing
-              </a>
-              <button className="border border-gray-300 px-6 py-2 rounded-lg font-semibold hover:bg-gray-50 transition">
-                Edit Profile
-              </button>
-              {!vendorApplication && (
-                <a
-                  href="/vendor-register"
-                  className="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition"
-                >
-                  Get Verified
-                </a>
-              )}
-              {!isPremium && (
-                <button
-                  onClick={() => setShowUpgrade(true)}
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition"
-                >
-                  Upgrade to Premium
-                </button>
-              )}
             </div>
           </div>
         </div>
 
-        {/* Sales Performance */}
+        {/* Bio */}
+        <div className="mb-4">
+          <p className="text-gray-700 text-sm mb-2">{currentUser.bio}</p>
+          <div className="flex flex-wrap gap-3 text-xs text-gray-600">
+            <span className="flex items-center gap-1">
+              <MapPin size={12} />
+              {currentUser.location}
+            </span>
+            <span className="flex items-center gap-1">
+              <Phone size={12} />
+              {currentUser.phone}
+            </span>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="grid grid-cols-2 gap-2 mb-4">
+          <a
+            href="/add-listing"
+            className="bg-blue-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition text-center"
+          >
+            Add Listing
+          </a>
+          {!vendorApplication ? (
+            <a
+              href="/vendor-register"
+              className="bg-green-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-green-700 transition text-center"
+            >
+              Get Verified
+            </a>
+          ) : (
+            <button
+              onClick={() => setShowUpgrade(true)}
+              className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-2 rounded-lg text-sm font-semibold hover:from-purple-700 hover:to-pink-700 transition"
+            >
+              Upgrade
+            </button>
+          )}
+        </div>
+
+        {/* Revenue Summary */}
         {vendorStats && (
-          <div className="bg-gradient-to-r from-blue-50 to-green-50 rounded-xl p-6 mb-8">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <TrendingUp size={20} />
-              Sales Performance
-            </h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="bg-white rounded-lg p-4 text-center shadow-sm">
-                <DollarSign className="text-green-600 mx-auto mb-2" size={24} />
-                <div className="text-2xl font-bold text-gray-900">{vendorStats.totalRevenue?.toLocaleString() || 0}</div>
-                <div className="text-sm text-gray-600">Total Revenue (CFA)</div>
+          <div className="bg-gradient-to-r from-green-100 to-emerald-100 rounded-lg p-3 mb-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="text-xs text-gray-600">Total Revenue</div>
+                <div className="text-lg font-bold text-green-600">{vendorStats.totalRevenue?.toLocaleString() || 0} CFA</div>
               </div>
-              <div className="bg-white rounded-lg p-4 text-center shadow-sm">
-                <Package className="text-blue-600 mx-auto mb-2" size={24} />
-                <div className="text-2xl font-bold text-gray-900">{vendorStats.totalSales || 0}</div>
-                <div className="text-sm text-gray-600">Total Sales</div>
-              </div>
-              <div className="bg-white rounded-lg p-4 text-center shadow-sm">
-                <Star className="text-yellow-600 mx-auto mb-2" size={24} />
-                <div className="text-2xl font-bold text-gray-900">{vendorStats.averageRating || currentUser.rating}</div>
-                <div className="text-sm text-gray-600">Average Rating</div>
-              </div>
-              <div className="bg-white rounded-lg p-4 text-center shadow-sm">
-                <Award className="text-purple-600 mx-auto mb-2" size={24} />
-                <div className="text-2xl font-bold text-gray-900">{userProducts.length}</div>
-                <div className="text-sm text-gray-600">Active Products</div>
+              <div className="text-right">
+                <div className="text-xs text-gray-600">Active Products</div>
+                <div className="text-lg font-bold text-blue-600">{userProducts.length}</div>
               </div>
             </div>
           </div>
@@ -328,53 +314,53 @@ export default function Profile() {
         <div className="flex">
           <button
             onClick={() => setActiveTab("overview")}
-            className={`flex-1 py-3 px-4 text-center text-sm font-medium transition-colors ${
+            className={`flex-1 py-2 text-center text-xs font-medium transition-colors ${
               activeTab === "overview"
                 ? 'text-blue-600 border-t-2 border-blue-600 bg-blue-50'
-                : 'text-gray-500 hover:text-gray-700'
+                : 'text-gray-500'
             }`}
           >
-            <Grid3X3 size={16} className="mx-auto mb-1" />
-            OVERVIEW
+            <Grid3X3 size={14} className="mx-auto mb-1" />
+            POSTS
           </button>
           <button
             onClick={() => setActiveTab("products")}
-            className={`flex-1 py-3 px-4 text-center text-sm font-medium transition-colors ${
+            className={`flex-1 py-2 text-center text-xs font-medium transition-colors ${
               activeTab === "products"
                 ? 'text-blue-600 border-t-2 border-blue-600 bg-blue-50'
-                : 'text-gray-500 hover:text-gray-700'
+                : 'text-gray-500'
             }`}
           >
-            <Package size={16} className="mx-auto mb-1" />
+            <Package size={14} className="mx-auto mb-1" />
             PRODUCTS
           </button>
           <button
             onClick={() => setActiveTab("activity")}
-            className={`flex-1 py-3 px-4 text-center text-sm font-medium transition-colors ${
+            className={`flex-1 py-2 text-center text-xs font-medium transition-colors ${
               activeTab === "activity"
                 ? 'text-blue-600 border-t-2 border-blue-600 bg-blue-50'
-                : 'text-gray-500 hover:text-gray-700'
+                : 'text-gray-500'
             }`}
           >
-            <TrendingUp size={16} className="mx-auto mb-1" />
+            <TrendingUp size={14} className="mx-auto mb-1" />
             ACTIVITY
           </button>
           <button
             onClick={() => setActiveTab("reviews")}
-            className={`flex-1 py-3 px-4 text-center text-sm font-medium transition-colors ${
+            className={`flex-1 py-2 text-center text-xs font-medium transition-colors ${
               activeTab === "reviews"
                 ? 'text-blue-600 border-t-2 border-blue-600 bg-blue-50'
-                : 'text-gray-500 hover:text-gray-700'
+                : 'text-gray-500'
             }`}
           >
-            <Star size={16} className="mx-auto mb-1" />
+            <Star size={14} className="mx-auto mb-1" />
             REVIEWS
           </button>
         </div>
       </div>
 
       {/* Tab Content */}
-      <div className="bg-white p-6">
+      <div className="bg-white p-3">
         {activeTab === "overview" && (
           <div className="grid grid-cols-3 gap-1">
             {posts.map((post) => (
@@ -382,17 +368,17 @@ export default function Profile() {
                 <img
                   src={post.image}
                   alt=""
-                  className="w-full h-full object-cover rounded-lg"
+                  className="w-full h-full object-cover rounded"
                 />
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-200 flex items-center justify-center rounded-lg">
-                  <div className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex gap-4">
+                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-200 flex items-center justify-center rounded">
+                  <div className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex gap-3">
                     <div className="flex items-center gap-1">
-                      <Heart size={20} fill="white" />
-                      <span className="font-semibold">{post.likes}</span>
+                      <Heart size={16} fill="white" />
+                      <span className="text-sm font-semibold">{post.likes}</span>
                     </div>
                     <div className="flex items-center gap-1">
-                      <MessageCircle size={20} fill="white" />
-                      <span className="font-semibold">{post.comments}</span>
+                      <MessageCircle size={16} fill="white" />
+                      <span className="text-sm font-semibold">{post.comments}</span>
                     </div>
                   </div>
                 </div>
@@ -402,20 +388,19 @@ export default function Profile() {
         )}
 
         {activeTab === "products" && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="space-y-3">
             {userProducts.length > 0 ? (
               userProducts.map((product: any) => (
-                <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                <div key={product.id} className="bg-gray-50 rounded-lg p-3 flex gap-3">
                   <img
-                    src={product.imageUrl || "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300"}
+                    src={product.imageUrl || "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80"}
                     alt={product.title}
-                    className="w-full h-48 object-cover"
+                    className="w-16 h-16 object-cover rounded"
                   />
-                  <div className="p-4">
-                    <h3 className="font-semibold text-gray-900 mb-2">{product.title}</h3>
-                    <p className="text-lg font-bold text-green-600 mb-2">{parseInt(product.price).toLocaleString()} CFA</p>
-                    <p className="text-gray-600 text-sm mb-3">{product.description}</p>
-                    <div className="flex items-center justify-between text-sm text-gray-500">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900 text-sm">{product.title}</h3>
+                    <p className="text-green-600 font-bold text-sm">{parseInt(product.price).toLocaleString()} CFA</p>
+                    <div className="flex items-center justify-between text-xs text-gray-500 mt-1">
                       <span>Views: {product.viewCount || 0}</span>
                       <span className="text-green-600">Active</span>
                     </div>
@@ -423,13 +408,13 @@ export default function Profile() {
                 </div>
               ))
             ) : (
-              <div className="col-span-full text-center py-12">
-                <Package size={48} className="mx-auto mb-4 text-gray-300" />
-                <p className="text-lg font-semibold mb-2">No products yet</p>
-                <p className="text-gray-600 mb-4">Start selling by adding your first product</p>
+              <div className="text-center py-8">
+                <Package size={32} className="mx-auto mb-2 text-gray-300" />
+                <p className="text-sm font-semibold mb-1">No products yet</p>
+                <p className="text-gray-600 text-xs mb-3">Start selling by adding your first product</p>
                 <a
                   href="/add-listing"
-                  className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
+                  className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg text-xs font-semibold hover:bg-blue-700 transition"
                 >
                   Add Product
                 </a>
@@ -439,36 +424,32 @@ export default function Profile() {
         )}
 
         {activeTab === "activity" && (
-          <div className="space-y-6">
-            <div className="bg-gray-50 rounded-lg p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">Platform Activity</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="space-y-4">
+            <div className="bg-gray-50 rounded-lg p-3">
+              <h3 className="font-semibold text-gray-900 mb-3 text-sm">Platform Activity</h3>
+              <div className="grid grid-cols-3 gap-3">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600">{currentUser.listingsPosted}</div>
-                  <div className="text-sm text-gray-600">Listings Posted</div>
+                  <div className="text-lg font-bold text-blue-600">{currentUser.listingsPosted}</div>
+                  <div className="text-xs text-gray-600">Listings</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-green-600">{currentUser.realEstatePosted}</div>
-                  <div className="text-sm text-gray-600">Real Estate</div>
+                  <div className="text-lg font-bold text-green-600">{currentUser.realEstatePosted}</div>
+                  <div className="text-xs text-gray-600">Real Estate</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-orange-600">{currentUser.auctionsPosted}</div>
-                  <div className="text-sm text-gray-600">Auctions</div>
+                  <div className="text-lg font-bold text-orange-600">{currentUser.auctionsPosted}</div>
+                  <div className="text-xs text-gray-600">Auctions</div>
                 </div>
               </div>
-            </div>
-            <div className="text-center py-8">
-              <TrendingUp size={48} className="mx-auto mb-4 text-gray-300" />
-              <p className="text-gray-600">Detailed activity history will appear here</p>
             </div>
           </div>
         )}
 
         {activeTab === "reviews" && (
-          <div className="text-center py-12">
-            <Star size={48} className="mx-auto mb-4 text-gray-300" />
-            <p className="text-lg font-semibold mb-2">No reviews yet</p>
-            <p className="text-gray-600">Customer reviews will appear here once you start selling</p>
+          <div className="text-center py-8">
+            <Star size={32} className="mx-auto mb-2 text-gray-300" />
+            <p className="text-sm font-semibold mb-1">No reviews yet</p>
+            <p className="text-gray-600 text-xs">Customer reviews will appear here</p>
           </div>
         )}
       </div>
