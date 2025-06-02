@@ -214,8 +214,7 @@ export default function Navbar() {
             </div>
           </Link>
 
-          {/* Notifications */}
-          <NotificationDropdown />
+
         </div>
       </div>
       
