@@ -15,6 +15,7 @@ import {
   ArrowLeft,
   MapPin
 } from 'lucide-react';
+import ShareButton from '@/components/ShareButton';
 
 interface Product {
   id: number;
