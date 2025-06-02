@@ -9,6 +9,7 @@ export default function Sidebar() {
 
   const links = [
     { icon: HomeIcon, label: 'Home', path: '/app' },
+    { icon: ShoppingBag, label: 'Products', path: '/products' },
     { icon: ShoppingBag, label: 'Marketplace', path: '/marketplace' },
     { icon: TagIcon, label: 'Listings', path: '/listings' },
     { icon: BuildingStorefrontIcon, label: 'Markets', path: '/markets' },

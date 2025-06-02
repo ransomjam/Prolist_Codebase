@@ -1,0 +1,73 @@
+Update the /src/pages/ProductFeed.jsx to look like Facebook Marketplace:
+
+2 items per row on small screens
+
+3 on medium, 4 on large screens
+
+Show bold price, title, image
+
+Vendor + badge info at the bottom
+
+Use Tailwind CSS, hover animation, rounded corners, shadow-neonBlue
+
+💻 NEW: ProductFeed.jsx (Facebook Style)
+jsx
+Copy
+Edit
+import { useState } from 'react';
+
+export default function ProductFeed({ productListings }) {
+  const [filter, setFilter] = useState('');
+
+  const filtered = productListings.filter(p => {
+    return filter ? p.category === filter : true;
+  });
+
+  return (
+    <div className="p-4">
+      <h2 className="text-2xl font-bold text-primary mb-4">🛒 Marketplace Listings</h2>
+
+      {/* Filter Bar */}
+      <div className="mb-6">
+        <select onChange={e => setFilter(e.target.value)} className="border p-2 rounded">
+          <option value="">All Categories</option>
+          <option value="shoes">Shoes</option>
+          <option value="phones">Phones</option>
+          <option value="clothes">Clothes</option>
+          <option value="electronics">Electronics</option>
+        </select>
+      </div>
+
+      {/* Product Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        {filtered.map((item, index) => (
+          <div
+            key={index}
+            className="bg-white rounded-xl shadow-neonBlue hover:shadow-neonGreen transition-all cursor-pointer"
+          >
+            <img src={item.image1} alt={item.title} className="w-full h-40 object-cover rounded-t-xl" />
+
+            <div className="p-3">
+              <p className="text-emerald-600 font-bold text-lg">{item.price} CFA</p>
+              <h3 className="text-md font-semibold truncate">{item.title}</h3>
+
+              <div className="mt-2 text-xs text-gray-600 flex justify-between items-center">
+                <span>By {item.postedBy}</span>
+                <span className="flex items-center gap-1">
+                  🛡️ <span className="text-blue-500">Verified</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+✅ Tailwind Grid Explanation
+Screen Size	Grid Columns
+Mobile (grid-cols-2)	2
+Small Tablets	3
+Large (Desktop)	4
+
+This mirrors the Facebook Marketplace experience on different screens.
