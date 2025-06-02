@@ -198,38 +198,12 @@ export default function ProductDetail() {
               </button>
             </div>
             
-            <div className="flex justify-between items-center mb-6">
-              <div className="text-3xl font-bold text-green-600">
-                {parseInt(product.price).toLocaleString()} XAF
-              </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={handleTrust}
-                  className={`flex items-center gap-1 px-3 py-2 rounded-full text-sm font-medium transition-all ${
-                    trusted 
-                      ? 'bg-blue-100 text-blue-700 shadow-lg shadow-blue-200' 
-                      : 'bg-gray-100 text-gray-700 hover:bg-blue-50'
-                  }`}
-                >
-                  <Shield size={16} />
-                  Trust ({trustCount})
-                </button>
-                <button
-                  onClick={handleFollow}
-                  className={`flex items-center gap-1 px-3 py-2 rounded-full text-sm font-medium transition-all ${
-                    following 
-                      ? 'bg-green-100 text-green-700 shadow-lg shadow-green-200' 
-                      : 'bg-gray-100 text-gray-700 hover:bg-green-50'
-                  }`}
-                >
-                  <UserPlus size={16} />
-                  Follow ({followCount})
-                </button>
-              </div>
+            <div className="text-3xl font-bold text-green-600 mb-4">
+              {parseInt(product.price).toLocaleString()} XAF
             </div>
 
             {/* Product Info */}
-            <div className="space-y-4">
+            <div className="space-y-3 mb-6">
               <div className="flex items-center gap-2 text-gray-600">
                 <MapPin size={16} />
                 <span>{product.location}</span>
@@ -245,6 +219,25 @@ export default function ProductDetail() {
                 </div>
               </div>
             </div>
+
+            {/* Primary Action Buttons */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+              <button
+                onClick={handleChat}
+                className="flex items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition-all shadow-lg hover:shadow-blue-200 font-medium"
+              >
+                <MessageCircle size={18} />
+                Chat Vendor
+              </button>
+              
+              <button
+                onClick={handlePlaceOrder}
+                className="flex items-center justify-center gap-2 bg-green-600 text-white px-6 py-3 rounded-xl hover:bg-green-700 transition-all shadow-lg hover:shadow-green-200 font-medium"
+              >
+                <ShoppingCart size={18} />
+                Place Order
+              </button>
+            </div>
           </div>
 
           {/* Description */}
@@ -255,54 +248,64 @@ export default function ProductDetail() {
 
           {/* Vendor Info */}
           <div className="bg-white rounded-xl p-6 shadow-lg">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                  <User className="text-blue-600" size={24} />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900">{vendor?.fullName || 'Vendor'}</h4>
-                  <div className="flex items-center gap-2">
-                    <Shield className="text-green-600" size={16} />
-                    <span className="text-sm text-green-600 font-medium">
-                      {vendor?.status || 'Basic Verified'}
-                    </span>
-                  </div>
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+                <User className="text-blue-600" size={28} />
+              </div>
+              <div className="flex-1">
+                <h4 className="text-lg font-semibold text-gray-900">{vendor?.fullName || 'Vendor'}</h4>
+                <div className="flex items-center gap-2 mt-1">
+                  <Shield className="text-green-600" size={16} />
+                  <span className="text-sm text-green-600 font-medium">
+                    {vendor?.status || 'Basic Verified'}
+                  </span>
                 </div>
               </div>
             </div>
             
-            <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
-              <div>Trusts: <span className="font-semibold">{trustCount}</span></div>
-              <div>Followers: <span className="font-semibold">{followCount}</span></div>
+            {/* Trust and Follow Stats with Buttons */}
+            <div className="grid grid-cols-2 gap-6 mb-6">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-gray-900 mb-1">{trustCount}</div>
+                <div className="text-sm text-gray-600 mb-3">Trusts</div>
+                <button
+                  onClick={handleTrust}
+                  className={`w-full px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                    trusted 
+                      ? 'bg-blue-600 text-white shadow-lg shadow-blue-200' 
+                      : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+                  }`}
+                >
+                  <Shield size={16} className="inline mr-2" />
+                  {trusted ? 'Trusted' : 'Trust'}
+                </button>
+              </div>
+              
+              <div className="text-center">
+                <div className="text-2xl font-bold text-gray-900 mb-1">{followCount}</div>
+                <div className="text-sm text-gray-600 mb-3">Followers</div>
+                <button
+                  onClick={handleFollow}
+                  className={`w-full px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                    following 
+                      ? 'bg-green-600 text-white shadow-lg shadow-green-200' 
+                      : 'bg-green-100 text-green-700 hover:bg-green-200'
+                  }`}
+                >
+                  <UserPlus size={16} className="inline mr-2" />
+                  {following ? 'Following' : 'Follow'}
+                </button>
+              </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <button
-                onClick={handleChat}
-                className="flex items-center justify-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                <MessageCircle size={16} />
-                Chat Vendor
-              </button>
-              
-              <button
-                onClick={() => setLocation(`/vendor/${vendor?.fullName.toLowerCase().replace(' ', '_')}`)}
-                className="flex items-center justify-center gap-2 bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors"
-              >
-                <User size={16} />
-                View Profile
-              </button>
-              
-              <button
-                onClick={handlePlaceOrder}
-                className="flex items-center justify-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors shadow-lg"
-              >
-                <ShoppingCart size={16} />
-                Place Order
-              </button>
-            </div>
+            {/* View Profile Button */}
+            <button
+              onClick={() => setLocation(`/vendor/${vendor?.fullName.toLowerCase().replace(' ', '_')}`)}
+              className="w-full flex items-center justify-center gap-2 bg-gray-100 text-gray-700 px-4 py-3 rounded-xl hover:bg-gray-200 transition-colors font-medium"
+            >
+              <User size={18} />
+              View Vendor Profile
+            </button>
           </div>
 
           {/* Chat Box */}
