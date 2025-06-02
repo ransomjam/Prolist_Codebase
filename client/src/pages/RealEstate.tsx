@@ -122,6 +122,11 @@ export default function RealEstate() {
     window.open(whatsappUrl, '_blank');
   };
 
+  const handleViewProfile = (property) => {
+    console.log('Viewing seller profile for property:', property.title);
+    // Navigate to seller/vendor profile page - would integrate with routing
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Compact Header */}
@@ -480,98 +485,104 @@ export default function RealEstate() {
 
       {/* Property Detail Modal */}
       {showPropertyModal && selectedProperty && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2">
+          <div className="bg-white rounded-xl max-w-4xl w-full max-h-[95vh] overflow-y-auto">
             {/* Modal Header */}
             <div className="relative">
               <img 
                 src={selectedProperty.image} 
                 alt={selectedProperty.title}
-                className="w-full h-48 md:h-64 object-cover rounded-t-2xl"
+                className="w-full h-40 md:h-48 object-cover rounded-t-xl"
               />
               <button 
                 onClick={() => setShowPropertyModal(false)}
-                className="absolute top-3 right-3 bg-white/90 hover:bg-white p-2 rounded-full transition-colors"
+                className="absolute top-2 right-2 bg-white/90 hover:bg-white p-1.5 rounded-full transition-colors"
               >
-                <div className="w-5 h-5 flex items-center justify-center text-gray-600">×</div>
+                <div className="w-4 h-4 flex items-center justify-center text-gray-600 font-bold">×</div>
               </button>
-              <div className="absolute top-3 left-3 flex gap-2">
+              <div className="absolute top-2 left-2 flex gap-1">
                 {selectedProperty.verified && (
                   <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
-                    <Shield size={12} />
+                    <Shield size={10} />
                     Verified
                   </span>
                 )}
                 <button 
                   onClick={() => handleToggleFavorite(selectedProperty.id)}
-                  className="bg-white/90 hover:bg-white p-2 rounded-full transition-colors"
+                  className="bg-white/90 hover:bg-white p-1.5 rounded-full transition-colors"
                 >
                   <Heart 
-                    size={16} 
+                    size={14} 
                     className={favoriteProperties.has(selectedProperty.id) ? "text-red-500 fill-current" : "text-gray-600"} 
                   />
                 </button>
               </div>
-              <div className="absolute bottom-3 left-3 bg-black/80 text-white px-3 py-2 rounded-full">
-                <span className="text-xl font-bold">{selectedProperty.price}</span>
+              <div className="absolute bottom-2 left-2 bg-black/80 text-white px-2 py-1 rounded-full">
+                <span className="text-lg font-bold">{selectedProperty.price}</span>
               </div>
             </div>
 
             {/* Modal Content */}
-            <div className="p-4">
-              <div className="flex justify-between items-start mb-3">
-                <h2 className="text-2xl font-bold text-gray-900">{selectedProperty.title}</h2>
+            <div className="p-3">
+              <div className="flex justify-between items-start mb-2">
+                <h2 className="text-xl font-bold text-gray-900">{selectedProperty.title}</h2>
                 <button 
                   onClick={() => handleShare(selectedProperty)}
-                  className="p-2 text-gray-400 hover:text-blue-600 transition-colors"
+                  className="p-1 text-gray-400 hover:text-blue-600 transition-colors"
                 >
-                  <Share2 size={18} />
+                  <Share2 size={16} />
                 </button>
               </div>
 
-              <div className="flex items-center text-gray-600 mb-4">
-                <LocationIcon size={16} className="mr-2" />
-                <span className="text-base">{selectedProperty.location}</span>
+              <div className="flex items-center text-gray-600 mb-3">
+                <LocationIcon size={14} className="mr-1" />
+                <span className="text-sm">{selectedProperty.location}</span>
               </div>
 
               {/* Vendor Information */}
-              <div className="bg-gray-50 rounded-xl p-4 mb-4">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Property Owner</h3>
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+              <div className="bg-gray-50 rounded-lg p-3 mb-3">
+                <h3 className="text-base font-semibold text-gray-900 mb-2">Property Owner</h3>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
                     {selectedProperty.title.charAt(0)}
                   </div>
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <h4 className="font-semibold text-gray-900">Professional Property Owner</h4>
+                      <h4 className="font-medium text-gray-900 text-sm">Professional Property Owner</h4>
                       {selectedProperty.verified && (
-                        <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
-                          <Shield size={12} />
-                          Verified Owner
+                        <span className="bg-green-100 text-green-800 px-1.5 py-0.5 rounded-full text-xs font-medium flex items-center gap-1">
+                          <Shield size={10} />
+                          Verified
                         </span>
                       )}
                     </div>
-                    <div className="flex items-center gap-4 text-sm text-gray-600">
+                    <div className="flex items-center gap-3 text-xs text-gray-600">
                       <div className="flex items-center gap-1">
-                        <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                        <span>4.8 Rating</span>
+                        <Star className="w-3 h-3 text-yellow-500 fill-current" />
+                        <span>4.8</span>
                       </div>
                       <div className="flex items-center gap-1">
-                        <Home size={14} />
+                        <Home size={12} />
                         <span>15+ Properties</span>
                       </div>
                       <div className="flex items-center gap-1">
-                        <Eye size={14} />
-                        <span>{selectedProperty.trustCount} views</span>
+                        <Eye size={12} />
+                        <span>{selectedProperty.trustCount}</span>
                       </div>
                     </div>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex flex-col gap-1">
                     <button 
                       onClick={() => handleContactOwner(selectedProperty)}
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded text-xs font-medium transition-colors"
                     >
                       Contact
+                    </button>
+                    <button 
+                      onClick={() => handleViewProfile(selectedProperty)}
+                      className="bg-gray-600 hover:bg-gray-700 text-white px-2 py-1 rounded text-xs font-medium transition-colors"
+                    >
+                      Profile
                     </button>
                   </div>
                 </div>
