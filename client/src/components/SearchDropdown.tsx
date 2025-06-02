@@ -57,7 +57,7 @@ export default function SearchDropdown() {
         item.location.toLowerCase().includes(query)
       ).slice(0, 2).map(item => ({ ...item, type: 'business' }));
 
-      results.push(...matchingListings, ...matchingMarkets, ...matchingRealEstate, ...matchingAuctions, ...matchingBusinesses);
+      results.push(...matchingProducts, ...matchingMarkets, ...matchingRealEstate, ...matchingAuctions, ...matchingBusinesses);
       setSearchResults(results);
     } else {
       setSearchResults([]);
@@ -66,7 +66,7 @@ export default function SearchDropdown() {
 
   const getResultLink = (result: any) => {
     switch (result.type) {
-      case 'listing': return '/listings';
+      case 'product': return '/products';
       case 'market': return `/markets/${result.id}`;
       case 'realestate': return '/realestate';
       case 'auction': return '/auctions';
@@ -77,7 +77,7 @@ export default function SearchDropdown() {
 
   const getResultIcon = (type: string) => {
     switch (type) {
-      case 'listing': return '🏷️';
+      case 'product': return '🏷️';
       case 'market': return '🏪';
       case 'realestate': return '🏠';
       case 'auction': return '🔥';
