@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MapPin, Filter, Search, Home, Building, Calendar, SlidersHorizontal, Grid3X3, List, Eye, Heart, Share2, Wifi, Car, Bath, Bed, MapPin as LocationIcon, DollarSign, TrendingUp, Shield } from 'lucide-react';
+import { MapPin, Filter, Search, Home, Building, Calendar, SlidersHorizontal, Grid3X3, List, Eye, Heart, Share2, Wifi, Car, Bath, Bed, MapPin as LocationIcon, DollarSign, TrendingUp, Shield, Star } from 'lucide-react';
 import { realEstate } from '../data/demoData';
 import RealEstateCard from '../components/RealEstateCard';
 
@@ -481,25 +481,25 @@ export default function RealEstate() {
       {/* Property Detail Modal */}
       {showPropertyModal && selectedProperty && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto">
             {/* Modal Header */}
             <div className="relative">
               <img 
                 src={selectedProperty.image} 
                 alt={selectedProperty.title}
-                className="w-full h-64 md:h-80 object-cover rounded-t-2xl"
+                className="w-full h-48 md:h-64 object-cover rounded-t-2xl"
               />
               <button 
                 onClick={() => setShowPropertyModal(false)}
-                className="absolute top-4 right-4 bg-white/90 hover:bg-white p-2 rounded-full transition-colors"
+                className="absolute top-3 right-3 bg-white/90 hover:bg-white p-2 rounded-full transition-colors"
               >
-                <div className="w-6 h-6 flex items-center justify-center">×</div>
+                <div className="w-5 h-5 flex items-center justify-center text-gray-600">×</div>
               </button>
-              <div className="absolute top-4 left-4 flex gap-2">
+              <div className="absolute top-3 left-3 flex gap-2">
                 {selectedProperty.verified && (
-                  <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
-                    <Shield size={14} />
-                    Verified Property
+                  <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+                    <Shield size={12} />
+                    Verified
                   </span>
                 )}
                 <button 
@@ -507,41 +507,84 @@ export default function RealEstate() {
                   className="bg-white/90 hover:bg-white p-2 rounded-full transition-colors"
                 >
                   <Heart 
-                    size={20} 
+                    size={16} 
                     className={favoriteProperties.has(selectedProperty.id) ? "text-red-500 fill-current" : "text-gray-600"} 
                   />
                 </button>
               </div>
-              <div className="absolute bottom-4 left-4 bg-black/80 text-white px-4 py-2 rounded-full">
-                <span className="text-2xl font-bold">{selectedProperty.price}</span>
+              <div className="absolute bottom-3 left-3 bg-black/80 text-white px-3 py-2 rounded-full">
+                <span className="text-xl font-bold">{selectedProperty.price}</span>
               </div>
             </div>
 
             {/* Modal Content */}
-            <div className="p-6">
-              <div className="flex justify-between items-start mb-4">
-                <h2 className="text-3xl font-bold text-gray-900">{selectedProperty.title}</h2>
+            <div className="p-4">
+              <div className="flex justify-between items-start mb-3">
+                <h2 className="text-2xl font-bold text-gray-900">{selectedProperty.title}</h2>
                 <button 
                   onClick={() => handleShare(selectedProperty)}
                   className="p-2 text-gray-400 hover:text-blue-600 transition-colors"
                 >
-                  <Share2 size={20} />
+                  <Share2 size={18} />
                 </button>
               </div>
 
-              <div className="flex items-center text-gray-600 mb-6">
-                <LocationIcon size={18} className="mr-2" />
-                <span className="text-lg">{selectedProperty.location}</span>
+              <div className="flex items-center text-gray-600 mb-4">
+                <LocationIcon size={16} className="mr-2" />
+                <span className="text-base">{selectedProperty.location}</span>
+              </div>
+
+              {/* Vendor Information */}
+              <div className="bg-gray-50 rounded-xl p-4 mb-4">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Property Owner</h3>
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                    {selectedProperty.title.charAt(0)}
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h4 className="font-semibold text-gray-900">Professional Property Owner</h4>
+                      {selectedProperty.verified && (
+                        <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+                          <Shield size={12} />
+                          Verified Owner
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-4 text-sm text-gray-600">
+                      <div className="flex items-center gap-1">
+                        <Star className="w-4 h-4 text-yellow-500 fill-current" />
+                        <span>4.8 Rating</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Home size={14} />
+                        <span>15+ Properties</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Eye size={14} />
+                        <span>{selectedProperty.trustCount} views</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <button 
+                      onClick={() => handleContactOwner(selectedProperty)}
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                    >
+                      Contact
+                    </button>
+                  </div>
+                </div>
               </div>
 
               {/* Property Features */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-4">Property Details</h3>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between py-2 border-b border-gray-100">
-                      <span className="text-gray-600">Property Type</span>
-                      <span className="font-semibold">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Property Details</h3>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between py-1 border-b border-gray-100">
+                      <span className="text-gray-600 text-sm">Property Type</span>
+                      <span className="font-medium text-sm">
                         {selectedProperty.title.toLowerCase().includes('apartment') ? 'Apartment' :
                          selectedProperty.title.toLowerCase().includes('duplex') ? 'Duplex' :
                          selectedProperty.title.toLowerCase().includes('house') ? 'House' :
@@ -549,19 +592,19 @@ export default function RealEstate() {
                          selectedProperty.title.toLowerCase().includes('commercial') ? 'Commercial' : 'Property'}
                       </span>
                     </div>
-                    <div className="flex items-center justify-between py-2 border-b border-gray-100">
-                      <span className="text-gray-600">Listing Type</span>
-                      <span className="font-semibold">
+                    <div className="flex items-center justify-between py-1 border-b border-gray-100">
+                      <span className="text-gray-600 text-sm">Listing Type</span>
+                      <span className="font-medium text-sm">
                         {selectedProperty.price.includes('month') ? 'For Rent' : 'For Sale'}
                       </span>
                     </div>
-                    <div className="flex items-center justify-between py-2 border-b border-gray-100">
-                      <span className="text-gray-600">Views</span>
-                      <span className="font-semibold">{selectedProperty.trustCount} views</span>
+                    <div className="flex items-center justify-between py-1 border-b border-gray-100">
+                      <span className="text-gray-600 text-sm">Views</span>
+                      <span className="font-medium text-sm">{selectedProperty.trustCount} views</span>
                     </div>
-                    <div className="flex items-center justify-between py-2 border-b border-gray-100">
-                      <span className="text-gray-600">Verification Status</span>
-                      <span className={`font-semibold ${selectedProperty.verified ? 'text-green-600' : 'text-gray-500'}`}>
+                    <div className="flex items-center justify-between py-1">
+                      <span className="text-gray-600 text-sm">Status</span>
+                      <span className={`font-medium text-sm ${selectedProperty.verified ? 'text-green-600' : 'text-gray-500'}`}>
                         {selectedProperty.verified ? 'Verified' : 'Unverified'}
                       </span>
                     </div>
@@ -569,32 +612,32 @@ export default function RealEstate() {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-4">Features & Amenities</h3>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
-                      <Wifi size={16} className="text-blue-600" />
-                      <span className="text-sm">WiFi Ready</span>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Features & Amenities</h3>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="flex items-center gap-2 p-2 bg-gray-50 rounded-lg">
+                      <Wifi size={14} className="text-blue-600" />
+                      <span className="text-xs">WiFi Ready</span>
                     </div>
-                    <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
-                      <Car size={16} className="text-green-600" />
-                      <span className="text-sm">Parking</span>
+                    <div className="flex items-center gap-2 p-2 bg-gray-50 rounded-lg">
+                      <Car size={14} className="text-green-600" />
+                      <span className="text-xs">Parking</span>
                     </div>
-                    <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
-                      <Building size={16} className="text-purple-600" />
-                      <span className="text-sm">Modern Design</span>
+                    <div className="flex items-center gap-2 p-2 bg-gray-50 rounded-lg">
+                      <Building size={14} className="text-purple-600" />
+                      <span className="text-xs">Modern Design</span>
                     </div>
-                    <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
-                      <Shield size={16} className="text-orange-600" />
-                      <span className="text-sm">Security</span>
+                    <div className="flex items-center gap-2 p-2 bg-gray-50 rounded-lg">
+                      <Shield size={14} className="text-orange-600" />
+                      <span className="text-xs">Security</span>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Description */}
-              <div className="mb-8">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Description</h3>
-                <p className="text-gray-700 leading-relaxed">
+              <div className="mb-4">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Description</h3>
+                <p className="text-gray-700 text-sm leading-relaxed">
                   This beautiful property in {selectedProperty.location} offers modern living with excellent accessibility to local amenities. 
                   The property features contemporary design elements and is situated in one of Bamenda's most sought-after neighborhoods. 
                   Perfect for those seeking quality accommodation in a prime location with easy access to markets, schools, and transportation.
@@ -602,28 +645,28 @@ export default function RealEstate() {
               </div>
 
               {/* Action Buttons */}
-              <div className="border-t border-gray-200 pt-6">
-                <div className="flex flex-col sm:flex-row gap-4">
+              <div className="border-t border-gray-200 pt-4">
+                <div className="flex flex-col sm:flex-row gap-3">
                   <button 
                     onClick={() => handleContactOwner(selectedProperty)}
-                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2"
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 text-sm"
                   >
-                    <span>Contact Property Owner</span>
+                    Contact Owner
                   </button>
                   <button 
                     onClick={() => handleScheduleViewing(selectedProperty)}
-                    className="flex-1 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2"
+                    className="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 text-sm"
                   >
-                    <Calendar size={18} />
-                    <span>Schedule Viewing</span>
+                    <Calendar size={16} />
+                    Schedule Viewing
                   </button>
                 </div>
-                <div className="flex justify-center mt-4">
+                <div className="flex justify-center mt-3">
                   <button 
                     onClick={() => setShowPropertyModal(false)}
-                    className="text-gray-500 hover:text-gray-700 px-4 py-2 text-sm"
+                    className="text-gray-500 hover:text-gray-700 px-4 py-1 text-sm"
                   >
-                    Close Details
+                    Close
                   </button>
                 </div>
               </div>
