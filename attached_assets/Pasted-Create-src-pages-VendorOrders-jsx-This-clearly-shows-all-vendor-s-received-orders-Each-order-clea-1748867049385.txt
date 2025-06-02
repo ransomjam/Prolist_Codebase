@@ -1,0 +1,75 @@
+Create /src/pages/VendorOrders.jsx.
+This clearly shows all vendor's received orders.
+Each order clearly displays:
+
+Product image, title, price, buyer notes.
+
+Buyer username clearly shown.
+
+Order status (Escrow - Pending, Delivered, Confirmed by Buyer).
+
+Button clearly labeled "🚚 Mark as Delivered".
+Clicking the button updates status clearly to "Delivered - Awaiting Buyer Confirmation".
+Use responsive, clean Tailwind cards, neon accents for clear visibility.
+
+💻 VendorOrders.jsx
+jsx
+Copy
+Edit
+export default function VendorOrders({ orders, updateOrder }) {
+  const handleDelivered = (index) => {
+    updateOrder(index, {
+      deliveryConfirmedByVendor: true,
+      status: 'Delivered - Awaiting Buyer Confirmation',
+    });
+  };
+
+  return (
+    <div className="p-6 max-w-3xl mx-auto">
+      <h2 className="text-3xl font-bold text-primary mb-6">📥 Incoming Orders</h2>
+
+      {orders.length === 0 ? (
+        <p className="text-gray-600">No incoming orders yet.</p>
+      ) : (
+        orders.map((order, index) => (
+          <div key={index} className="bg-white rounded-xl shadow-neonBlue p-4 mb-4">
+            <div className="flex gap-4">
+              <img src={order.product.image1} alt={order.product.title} className="w-24 h-24 object-cover rounded" />
+              <div>
+                <h3 className="font-bold text-lg">{order.product.title}</h3>
+                <p className="text-emerald-600 font-bold">{order.product.price} CFA</p>
+                <p className="text-sm text-gray-500">Buyer: {order.buyer}</p>
+                <p className="text-sm text-gray-500">Status: {order.status}</p>
+                {order.notes && <p className="text-sm text-gray-600">Note: {order.notes}</p>}
+              </div>
+            </div>
+
+            {!order.deliveryConfirmedByVendor && (
+              <button
+                onClick={() => handleDelivered(index)}
+                className="mt-4 bg-gradient-to-r from-blue-500 to-emerald-400 text-white py-2 px-4 rounded-lg shadow-neonGreen hover:scale-105 transition"
+              >
+                🚚 Mark as Delivered
+              </button>
+            )}
+
+            {order.deliveryConfirmedByVendor && (
+              <p className="text-green-600 font-semibold mt-2">✔️ Marked as Delivered!</p>
+            )}
+          </div>
+        ))
+      )}
+    </div>
+  );
+}
+✅ Integration in App.jsx:
+Add clearly to your routes:
+
+jsx
+Copy
+Edit
+import VendorOrders from './pages/VendorOrders';
+
+<Route path="/vendor-orders" element={<VendorOrders orders={orders} updateOrder={updateOrder} />} />
+(You've already defined updateOrder previously.)
+
