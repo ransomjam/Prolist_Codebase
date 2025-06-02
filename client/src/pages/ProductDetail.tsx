@@ -222,7 +222,7 @@ export default function ProductDetail() {
             </div>
 
             {/* Primary Action Buttons */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
               <button
                 onClick={handleChat}
                 className="flex items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition-all shadow-lg hover:shadow-blue-200 font-medium"
@@ -238,6 +238,18 @@ export default function ProductDetail() {
                 <ShoppingCart size={18} />
                 Place Order
               </button>
+            </div>
+
+            {/* Secondary Actions */}
+            <div className="flex items-center justify-end mb-6">
+              <ShareButton 
+                product={{
+                  id: product.id,
+                  title: product.title,
+                  price: product.price,
+                  description: product.description
+                }}
+              />
             </div>
           </div>
 

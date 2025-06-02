@@ -1,5 +1,6 @@
 import { Shield, Eye, ShoppingCart, Star, MapPin, Clock, CheckCircle } from 'lucide-react';
 import { useState } from 'react';
+import QuickShareButton from './QuickShareButton';
 
 interface Product {
   id: number;
@@ -88,18 +89,29 @@ export default function MarketplaceProductCard({ product, onViewProduct, onAddTo
           {product.viewCount}
         </div>
         
-        {/* Quick Action Button */}
-        {onAddToCart && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onAddToCart(product.id);
+        {/* Action Buttons */}
+        <div className="absolute bottom-3 right-3 flex items-center gap-2">
+          <QuickShareButton 
+            product={{
+              id: product.id,
+              title: product.title,
+              price: product.price
             }}
-            className="absolute bottom-3 right-3 bg-gradient-to-r from-blue-600 to-emerald-600 text-white p-2 rounded-full hover:from-blue-700 hover:to-emerald-700 transition-all shadow-lg"
-          >
-            <ShoppingCart size={16} />
-          </button>
-        )}
+            className="bg-white shadow-lg"
+          />
+          
+          {onAddToCart && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onAddToCart(product.id);
+              }}
+              className="bg-gradient-to-r from-blue-600 to-emerald-600 text-white p-2 rounded-full hover:from-blue-700 hover:to-emerald-700 transition-all shadow-lg"
+            >
+              <ShoppingCart size={16} />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Content Section */}
