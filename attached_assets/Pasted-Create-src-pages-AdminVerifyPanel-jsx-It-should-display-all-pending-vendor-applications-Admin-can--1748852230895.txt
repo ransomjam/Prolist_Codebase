@@ -1,0 +1,80 @@
+Create /src/pages/AdminVerifyPanel.jsx
+It should display all pending vendor applications.
+Admin can:
+
+Approve (mark as “Basic Verified”)
+
+Reject (mark as “Rejected”)
+
+See submitted fields: Name, Phone, Location, ID, Photo, Appointment
+Update vendor status and display live.
+
+Use responsive grid, Tailwind cards, neon hover borders, and badges.
+
+💻 FILE: AdminVerifyPanel.jsx
+jsx
+Copy
+Edit
+import { useState } from 'react';
+
+export default function AdminVerifyPanel({ vendorApplications, onUpdate }) {
+  return (
+    <div className="p-6">
+      <h2 className="text-3xl font-bold text-primary mb-6">🔐 Admin – Vendor Verifications</h2>
+
+      {vendorApplications.length === 0 && <p className="text-gray-600">No applications yet.</p>}
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {vendorApplications.map((vendor, index) => (
+          <div key={index} className="bg-white p-4 rounded-xl shadow-neonBlue">
+            <h3 className="text-xl font-bold text-primary">{vendor.fullName}</h3>
+            <p className="text-sm text-gray-700">📞 {vendor.phone}</p>
+            <p className="text-sm text-gray-700">📍 {vendor.location}</p>
+            <p className="text-sm text-gray-500">📅 {vendor.appointment}</p>
+
+            <div className="my-2">
+              <img src={vendor.idCard} alt="ID Card" className="w-full rounded mb-2 border" />
+              <img src={vendor.photo} alt="Shop/Product" className="w-full rounded border" />
+            </div>
+
+            <p className="mt-2 text-sm font-bold">
+              Status: <span className="text-yellow-600">{vendor.status}</span>
+            </p>
+
+            <div className="mt-4 flex gap-2">
+              <button
+                onClick={() => onUpdate(index, 'Basic Verified')}
+                className="bg-green-500 text-white px-4 py-1 rounded hover:bg-green-600"
+              >
+                ✅ Approve
+              </button>
+              <button
+                onClick={() => onUpdate(index, 'Rejected')}
+                className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600"
+              >
+                ❌ Reject
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+✅ UPDATE IN App.jsx:
+1. Add onUpdateVendorStatus:
+jsx
+Copy
+Edit
+const handleVendorUpdate = (index, newStatus) => {
+  const updated = [...vendorApplications];
+  updated[index].status = newStatus;
+  setVendorApplications(updated);
+};
+2. Route to Panel:
+jsx
+Copy
+Edit
+import AdminVerifyPanel from './pages/AdminVerifyPanel';
+...
+<Route path="/admin-verify" element={<AdminVerifyPanel vendorApplications={vendorApplications} onUpdate={handleVendorUpdate} />} />

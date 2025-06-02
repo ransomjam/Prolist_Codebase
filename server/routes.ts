@@ -152,6 +152,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get('/api/vendor/applications', async (req, res) => {
+    try {
+      const applications = await storage.getAllVendorApplications();
+      res.json(applications);
+    } catch (error) {
+      console.error("Error fetching vendor applications:", error);
+      res.status(500).json({ message: "Failed to fetch applications" });
+    }
+  });
+
+  app.patch('/api/vendor/applications/:id/status', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const { status } = req.body;
+
+      if (!status) {
+        return res.status(400).json({ message: "Status is required" });
+      }
+
+      const updatedApplication = await storage.updateVendorApplicationStatus(id, status);
+      
+      if (!updatedApplication) {
+        return res.status(404).json({ message: "Application not found" });
+      }
+
+      // If approved, update user verification status
+      if (status === 'Basic Verified') {
+        await storage.updateUser(updatedApplication.userId, {
+          verificationStatus: 'basic_verified',
+          accountType: 'vendor'
+        });
+      }
+
+      console.log(`Admin approved vendor application ${id} - Status: ${status}`);
+      res.json(updatedApplication);
+    } catch (error) {
+      console.error("Error updating vendor application status:", error);
+      res.status(500).json({ message: "Failed to update application status" });
+    }
+  });
+
   // Product routes
   app.post('/api/products', async (req, res) => {
     try {
