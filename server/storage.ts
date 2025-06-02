@@ -294,4 +294,123 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+import { db } from "./db";
+import { eq } from "drizzle-orm";
+
+export class DatabaseStorage implements IStorage {
+  async getUser(id: number): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user || undefined;
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user || undefined;
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const [user] = await db.insert(users).values(insertUser).returning();
+    return user;
+  }
+
+  async updateUser(id: number, updates: Partial<User>): Promise<User | undefined> {
+    const [user] = await db.update(users).set(updates).where(eq(users.id, id)).returning();
+    return user || undefined;
+  }
+
+  async getComments(listingId: string, listingType: string): Promise<Comment[]> {
+    return await db.select().from(comments).where(eq(comments.listingId, listingId));
+  }
+
+  async createComment(insertComment: InsertComment): Promise<Comment> {
+    const [comment] = await db.insert(comments).values(insertComment).returning();
+    return comment;
+  }
+
+  async createVendorApplication(application: InsertVendorApplication): Promise<VendorApplication> {
+    const [vendorApp] = await db.insert(vendorApplications).values(application).returning();
+    return vendorApp;
+  }
+
+  async getVendorApplication(userId: number): Promise<VendorApplication | undefined> {
+    const [application] = await db.select().from(vendorApplications).where(eq(vendorApplications.userId, userId));
+    return application || undefined;
+  }
+
+  async updateVendorApplicationStatus(id: number, status: string, adminNotes?: string): Promise<VendorApplication | undefined> {
+    const [application] = await db.update(vendorApplications)
+      .set({ status, adminNotes, verifiedAt: new Date() })
+      .where(eq(vendorApplications.id, id))
+      .returning();
+    return application || undefined;
+  }
+
+  async getAllVendorApplications(): Promise<VendorApplication[]> {
+    return await db.select().from(vendorApplications);
+  }
+
+  async createProduct(product: InsertProduct): Promise<Product> {
+    const [newProduct] = await db.insert(products).values(product).returning();
+    return newProduct;
+  }
+
+  async getProduct(id: number): Promise<Product | undefined> {
+    const [product] = await db.select().from(products).where(eq(products.id, id));
+    return product || undefined;
+  }
+
+  async getProductsByVendor(vendorId: number): Promise<Product[]> {
+    return await db.select().from(products).where(eq(products.vendorId, vendorId));
+  }
+
+  async getAllProducts(): Promise<Product[]> {
+    return await db.select().from(products);
+  }
+
+  async updateProductViewCount(id: number): Promise<void> {
+    await db.update(products)
+      .set({ viewCount: products.viewCount + 1 })
+      .where(eq(products.id, id));
+  }
+
+  async createOrder(order: InsertOrder): Promise<Order> {
+    const [newOrder] = await db.insert(orders).values(order).returning();
+    return newOrder;
+  }
+
+  async getOrder(id: number): Promise<Order | undefined> {
+    const [order] = await db.select().from(orders).where(eq(orders.id, id));
+    return order || undefined;
+  }
+
+  async getOrdersByBuyer(buyerId: number): Promise<Order[]> {
+    return await db.select().from(orders).where(eq(orders.buyerId, buyerId));
+  }
+
+  async getOrdersByVendor(vendorId: number): Promise<Order[]> {
+    return await db.select().from(orders).where(eq(orders.vendorId, vendorId));
+  }
+
+  async updateOrderStatus(id: number, updates: Partial<Order>): Promise<Order | undefined> {
+    const [order] = await db.update(orders).set(updates).where(eq(orders.id, id)).returning();
+    return order || undefined;
+  }
+
+  async createRating(rating: InsertRating): Promise<Rating> {
+    const [newRating] = await db.insert(ratings).values(rating).returning();
+    return newRating;
+  }
+
+  async getRatingsByUser(userId: number): Promise<Rating[]> {
+    return await db.select().from(ratings).where(eq(ratings.userId, userId));
+  }
+
+  async getAverageRating(userId: number): Promise<number> {
+    const userRatings = await this.getRatingsByUser(userId);
+    if (userRatings.length === 0) return 0;
+    const sum = userRatings.reduce((acc, rating) => acc + rating.rating, 0);
+    return sum / userRatings.length;
+  }
+}
+
+export const storage = new DatabaseStorage();
