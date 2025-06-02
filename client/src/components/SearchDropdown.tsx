@@ -66,7 +66,7 @@ export default function SearchDropdown() {
 
   const getResultLink = (result: any) => {
     switch (result.type) {
-      case 'listing': return '/listings';
+      case 'listing': return '/products';
       case 'market': return `/markets/${result.id}`;
       case 'realestate': return '/realestate';
       case 'auction': return '/auctions';

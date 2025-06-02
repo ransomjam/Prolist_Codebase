@@ -34,10 +34,10 @@ export default function LandingPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a 
-              href="/listings" 
+              href="/products" 
               className="bg-gradient-to-r from-emerald to-green-600 px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-white font-semibold hover:from-green-600 hover:to-green-700 transition-all shadow-lg border-2 border-emerald/50"
             >
-              Browse Listings
+              Browse Products
             </a>
             <a
               href="/signup"

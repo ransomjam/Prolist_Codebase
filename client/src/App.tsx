@@ -13,7 +13,7 @@ import Verification from './pages/Verification';
 import Homepage from './pages/Homepage';
 import Markets from "./pages/Markets";
 import MarketDetails from "./pages/MarketDetails";
-import Listings from "./pages/Listings";
+import Products from "./pages/Products";
 import RealEstate from "./pages/RealEstate";
 import Auctions from "./pages/Auctions";
 import Profile from "./pages/Profile";
@@ -48,7 +48,7 @@ function Router() {
       <Route path="/app" component={Homepage} />
       <Route path="/markets" component={Markets} />
       <Route path="/markets/:id" component={MarketDetails} />
-      <Route path="/listings" component={Listings} />
+      <Route path="/products" component={Products} />
       <Route path="/realestate" component={RealEstate} />
       <Route path="/auctions" component={Auctions} />
       <Route path="/profile" component={Profile} />
