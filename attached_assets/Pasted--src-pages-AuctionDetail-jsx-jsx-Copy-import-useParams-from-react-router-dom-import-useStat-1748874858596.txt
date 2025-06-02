@@ -1,0 +1,137 @@
+/src/pages/AuctionDetail.jsx
+jsx
+Copy
+import { useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+
+export default function AuctionDetail({ auctions, onPlaceBid }) {
+  const { id } = useParams();
+  const auction = auctions.find(a => a.id === parseInt(id));
+
+  const [countdown, setCountdown] = useState({});
+  const [bidAmount, setBidAmount] = useState('');
+  const [error, setError] = useState('');
+  const [auctionEnded, setAuctionEnded] = useState(false);
+
+  useEffect(() => {
+    if (!auction) return;
+
+    const interval = setInterval(() => {
+      const now = new Date().getTime();
+      const end = new Date(auction.endTime).getTime();
+      const diff = end - now;
+
+      if (diff <= 0) {
+        clearInterval(interval);
+        setAuctionEnded(true);
+      } else {
+        setCountdown({
+          days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+          minutes: Math.floor((diff / (1000 * 60)) % 60),
+          seconds: Math.floor((diff / 1000) % 60),
+        });
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [auction]);
+
+  if (!auction) {
+    return <p className="p-6 text-red-600">Auction not found.</p>;
+  }
+
+  const handleBidSubmit = () => {
+    const bidValue = parseInt(bidAmount);
+    if (isNaN(bidValue)) {
+      setError('Please enter a valid number.');
+      return;
+    }
+    if (bidValue <= auction.currentBid) {
+      setError(`Your bid must be higher than the current highest bid (${auction.currentBid.toLocaleString()} CFA).`);
+      return;
+    }
+    if (auctionEnded) {
+      setError('Auction has ended. You cannot place bids anymore.');
+      return;
+    }
+    setError('');
+    onPlaceBid(auction.id, bidValue);
+    setBidAmount('');
+  };
+
+  return (
+    <div className="max-w-3xl mx-auto p-6 bg-white rounded-xl shadow-neonBlue mt-10">
+      <h2 className="text-3xl font-bold text-primary mb-4">{auction.product.title}</h2>
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        <img src={auction.product.image} alt={auction.product.title} className="rounded shadow" />
+      </div>
+
+      <p className="text-lg text-emerald-600 font-bold mb-2">
+        Starting Price: {auction.startingPrice.toLocaleString()} CFA
+      </p>
+      <p className="text-lg text-yellow-600 font-bold mb-2">
+        Current Highest Bid: {auction.currentBid.toLocaleString()} CFA by {auction.highestBidder}
+      </p>
+
+      {!auctionEnded ? (
+        <>
+          <p className="font-semibold mb-2">
+            Time Left: {countdown.days}d {countdown.hours}h {countdown.minutes}m {countdown.seconds}s
+          </p>
+          <div className="flex gap-4 items-center mb-4">
+            <input
+              type="number"
+              placeholder="Enter your bid (CFA)"
+              className="border p-2 rounded flex-grow"
+              value={bidAmount}
+              onChange={(e) => setBidAmount(e.target.value)}
+              min={auction.currentBid + 1}
+            />
+            <button
+              onClick={handleBidSubmit}
+              className="bg-gradient-to-r from-blue-600 to-emerald-500 text-white px-4 py-2 rounded-xl shadow-neonGreen hover:scale-105 transition"
+            >
+              Place Bid
+            </button>
+          </div>
+          {error && <p className="text-red-600">{error}</p>}
+        </>
+      ) : (
+        <p className="text-red-600 font-bold">Auction ended. Winning bid: {auction.currentBid.toLocaleString()} CFA by {auction.highestBidder}</p>
+      )}
+
+      <p className="text-gray-700 mt-6">{auction.product.description}</p>
+
+      <div className="mt-6 text-sm text-gray-600">
+        Vendor: <strong>{auction.vendor}</strong> {auction.verified && <span className="text-blue-600">🛡️ Verified</span>}
+      </div>
+    </div>
+  );
+}
+Integration Notes:
+Your auctions state should be managed in App.jsx or higher-level component, with an onPlaceBid function:
+
+jsx
+Copy
+const onPlaceBid = (auctionId, newBid) => {
+  setAuctions((prevAuctions) =>
+    prevAuctions.map((a) =>
+      a.id === auctionId
+        ? {
+            ...a,
+            currentBid: newBid,
+            highestBidder: userSession?.username || "anonymous",
+          }
+        : a
+    )
+  );
+};
+Add route in App.jsx:
+
+jsx
+Copy
+import AuctionDetail from './pages/AuctionDetail';
+...
+<Route path="/auction/:id" element={<AuctionDetail auctions={auctions} onPlaceBid={onPlaceBid} />} />
