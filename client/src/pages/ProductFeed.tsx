@@ -110,6 +110,7 @@ export default function ProductFeed() {
           {filtered.map((item: Product) => (
             <div
               key={item.id}
+              onClick={() => window.location.href = `/product/${item.id}`}
               className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer hover:scale-[1.02] border border-gray-100"
             >
               {/* Product Image */}

@@ -29,6 +29,7 @@ import AdminPanel from "./pages/AdminPanel";
 import AdminVerifyPanel from "./pages/AdminVerifyPanel";
 import ProductListingForm from "./pages/ProductListingForm";
 import ProductFeed from "./pages/ProductFeed";
+import ProductDetail from "./pages/ProductDetail";
 import Marketplace from "./pages/Marketplace";
 import NotFound from "@/pages/not-found";
 
@@ -58,6 +59,7 @@ function Router() {
       <Route path="/admin-verify" component={AdminVerifyPanel} />
       <Route path="/add-listing" component={ProductListingForm} />
       <Route path="/products" component={ProductFeed} />
+      <Route path="/product/:id" component={ProductDetail} />
       <Route path="/marketplace" component={Marketplace} />
       <Route component={NotFound} />
     </Switch>

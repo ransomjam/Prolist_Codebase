@@ -264,6 +264,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get('/api/products/:id', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const product = await storage.getProduct(id);
+      
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+      
+      // Increment view count
+      await storage.updateProductViewCount(id);
+      
+      res.json(product);
+    } catch (error) {
+      console.error("Error fetching product:", error);
+      res.status(500).json({ message: "Failed to fetch product" });
+    }
+  });
+
+  app.get('/api/products/vendor/:vendorId', async (req, res) => {
+    try {
+      const vendorId = parseInt(req.params.vendorId);
+      const products = await storage.getProductsByVendor(vendorId);
+      res.json(products);
+    } catch (error) {
+      console.error("Error fetching vendor products:", error);
+      res.status(500).json({ message: "Failed to fetch vendor products" });
+    }
+  });
+
   app.get('/api/products/vendor/:vendorId', async (req, res) => {
     try {
       const vendorId = parseInt(req.params.vendorId);

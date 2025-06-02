@@ -368,9 +368,12 @@ export class DatabaseStorage implements IStorage {
   }
 
   async updateProductViewCount(id: number): Promise<void> {
-    await db.update(products)
-      .set({ viewCount: products.viewCount + 1 })
-      .where(eq(products.id, id));
+    const [product] = await db.select().from(products).where(eq(products.id, id));
+    if (product) {
+      await db.update(products)
+        .set({ viewCount: (product.viewCount || 0) + 1 })
+        .where(eq(products.id, id));
+    }
   }
 
   async createOrder(order: InsertOrder): Promise<Order> {
