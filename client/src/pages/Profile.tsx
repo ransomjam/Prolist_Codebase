@@ -298,10 +298,8 @@ export default function Profile() {
               <div className="absolute inset-0 bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-pulse"></div>
               
               {/* Button content */}
-              <span className="relative z-10 flex items-center justify-center gap-1">
-                <span className="animate-pulse">✨</span>
+              <span className="relative z-10 flex items-center justify-center">
                 <span className="group-hover:text-yellow-900 transition-colors duration-300">Upgrade to Premium</span>
-                <span className="animate-pulse">✨</span>
               </span>
               
               {/* Glow effect */}
