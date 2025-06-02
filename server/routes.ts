@@ -162,6 +162,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get('/api/vendor/application/:userId', async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const application = await storage.getVendorApplication(userId);
+      
+      if (!application) {
+        return res.status(404).json({ message: "No application found for this user" });
+      }
+      
+      res.json(application);
+    } catch (error) {
+      console.error("Error fetching vendor application:", error);
+      res.status(500).json({ message: "Failed to fetch application" });
+    }
+  });
+
   app.patch('/api/vendor/applications/:id/status', async (req, res) => {
     try {
       const id = parseInt(req.params.id);
