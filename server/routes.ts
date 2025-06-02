@@ -177,16 +177,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Application not found" });
       }
 
-      // If approved, update user verification status
+      // Update user account based on status
       if (status === 'Basic Verified') {
         await storage.updateUser(updatedApplication.userId, {
           verificationStatus: 'basic_verified',
           accountType: 'vendor'
         });
+        
+        console.log(`✅ APPROVED: Vendor application ${id} for ${updatedApplication.fullName}`);
+        console.log(`📧 NOTIFICATION: User ${updatedApplication.userId} - Your vendor application has been approved! You now have Basic Verified status.`);
+      } else if (status === 'Rejected') {
+        console.log(`❌ REJECTED: Vendor application ${id} for ${updatedApplication.fullName}`);
+        console.log(`📧 NOTIFICATION: User ${updatedApplication.userId} - Your vendor application was rejected. Please review your documents and reapply.`);
       }
 
-      console.log(`Admin approved vendor application ${id} - Status: ${status}`);
-      res.json(updatedApplication);
+      // Log the admin action with full details
+      console.log(`Admin Action Summary:`, {
+        applicationId: id,
+        vendorName: updatedApplication.fullName,
+        phone: updatedApplication.phone,
+        location: updatedApplication.location,
+        previousStatus: 'Pending Basic Verification',
+        newStatus: status,
+        userId: updatedApplication.userId,
+        timestamp: new Date().toISOString(),
+        actionBy: 'Admin Panel'
+      });
+
+      res.json({
+        ...updatedApplication,
+        message: `Vendor application ${status.toLowerCase()} successfully`,
+        userNotified: true
+      });
     } catch (error) {
       console.error("Error updating vendor application status:", error);
       res.status(500).json({ message: "Failed to update application status" });

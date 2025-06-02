@@ -33,7 +33,6 @@ export default function AdminVerifyPanel() {
 
   const updateStatusMutation = useMutation({
     mutationFn: async ({ id, status }: { id: number; status: string }) => {
-      // In real app, this would call the API to update status
       const response = await fetch(`/api/vendor/applications/${id}/status`, {
         method: 'PATCH',
         headers: {
@@ -43,15 +42,21 @@ export default function AdminVerifyPanel() {
       });
       
       if (!response.ok) {
-        // For demo purposes, we'll simulate the update
-        console.log(`Admin action: Updated vendor ${id} status to ${status}`);
-        return { success: true };
+        throw new Error('Failed to update vendor status');
       }
       
       return response.json();
     },
-    onSuccess: () => {
+    onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: ['/api/vendor/applications'] });
+      
+      // Show success message
+      const statusText = variables.status === 'Basic Verified' ? 'approved' : 'rejected';
+      alert(`Vendor application ${statusText} successfully! User has been notified.`);
+    },
+    onError: (error) => {
+      console.error('Error updating vendor status:', error);
+      alert('Failed to update vendor status. Please try again.');
     }
   });
 

@@ -1,24 +1,129 @@
 import { currentUser } from '../data/demoData';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
+import { useQuery } from '@tanstack/react-query';
+import { Shield, CheckCircle, Clock, XCircle, Bell } from 'lucide-react';
+
+interface VendorApplication {
+  id: number;
+  status: string;
+  submittedAt: string;
+  verifiedAt?: string;
+}
 
 export default function Profile() {
   const [showUpgrade, setShowUpgrade] = useState(false);
-  const [verificationStatus, setVerificationStatus] = useState<string>('none');
   const { user } = useAuth();
   const isPremium = currentUser.accountType === 'premium';
 
-  useEffect(() => {
-    // Check for pending verification requests
-    const requests = JSON.parse(localStorage.getItem('verificationRequests') || '[]');
-    const userRequest = requests.find((req: any) => req.submittedBy === user?.username);
-    if (userRequest) {
-      setVerificationStatus(userRequest.status);
+  // Fetch user's vendor application status
+  const { data: vendorApplication } = useQuery({
+    queryKey: ['/api/vendor/application', user?.id],
+    queryFn: async () => {
+      if (!user?.id) return null;
+      const response = await fetch(`/api/vendor/application/${user.id}`);
+      if (!response.ok) {
+        if (response.status === 404) return null; // No application found
+        throw new Error('Failed to fetch application');
+      }
+      return response.json();
+    },
+    enabled: !!user?.id
+  });
+
+  const getVerificationBadge = () => {
+    if (!vendorApplication) {
+      return (
+        <div className="flex items-center gap-2 text-gray-600">
+          <Shield size={20} />
+          <span>Not Verified</span>
+        </div>
+      );
     }
-  }, [user]);
+
+    switch (vendorApplication.status) {
+      case 'Basic Verified':
+        return (
+          <div className="flex items-center gap-2 bg-green-100 text-green-800 px-3 py-2 rounded-full">
+            <CheckCircle size={20} />
+            <span className="font-medium">Basic Verified</span>
+          </div>
+        );
+      case 'Rejected':
+        return (
+          <div className="flex items-center gap-2 bg-red-100 text-red-800 px-3 py-2 rounded-full">
+            <XCircle size={20} />
+            <span className="font-medium">Application Rejected</span>
+          </div>
+        );
+      default:
+        return (
+          <div className="flex items-center gap-2 bg-yellow-100 text-yellow-800 px-3 py-2 rounded-full">
+            <Clock size={20} />
+            <span className="font-medium">Pending Verification</span>
+          </div>
+        );
+    }
+  };
+
+  const getNotificationMessage = () => {
+    if (!vendorApplication) return null;
+
+    if (vendorApplication.status === 'Basic Verified') {
+      return (
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+          <div className="flex items-center gap-3">
+            <CheckCircle className="text-green-600" size={24} />
+            <div>
+              <h3 className="font-semibold text-green-900">Congratulations! Your application was approved</h3>
+              <p className="text-green-700 text-sm">You now have Basic Verified status and can start listing products on ProList.</p>
+              <p className="text-green-600 text-xs mt-1">
+                Verified on: {new Date(vendorApplication.verifiedAt || vendorApplication.submittedAt).toLocaleDateString()}
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    if (vendorApplication.status === 'Rejected') {
+      return (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+          <div className="flex items-center gap-3">
+            <XCircle className="text-red-600" size={24} />
+            <div>
+              <h3 className="font-semibold text-red-900">Application Not Approved</h3>
+              <p className="text-red-700 text-sm">Your vendor application was rejected. Please review your documents and submit a new application.</p>
+              <a href="/vendor-register" className="text-red-600 underline text-sm hover:text-red-800 mt-1 inline-block">
+                Submit New Application
+              </a>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+        <div className="flex items-center gap-3">
+          <Clock className="text-blue-600" size={24} />
+          <div>
+            <h3 className="font-semibold text-blue-900">Application Under Review</h3>
+            <p className="text-blue-700 text-sm">Your vendor application is being reviewed by our team. You'll be notified once a decision is made.</p>
+            <p className="text-blue-600 text-xs mt-1">
+              Submitted on: {new Date(vendorApplication.submittedAt).toLocaleDateString()}
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="p-6">
+      {/* Notification Messages */}
+      {getNotificationMessage()}
+
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-3xl font-bold text-primary">👤 My Profile</h2>
         {!isPremium && (
@@ -41,29 +146,19 @@ export default function Profile() {
         
         <p className="mt-3 text-sm">Account: <strong className="text-emerald">{currentUser.accountType}</strong></p>
         
-        {/* Verification Status for Vendors */}
-        {currentUser.accountType === 'vendor' && (
-          <div className="mt-3 p-3 bg-gray-50 rounded-lg">
-            <p className="text-sm">
-              Verification Status: {' '}
-              {verificationStatus === 'pending' ? (
-                <span className="text-yellow-600 font-medium">⏳ Pending Verification</span>
-              ) : verificationStatus === 'verified' ? (
-                <span className="text-green-600 font-medium">✓ Verified</span>
-              ) : (
-                <span className="text-gray-600">Not Verified</span>
-              )}
-            </p>
-            {verificationStatus === 'none' && (
-              <a 
-                href="/apply-verification" 
-                className="inline-block mt-2 text-primary hover:text-blue-700 font-medium underline text-sm"
-              >
-                Apply for Verification
-              </a>
-            )}
-          </div>
-        )}
+        {/* Verification Status */}
+        <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+          <h4 className="font-semibold text-gray-900 mb-2">Verification Status</h4>
+          {getVerificationBadge()}
+          {!vendorApplication && (
+            <a 
+              href="/vendor-register" 
+              className="inline-block mt-2 text-blue-600 hover:text-blue-800 font-medium underline text-sm"
+            >
+              Apply for Vendor Verification
+            </a>
+          )}
+        </div>
         <div className="mt-4 flex gap-6 text-sm">
           <span>Listings: {currentUser.listingsPosted}</span>
           <span>Real Estate: {currentUser.realEstatePosted}</span>
