@@ -289,9 +289,23 @@ export default function Profile() {
           {!isPremium && (
             <button
               onClick={() => setShowUpgrade(true)}
-              className="w-full bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 text-gray-900 py-3 rounded-lg text-sm font-bold hover:from-yellow-500 hover:via-yellow-600 hover:to-yellow-700 transition shadow-lg transform hover:scale-105 border border-yellow-300"
+              className="relative w-full bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 text-gray-900 py-3 rounded-lg text-sm font-bold transition-all duration-300 transform hover:scale-105 hover:shadow-2xl border border-yellow-300 overflow-hidden group"
             >
-              ⭐ Upgrade to Premium ⭐
+              {/* Shimmer effect overlay */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-30 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+              
+              {/* Background pulse animation */}
+              <div className="absolute inset-0 bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-pulse"></div>
+              
+              {/* Button content */}
+              <span className="relative z-10 flex items-center justify-center gap-1">
+                <span className="animate-pulse">✨</span>
+                <span className="group-hover:text-yellow-900 transition-colors duration-300">Upgrade to Premium</span>
+                <span className="animate-pulse">✨</span>
+              </span>
+              
+              {/* Glow effect */}
+              <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 opacity-0 group-hover:opacity-75 blur-sm transform scale-110 transition-all duration-300"></div>
             </button>
           )}
         </div>
