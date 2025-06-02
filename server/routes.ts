@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertCommentSchema } from "@shared/schema";
+import { insertCommentSchema, insertVendorApplicationSchema, insertProductSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Comment routes
@@ -78,6 +78,65 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error submitting support request:", error);
       res.status(500).json({ message: "Failed to submit support request" });
+    }
+  });
+
+  // Vendor application routes
+  app.post('/api/vendor/apply', async (req, res) => {
+    try {
+      const validatedApplication = insertVendorApplicationSchema.parse(req.body);
+      const application = await storage.createVendorApplication(validatedApplication);
+      res.status(201).json(application);
+    } catch (error) {
+      console.error("Error creating vendor application:", error);
+      res.status(400).json({ message: "Invalid application data" });
+    }
+  });
+
+  app.get('/api/vendor/application/:userId', async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const application = await storage.getVendorApplication(userId);
+      if (!application) {
+        return res.status(404).json({ message: "Application not found" });
+      }
+      res.json(application);
+    } catch (error) {
+      console.error("Error fetching vendor application:", error);
+      res.status(500).json({ message: "Failed to fetch application" });
+    }
+  });
+
+  // Product routes
+  app.post('/api/products', async (req, res) => {
+    try {
+      const validatedProduct = insertProductSchema.parse(req.body);
+      const product = await storage.createProduct(validatedProduct);
+      res.status(201).json(product);
+    } catch (error) {
+      console.error("Error creating product:", error);
+      res.status(400).json({ message: "Invalid product data" });
+    }
+  });
+
+  app.get('/api/products', async (req, res) => {
+    try {
+      const products = await storage.getAllProducts();
+      res.json(products);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      res.status(500).json({ message: "Failed to fetch products" });
+    }
+  });
+
+  app.get('/api/products/vendor/:vendorId', async (req, res) => {
+    try {
+      const vendorId = parseInt(req.params.vendorId);
+      const products = await storage.getProductsByVendor(vendorId);
+      res.json(products);
+    } catch (error) {
+      console.error("Error fetching vendor products:", error);
+      res.status(500).json({ message: "Failed to fetch vendor products" });
     }
   });
 
