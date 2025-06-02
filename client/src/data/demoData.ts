@@ -51,7 +51,7 @@ export const markets = [
   }
 ];
 
-export const listings = [
+export const products = [
   {
     id: 1,
     title: "Samsung Galaxy S23 Ultra",

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Search, X, MapPin, Star, Shield } from "lucide-react";
-import { listings, markets, realEstate, auctions, verifiedBusinesses } from "../data/demoData";
+import { products, markets, realEstate, auctions, verifiedBusinesses } from "../data/demoData";
 
 export default function SearchDropdown() {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,12 +27,12 @@ export default function SearchDropdown() {
       const query = searchQuery.toLowerCase();
       const results = [];
 
-      // Search in listings
-      const matchingListings = listings.filter(item => 
+      // Search in products
+      const matchingProducts = products.filter(item => 
         item.title.toLowerCase().includes(query) ||
         item.category.toLowerCase().includes(query) ||
         item.location.toLowerCase().includes(query)
-      ).slice(0, 3).map(item => ({ ...item, type: 'listing' }));
+      ).slice(0, 3).map(item => ({ ...item, type: 'product' }));
 
       // Search in markets
       const matchingMarkets = markets.filter(item => 
