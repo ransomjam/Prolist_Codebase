@@ -1,0 +1,195 @@
+Build a seamless, mobile-friendly, trust-based marketplace platform for a local Cameroonian community.
+Focus: Vendor verification, escrow transactions, buyer security, field agent involvement, and beautiful UI (neon gradients, mobile responsiveness, Bamenda vibe).
+
+Use: React (Vite) + Tailwind CSS, simulate backend with in-memory state or Firebase later.
+
+✅ CORE FEATURES TO IMPLEMENT:
+1️⃣ Vendor Registration & Multi-Stage Verification
+Form with:
+
+Full name, phone, location
+
+Uploads: ID (image), shop/product photo
+
+After submit:
+
+Pick a video verification date & time (calendar)
+
+Notify admin
+
+Admin approves or reschedules appointment
+
+Integration placeholder for Zoom/Meet/WhatsApp Video
+
+If passed:
+
+Assign badge: "Basic Verified"
+
+Allow access to dashboard
+
+Vendors may later request Premium Verified → triggers Field Agent Visit (logged by admin)
+
+Admin updates badge to “Premium Verified”
+
+🧠 Design notes:
+
+Use Tailwind cards and neon hover shadows
+
+Use blue shield icon for verification
+
+2️⃣ Product Listing (After Verification)
+Verified vendors can post listings:
+
+Title, category, price, 3 images, description
+
+Show warning if minimum listing rules not met (basic quality checklist logic optional)
+
+Display:
+
+Trust badge
+
+Sales count
+
+Vendor type (Online / Shop Owner)
+
+🎨 Use clean, bold listing cards with image sliders
+
+3️⃣ Buyer Experience
+Browse/search/filter listings by:
+
+Category, vendor type, location, rating
+
+Place order via listing page
+
+Checkout flow:
+
+Choose payment:
+
+💵 Community Payment Point (manual pay-in at local shop)
+
+📱 MTN/Orange Money integration (simulate API)
+
+Record payment in Escrow
+
+Notify vendor
+
+🧠 Mobile-first: all product cards must have visible price, trust icon, CTA
+
+4️⃣ Order Fulfilment Workflow
+Vendor chooses fulfillment method:
+
+Self-delivery
+
+Assign to rider (select from dropdown list)
+
+Buyer pickup
+
+Add delivery status:
+
+Pending → In Transit → Delivered
+
+Field agent may verify delivery
+
+Use color-coded status badges for clarity
+
+5️⃣ Order Confirmation Logic
+Buyer must confirm receipt:
+
+Check “Received” box
+
+Upload photo of product as proof
+
+If buyer doesn’t confirm after 72 hours:
+
+Notify admin or assign follow-up to field agent
+
+6️⃣ Escrow Release
+After confirmation:
+
+Escrow is released
+
+Sale is logged in seller’s profile
+
+Sales count is increased and shown live
+
+Seller receives “Completed Sale” badge
+
+7️⃣ Ratings & Reviews System
+After transaction:
+
+Buyer & seller rate each other (1–5 stars)
+
+Leave public comment
+
+Ratings + Reviews shown on profile
+
+Profiles show:
+
+Sales count
+
+Star average
+
+Verification level
+
+8️⃣ Field Agent Spot Checks
+Admin schedules random visits
+
+Agent logs:
+
+Date, vendor ID, notes, images (optional)
+
+“Last Checked” date appears on vendor profile
+
+9️⃣ Support & Rewards System
+In-app support chat (placeholder UI)
+
+Help Center FAQ page
+
+Rewards logic:
+
+🎉 Badges for listing milestones
+
+🎁 Referral code system (basic)
+
+🔔 NOTIFICATIONS
+Use simulated:
+
+SMS alerts (basic toast UI)
+
+WhatsApp-style messages
+
+Admin dashboard logs events
+
+✅ ADMIN PRIVILEGES
+Can view all users, change badge level, confirm payments, override disputes
+
+Can assign field agents to vendor profiles
+
+🧠 UX/UI & GRAPHICS REQUIREMENTS
+Element	Design
+Cards	Rounded-xl, shadow-neonBlue, hover:scale-105
+Buttons	Gradient (from-blue to-emerald), text-white, shadow-neonGreen
+Icons	Lucide-react or Heroicons
+Fonts	font-bold for headers, text-sm for inputs
+Layout	Responsive grid, sidebar (Facebook Lite-style)
+Visuals	Clean graphics, shield icons for trust, live counts, photo proof
+Language Support	Simple English, future i18n-ready for local dialects
+
+✅ Once this is working, proceed to build in this order:
+
+Registration + Verification System
+
+Product Listings
+
+Buyer Checkout + Escrow Logic
+
+Delivery Handling
+
+Confirmation + Funds Release
+
+Ratings & Profiles
+
+Admin Panel & Spot Checks
+
+Rewards + Support + WhatsApp Directory
+
