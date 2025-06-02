@@ -45,7 +45,10 @@ export default function Auctions() {
           <Gavel className="text-primary" size={32} />
           <h2 className="text-3xl font-bold text-primary">Live Auctions</h2>
         </div>
-        <button className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2">
+        <button 
+          onClick={() => window.location.href = '/product-listing'}
+          className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
+        >
           <Gavel size={20} />
           Post New Auction
         </button>

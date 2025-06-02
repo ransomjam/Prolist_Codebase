@@ -139,7 +139,10 @@ export default function RealEstate() {
               <h1 className="text-2xl font-bold mb-1">Verified Real Estate</h1>
               <p className="text-blue-100 text-sm">Trusted properties in Bamenda</p>
             </div>
-            <button className="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 border border-white/30">
+            <button 
+              onClick={() => window.location.href = '/product-listing'}
+              className="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 border border-white/30"
+            >
               <Building size={20} />
               List Property
             </button>

@@ -89,7 +89,7 @@ export default function ProductFeed() {
           className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium shadow-sm hover:shadow-md transition-all duration-200 flex items-center gap-2 text-sm"
         >
           <ShoppingBag size={16} />
-          Sell Product
+          List Product
         </button>
       </div>
 
