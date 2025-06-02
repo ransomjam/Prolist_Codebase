@@ -30,6 +30,8 @@ import AdminVerifyPanel from "./pages/AdminVerifyPanel";
 import ProductListingForm from "./pages/ProductListingForm";
 import ProductFeed from "./pages/ProductFeed";
 import ProductDetail from "./pages/ProductDetail";
+import Checkout from "./pages/Checkout";
+import OrderConfirmed from "./pages/OrderConfirmed";
 import Marketplace from "./pages/Marketplace";
 import NotFound from "@/pages/not-found";
 
@@ -60,6 +62,8 @@ function Router() {
       <Route path="/add-listing" component={ProductListingForm} />
       <Route path="/products" component={ProductFeed} />
       <Route path="/product/:id" component={ProductDetail} />
+      <Route path="/checkout/:id" component={Checkout} />
+      <Route path="/order-confirmed/:id" component={OrderConfirmed} />
       <Route path="/marketplace" component={Marketplace} />
       <Route component={NotFound} />
     </Switch>

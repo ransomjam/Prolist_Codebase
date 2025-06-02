@@ -1,0 +1,123 @@
+Create /src/pages/Checkout.jsx. It clearly shows:
+
+Product info: image, title, price
+
+Delivery method (dropdown clearly listed: Vendor Delivery, Buyer Pickup, Rider)
+
+Payment method (dropdown: MTN Mobile Money, Orange Money, CPP)
+
+Notes box (optional instructions)
+
+Clear button: "✅ Confirm Order"
+
+On confirm:
+
+Saves the order in app state with the status: "Payment in Escrow"
+
+Redirects buyer clearly to /order-confirmed
+
+Tailwind CSS, clear, responsive, vibrant UI, easy on mobile.
+
+🚩 Checkout.jsx (Full & Clear)
+jsx
+Copy
+Edit
+import { useParams, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+
+export default function Checkout({ productListings, onCreateOrder }) {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const product = productListings[id];
+
+  const [delivery, setDelivery] = useState('vendor_delivery');
+  const [payment, setPayment] = useState('mtn');
+  const [notes, setNotes] = useState('');
+
+  const handleConfirm = () => {
+    const newOrder = {
+      product,
+      delivery,
+      payment,
+      notes,
+      status: 'Payment in Escrow',
+      buyer: 'buyer_user', // temporary user placeholder
+      date: new Date().toLocaleString()
+    };
+    onCreateOrder(newOrder);
+    navigate('/order-confirmed');
+  };
+
+  if (!product) return <p className="p-6 text-red-600">Product not found.</p>;
+
+  return (
+    <div className="max-w-2xl mx-auto p-6 bg-white rounded-xl shadow-neonBlue my-10">
+      <h2 className="text-3xl font-bold text-primary mb-4">🛒 Checkout</h2>
+
+      <div className="flex gap-4 mb-4">
+        <img src={product.image1} alt={product.title} className="w-32 h-32 rounded-lg object-cover" />
+        <div>
+          <h3 className="text-xl font-semibold">{product.title}</h3>
+          <p className="text-emerald-600 font-bold text-lg">{product.price} CFA</p>
+        </div>
+      </div>
+
+      <label className="block font-semibold">Delivery Method</label>
+      <select value={delivery} onChange={e => setDelivery(e.target.value)} className="w-full border rounded p-2 mb-4">
+        <option value="vendor_delivery">Vendor Delivery</option>
+        <option value="buyer_pickup">Buyer Pickup</option>
+        <option value="local_rider">Assign Local Rider</option>
+      </select>
+
+      <label className="block font-semibold">Payment Method</label>
+      <select value={payment} onChange={e => setPayment(e.target.value)} className="w-full border rounded p-2 mb-4">
+        <option value="mtn">MTN Mobile Money</option>
+        <option value="orange">Orange Money</option>
+        <option value="cpp">Community Payment Point (CPP)</option>
+      </select>
+
+      <label className="block font-semibold">Notes (Optional)</label>
+      <textarea 
+        placeholder="Special instructions for delivery..."
+        value={notes}
+        onChange={e => setNotes(e.target.value)}
+        className="w-full border rounded p-2 mb-4"
+        rows="3"
+      />
+
+      <button
+        onClick={handleConfirm}
+        className="w-full bg-gradient-to-r from-blue-500 to-emerald-400 text-white py-3 rounded-xl shadow-neonGreen hover:scale-105 transition"
+      >
+        ✅ Confirm Order
+      </button>
+    </div>
+  );
+}
+✅ STEP 2: Integration in App.jsx
+Add to your existing App.jsx:
+
+🟢 Order state:
+jsx
+Copy
+Edit
+const [orders, setOrders] = useState([]);
+const handleCreateOrder = (order) => {
+  setOrders([...orders, order]);
+};
+🟢 Route setup:
+jsx
+Copy
+Edit
+import Checkout from './pages/Checkout';
+...
+<Route path="/checkout/:id" element={<Checkout productListings={productListings} onCreateOrder={handleCreateOrder} />} />
+✅ STEP 3: Next Step Clearly
+Next, we’ll create an elegant Order Confirmation (/order-confirmed) page clearly showing escrow and next steps.
+
+✅ After Building This Checkout Page, You’ll Have:
+Escrow integrated clearly (order state)
+
+Delivery/payment clearly handled
+
+A solid foundation for buyer-vendor trust

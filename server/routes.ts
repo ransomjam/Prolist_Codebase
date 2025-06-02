@@ -242,6 +242,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Order routes
+  app.post('/api/orders', async (req, res) => {
+    try {
+      const order = await storage.createOrder(req.body);
+      res.status(201).json(order);
+    } catch (error) {
+      console.error("Error creating order:", error);
+      res.status(500).json({ message: "Failed to create order" });
+    }
+  });
+
+  app.get('/api/orders/:id', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const order = await storage.getOrder(id);
+      
+      if (!order) {
+        return res.status(404).json({ message: "Order not found" });
+      }
+      
+      res.json(order);
+    } catch (error) {
+      console.error("Error fetching order:", error);
+      res.status(500).json({ message: "Failed to fetch order" });
+    }
+  });
+
   // Product routes
   app.post('/api/products', async (req, res) => {
     try {
