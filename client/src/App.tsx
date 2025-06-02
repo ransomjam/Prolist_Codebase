@@ -49,6 +49,12 @@ function Router() {
       <Route path="/markets" component={Markets} />
       <Route path="/markets/:id" component={MarketDetails} />
       <Route path="/products" component={Products} />
+      <Route path="/listings">
+        {() => {
+          window.location.replace('/products');
+          return null;
+        }}
+      </Route>
       <Route path="/realestate" component={RealEstate} />
       <Route path="/auctions" component={Auctions} />
       <Route path="/profile" component={Profile} />
