@@ -149,6 +149,18 @@ export default function Navbar() {
             <HomeIcon className="h-7 w-7" />
           </Link>
 
+          {/* Sales Stats */}
+          <Link 
+            href="/vendor-orders"
+            className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 ${
+              location === '/vendor-orders' 
+                ? 'text-primary' 
+                : 'text-gray-600 hover:bg-gray-100'
+            }`}
+          >
+            <TrendingUp className="h-7 w-7" />
+          </Link>
+
           {/* Listings */}
           <Link 
             href="/listings"
