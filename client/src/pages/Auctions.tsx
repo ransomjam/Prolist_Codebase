@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
-import { Gavel } from "lucide-react";
+import { Gavel, Shield } from "lucide-react";
 import { auctions } from '../data/demoData';
 
 interface Countdown {
@@ -54,47 +54,71 @@ export default function Auctions() {
             <Link
               href={`/auction/${auction.id}`}
               key={auction.id}
-              className="bg-white rounded-xl shadow-neonBlue hover:shadow-neonGreen transition p-4 cursor-pointer flex flex-col"
+              className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer flex flex-col group"
             >
-              <img
-                src={auction.product.image}
-                alt={auction.product.title}
-                className="h-48 w-full object-cover rounded-md mb-4"
-              />
-              <h3 className="text-lg font-semibold text-primary mb-1 truncate">
-                {auction.product.title}
-              </h3>
-              <p className="text-gray-600 text-sm mb-2 truncate">
-                {auction.product.description}
-              </p>
-              <p className="text-sm text-gray-700 mb-2">
-                Vendor: <span className="font-semibold">{auction.vendor}</span>{" "}
-                {auction.verified && (
-                  <span className="text-blue-600 ml-1">🛡️ Verified</span>
-                )}
-              </p>
-              <p className="text-sm mb-1">
-                Starting Price:{" "}
-                <span className="font-bold text-emerald-600">
-                  {auction.startingPrice.toLocaleString()} CFA
-                </span>
-              </p>
-              <p className="text-sm mb-2">
-                Current Bid:{" "}
-                <span className="font-bold text-yellow-600">
-                  {auction.currentBid.toLocaleString()} CFA
-                </span>
-              </p>
-              {ended ? (
-                <p className="text-red-600 font-semibold">Auction Ended</p>
-              ) : (
-                timer && (
-                  <p className="text-gray-700 font-mono text-sm">
-                    Time Left:{" "}
-                    {timer.days}d {timer.hours}h {timer.minutes}m {timer.seconds}s
-                  </p>
-                )
-              )}
+              <div className="relative">
+                <img
+                  src={auction.product.image}
+                  alt={auction.product.title}
+                  className="h-48 w-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute top-3 right-3">
+                  {auction.verified && (
+                    <span className="bg-blue-600 text-white px-2 py-1 rounded-full text-xs font-medium">
+                      Verified
+                    </span>
+                  )}
+                </div>
+                <div className="absolute bottom-3 left-3">
+                  {!ended && timer && (
+                    <span className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+                      {timer.days}d {timer.hours}h {timer.minutes}m
+                    </span>
+                  )}
+                  {ended && (
+                    <span className="bg-gray-600 text-white px-3 py-1 rounded-full text-xs font-bold">
+                      Ended
+                    </span>
+                  )}
+                </div>
+              </div>
+              
+              <div className="p-4 flex flex-col flex-1">
+                <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2 leading-tight">
+                  {auction.product.title}
+                </h3>
+                
+                <p className="text-gray-600 text-sm mb-3 line-clamp-2 flex-1">
+                  {auction.product.description}
+                </p>
+                
+                <div className="space-y-2 mt-auto">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-gray-500 uppercase tracking-wide">Starting Price</span>
+                    <span className="text-sm font-bold text-emerald-600">
+                      {auction.startingPrice.toLocaleString()} CFA
+                    </span>
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-gray-500 uppercase tracking-wide">Current Bid</span>
+                    <span className="text-lg font-bold text-yellow-600">
+                      {auction.currentBid.toLocaleString()} CFA
+                    </span>
+                  </div>
+                  
+                  <div className="pt-2 border-t border-gray-100">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-gray-700 font-medium">
+                        {auction.vendor}
+                      </span>
+                      <span className="text-xs text-gray-400">
+                        #{auction.id}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </Link>
           );
         })}
