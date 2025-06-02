@@ -268,26 +268,30 @@ export default function Profile() {
         </div>
 
         {/* Action Buttons */}
-        <div className="grid grid-cols-2 gap-2 mb-4">
-          <a
-            href="/add-listing"
-            className="bg-blue-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition text-center"
-          >
-            Add Listing
-          </a>
-          {!vendorApplication ? (
+        <div className="space-y-2 mb-4">
+          <div className="grid grid-cols-2 gap-2">
             <a
-              href="/vendor-register"
-              className="bg-green-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-green-700 transition text-center"
+              href="/add-listing"
+              className="bg-blue-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition text-center"
             >
-              Get Verified
+              Add Listing
             </a>
-          ) : (
+            {!vendorApplication && (
+              <a
+                href="/vendor-register"
+                className="bg-green-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-green-700 transition text-center"
+              >
+                Get Verified
+              </a>
+            )}
+          </div>
+          
+          {!isPremium && (
             <button
               onClick={() => setShowUpgrade(true)}
-              className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-2 rounded-lg text-sm font-semibold hover:from-purple-700 hover:to-pink-700 transition"
+              className="w-full bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 text-gray-900 py-3 rounded-lg text-sm font-bold hover:from-yellow-500 hover:via-yellow-600 hover:to-yellow-700 transition shadow-lg transform hover:scale-105 border border-yellow-300"
             >
-              Upgrade
+              ⭐ Upgrade to Premium ⭐
             </button>
           )}
         </div>
