@@ -24,6 +24,8 @@ import VerifiedDirectory from "./pages/VerifiedDirectory";
 import Settings from "./pages/Settings";
 import HelpSupport from "./pages/HelpSupport";
 import VendorRegistration from "./pages/VendorRegistration";
+import VendorRegister from "./pages/VendorRegister";
+import AdminPanel from "./pages/AdminPanel";
 import Marketplace from "./pages/Marketplace";
 import NotFound from "@/pages/not-found";
 
@@ -48,6 +50,8 @@ function Router() {
       <Route path="/settings" component={Settings} />
       <Route path="/help" component={HelpSupport} />
       <Route path="/vendor/register" component={VendorRegistration} />
+      <Route path="/vendor-register" component={VendorRegister} />
+      <Route path="/admin" component={AdminPanel} />
       <Route path="/marketplace" component={Marketplace} />
       <Route component={NotFound} />
     </Switch>

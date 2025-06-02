@@ -1,0 +1,85 @@
+Build a Vendor Registration + Verification page for ProList.
+This form collects:
+
+Full Name
+
+Phone
+
+Business Location
+
+Upload: ID card photo
+
+Upload: Shop/Product photo
+
+Pick a verification appointment date/time
+After submit:
+
+Show “Pending Verification” status
+
+Simulate admin approval in App state
+Use React (Vite) + Tailwind. Neon blue styles, responsive layout.
+
+✅ Create /src/pages/VendorRegister.jsx
+jsx
+Copy
+Edit
+import { useState } from 'react';
+
+export default function VendorRegister({ onSubmit }) {
+  const [form, setForm] = useState({
+    fullName: '',
+    phone: '',
+    location: '',
+    idCard: '',
+    photo: '',
+    appointment: '',
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit({ ...form, status: 'Pending Basic Verification' });
+    alert("Application submitted. Admin will confirm your appointment.");
+  };
+
+  return (
+    <div className="p-6 max-w-2xl mx-auto">
+      <h2 className="text-3xl font-bold text-primary mb-4">🛍️ Vendor Registration</h2>
+      <form onSubmit={handleSubmit} className="bg-white p-6 rounded-xl shadow-neonBlue grid gap-4">
+        <input name="fullName" onChange={handleChange} placeholder="Full Name" className="border p-2 rounded" />
+        <input name="phone" onChange={handleChange} placeholder="Phone (e.g. +237 6XX...)" className="border p-2 rounded" />
+        <input name="location" onChange={handleChange} placeholder="Business Location (e.g. Main Market)" className="border p-2 rounded" />
+        <input name="idCard" onChange={handleChange} placeholder="ID Card Image URL" className="border p-2 rounded" />
+        <input name="photo" onChange={handleChange} placeholder="Photo of Shop or Products (Image URL)" className="border p-2 rounded" />
+        <input name="appointment" type="datetime-local" onChange={handleChange} className="border p-2 rounded" />
+
+        <button type="submit" className="bg-gradient-to-r from-blue-500 to-emerald-400 text-white py-2 px-4 rounded-xl shadow-neonGreen">
+          Submit Verification Request
+        </button>
+      </form>
+    </div>
+  );
+}
+✅ In App.jsx – Add State and Route
+Add:
+
+jsx
+Copy
+Edit
+const [vendorApplications, setVendorApplications] = useState([]);
+
+const handleVendorSubmit = (data) => {
+  setVendorApplications([...vendorApplications, data]);
+};
+And route:
+
+jsx
+Copy
+Edit
+import VendorRegister from './pages/VendorRegister';
+...
+<Route path="/vendor-register" element={<VendorRegister onSubmit={handleVendorSubmit} />} />

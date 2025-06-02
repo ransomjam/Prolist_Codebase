@@ -93,6 +93,51 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.post('/api/vendor/register', async (req, res) => {
+    try {
+      const { userId, fullName, phone, location, shopType, businessName, verificationSlot, idCardUrl, shopPhotoUrl } = req.body;
+      
+      // Validate required fields
+      if (!userId || !fullName || !phone || !location || !verificationSlot) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+
+      const applicationData = {
+        userId,
+        fullName,
+        phone,
+        location,
+        shopType: shopType || 'online',
+        businessName: businessName || fullName + "'s Business",
+        verificationSlot
+      };
+
+      const application = await storage.createVendorApplication(applicationData);
+      
+      // Log the application for admin review
+      console.log('New vendor registration:', {
+        id: application.id,
+        fullName,
+        phone,
+        location,
+        verificationSlot,
+        idCardUrl,
+        shopPhotoUrl,
+        status: 'Pending Basic Verification',
+        submittedAt: new Date().toISOString()
+      });
+
+      res.status(201).json({ 
+        ...application, 
+        message: "Application submitted successfully",
+        status: "Pending Basic Verification"
+      });
+    } catch (error) {
+      console.error("Error creating vendor registration:", error);
+      res.status(500).json({ message: "Failed to submit application" });
+    }
+  });
+
   app.get('/api/vendor/application/:userId', async (req, res) => {
     try {
       const userId = parseInt(req.params.userId);
