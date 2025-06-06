@@ -464,18 +464,18 @@ export default function MarketDetails() {
           )}
         </div>
 
-        {/* Sections Header */}
-        <div className="text-center mb-8 sm:mb-12">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-4">
-            Market Sections & Lines
+        {/* Compact Header */}
+        <div className="mb-4">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2 text-center">
+            Market Lines
           </h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Explore the different sections within {market.name}. Each section specializes in specific products and services.
+          <p className="text-sm text-gray-600 text-center mb-3">
+            Browse specialized market lines within {market.name}
           </p>
         </div>
 
-        {/* Market Lines Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-8 lg:gap-10">
+        {/* Compact Market Lines Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
           {market.sections.map((section, index) => {
             // All items now route to MarketLine
             const linkPath = `/markets/${marketId}/lines/${section.id}`;
@@ -483,66 +483,39 @@ export default function MarketDetails() {
             return (
               <div key={section.id} className="group">
                 <Link to={linkPath}>
-                  <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] relative h-full">
-                    {/* Section Header */}
-                    <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 p-6 text-white relative">
-                      <div className="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent"></div>
-                      <div className="relative z-10">
-                        <div className="flex items-center justify-between mb-3">
-                          <h3 className="text-xl sm:text-2xl font-bold leading-tight">
-                            {section.name}
-                          </h3>
-                          <div className="bg-white/20 backdrop-blur-md rounded-full p-2">
-                            <Shield size={16} />
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-4 text-sm opacity-90">
-                          <div className="flex items-center gap-1">
-                            <Users size={14} />
-                            {section.vendors} vendors
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
-                            Active
-                          </div>
-                        </div>
+                  <div className="bg-white rounded-xl shadow-lg border border-gray-100 cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-[1.02] relative h-32">
+                    {/* Line Name - Top Left */}
+                    <div className="absolute top-2 left-2 z-10">
+                      <h3 className="text-sm font-bold text-gray-800 group-hover:text-blue-600 transition-colors duration-300 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg">
+                        {section.name}
+                      </h3>
+                    </div>
+
+                    {/* Vendor Count - Top Right */}
+                    <div className="absolute top-2 right-2 z-10">
+                      <div className="bg-white/90 backdrop-blur-sm text-gray-700 px-2 py-1 rounded-lg text-xs font-semibold flex items-center gap-1">
+                        <Users size={10} />
+                        {section.vendors}
                       </div>
                     </div>
-                    
-                    {/* Section Content */}
-                    <div className="p-6 flex-1">
-                      <p className="text-gray-600 text-sm sm:text-base leading-relaxed mb-6 group-hover:text-gray-700 transition-colors duration-300">
-                        {section.description}
-                      </p>
 
-                      {/* Specialties */}
-                      <div className="mb-6">
-                        <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Specialties</div>
-                        <div className="flex flex-wrap gap-2">
-                          {section.specialties.slice(0, 3).map((specialty, idx) => (
-                            <span
-                              key={idx}
-                              className="bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium"
-                            >
-                              {specialty}
-                            </span>
-                          ))}
-                          {section.specialties.length > 3 && (
-                            <span className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-xs font-medium">
-                              +{section.specialties.length - 3} more
-                            </span>
-                          )}
-                        </div>
+                    {/* Background Pattern */}
+                    <div className="w-full h-full bg-gradient-to-br from-blue-100 via-purple-100 to-teal-100 rounded-xl flex items-center justify-center">
+                      <div className="text-2xl opacity-20">🏪</div>
+                    </div>
+
+                    {/* View Button - Bottom Right */}
+                    <div className="absolute bottom-2 right-2 z-10">
+                      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-3 py-1 rounded-full text-xs font-semibold group-hover:from-blue-700 group-hover:to-purple-700 transition-all duration-300 shadow-lg">
+                        View →
                       </div>
+                    </div>
 
-                      {/* Action Button */}
-                      <div className="flex items-center justify-between">
-                        <div className="text-sm text-gray-500">
-                          Explore Section
-                        </div>
-                        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold group-hover:from-blue-700 group-hover:to-purple-700 transition-all duration-300 shadow-lg">
-                          Browse →
-                        </div>
+                    {/* Verified Badge - Bottom Left */}
+                    <div className="absolute bottom-2 left-2 z-10">
+                      <div className="bg-emerald-500 text-white px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+                        <Shield size={8} />
+                        Active
                       </div>
                     </div>
                   </div>
