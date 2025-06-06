@@ -493,45 +493,38 @@ export default function MarketLine() {
             </div>
           ) : (
             filteredShops.map(shop => (
-              <div key={shop.id} className="bg-white rounded-lg border border-gray-200 p-3 hover:shadow-sm transition-all duration-200">
-                <div className="flex items-center justify-between">
+              <div key={shop.id} className="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-sm transition-all duration-200">
+                <div className="flex items-center gap-4">
+                  {/* Shop Image Placeholder */}
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <ShoppingBag size={24} className="text-blue-600" />
+                  </div>
+                  
                   {/* Shop Name & Status */}
-                  <div className="flex items-center gap-3 flex-1">
-                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                      <ShoppingBag size={16} className="text-blue-600" />
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="text-lg font-semibold text-gray-900">{shop.name}</h3>
+                      {shop.verified && (
+                        <div className="flex items-center gap-1 bg-emerald-50 text-emerald-600 px-2 py-1 rounded-full text-xs">
+                          <Shield size={12} />
+                          Verified
+                        </div>
+                      )}
                     </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <h3 className="font-medium text-gray-900">{shop.name}</h3>
-                        {shop.verified && <Shield size={14} className="text-emerald-500" />}
-                      </div>
+                    
+                    <div className="flex items-center gap-1 text-sm">
+                      <Award size={14} className="text-blue-500" />
+                      <span className="text-blue-600 font-medium">{shop.trustScore}% Trust Score</span>
                     </div>
                   </div>
                   
-                  {/* Essential Info */}
-                  <div className="flex items-center gap-6 text-sm">
-                    <div className="flex items-center gap-1 text-gray-600">
-                      <Phone size={14} />
-                      <span>{shop.phone}</span>
-                    </div>
-                    
-                    <div className="flex items-center gap-1 text-blue-600">
-                      <Award size={14} />
-                      <span className="font-medium">{shop.trustScore}%</span>
-                    </div>
-                    
-                    <div className="flex items-center gap-1 text-gray-600">
-                      <Users size={14} />
-                      <span>{shop.followers || Math.floor(Math.random() * 500) + 50} followers</span>
-                    </div>
-                    
-                    <Link to={`/shop-profile/${shop.id}`}>
-                      <button className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition-colors flex items-center gap-2">
-                        <Eye size={14} />
-                        View
-                      </button>
-                    </Link>
-                  </div>
+                  {/* View Button */}
+                  <Link to={`/shop-profile/${shop.id}`}>
+                    <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2">
+                      <Eye size={16} />
+                      View Shop
+                    </button>
+                  </Link>
                 </div>
               </div>
             ))
