@@ -18,10 +18,19 @@ interface ListingCardProps {
 
 export default function ListingCard({ listing }: ListingCardProps) {
   const [showComments, setShowComments] = useState(false);
+  const { setElementRef, getAnimationClass, getAnimationStyle } = useScrollAnimations({
+    enableParallax: true,
+    staggerDelay: 100
+  });
 
   return (
     <>
-      <div className="bg-white rounded-xl overflow-hidden shadow-neonBlue transition-transform hover:scale-105 cursor-pointer">
+      <div 
+        ref={(el) => setElementRef(`listing-${listing.id}`, el)}
+        data-animation-id={`listing-${listing.id}`}
+        className={`bg-white rounded-xl overflow-hidden shadow-neonBlue transition-transform hover:scale-105 cursor-pointer gpu-accelerated will-change-transform ${getAnimationClass(`listing-${listing.id}`, 0)}`}
+        style={getAnimationStyle(0)}
+      >
       <img src={listing.image} alt={listing.title} className="h-48 w-full object-cover"/>
       <div className="p-4">
         <h3 className="font-bold text-primary">{listing.title}</h3>
