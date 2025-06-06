@@ -42,15 +42,8 @@ export function useScrollAnimations() {
     
     if (!isVisible) {
       if (animationType === 'slide') {
-        // Slide-in entrance states
-        const slideEntranceTypes = [
-          'opacity-0 translate-x-16 scale-95',      // Slide from right
-          'opacity-0 -translate-x-16 scale-95',     // Slide from left
-          'opacity-0 translate-y-16 scale-95',      // Slide from bottom
-          'opacity-0 -translate-y-16 scale-95',     // Slide from top
-          'opacity-0 translate-x-12 translate-y-8 scale-95'  // Slide diagonally
-        ];
-        return slideEntranceTypes[index % slideEntranceTypes.length];
+        // Left to right slide-in entrance state
+        return 'opacity-0 -translate-x-16 scale-95';
       } else {
         // Cool entrance states with 3D transforms
         const entranceTypes = [
