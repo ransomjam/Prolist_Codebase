@@ -28,7 +28,7 @@ export function useScrollAnimations() {
       },
       {
         threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
+        rootMargin: '0px 0px -80px 0px'
       }
     );
 
@@ -41,17 +41,40 @@ export function useScrollAnimations() {
     const isVisible = visibleElements.has(id);
     
     if (!isVisible) {
-      return 'opacity-0 translate-y-6';
+      // Cool entrance states with 3D transforms
+      const entranceTypes = [
+        'opacity-0 translate-y-12 rotate-3 scale-95',
+        'opacity-0 translate-x-8 -translate-y-8 rotate-6 scale-90',
+        'opacity-0 -translate-x-8 translate-y-8 -rotate-3 scale-95',
+        'opacity-0 translate-y-16 skew-x-3 scale-90',
+        'opacity-0 -translate-y-12 rotate-12 scale-85'
+      ];
+      return entranceTypes[index % entranceTypes.length];
     }
 
-    return 'opacity-100 translate-y-0 transition-all duration-500 ease-out';
+    // Cool visible states with smooth 3D transforms
+    const visibleTypes = [
+      'opacity-100 translate-x-0 translate-y-0 rotate-0 scale-100 transition-all duration-1000 ease-out',
+      'opacity-100 translate-x-0 translate-y-0 rotate-0 scale-100 transition-all duration-900 ease-out',
+      'opacity-100 translate-x-0 translate-y-0 rotate-0 scale-100 transition-all duration-1100 ease-out',
+      'opacity-100 translate-x-0 translate-y-0 rotate-0 scale-100 transition-all duration-800 ease-out',
+      'opacity-100 translate-x-0 translate-y-0 rotate-0 scale-100 transition-all duration-1200 ease-out'
+    ];
+    return visibleTypes[index % visibleTypes.length];
   }, [visibleElements]);
 
   const getAnimationStyle = useCallback((index: number = 0) => {
+    const delay = Math.min(index * 150, 800);
+    
     return {
-      transitionDelay: `${Math.min(index * 50, 400)}ms`
+      transitionDelay: `${delay}ms`,
+      willChange: 'transform, opacity',
+      backfaceVisibility: 'hidden' as const,
+      perspective: '1000px',
+      transformStyle: 'preserve-3d' as const,
+      filter: visibleElements.size > 0 ? 'drop-shadow(0 10px 25px rgba(0,0,0,0.1))' : 'none'
     };
-  }, []);
+  }, [visibleElements]);
 
   return {
     setElementRef,

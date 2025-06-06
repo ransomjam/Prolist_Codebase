@@ -37,14 +37,24 @@ export default function Homepage() {
       <div 
         ref={(el) => setElementRef('hero-section', el)}
         data-animation-id="hero-section"
-        className={`relative bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 rounded-3xl p-6 sm:p-8 lg:p-12 xl:p-16 text-white overflow-hidden gpu-accelerated will-change-transform ${getAnimationClass('hero-section', 0)}`}
+        className={`relative morphing-bg rounded-3xl p-6 sm:p-8 lg:p-12 xl:p-16 text-white overflow-hidden gpu-accelerated hover-lift ${getAnimationClass('hero-section', 0)}`}
         style={getAnimationStyle(0)}
       >
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-10 w-32 h-32 bg-white rounded-full animate-pulse"></div>
-          <div className="absolute bottom-10 right-10 w-24 h-24 bg-white rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
-          <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-white rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
+        {/* Floating Particles */}
+        <div className="particles">
+          <div className="particle w-3 h-3 animate-particle-float" style={{ top: '20%', left: '10%', animationDelay: '0s' }}></div>
+          <div className="particle w-2 h-2 animate-particle-float" style={{ top: '60%', left: '80%', animationDelay: '1s' }}></div>
+          <div className="particle w-4 h-4 animate-particle-float" style={{ top: '30%', left: '70%', animationDelay: '2s' }}></div>
+          <div className="particle w-1 h-1 animate-particle-float" style={{ top: '80%', left: '20%', animationDelay: '3s' }}></div>
+          <div className="particle w-2 h-2 animate-particle-float" style={{ top: '40%', left: '90%', animationDelay: '4s' }}></div>
+        </div>
+
+        {/* Enhanced Background Pattern */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-10 left-10 w-32 h-32 bg-white rounded-full animate-float animate-pulse-glow"></div>
+          <div className="absolute bottom-10 right-10 w-24 h-24 bg-gradient-to-br from-yellow-300 to-orange-400 rounded-full animate-float" style={{ animationDelay: '2s' }}></div>
+          <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-gradient-to-br from-pink-300 to-purple-400 rounded-full animate-bounce-in" style={{ animationDelay: '1s' }}></div>
+          <div className="absolute top-1/4 right-1/4 w-20 h-20 bg-gradient-to-br from-cyan-300 to-blue-400 rounded-full animate-rotate-3d opacity-60"></div>
         </div>
         
         <div className="relative z-10 max-w-6xl mx-auto text-center">
@@ -88,14 +98,24 @@ export default function Homepage() {
                   ref={(el) => setElementRef(`action-${index}`, el)}
                   data-animation-id={`action-${index}`}
                   href={action.href}
-                  className={`group bg-white/15 backdrop-blur-md rounded-2xl p-4 sm:p-5 lg:p-6 text-center hover:bg-white/25 transition-all duration-300 transform hover:scale-105 hover:rotate-1 border border-white/20 gpu-accelerated will-change-transform ${getAnimationClass(`action-${index}`, index + 5)}`}
+                  className={`group bg-white/20 backdrop-blur-lg rounded-3xl p-4 sm:p-5 lg:p-6 text-center hover:bg-white/30 transition-all duration-500 hover-tilt border border-white/30 gpu-accelerated relative overflow-hidden ${getAnimationClass(`action-${index}`, index + 5)}`}
                   style={getAnimationStyle(index + 5)}
                 >
-                  <div className={`w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br ${action.color} rounded-2xl mx-auto mb-3 sm:mb-4 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
-                    <Icon className="text-white w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7" />
+                  {/* Floating particles for each action */}
+                  <div className="absolute inset-0 opacity-30">
+                    <div className="particle w-1 h-1 animate-particle-float" style={{ top: '20%', left: '20%', animationDelay: `${index * 0.5}s` }}></div>
+                    <div className="particle w-1 h-1 animate-particle-float" style={{ top: '70%', left: '80%', animationDelay: `${index * 0.5 + 1}s` }}></div>
                   </div>
-                  <div className="text-sm sm:text-base lg:text-lg font-semibold mb-1 leading-tight">{action.label}</div>
-                  <div className="text-xs sm:text-sm text-blue-200 opacity-80">Explore now</div>
+                  
+                  <div className={`w-12 h-12 sm:w-14 sm:h-14 lg:w-18 lg:h-18 bg-gradient-to-br ${action.color} rounded-3xl mx-auto mb-3 sm:mb-4 flex items-center justify-center group-hover:scale-125 group-hover:rotate-12 transition-all duration-500 shadow-2xl animate-pulse-glow relative`}>
+                    <Icon className="text-white w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 animate-bounce-in" style={{ animationDelay: `${index * 200}ms` }} />
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-3xl"></div>
+                  </div>
+                  <div className="text-sm sm:text-base lg:text-lg font-bold mb-1 leading-tight group-hover:text-yellow-200 transition-colors duration-300">{action.label}</div>
+                  <div className="text-xs sm:text-sm text-blue-200 opacity-90 group-hover:opacity-100 transition-opacity duration-300">Explore now</div>
+                  
+                  {/* Cool border glow effect */}
+                  <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/10 via-transparent to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 </a>
               );
             })}
@@ -121,24 +141,38 @@ export default function Homepage() {
               key={index} 
               ref={(el) => setElementRef(`stat-${index}`, el)}
               data-animation-id={`stat-${index}`}
-              className={`group bg-white rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100 text-center gpu-accelerated will-change-transform hover:scale-105 hover:shadow-2xl transition-all duration-300 relative overflow-hidden ${getAnimationClass(`stat-${index}`, index + 10)}`}
+              className={`group bg-white rounded-3xl p-4 sm:p-6 lg:p-8 shadow-2xl border border-gray-100 text-center gpu-accelerated hover-lift transition-all duration-500 relative overflow-hidden ${getAnimationClass(`stat-${index}`, index + 10)}`}
               style={getAnimationStyle(index + 10)}
             >
-              {/* Background Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-br from-transparent to-gray-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              {/* Animated Background Particles */}
+              <div className="absolute inset-0 opacity-20">
+                <div className="particle w-2 h-2 animate-particle-float bg-gradient-to-br from-blue-400 to-purple-500 rounded-full" style={{ top: '15%', left: '80%', animationDelay: `${index * 0.3}s` }}></div>
+                <div className="particle w-1 h-1 animate-particle-float bg-gradient-to-br from-pink-400 to-red-500 rounded-full" style={{ top: '70%', left: '20%', animationDelay: `${index * 0.3 + 1}s` }}></div>
+              </div>
+
+              {/* Dynamic Background Gradient */}
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-50/80 via-purple-50/60 to-teal-50/80 opacity-0 group-hover:opacity-100 transition-all duration-500 animate-gradient-shift"></div>
               
               <div className="relative z-10">
-                <div className={`text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold ${stat.color} mb-2 lg:mb-3 group-hover:scale-110 transition-transform duration-300`}>
+                <div className={`text-2xl sm:text-3xl lg:text-4xl xl:text-6xl font-bold ${stat.color} mb-2 lg:mb-3 group-hover:scale-125 transition-all duration-500 animate-bounce-in relative`} style={{ animationDelay: `${index * 100}ms` }}>
                   {stat.value}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 animate-gradient-shift"></div>
                 </div>
-                <div className="text-xs sm:text-sm lg:text-base font-medium text-gray-600 uppercase tracking-wide leading-tight">{stat.label}</div>
+                <div className="text-xs sm:text-sm lg:text-base font-semibold text-gray-700 uppercase tracking-wider leading-tight group-hover:text-gray-900 transition-colors duration-300">{stat.label}</div>
                 
-                {/* Progress indicator */}
-                <div className="mt-3 lg:mt-4 w-full bg-gray-200 rounded-full h-1.5 lg:h-2 overflow-hidden">
+                {/* Enhanced Progress indicator with glow */}
+                <div className="mt-3 lg:mt-4 w-full bg-gray-200 rounded-full h-2 lg:h-3 overflow-hidden shadow-inner">
                   <div 
-                    className={`h-full bg-gradient-to-r ${stat.color === 'text-primary' ? 'from-blue-400 to-blue-600' : stat.color === 'text-emerald' ? 'from-emerald-400 to-emerald-600' : stat.color === 'text-neonBlue' ? 'from-cyan-400 to-cyan-600' : 'from-teal-400 to-teal-600'} rounded-full transition-all duration-1000 ease-out`}
-                    style={{ width: `${75 + index * 5}%` }}
-                  ></div>
+                    className={`h-full bg-gradient-to-r ${stat.color === 'text-primary' ? 'from-blue-400 via-blue-500 to-blue-600' : stat.color === 'text-emerald' ? 'from-emerald-400 via-emerald-500 to-emerald-600' : stat.color === 'text-neonBlue' ? 'from-cyan-400 via-cyan-500 to-cyan-600' : 'from-teal-400 via-teal-500 to-teal-600'} rounded-full transition-all duration-1000 ease-out animate-pulse-glow animate-slide-up-bounce relative`}
+                    style={{ width: `${75 + index * 5}%`, animationDelay: `${index * 200}ms` }}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/30 to-transparent rounded-full"></div>
+                  </div>
+                </div>
+
+                {/* Floating icon effect */}
+                <div className="absolute top-4 right-4 opacity-20 group-hover:opacity-60 transition-opacity duration-500">
+                  <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full animate-float"></div>
                 </div>
               </div>
             </div>
@@ -178,25 +212,38 @@ export default function Homepage() {
                 href={`/markets/${market.id}`} 
                 className="block transform transition-all duration-300 hover:scale-105"
               >
-                <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 group-hover:shadow-2xl transition-all duration-300">
+                <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100 group-hover:shadow-3xl transition-all duration-500 hover-lift relative">
+                  {/* Floating particles */}
+                  <div className="absolute inset-0 pointer-events-none z-10">
+                    <div className="particle w-2 h-2 animate-particle-float bg-gradient-to-br from-emerald-400 to-blue-500 rounded-full" style={{ top: '20%', left: '10%', animationDelay: `${index * 0.4}s` }}></div>
+                    <div className="particle w-1 h-1 animate-particle-float bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full" style={{ top: '70%', left: '85%', animationDelay: `${index * 0.4 + 1.5}s` }}></div>
+                  </div>
+
                   {/* Market Image */}
                   <div className="relative h-48 lg:h-56 overflow-hidden">
                     <img 
                       src={market.image} 
                       alt={market.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      className="w-full h-full object-cover group-hover:scale-125 group-hover:rotate-2 transition-all duration-700 filter group-hover:brightness-110"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent group-hover:from-black/40 transition-all duration-500"></div>
+                    
+                    {/* Animated status badge */}
                     <div className="absolute bottom-4 left-4">
-                      <span className="bg-emerald-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                      <span className="bg-gradient-to-r from-emerald-500 to-green-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg animate-pulse-glow">
                         Open Now
                       </span>
                     </div>
+                    
+                    {/* Enhanced shield icon */}
                     <div className="absolute top-4 right-4">
-                      <div className="bg-white/90 backdrop-blur-sm rounded-full p-2">
-                        <Shield className="text-blue-600 w-4 h-4" />
+                      <div className="bg-white/95 backdrop-blur-md rounded-full p-3 shadow-lg animate-float">
+                        <Shield className="text-blue-600 w-5 h-5 animate-bounce-in" style={{ animationDelay: `${index * 150}ms` }} />
                       </div>
                     </div>
+
+                    {/* Cool overlay effect */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-transparent to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                   </div>
                   
                   {/* Market Info */}
