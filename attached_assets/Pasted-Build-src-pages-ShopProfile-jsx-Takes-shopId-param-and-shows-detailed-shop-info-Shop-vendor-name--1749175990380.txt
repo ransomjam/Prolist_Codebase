@@ -1,0 +1,82 @@
+Build /src/pages/ShopProfile.jsx
+Takes shopId param and shows detailed shop info:
+
+Shop/vendor name, number
+
+Trust badge with blue shield icon
+
+Vendor bio/description
+
+List of products/services (dummy data)
+
+In-app chat button (opens chat component or placeholder)
+Use Tailwind CSS with neon highlights, clean layout, responsive.
+
+Sample React Skeleton for ShopProfile.jsx
+jsx
+Copy
+import { useParams } from 'react-router-dom';
+import { ShieldCheckIcon } from '@heroicons/react/24/outline';
+
+const shopsData = {
+  1: {
+    name: 'Ngwa Electronics',
+    number: 'A12',
+    vendor: 'Emmanuel Ngwa',
+    trustScore: 95,
+    bio: 'Leading electronics vendor specializing in phones and repair services.',
+    products: [
+      { id: 'p1', title: 'Samsung Galaxy S21', price: '150000' },
+      { id: 'p2', title: 'iPhone 12', price: '250000' },
+    ],
+  },
+  // more shops...
+};
+
+export default function ShopProfile() {
+  const { shopId } = useParams();
+  const shop = shopsData[shopId];
+
+  if (!shop) return <p className="p-6 text-red-600">Shop not found.</p>;
+
+  return (
+    <div className="p-6 max-w-4xl mx-auto bg-white rounded-xl shadow-neonBlue">
+      <h2 className="text-3xl font-bold text-primary mb-2">{shop.name}</h2>
+      <p className="text-gray-600 mb-1">Shop No: {shop.number}</p>
+      <p className="flex items-center gap-2 text-blue-600 mb-4">
+        <ShieldCheckIcon className="h-6 w-6" />
+        Verified Professional (Trust Score: {shop.trustScore})
+      </p>
+      <p className="text-justify mb-6">{shop.bio}</p>
+
+      <h3 className="text-2xl font-semibold mb-4">Products & Services</h3>
+      <ul className="space-y-3 mb-6">
+        {shop.products.map(({ id, title, price }) => (
+          <li key={id} className="border-b border-gray-300 pb-2">
+            <p className="font-semibold">{title}</p>
+            <p className="text-emerald-600">{price} CFA</p>
+          </li>
+        ))}
+      </ul>
+
+      <button
+        className="bg-gradient-to-r from-blue-600 to-emerald-500 text-white px-6 py-3 rounded-xl shadow-neonGreen hover:scale-105 transition"
+        onClick={() => alert('Chat feature coming soon!')}
+      >
+        🗨️ Chat with Vendor
+      </button>
+    </div>
+  );
+}
+Routing Update in App.jsx
+jsx
+Copy
+import ShopProfile from './pages/ShopProfile';
+
+<Route path="/shop-profile/:shopId" element={<ShopProfile />} />
+Your task now:
+Build and style the Shop Profile page as above.
+
+Add real or dummy products and test layout.
+
+Prepare for integrating chat feature.

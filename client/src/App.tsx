@@ -44,6 +44,7 @@ import ProfessionalServices from "./pages/ProfessionalServices";
 import ProfessionalProfile from "./pages/ProfessionalProfile";
 import MarketsOverview from "./pages/MarketsOverview";
 import LineDetails from "./pages/LineDetails";
+import ShopProfile from "./pages/ShopProfile";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -57,6 +58,7 @@ function Router() {
       <Route path="/markets" component={MarketsOverview} />
       <Route path="/markets/:id/:sectionId" component={LineDetails} />
       <Route path="/markets/:id" component={MarketDetails} />
+      <Route path="/shop-profile/:shopId" component={ShopProfile} />
       <Route path="/listings" component={ProductFeed} />
       <Route path="/real-estate" component={RealEstate} />
       <Route path="/realestate" component={RealEstate} />
