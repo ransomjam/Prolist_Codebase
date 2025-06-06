@@ -57,9 +57,9 @@ function Router() {
       <Route path="/apply-verification" component={Verification} />
       <Route path="/app" component={Homepage} />
       <Route path="/markets" component={MarketsOverview} />
-      <Route path="/market-line/:marketId/:lineId" component={MarketLine} />
-      <Route path="/markets/:id/:sectionId" component={LineDetails} />
-      <Route path="/markets/:id" component={MarketDetails} />
+      <Route path="/markets/:marketId" component={MarketDetails} />
+      <Route path="/markets/:marketId/lines/:lineId" component={MarketLine} />
+      <Route path="/markets/:marketId/sections/:sectionId" component={LineDetails} />
       <Route path="/shop-profile/:shopId" component={ShopProfile} />
       <Route path="/listings" component={ProductFeed} />
       <Route path="/real-estate" component={RealEstate} />

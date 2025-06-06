@@ -338,9 +338,16 @@ export default function MarketDetails() {
 
         {/* Sections Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-8">
-          {market.sections.map((section, index) => (
+          {market.sections.map((section, index) => {
+            // Special routing for market lines vs regular sections
+            const isMarketLine = section.id.includes('line');
+            const linkPath = isMarketLine 
+              ? `/markets/${marketId}/lines/${section.id}`
+              : `/markets/${marketId}/sections/${section.id}`;
+            
+            return (
             <div key={section.id} className="group">
-              <Link to={`/markets/${marketId}/${section.id}`}>
+              <Link to={linkPath}>
                 <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-2xl hover:scale-105 relative h-full">
                   {/* Section Header */}
                   <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 p-6 text-white relative">
@@ -406,7 +413,8 @@ export default function MarketDetails() {
                 </div>
               </Link>
             </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Footer Info */}

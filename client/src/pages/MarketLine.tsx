@@ -303,10 +303,10 @@ export default function MarketLine() {
         
         {/* Header Navigation */}
         <div className="mb-6">
-          <Link to="/markets">
+          <Link to={`/markets/${marketId}`}>
             <button className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors duration-200">
               <ArrowLeft size={20} />
-              Back to Markets
+              Back to {marketId?.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
             </button>
           </Link>
         </div>
@@ -314,9 +314,11 @@ export default function MarketLine() {
         {/* Page Title */}
         <div className="text-center mb-8">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 mb-4">
-            Market Line: Onitsha Line
+            {lineId?.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
           </h1>
-          <p className="text-lg text-gray-600">Electronics and imported goods from major suppliers</p>
+          <p className="text-lg text-gray-600">
+            {marketId?.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())} • {lineId === 'onitsha-line' ? 'Electronics and imported goods from major suppliers' : 'Specialized vendors and quality products'}
+          </p>
         </div>
 
         {/* Interactive Chat Button at Top */}
