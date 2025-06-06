@@ -68,6 +68,8 @@ export const products = pgTable("products", {
   description: text("description"),
   imageUrls: text("image_urls").array(),
   location: varchar("location", { length: 255 }),
+  marketId: varchar("market_id", { length: 100 }),
+  marketLine: varchar("market_line", { length: 100 }),
   status: varchar("status", { length: 50 }).default("active"), // active, sold, removed
   viewCount: integer("view_count").default(0),
   salesCount: integer("sales_count").default(0),

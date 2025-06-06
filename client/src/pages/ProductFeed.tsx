@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Filter, ShoppingBag, Shield, Star, Eye } from 'lucide-react';
 import { useScrollAnimations } from '../hooks/useScrollAnimations';
@@ -13,11 +13,29 @@ interface Product {
   vendorId: number;
   viewCount: number;
   createdAt: string;
+  marketId?: string;
+  marketLine?: string;
 }
 
 export default function ProductFeed() {
   const [filter, setFilter] = useState('');
+  const [marketLineFilter, setMarketLineFilter] = useState('');
+  const [marketFilter, setMarketFilter] = useState('');
   const { setElementRef, getAnimationClass, getAnimationStyle } = useScrollAnimations();
+
+  // Check URL parameters for market line filtering
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const lineParam = urlParams.get('line');
+    const marketParam = urlParams.get('market');
+    
+    if (lineParam) {
+      setMarketLineFilter(lineParam);
+    }
+    if (marketParam) {
+      setMarketFilter(marketParam);
+    }
+  }, []);
 
   // Fetch products from the API
   const { data: products = [], isLoading, error } = useQuery({
@@ -32,7 +50,11 @@ export default function ProductFeed() {
   });
 
   const filtered = products.filter((p: Product) => {
-    return filter ? p.category === filter : true;
+    const categoryMatch = filter ? p.category === filter : true;
+    const marketLineMatch = marketLineFilter ? p.marketLine === marketLineFilter : true;
+    const marketMatch = marketFilter ? p.marketId === marketFilter : true;
+    
+    return categoryMatch && marketLineMatch && marketMatch;
   });
 
   const categories = [
@@ -89,7 +111,7 @@ export default function ProductFeed() {
             className={`text-2xl sm:text-3xl font-bold text-blue-600 leading-tight ${getAnimationClass('title', 1, 'slide')}`}
             style={getAnimationStyle(1)}
           >
-            Listings
+            {marketLineFilter ? `${marketLineFilter.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())} Listings` : 'Listings'}
           </h2>
           <p 
             ref={(el) => setElementRef('subtitle', el)}

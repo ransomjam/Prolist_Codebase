@@ -218,7 +218,16 @@ export class MemStorage implements IStorage {
   }
 
   async getAllProducts(): Promise<Product[]> {
-    return Array.from(this.products.values());
+    // Add market line data to products if not already present
+    const products = Array.from(this.products.values());
+    return products.map(product => ({
+      ...product,
+      marketId: product.marketId || 'main-market',
+      marketLine: product.marketLine || (product.category === 'electronics' ? 'onitsha-line' : 
+                                         product.category === 'clothes' ? 'tailoring-line' : 
+                                         product.category === 'shoes' ? 'shoe-line' : 
+                                         product.category === 'phones' ? 'onitsha-line' : 'back-market')
+    }));
   }
 
   async updateProductViewCount(id: number): Promise<void> {
