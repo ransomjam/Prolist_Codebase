@@ -45,6 +45,7 @@ import ProfessionalProfile from "./pages/ProfessionalProfile";
 import MarketsOverview from "./pages/MarketsOverview";
 import LineDetails from "./pages/LineDetails";
 import ShopProfile from "./pages/ShopProfile";
+import MarketLine from "./pages/MarketLine";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -56,6 +57,7 @@ function Router() {
       <Route path="/apply-verification" component={Verification} />
       <Route path="/app" component={Homepage} />
       <Route path="/markets" component={MarketsOverview} />
+      <Route path="/market-line/:marketId/:lineId" component={MarketLine} />
       <Route path="/markets/:id/:sectionId" component={LineDetails} />
       <Route path="/markets/:id" component={MarketDetails} />
       <Route path="/shop-profile/:shopId" component={ShopProfile} />
