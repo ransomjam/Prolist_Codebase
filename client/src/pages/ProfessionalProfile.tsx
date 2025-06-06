@@ -1,14 +1,19 @@
 import { useState } from 'react';
-import { useRoute } from 'wouter';
-import { ArrowLeft, Star, Shield, MessageCircle, MapPin, Calendar, Briefcase, Phone, Mail, Globe } from 'lucide-react';
+import { useRoute, Link } from 'wouter';
+import { ArrowLeft, Star, Shield, MessageCircle, MapPin, Calendar, Briefcase, CheckCircle } from 'lucide-react';
+import { ShieldCheckIcon } from '@heroicons/react/24/outline';
 import { dummyProfessionals, serviceCategories, type Professional } from '../data/professionalData';
 import ChatBox from '../components/ChatBox';
 
 export default function ProfessionalProfile() {
   const [, params] = useRoute('/professional-profile/:username');
+  const [, paramsById] = useRoute('/professional/:id');
   const [chatOpen, setChatOpen] = useState(false);
   
-  const professional = dummyProfessionals.find(p => p.username === params?.username);
+  // Find professional by username or ID
+  const professional = dummyProfessionals.find(p => 
+    p.username === params?.username || p.id === paramsById?.id
+  );
 
   if (!professional) {
     return (
@@ -16,12 +21,11 @@ export default function ProfessionalProfile() {
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Professional Not Found</h2>
           <p className="text-gray-600 mb-4">The professional you're looking for doesn't exist.</p>
-          <button 
-            onClick={() => window.history.back()}
-            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Go Back
-          </button>
+          <Link href="/services">
+            <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+              Browse Services
+            </button>
+          </Link>
         </div>
       </div>
     );
@@ -33,369 +37,175 @@ export default function ProfessionalProfile() {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white shadow-sm border-b">
-        <div className="max-w-4xl mx-auto px-4 py-4">
-          <button 
-            onClick={() => window.history.back()}
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors mb-4"
-          >
-            <ArrowLeft size={20} />
-            Back to Services
-          </button>
+        <div className="max-w-6xl mx-auto px-4 py-4">
+          <Link href="/services">
+            <button className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors mb-4">
+              <ArrowLeft size={20} />
+              Back to Services
+            </button>
+          </Link>
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        {/* Profile Header */}
-        <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-          <div className="flex flex-col md:flex-row gap-6">
-            {/* Profile Image */}
-            <div className="flex-shrink-0">
-              <img
-                src={professional.photo}
-                alt={professional.name}
-                className="w-32 h-32 rounded-full object-cover border-4 border-gray-200 mx-auto md:mx-0"
-              />
-            </div>
-
-            {/* Profile Info */}
-            <div className="flex-1 text-center md:text-left">
-              <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
-                <div>
-                  <div className="flex items-center justify-center md:justify-start gap-2 mb-2">
-                    <h1 className="text-3xl font-bold text-gray-900">{professional.name}</h1>
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Main Profile Content */}
+          <div className="lg:col-span-2 space-y-8">
+            {/* Profile Header */}
+            <div className="bg-white rounded-2xl shadow-lg p-8">
+              <div className="flex flex-col sm:flex-row gap-6">
+                <img
+                  src={professional.avatar}
+                  alt={professional.name}
+                  className="w-32 h-32 rounded-full object-cover border-4 border-gray-200 mx-auto sm:mx-0"
+                />
+                <div className="flex-1 text-center sm:text-left">
+                  <div className="flex items-center justify-center sm:justify-start gap-3 mb-3">
+                    <h1 className="text-3xl font-bold text-gray-800">{professional.name}</h1>
                     {professional.verified && (
-                      <Shield className="text-green-500" size={24} />
+                      <ShieldCheckIcon className="w-8 h-8 text-blue-500" />
                     )}
                   </div>
                   
-                  <div className="flex items-center justify-center md:justify-start gap-1 mb-3">
-                    <Star className="text-yellow-500 fill-current" size={20} />
-                    <span className="text-xl font-semibold text-gray-700">{professional.rating}</span>
-                    <span className="text-gray-500">({professional.trustCount} reviews)</span>
+                  <div className="flex items-center justify-center sm:justify-start gap-2 mb-3">
+                    <div className={`w-3 h-3 bg-gradient-to-r ${category?.color} rounded-full`}></div>
+                    <span className="text-lg text-gray-600">{category?.name}</span>
                   </div>
 
-                  {category && (
-                    <div className="mb-4">
-                      <span className={`inline-block bg-gradient-to-r ${category.color} text-white text-sm font-semibold px-4 py-2 rounded-full`}>
-                        {category.icon} {category.name}
-                      </span>
+                  <div className="flex items-center justify-center sm:justify-start space-x-6 mb-4">
+                    <div className="flex items-center">
+                      <Star className="w-5 h-5 text-yellow-400 fill-current mr-1" />
+                      <span className="font-semibold text-gray-800">{professional.rating}</span>
                     </div>
-                  )}
-                </div>
+                    <div className="flex items-center">
+                      <Shield className="w-5 h-5 text-green-500 mr-1" />
+                      <span className="font-semibold text-gray-800">{professional.trustCount} trust</span>
+                    </div>
+                  </div>
 
-                {/* Action Button */}
+                  <div className="flex items-center justify-center sm:justify-start text-gray-600 mb-4">
+                    <MapPin className="w-4 h-4 mr-1" />
+                    <span>{professional.location}</span>
+                  </div>
+
+                  <p className="text-lg font-semibold text-blue-600">{professional.rate}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* About Section */}
+            <div className="bg-white rounded-2xl shadow-lg p-8">
+              <h2 className="text-2xl font-bold text-gray-800 mb-6">About</h2>
+              <p className="text-gray-700 leading-relaxed text-lg">{professional.bio}</p>
+            </div>
+
+            {/* Services Offered */}
+            <div className="bg-white rounded-2xl shadow-lg p-8">
+              <h2 className="text-2xl font-bold text-gray-800 mb-6">Services Offered</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {professional.services.map((service, index) => (
+                  <div key={index} className="flex items-center p-4 bg-blue-50 rounded-lg">
+                    <CheckCircle className="w-5 h-5 text-blue-600 mr-3" />
+                    <span className="font-medium text-gray-800">{service}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Experience & Portfolio */}
+            <div className="bg-white rounded-2xl shadow-lg p-8">
+              <h2 className="text-2xl font-bold text-gray-800 mb-6">Experience & Portfolio</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <div className="text-center p-6 bg-gray-50 rounded-lg">
+                  <Calendar className="w-8 h-8 mx-auto text-blue-600 mb-3" />
+                  <div className="text-2xl font-bold text-gray-800">{professional.experience}</div>
+                  <div className="text-gray-600">Years Experience</div>
+                </div>
+                <div className="text-center p-6 bg-gray-50 rounded-lg">
+                  <Briefcase className="w-8 h-8 mx-auto text-green-600 mb-3" />
+                  <div className="text-2xl font-bold text-gray-800">{professional.completedProjects}</div>
+                  <div className="text-gray-600">Projects Completed</div>
+                </div>
+                <div className="text-center p-6 bg-gray-50 rounded-lg">
+                  <Shield className="w-8 h-8 mx-auto text-purple-600 mb-3" />
+                  <div className="text-2xl font-bold text-gray-800">{professional.trustCount}</div>
+                  <div className="text-gray-600">Trust Score</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Action Panel */}
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-8">
+              <h3 className="text-xl font-bold text-gray-800 mb-6">Hire {professional.name}</h3>
+              
+              {/* Pricing */}
+              <div className="mb-6 p-4 bg-blue-50 rounded-lg">
+                <div className="text-center">
+                  <div className="text-sm text-gray-600 mb-1">Starting from</div>
+                  <div className="text-2xl font-bold text-blue-600">{professional.rate}</div>
+                  <div className="text-sm text-gray-500 mt-1">Escrow protected</div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="space-y-4">
+                <Link href={`/service-checkout/${professional.id}`}>
+                  <button className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors">
+                    Hire Now
+                  </button>
+                </Link>
+                
                 <button
                   onClick={() => setChatOpen(true)}
-                  className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center gap-2 mx-auto md:mx-0"
+                  className="w-full flex items-center justify-center space-x-2 py-3 border border-blue-600 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                 >
-                  <MessageCircle size={20} />
-                  Start Chat
+                  <MessageCircle className="w-5 h-5" />
+                  <span>Chat First</span>
                 </button>
               </div>
 
-              {/* Stats Grid */}
-              <div className="grid grid-cols-3 gap-4 mb-6">
-                <div className="bg-gray-50 rounded-lg p-4 text-center">
-                  <Calendar size={24} className="mx-auto text-gray-600 mb-2" />
-                  <p className="text-lg font-bold text-gray-900">{professional.experience}</p>
-                  <p className="text-sm text-gray-600">Experience</p>
-                </div>
-                <div className="bg-gray-50 rounded-lg p-4 text-center">
-                  <Briefcase size={24} className="mx-auto text-gray-600 mb-2" />
-                  <p className="text-lg font-bold text-gray-900">{professional.completedProjects}</p>
-                  <p className="text-sm text-gray-600">Projects Completed</p>
-                </div>
-                <div className="bg-gray-50 rounded-lg p-4 text-center">
-                  <MapPin size={24} className="mx-auto text-gray-600 mb-2" />
-                  <p className="text-sm font-bold text-gray-900">{professional.location}</p>
-                  <p className="text-sm text-gray-600">Location</p>
+              {/* Trust Indicators */}
+              <div className="mt-8 pt-6 border-t">
+                <h4 className="font-semibold text-gray-800 mb-4">Why Choose {professional.name.split(' ')[0]}?</h4>
+                <div className="space-y-3">
+                  <div className="flex items-center text-sm text-gray-600">
+                    <Shield className="w-4 h-4 text-green-500 mr-2" />
+                    <span>Verified Professional</span>
+                  </div>
+                  <div className="flex items-center text-sm text-gray-600">
+                    <CheckCircle className="w-4 h-4 text-blue-500 mr-2" />
+                    <span>Escrow Protection</span>
+                  </div>
+                  <div className="flex items-center text-sm text-gray-600">
+                    <Star className="w-4 h-4 text-yellow-400 mr-2" />
+                    <span>Highly Rated</span>
+                  </div>
+                  <div className="flex items-center text-sm text-gray-600">
+                    <MessageCircle className="w-4 h-4 text-purple-500 mr-2" />
+                    <span>Quick Response</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
 
-        {/* About Section */}
-        <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">About</h2>
-          <p className="text-gray-700 leading-relaxed text-lg">{professional.bio}</p>
-        </div>
-
-        {/* Services & Expertise */}
-        <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Services & Expertise</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">Primary Services</h3>
-              <div className="space-y-2">
-                {category?.name === 'Architecture & Building Design' && (
-                  <>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Residential Design</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Commercial Buildings</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Building Plans & Permits</span>
-                    </div>
-                  </>
-                )}
-                {category?.name === 'Plumbing & Pipe Repairs' && (
-                  <>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Emergency Pipe Repairs</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Water System Installation</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Drainage Solutions</span>
-                    </div>
-                  </>
-                )}
-                {category?.name === 'Web Development & Maintenance' && (
-                  <>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Business Websites</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">E-commerce Platforms</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Website Maintenance</span>
-                    </div>
-                  </>
-                )}
-                {category?.name === 'Fridge & AC Repairs' && (
-                  <>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Refrigerator Repairs</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Air Conditioning Service</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Cooling System Installation</span>
-                    </div>
-                  </>
-                )}
-                {category?.name === 'Electronics Repairs (TVs, Radios, etc.)' && (
-                  <>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">TV & Audio Repairs</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Home Appliance Fixes</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Electronic Diagnostics</span>
-                    </div>
-                  </>
-                )}
-                {category?.name === 'Mobile Phone Repairs' && (
-                  <>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Screen Replacements</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Battery Replacements</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Software Troubleshooting</span>
-                    </div>
-                  </>
-                )}
-                {category?.name === 'Tailoring & Clothing Alterations' && (
-                  <>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Custom Clothing Design</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Clothing Alterations</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Traditional Wear</span>
-                    </div>
-                  </>
-                )}
-                {category?.name === 'Laptop & Computer Repairs' && (
-                  <>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Hardware Repairs</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Software Installation</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Virus Removal</span>
-                    </div>
-                  </>
-                )}
-                {category?.name === 'Event Planning & Management' && (
-                  <>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Wedding Planning</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Corporate Events</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Cultural Celebrations</span>
-                    </div>
-                  </>
-                )}
-                {category?.name === 'Photography & Videography' && (
-                  <>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Wedding Photography</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Event Documentation</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Corporate Videos</span>
-                    </div>
-                  </>
-                )}
-                {category?.name === 'Cleaning & Housekeeping Services' && (
-                  <>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Home Cleaning</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Office Cleaning</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Deep Cleaning Services</span>
-                    </div>
-                  </>
-                )}
-                {category?.name === 'Electrical Installations & Repairs' && (
-                  <>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Home Wiring</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Electrical Installations</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Emergency Electrical Repairs</span>
-                    </div>
-                  </>
-                )}
+              {/* Contact Info */}
+              <div className="mt-8 pt-6 border-t">
+                <h4 className="font-semibold text-gray-800 mb-3">Response Time</h4>
+                <p className="text-sm text-gray-600">
+                  Typically responds within 2-4 hours during business hours.
+                </p>
               </div>
-            </div>
-            
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">Availability</h3>
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-gray-700">Available for new projects</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-gray-700">Response time: Within 2 hours</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-gray-700">Free consultation available</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Contact Information */}
-        <div className="bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Get In Touch</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="text-center">
-              <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3">
-                <MessageCircle className="text-blue-600" size={24} />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Chat</h3>
-              <p className="text-gray-600 text-sm mb-3">Start a conversation</p>
-              <button
-                onClick={() => setChatOpen(true)}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm"
-              >
-                Send Message
-              </button>
-            </div>
-            
-            <div className="text-center">
-              <div className="bg-green-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3">
-                <Phone className="text-green-600" size={24} />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Call</h3>
-              <p className="text-gray-600 text-sm mb-3">Direct phone contact</p>
-              <a
-                href="tel:+237670000000"
-                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm inline-block"
-              >
-                Call Now
-              </a>
-            </div>
-            
-            <div className="text-center">
-              <div className="bg-purple-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3">
-                <Mail className="text-purple-600" size={24} />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Email</h3>
-              <p className="text-gray-600 text-sm mb-3">Professional inquiry</p>
-              <a
-                href={`mailto:${professional.username}@prolist.cm`}
-                className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors text-sm inline-block"
-              >
-                Send Email
-              </a>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Chat Modal */}
+      {/* Chat Component */}
       {chatOpen && (
         <ChatBox
           vendorName={professional.name}
+          buyerName="You"
           isOpen={chatOpen}
           onClose={() => setChatOpen(false)}
         />

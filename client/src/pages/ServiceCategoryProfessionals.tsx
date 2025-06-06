@@ -141,9 +141,9 @@ export default function ServiceCategoryProfessionals() {
                     <MessageCircle className="w-4 h-4" />
                     <span className="text-sm font-medium">Chat</span>
                   </button>
-                  <Link href={`/professional/${professional.id}`}>
+                  <Link href={`/service-checkout/${professional.id}`}>
                     <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
-                      View Profile
+                      Hire Now
                     </button>
                   </Link>
                 </div>
