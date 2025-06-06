@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, Filter, Star, Shield, MessageCircle, Eye, User, Grid3X3, List, SlidersHorizontal, Package } from 'lucide-react';
+import { Search, Filter, Star, Shield, MessageCircle, Eye, Grid3X3, List, SlidersHorizontal, Package } from 'lucide-react';
 import { Link } from 'wouter';
 import { ShieldCheckIcon } from '@heroicons/react/24/outline';
 import { serviceCategories, dummyProfessionals, type Professional } from '../data/professionalData';
