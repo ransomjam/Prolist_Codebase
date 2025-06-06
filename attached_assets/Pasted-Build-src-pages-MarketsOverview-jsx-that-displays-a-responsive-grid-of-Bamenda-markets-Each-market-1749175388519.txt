@@ -1,0 +1,79 @@
+Build /src/pages/MarketsOverview.jsx that displays a responsive grid of Bamenda markets.
+Each market is displayed as a card with:
+
+Market name (e.g., Main Market, Food Market)
+
+Short description
+
+Representative image or icon
+
+Neon borders and hover glow effects consistent with ProList brand
+Clicking a market card navigates to /markets/:marketId route to show market sections.
+
+Sample React Component Skeleton for MarketsOverview.jsx
+jsx
+Copy
+import { Link } from 'react-router-dom';
+
+const markets = [
+  {
+    id: 'main-market',
+    name: 'Main Market',
+    description: 'Bamenda’s busiest commercial hub with diverse sections.',
+    image: '/assets/main-market.jpg',
+  },
+  {
+    id: 'food-market',
+    name: 'Food Market',
+    description: 'Fresh produce and food items at competitive prices.',
+    image: '/assets/food-market.jpg',
+  },
+  {
+    id: 'other-market',
+    name: 'Other Markets',
+    description: 'Various smaller markets across Bamenda.',
+    image: '/assets/other-market.jpg',
+  },
+];
+
+export default function MarketsOverview() {
+  return (
+    <div className="p-6 max-w-6xl mx-auto">
+      <h1 className="text-4xl font-bold mb-8 text-primary text-center">
+        Explore Bamenda Markets
+      </h1>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {markets.map(({ id, name, description, image }) => (
+          <Link
+            to={`/markets/${id}`}
+            key={id}
+            className="bg-white rounded-xl shadow-neonBlue hover:shadow-neonGreen transition p-4 cursor-pointer flex flex-col"
+          >
+            <img
+              src={image}
+              alt={name}
+              className="h-48 w-full object-cover rounded-md mb-4"
+            />
+            <h2 className="text-xl font-semibold mb-2">{name}</h2>
+            <p className="text-gray-600">{description}</p>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
+Routing
+Add in App.jsx:
+
+jsx
+Copy
+import MarketsOverview from './pages/MarketsOverview';
+
+<Route path="/markets" element={<MarketsOverview />} />
+Your task now:
+Build and style this Markets Overview page.
+
+Ensure cards are responsive and visually appealing.
+
+Test that clicking a card correctly routes to /markets/:marketId.
