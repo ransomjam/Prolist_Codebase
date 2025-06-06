@@ -2,6 +2,7 @@ import { useParams, Link } from 'wouter';
 import { ArrowLeft, Shield, Star, MapPin, Phone, Clock, MessageCircle, Package, Award, Users } from 'lucide-react';
 import { useScrollAnimations } from '../hooks/useScrollAnimations';
 import { useState } from 'react';
+import ChatBox from '../components/ChatBox';
 
 interface Product {
   id: string;
@@ -388,33 +389,13 @@ export default function ShopProfile() {
           </div>
         </div>
 
-        {/* Chat Modal Placeholder */}
-        {isChatOpen && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full">
-              <h3 className="text-2xl font-bold text-gray-800 mb-4">Chat with {shop.vendor}</h3>
-              <p className="text-gray-600 mb-6">
-                Chat functionality will be available soon. For now, please use WhatsApp or call directly.
-              </p>
-              <div className="flex gap-3">
-                <button 
-                  onClick={() => setIsChatOpen(false)}
-                  className="flex-1 bg-gray-200 text-gray-800 py-3 rounded-2xl font-semibold hover:bg-gray-300 transition-colors duration-300"
-                >
-                  Close
-                </button>
-                <a 
-                  href={`https://wa.me/${shop.whatsapp.replace(/\D/g, '')}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 bg-emerald-500 text-white py-3 rounded-2xl font-semibold hover:bg-emerald-600 transition-colors duration-300 text-center"
-                >
-                  WhatsApp Now
-                </a>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* Chat Component */}
+        <ChatBox
+          vendorName={shop.vendor}
+          buyerName="Customer"
+          isOpen={isChatOpen}
+          onClose={() => setIsChatOpen(false)}
+        />
       </div>
     </div>
   );

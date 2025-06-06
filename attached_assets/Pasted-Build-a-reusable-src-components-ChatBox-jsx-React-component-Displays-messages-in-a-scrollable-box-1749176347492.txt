@@ -1,0 +1,75 @@
+Build a reusable /src/components/ChatBox.jsx React component:
+
+Displays messages in a scrollable box.
+
+Input field for sending new messages.
+
+Shows sender name and timestamp for each message.
+
+Messages stored in component state for demo (no backend).
+
+Styled with Tailwind CSS, neon shadows, and clean layout.
+Integrate ChatBox into /src/pages/ShopProfile.jsx with a toggle button.
+
+Example ChatBox.jsx Skeleton
+jsx
+Copy
+import { useState, useRef, useEffect } from 'react';
+
+export default function ChatBox({ vendorName, buyerName = 'You' }) {
+  const [messages, setMessages] = useState([
+    { sender: vendorName, text: 'Welcome! How can I help you today?', time: new Date().toLocaleTimeString() },
+  ]);
+  const [input, setInput] = useState('');
+  const messagesEndRef = useRef(null);
+
+  const sendMessage = () => {
+    if (!input.trim()) return;
+    setMessages([...messages, { sender: buyerName, text: input.trim(), time: new Date().toLocaleTimeString() }]);
+    setInput('');
+  };
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  return (
+    <div className="flex flex-col border rounded-xl shadow-neonBlue p-4 w-full max-w-md h-96 bg-white">
+      <div className="flex-1 overflow-y-auto mb-4 space-y-3">
+        {messages.map((msg, i) => (
+          <div
+            key={i}
+            className={`p-2 rounded-xl max-w-xs ${
+              msg.sender === buyerName ? 'bg-emerald-400 text-white self-end' : 'bg-gray-200 self-start'
+            }`}
+          >
+            <p className="text-sm font-semibold">{msg.sender}</p>
+            <p>{msg.text}</p>
+            <p className="text-xs text-gray-500 text-right">{msg.time}</p>
+          </div>
+        ))}
+        <div ref={messagesEndRef} />
+      </div>
+
+      <div className="flex gap-2">
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          className="border rounded px-3 py-2 flex-grow"
+          placeholder="Type your message..."
+          onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+        />
+        <button
+          onClick={sendMessage}
+          className="bg-gradient-to-r from-blue-600 to-emerald-500 text-white px-4 py-2 rounded-xl shadow-neonGreen hover:scale-105 transition"
+        >
+          Send
+        </button>
+      </div>
+    </div>
+  );
+}
+Integration Tip
+In ShopProfile.jsx, add a button to toggle showing/hiding the chat box below vendor info.
+
