@@ -342,39 +342,35 @@ export default function MarketDetails() {
           </Link>
         </div>
 
-        {/* Market Header */}
-        <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 lg:p-12 mb-8 sm:mb-12">
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 mb-4">
+        {/* Compact Market Header */}
+        <div className="bg-white rounded-2xl shadow-lg p-4 mb-6">
+          <div className="flex items-center justify-between">
+            <div className="flex-1">
+              <h1 className="text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 mb-2">
                 {market.name}
               </h1>
-              <p className="text-lg sm:text-xl text-gray-600 mb-6 leading-relaxed">
+              <p className="text-sm text-gray-600 mb-3">
                 {market.description}
               </p>
               
-              <div className="flex flex-wrap gap-4 text-sm">
-                <div className="flex items-center gap-2 text-gray-600">
-                  <MapPin size={16} className="text-blue-500" />
+              <div className="flex flex-wrap gap-3 text-xs">
+                <div className="flex items-center gap-1 text-gray-600">
+                  <MapPin size={12} className="text-blue-500" />
                   {market.location}
                 </div>
-                <div className="flex items-center gap-2 text-gray-600">
-                  <Clock size={16} className="text-emerald-500" />
-                  {market.openHours}
-                </div>
-                <div className="flex items-center gap-2 text-gray-600">
-                  <Users size={16} className="text-purple-500" />
+                <div className="flex items-center gap-1 text-gray-600">
+                  <Users size={12} className="text-purple-500" />
                   {market.totalVendors}+ vendors
                 </div>
-                <div className="flex items-center gap-2 text-gray-600">
-                  <Star size={16} className="text-yellow-500" />
+                <div className="flex items-center gap-1 text-gray-600">
+                  <Star size={12} className="text-yellow-500" />
                   {market.rating} rating
                 </div>
               </div>
             </div>
             
-            <div className="text-center">
-              <div className="w-48 h-48 mx-auto bg-gradient-to-br from-blue-100 via-purple-100 to-teal-100 rounded-3xl flex items-center justify-center text-8xl shadow-lg">
+            <div className="ml-4">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-100 via-purple-100 to-teal-100 rounded-xl flex items-center justify-center text-3xl">
                 🏪
               </div>
             </div>
