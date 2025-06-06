@@ -43,7 +43,7 @@ import AuctionPostProcess from "./components/AuctionPostProcess";
 import ProfessionalServices from "./pages/ProfessionalServices";
 import ProfessionalProfile from "./pages/ProfessionalProfile";
 import MarketsOverview from "./pages/MarketsOverview";
-import LineDetails from "./pages/LineDetails";
+
 import ShopProfile from "./pages/ShopProfile";
 import MarketLine from "./pages/MarketLine";
 import NotFound from "@/pages/not-found";
@@ -59,7 +59,6 @@ function Router() {
       <Route path="/markets" component={MarketsOverview} />
       <Route path="/markets/:marketId" component={MarketDetails} />
       <Route path="/markets/:marketId/lines/:lineId" component={MarketLine} />
-      <Route path="/markets/:marketId/sections/:sectionId" component={LineDetails} />
       <Route path="/shop-profile/:shopId" component={ShopProfile} />
       <Route path="/listings" component={ProductFeed} />
       <Route path="/real-estate" component={RealEstate} />
