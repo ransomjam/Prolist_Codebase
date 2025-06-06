@@ -175,6 +175,7 @@ export default function MarketLine() {
   // Component state
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
+  const [chatOpen, setChatOpen] = useState(false);
   const [activeChat, setActiveChat] = useState('general'); // 'general' or 'line'
   const [generalMessages, setGeneralMessages] = useState([
     { id: 1, user: 'MarketModerator', message: 'Welcome to Main Market general chat!', time: '10:30 AM', isSystem: true },
@@ -265,6 +266,122 @@ export default function MarketLine() {
               Back to {market.name}
             </button>
           </Link>
+        </div>
+
+        {/* Interactive Chat Button */}
+        <div className="bg-white rounded-3xl shadow-2xl p-4 mb-6">
+          <button
+            onClick={() => setChatOpen(!chatOpen)}
+            className="w-full flex items-center justify-between p-4 bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 text-white rounded-2xl hover:from-blue-700 hover:via-purple-700 hover:to-teal-700 transition-all duration-300"
+          >
+            <div className="flex items-center gap-3">
+              <MessageSquare size={24} />
+              <div className="text-left">
+                <div className="font-semibold">Market Chat Groups</div>
+                <div className="text-blue-100 text-sm">
+                  {generalMessages.length + lineMessages.length} messages total
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
+                {chatOpen ? 'Close' : 'Open'} Chat
+              </span>
+              <div className={`transform transition-transform duration-300 ${chatOpen ? 'rotate-180' : ''}`}>
+                ▼
+              </div>
+            </div>
+          </button>
+
+          {/* Expandable Chat Section */}
+          {chatOpen && (
+            <div className="mt-4 border-t border-gray-200 pt-4">
+              {/* Chat Tabs */}
+              <div className="flex space-x-1 bg-gray-100 rounded-2xl p-1 mb-4">
+                <button
+                  onClick={() => setActiveChat('general')}
+                  className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium transition-all duration-300 ${
+                    activeChat === 'general'
+                      ? 'bg-white text-blue-600 shadow-lg'
+                      : 'text-gray-600 hover:text-gray-800'
+                  }`}
+                >
+                  <Users size={18} />
+                  General Market
+                  <span className="bg-blue-100 text-blue-600 px-2 py-1 rounded-full text-xs">
+                    {generalMessages.length}
+                  </span>
+                </button>
+                <button
+                  onClick={() => setActiveChat('line')}
+                  className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium transition-all duration-300 ${
+                    activeChat === 'line'
+                      ? 'bg-white text-purple-600 shadow-lg'
+                      : 'text-gray-600 hover:text-gray-800'
+                  }`}
+                >
+                  <ShoppingBag size={18} />
+                  {line.name}
+                  <span className="bg-purple-100 text-purple-600 px-2 py-1 rounded-full text-xs">
+                    {lineMessages.length}
+                  </span>
+                </button>
+              </div>
+
+              {/* Chat Messages */}
+              <div className="bg-gray-50 rounded-2xl p-4 h-64 overflow-y-auto mb-4">
+                <div className="space-y-3">
+                  {(activeChat === 'general' ? generalMessages : lineMessages).map((msg) => (
+                    <div key={msg.id} className={`flex ${msg.user === 'You' ? 'justify-end' : 'justify-start'}`}>
+                      <div className={`max-w-xs lg:max-w-md px-3 py-2 rounded-xl ${
+                        msg.isSystem
+                          ? 'bg-yellow-100 text-yellow-800 text-center text-sm italic'
+                          : msg.user === 'You'
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-white text-gray-800 shadow-sm'
+                      }`}>
+                        {!msg.isSystem && msg.user !== 'You' && (
+                          <div className="text-xs font-semibold mb-1 text-blue-600">
+                            {msg.user}
+                          </div>
+                        )}
+                        <div className="text-sm">{msg.message}</div>
+                        <div className={`text-xs mt-1 ${
+                          msg.isSystem 
+                            ? 'text-yellow-600'
+                            : msg.user === 'You' 
+                            ? 'text-blue-200' 
+                            : 'text-gray-500'
+                        }`}>
+                          {msg.time}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  <div ref={chatEndRef} />
+                </div>
+              </div>
+
+              {/* Message Input */}
+              <div className="flex gap-3">
+                <input
+                  type="text"
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  placeholder={`Message ${activeChat === 'general' ? 'general market' : line.name} chat...`}
+                  className="flex-1 px-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                <button
+                  onClick={handleSendMessage}
+                  disabled={!newMessage.trim()}
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-2xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                >
+                  <Send size={18} />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Page Header */}
