@@ -395,10 +395,9 @@ export default function ProfessionalProfile() {
       {/* Chat Modal */}
       {chatOpen && (
         <ChatBox
+          vendorName={professional.name}
           isOpen={chatOpen}
           onClose={() => setChatOpen(false)}
-          recipientName={professional.name}
-          currentUser="You"
         />
       )}
     </div>

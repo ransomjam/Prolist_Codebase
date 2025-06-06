@@ -2,7 +2,30 @@ import { useState, useMemo } from 'react';
 import { useParams, Link } from 'wouter';
 import { ArrowLeft, Search, Filter, MessageSquare, Send, Users, ShoppingBag, Shield, Star, Phone, MessageCircle, Eye, Clock, Award } from 'lucide-react';
 
-const dummyShops = [
+interface Shop {
+  id: number;
+  name: string;
+  category: string;
+  vendor: string;
+  trusted: boolean;
+  rating: number;
+  reviews: number;
+  phone: string;
+  specialties: string[];
+  verified: boolean;
+  yearsInBusiness: number;
+  trustScore: number;
+}
+
+interface Message {
+  id: number;
+  sender: string;
+  text: string;
+  time: string;
+  isSystem?: boolean;
+}
+
+const dummyShops: Shop[] = [
   { 
     id: 1, 
     name: 'Ngwa Electronics', 
@@ -182,7 +205,7 @@ export default function MarketLine() {
   const [chatOpen, setChatOpen] = useState(false);
   const [activeChat, setActiveChat] = useState('general');
   
-  const [generalMessages, setGeneralMessages] = useState([
+  const [generalMessages, setGeneralMessages] = useState<Message[]>([
     { 
       id: 1,
       sender: 'Market Admin', 
@@ -204,7 +227,7 @@ export default function MarketLine() {
     },
   ]);
   
-  const [lineMessages, setLineMessages] = useState([
+  const [lineMessages, setLineMessages] = useState<Message[]>([
     { 
       id: 1,
       sender: 'Line Moderator', 
@@ -240,7 +263,7 @@ export default function MarketLine() {
   const handleSendMessage = () => {
     if (!newMessage.trim()) return;
     
-    const message = {
+    const message: Message = {
       id: Date.now(),
       sender: 'You',
       text: newMessage.trim(),
@@ -255,22 +278,22 @@ export default function MarketLine() {
     setNewMessage('');
   };
 
-  const handleKeyPress = (e) => {
+  const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
     }
   };
 
-  const handleWhatsAppClick = (phone) => {
+  const handleWhatsAppClick = (phone: string) => {
     window.open(`https://wa.me/${phone}`, '_blank');
   };
 
-  const handleCallClick = (phone) => {
+  const handleCallClick = (phone: string) => {
     window.open(`tel:${phone}`, '_self');
   };
 
-  const handleVendorChat = (vendor, shopName) => {
+  const handleVendorChat = (vendor: string, shopName: string) => {
     alert(`Opening direct chat with ${vendor} from ${shopName}`);
   };
 

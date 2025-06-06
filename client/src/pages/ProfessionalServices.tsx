@@ -131,7 +131,7 @@ export default function ProfessionalServices() {
     });
 
     return () => observer.disconnect();
-  }, [filteredCategories]);
+  }, [filteredData]);
 
   // Scroll direction detection for enhanced animations
   useEffect(() => {
@@ -542,10 +542,9 @@ export default function ProfessionalServices() {
       {/* Chat Modal */}
       {chatOpen && selectedProfessional && (
         <ChatBox
+          vendorName={selectedProfessional.name}
           isOpen={chatOpen}
           onClose={closeChat}
-          recipientName={selectedProfessional.name}
-          currentUser="You"
         />
       )}
     </div>
