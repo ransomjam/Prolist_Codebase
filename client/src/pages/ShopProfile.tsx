@@ -2,6 +2,7 @@ import { useParams, Link } from 'wouter';
 import { ArrowLeft, Shield, Star, MapPin, Phone, Clock, MessageCircle, Package, Award, Users } from 'lucide-react';
 import { useState } from 'react';
 import ChatBox from '../components/ChatBox';
+import { useScrollAnimations } from '../hooks/useScrollAnimations';
 
 interface Product {
   id: string;
