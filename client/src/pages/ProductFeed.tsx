@@ -17,10 +17,7 @@ interface Product {
 
 export default function ProductFeed() {
   const [filter, setFilter] = useState('');
-  const { setElementRef, getAnimationClass, getAnimationStyle } = useScrollAnimations({
-    enableParallax: true,
-    staggerDelay: 80
-  });
+  const { setElementRef, getAnimationClass, getAnimationStyle } = useScrollAnimations();
 
   // Fetch products from the API
   const { data: products = [], isLoading, error } = useQuery({

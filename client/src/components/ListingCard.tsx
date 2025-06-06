@@ -18,10 +18,7 @@ interface ListingCardProps {
 
 export default function ListingCard({ listing }: ListingCardProps) {
   const [showComments, setShowComments] = useState(false);
-  const { setElementRef, getAnimationClass, getAnimationStyle } = useScrollAnimations({
-    enableParallax: true,
-    staggerDelay: 100
-  });
+  const { setElementRef, getAnimationClass, getAnimationStyle } = useScrollAnimations();
 
   return (
     <>

@@ -13,10 +13,7 @@ interface Countdown {
 
 export default function Auctions() {
   const [countdowns, setCountdowns] = useState<{ [key: number]: Countdown | null }>({});
-  const { setElementRef, getAnimationClass, getAnimationStyle } = useScrollAnimations({
-    enableParallax: true,
-    staggerDelay: 120
-  });
+  const { setElementRef, getAnimationClass, getAnimationStyle } = useScrollAnimations();
 
   useEffect(() => {
     const interval = setInterval(() => {

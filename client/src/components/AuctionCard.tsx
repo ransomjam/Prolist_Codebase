@@ -17,10 +17,7 @@ interface AuctionCardProps {
 }
 
 export default function AuctionCard({ item }: AuctionCardProps) {
-  const { setElementRef, getAnimationClass, getAnimationStyle } = useScrollAnimations({
-    enableParallax: true,
-    staggerDelay: 100
-  });
+  const { setElementRef, getAnimationClass, getAnimationStyle } = useScrollAnimations();
 
   return (
     <div 
