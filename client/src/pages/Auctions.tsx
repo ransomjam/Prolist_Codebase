@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { Gavel, Shield } from "lucide-react";
 import { auctions } from '../data/demoData';
+import { useScrollAnimations } from '../hooks/useScrollAnimations';
 
 interface Countdown {
   days: number;
@@ -12,6 +13,10 @@ interface Countdown {
 
 export default function Auctions() {
   const [countdowns, setCountdowns] = useState<{ [key: number]: Countdown | null }>({});
+  const { setElementRef, getAnimationClass, getAnimationStyle } = useScrollAnimations({
+    enableParallax: true,
+    staggerDelay: 120
+  });
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -39,31 +44,56 @@ export default function Auctions() {
   }, []);
 
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-6">
+    <div className="p-6 scroll-smooth">
+      <div 
+        ref={(el) => setElementRef('auction-header', el)}
+        data-animation-id="auction-header"
+        className={`flex items-center justify-between mb-6 gpu-accelerated will-change-transform ${getAnimationClass('auction-header', 0)}`}
+        style={getAnimationStyle(0)}
+      >
         <div className="flex items-center gap-3">
           <Gavel className="text-primary" size={32} />
-          <h2 className="text-3xl font-bold text-primary">Live Auctions</h2>
+          <h2 
+            ref={(el) => setElementRef('auction-title', el)}
+            data-animation-id="auction-title"
+            className={`text-3xl font-bold text-primary ${getAnimationClass('auction-title', 1)}`}
+            style={getAnimationStyle(1)}
+          >
+            Live Auctions
+          </h2>
         </div>
         <button 
+          ref={(el) => setElementRef('post-auction-btn', el)}
+          data-animation-id="post-auction-btn"
           onClick={() => window.location.href = '/product-listing'}
-          className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
+          className={`bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 gpu-accelerated will-change-transform ${getAnimationClass('post-auction-btn', 2)}`}
+          style={getAnimationStyle(2)}
         >
           <Gavel size={20} />
           Post New Auction
         </button>
       </div>
-      <p className="text-sm text-gray-600 mb-6">Only Premium Users Can Post Deals. All Prices Are in CFA.</p>
+      <p 
+        ref={(el) => setElementRef('auction-subtitle', el)}
+        data-animation-id="auction-subtitle"
+        className={`text-sm text-gray-600 mb-6 ${getAnimationClass('auction-subtitle', 3)}`}
+        style={getAnimationStyle(3)}
+      >
+        Only Premium Users Can Post Deals. All Prices Are in CFA.
+      </p>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {auctions.map((auction) => {
+        {auctions.map((auction, index) => {
           const timer = countdowns[auction.id];
           const ended = timer === null;
           return (
             <Link
               href={`/auction/${auction.id}`}
               key={auction.id}
-              className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer flex flex-col group"
+              ref={(el) => setElementRef(`auction-${auction.id}`, el)}
+              data-animation-id={`auction-${auction.id}`}
+              className={`bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer flex flex-col group gpu-accelerated will-change-transform ${getAnimationClass(`auction-${auction.id}`, index + 4)}`}
+              style={getAnimationStyle(index + 4)}
             >
               <div className="relative">
                 <img

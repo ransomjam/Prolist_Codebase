@@ -1,6 +1,7 @@
 import { Shield, MessageSquare, Phone } from "lucide-react";
 import { useState } from "react";
 import CommentsSection from "./CommentsSection";
+import { useScrollAnimations } from "../hooks/useScrollAnimations";
 
 interface ListingCardProps {
   listing: {
