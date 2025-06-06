@@ -493,15 +493,15 @@ export default function MarketLine() {
             </div>
           ) : (
             filteredShops.map(shop => (
-              <div key={shop.id} className="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 hover:shadow-sm transition-all duration-200">
-                <div className="flex items-center gap-3 sm:gap-4">
+              <div key={shop.id} className="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 hover:shadow-sm transition-all duration-200 relative">
+                <div className="flex items-start gap-3 sm:gap-4">
                   {/* Shop Image Placeholder */}
                   <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-blue-100 to-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
                     <ShoppingBag size={20} className="sm:w-6 sm:h-6 text-blue-600" />
                   </div>
                   
                   {/* Shop Name & Status */}
-                  <div className="flex-1 min-w-0">
+                  <div className="flex-1 min-w-0 pr-20">
                     <div className="flex items-center gap-2 mb-1 flex-wrap sm:flex-nowrap">
                       <h3 className="text-sm sm:text-base font-medium text-gray-900 truncate">{shop.name}</h3>
                       {shop.verified && (
@@ -519,13 +519,19 @@ export default function MarketLine() {
                       <span className="text-gray-500 hidden sm:inline">Trust Score</span>
                     </div>
                   </div>
-                  
-                  {/* View Button */}
-                  <Link to={`/shop-profile/${shop.id}`} className="flex-shrink-0">
-                    <button className="bg-blue-600 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center gap-1.5 text-xs sm:text-sm">
-                      <Eye size={12} className="sm:w-4 sm:h-4" />
-                      <span className="hidden sm:inline">View</span>
-                      <span className="sm:hidden">View</span>
+                </div>
+                
+                {/* Shop Phone Number - Top Right */}
+                <div className="absolute top-2 right-2 text-xs text-gray-500">
+                  {shop.phone}
+                </div>
+                
+                {/* View Button - Bottom Right */}
+                <div className="absolute bottom-2 right-2">
+                  <Link to={`/shop-profile/${shop.id}`}>
+                    <button className="bg-blue-600 text-white px-3 py-1.5 rounded-md hover:bg-blue-700 transition-colors flex items-center gap-1.5 text-xs">
+                      <Eye size={12} />
+                      <span>View</span>
                     </button>
                   </Link>
                 </div>
