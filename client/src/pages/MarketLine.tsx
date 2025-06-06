@@ -301,44 +301,48 @@ export default function MarketLine() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-teal-50 p-4 sm:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto">
         
-        {/* Header Navigation */}
-        <div className="mb-6">
-          <Link to={`/markets/${marketId}`}>
-            <button className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors duration-200">
-              <ArrowLeft size={20} />
-              Back to {marketId?.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-            </button>
-          </Link>
+        {/* Compact Header */}
+        <div className="bg-white rounded-2xl shadow-lg p-4 mb-6">
+          <div className="flex items-center justify-between">
+            <Link to={`/markets/${marketId}`}>
+              <button className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors duration-200">
+                <ArrowLeft size={18} />
+                <span className="hidden sm:inline">Back to {marketId?.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
+                <span className="sm:hidden">Back</span>
+              </button>
+            </Link>
+            <div className="text-center flex-1 mx-4">
+              <h1 className="text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600">
+                {lineId?.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+              </h1>
+              <p className="text-sm text-gray-600 hidden sm:block">
+                {lineId === 'onitsha-line' ? 'Electronics and imported goods' : 'Specialized vendors'}
+              </p>
+            </div>
+            <div className="text-xs text-gray-500 hidden md:block">
+              {filteredShops.length} shops
+            </div>
+          </div>
         </div>
 
-        {/* Page Title */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 mb-4">
-            {lineId?.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-          </h1>
-          <p className="text-lg text-gray-600">
-            {marketId?.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())} • {lineId === 'onitsha-line' ? 'Electronics and imported goods from major suppliers' : 'Specialized vendors and quality products'}
-          </p>
-        </div>
-
-        {/* Interactive Chat Button at Top */}
-        <div className="bg-white rounded-3xl shadow-2xl p-4 mb-8">
+        {/* Compact Chat Toggle */}
+        <div className="bg-white rounded-2xl shadow-lg p-3 mb-4">
           <button
             onClick={() => setChatOpen(!chatOpen)}
-            className="w-full flex items-center justify-between p-4 bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 text-white rounded-2xl hover:from-blue-700 hover:via-purple-700 hover:to-teal-700 transition-all duration-300"
+            className="w-full flex items-center justify-between p-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300"
           >
             <div className="flex items-center gap-3">
-              <MessageSquare size={24} />
+              <MessageSquare size={20} />
               <div className="text-left">
-                <div className="font-semibold">Market Chat Groups</div>
-                <div className="text-blue-100 text-sm">
-                  {generalMessages.length + lineMessages.length} messages total
+                <div className="font-semibold text-sm">Market Chat</div>
+                <div className="text-blue-100 text-xs">
+                  {generalMessages.length + lineMessages.length} messages
                 </div>
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
-                {chatOpen ? 'Close' : 'Open'} Chat
+              <span className="bg-white/20 px-2 py-1 rounded-lg text-xs">
+                {chatOpen ? 'Close' : 'Open'}
               </span>
               <div className={`transform transition-transform duration-300 ${chatOpen ? 'rotate-180' : ''}`}>
                 ▼
@@ -436,25 +440,25 @@ export default function MarketLine() {
           )}
         </div>
 
-        {/* Search and Filter Section */}
-        <div className="bg-white rounded-3xl shadow-2xl p-6 mb-8">
-          <div className="flex flex-col sm:flex-row gap-4 items-center">
-            <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+        {/* Compact Search and Filter */}
+        <div className="bg-white rounded-2xl shadow-lg p-4 mb-6">
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
               <input
                 type="text"
-                placeholder="Search shops or vendors..."
+                placeholder="Search shops..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700"
+                className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-500"
               />
             </div>
             <div className="relative">
-              <Filter className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
+              <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={18} />
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="pl-12 pr-8 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 bg-white cursor-pointer appearance-none min-w-[200px]"
+                className="pl-10 pr-8 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 cursor-pointer appearance-none min-w-[160px]"
               >
                 {categories.map(cat => (
                   <option key={cat} value={cat}>{cat}</option>
@@ -462,9 +466,9 @@ export default function MarketLine() {
               </select>
             </div>
           </div>
-          <div className="mt-4 text-center">
-            <p className="text-gray-600">
-              Showing {filteredShops.length} of {dummyShops.length} shops
+          <div className="mt-3 text-center">
+            <p className="text-sm text-gray-600">
+              {filteredShops.length} shops
             </p>
           </div>
         </div>
