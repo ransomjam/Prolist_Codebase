@@ -346,73 +346,73 @@ export default function MarketDetails() {
               : `/markets/${marketId}/sections/${section.id}`;
             
             return (
-            <div key={section.id} className="group">
-              <Link to={linkPath}>
-                <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-2xl hover:scale-105 relative h-full">
-                  {/* Section Header */}
-                  <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 p-6 text-white relative">
-                    <div className="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent"></div>
-                    <div className="relative z-10">
-                      <div className="flex items-center justify-between mb-3">
-                        <h3 className="text-xl sm:text-2xl font-bold leading-tight">
-                          {section.name}
-                        </h3>
-                        <div className="bg-white/20 backdrop-blur-md rounded-full p-2">
-                          <Shield size={16} />
+              <div key={section.id} className="group">
+                <Link to={linkPath}>
+                  <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-2xl hover:scale-105 relative h-full">
+                    {/* Section Header */}
+                    <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 p-6 text-white relative">
+                      <div className="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent"></div>
+                      <div className="relative z-10">
+                        <div className="flex items-center justify-between mb-3">
+                          <h3 className="text-xl sm:text-2xl font-bold leading-tight">
+                            {section.name}
+                          </h3>
+                          <div className="bg-white/20 backdrop-blur-md rounded-full p-2">
+                            <Shield size={16} />
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-4 text-sm opacity-90">
+                          <div className="flex items-center gap-1">
+                            <Users size={14} />
+                            {section.vendors} vendors
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                            Active
+                          </div>
                         </div>
                       </div>
-                      <div className="flex items-center gap-4 text-sm opacity-90">
-                        <div className="flex items-center gap-1">
-                          <Users size={14} />
-                          {section.vendors} vendors
+                    </div>
+                    
+                    {/* Section Content */}
+                    <div className="p-6 flex-1">
+                      <p className="text-gray-600 text-sm sm:text-base leading-relaxed mb-6 group-hover:text-gray-700 transition-colors duration-300">
+                        {section.description}
+                      </p>
+
+                      {/* Specialties */}
+                      <div className="mb-6">
+                        <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Specialties</div>
+                        <div className="flex flex-wrap gap-2">
+                          {section.specialties.slice(0, 3).map((specialty, idx) => (
+                            <span
+                              key={idx}
+                              className="bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium"
+                            >
+                              {specialty}
+                            </span>
+                          ))}
+                          {section.specialties.length > 3 && (
+                            <span className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-xs font-medium">
+                              +{section.specialties.length - 3} more
+                            </span>
+                          )}
                         </div>
-                        <div className="flex items-center gap-1">
-                          <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
-                          Active
+                      </div>
+
+                      {/* Action Button */}
+                      <div className="flex items-center justify-between">
+                        <div className="text-sm text-gray-500">
+                          Explore Section
+                        </div>
+                        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold group-hover:from-blue-700 group-hover:to-purple-700 transition-all duration-300 shadow-lg">
+                          Browse →
                         </div>
                       </div>
                     </div>
                   </div>
-                  
-                  {/* Section Content */}
-                  <div className="p-6 flex-1">
-                    <p className="text-gray-600 text-sm sm:text-base leading-relaxed mb-6 group-hover:text-gray-700 transition-colors duration-300">
-                      {section.description}
-                    </p>
-
-                    {/* Specialties */}
-                    <div className="mb-6">
-                      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Specialties</div>
-                      <div className="flex flex-wrap gap-2">
-                        {section.specialties.slice(0, 3).map((specialty, idx) => (
-                          <span
-                            key={idx}
-                            className="bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium"
-                          >
-                            {specialty}
-                          </span>
-                        ))}
-                        {section.specialties.length > 3 && (
-                          <span className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-xs font-medium">
-                            +{section.specialties.length - 3} more
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Action Button */}
-                    <div className="flex items-center justify-between">
-                      <div className="text-sm text-gray-500">
-                        Explore Section
-                      </div>
-                      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold group-hover:from-blue-700 group-hover:to-purple-700 transition-all duration-300 shadow-lg">
-                        Browse →
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            </div>
+                </Link>
+              </div>
             );
           })}
         </div>
