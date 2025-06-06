@@ -1,0 +1,91 @@
+Build /src/pages/LineDetails.jsx
+Receives marketId and sectionId as params.
+Displays all shops/vendors in that market line.
+Each shop card shows:
+
+Shop name and number
+
+Vendor’s name
+
+Trust badge (blue shield icon)
+
+Link to shop profile page
+Use Tailwind CSS with consistent branding and responsiveness.
+
+Sample React Skeleton for LineDetails.jsx
+jsx
+Copy
+import { useParams, Link } from 'react-router-dom';
+import { ShieldCheckIcon } from '@heroicons/react/24/outline';
+
+const marketLinesData = {
+  'main-market': {
+    'back-market': [
+      { id: 1, name: 'Ngwa Electronics', number: 'A12', vendor: 'Emmanuel Ngwa', trusted: true },
+      { id: 2, name: 'Mama’s Fabrics', number: 'B5', vendor: 'Theresa Mbi', trusted: true },
+      // more shops...
+    ],
+    'onitsha-line': [
+      { id: 3, name: 'Onitsha Imports', number: 'C8', vendor: 'Pierre Fotso', trusted: false },
+      // more shops...
+    ],
+    // more sections...
+  },
+  'food-market': {
+    'bali-line': [
+      { id: 4, name: 'Bali Fruits', number: 'D3', vendor: 'Sophie Atanga', trusted: true },
+      // more shops...
+    ],
+    // more sections...
+  },
+  // more markets...
+};
+
+export default function LineDetails() {
+  const { marketId, sectionId } = useParams();
+  const shops = marketLinesData[marketId]?.[sectionId] || [];
+
+  return (
+    <div className="p-6 max-w-6xl mx-auto">
+      <h1 className="text-3xl font-bold mb-6 text-primary">Shops in {sectionId.replace(/-/g, ' ')}</h1>
+
+      {shops.length === 0 ? (
+        <p className="text-gray-600">No shops found in this section.</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {shops.map(({ id, name, number, vendor, trusted }) => (
+            <div key={id} className="bg-white rounded-xl shadow-neonBlue p-4 hover:shadow-neonGreen transition cursor-pointer">
+              <h2 className="text-xl font-semibold">{name}</h2>
+              <p className="text-gray-600">Shop No: {number}</p>
+              <p className="text-gray-600">Vendor: {vendor}</p>
+              {trusted && (
+                <div className="flex items-center mt-2 text-blue-600 gap-1">
+                  <ShieldCheckIcon className="h-5 w-5" />
+                  <span>Trusted Vendor</span>
+                </div>
+              )}
+              <Link
+                to={`/shop-profile/${id}`}
+                className="inline-block mt-3 text-sm text-blue-600 hover:underline"
+              >
+                View Profile
+              </Link>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+Routing Update in App.jsx
+jsx
+Copy
+import LineDetails from './pages/LineDetails';
+
+<Route path="/markets/:marketId/:sectionId" element={<LineDetails />} />
+Your task now:
+Build and style this Line Details page.
+
+Populate with dummy shops as above or extend with local data.
+
+Test navigation and layout on different screen sizes.
