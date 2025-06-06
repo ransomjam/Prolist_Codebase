@@ -234,11 +234,7 @@ export default function ProfessionalServices() {
                   {isExpanded && (
                     <div 
                       id={`professionals-${category.id}`}
-                      className="border-t border-gray-200 bg-gradient-to-b from-gray-50 to-gray-100 max-h-80 sm:max-h-96 overflow-y-auto animate-fadeIn"
-                      style={{
-                        scrollbarWidth: 'thin',
-                        scrollbarColor: '#14b8a6 #f1f5f9'
-                      }}
+                      className="border-t border-gray-200 bg-gradient-to-b from-gray-50 to-gray-100 max-h-80 sm:max-h-96 overflow-y-auto animate-fadeIn custom-scrollbar"
                     >
                       <div className="p-3 sm:p-4 space-y-3">
                         {categoryProfessionals.map((professional: Professional, profIndex) => (
