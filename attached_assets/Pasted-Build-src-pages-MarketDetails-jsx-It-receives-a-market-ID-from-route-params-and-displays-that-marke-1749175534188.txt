@@ -1,0 +1,75 @@
+Build /src/pages/MarketDetails.jsx
+It receives a market ID from route params and displays that market’s sections/lines as cards.
+Each section card includes:
+
+Section/Line name (e.g., Back Market, Onitsha Line)
+
+Short description or local insight
+
+Neon borders and hover glow consistent with ProList
+Clicking a section card navigates to /markets/:marketId/:sectionId.
+
+Sample React Skeleton for MarketDetails.jsx
+jsx
+Copy
+import { useParams, Link } from 'react-router-dom';
+
+const marketData = {
+  'main-market': {
+    name: 'Main Market',
+    sections: [
+      { id: 'back-market', name: 'Back Market', description: 'Secondary vendors and small traders' },
+      { id: 'onitsha-line', name: 'Onitsha Line', description: 'Known for electronics and imports' },
+      { id: 'tailoring-line', name: 'Tailoring Line', description: 'Tailors and fabric sellers' },
+      // Add other lines...
+    ],
+  },
+  'food-market': {
+    name: 'Food Market',
+    sections: [
+      { id: 'bali-line', name: 'Bali Line', description: 'Fresh vegetables and fruits' },
+      { id: 'plantain-line', name: 'Plantain Line', description: 'Staple food sellers' },
+      { id: 'green-spice-line', name: 'Green Spice Line', description: 'Spices and herbs' },
+      // Add other lines...
+    ],
+  },
+  // More markets if needed...
+};
+
+export default function MarketDetails() {
+  const { marketId } = useParams();
+  const market = marketData[marketId];
+
+  if (!market) return <p className="p-6 text-red-600">Market not found.</p>;
+
+  return (
+    <div className="p-6 max-w-5xl mx-auto">
+      <h1 className="text-3xl font-bold mb-6 text-primary">{market.name} - Sections</h1>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {market.sections.map(({ id, name, description }) => (
+          <Link
+            to={`/markets/${marketId}/${id}`}
+            key={id}
+            className="bg-white rounded-xl shadow-neonBlue hover:shadow-neonGreen transition p-4 cursor-pointer"
+          >
+            <h2 className="text-xl font-semibold mb-2">{name}</h2>
+            <p className="text-gray-600 text-justify">{description}</p>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
+Routing Update in App.jsx
+jsx
+Copy
+import MarketDetails from './pages/MarketDetails';
+
+<Route path="/markets/:marketId" element={<MarketDetails />} />
+Your task now:
+Build and style the Market Details page.
+
+Make sure the sections/lines cards are clickable and navigate properly.
+
+Use the dummy data above or extend with local names.
