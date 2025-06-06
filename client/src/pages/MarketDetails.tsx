@@ -407,7 +407,7 @@ export default function MarketDetails() {
             <div className="mt-3 border-t border-gray-200 pt-3">
               {/* Horizontal Chat Messages */}
               <div className="h-32 overflow-y-auto mb-3 border border-gray-300 rounded-xl p-3 bg-gray-50">
-                <div className="space-y-2">
+                <div className="space-y-1">
                   {marketMessages.map((msg) => (
                     <div key={msg.id} className={`flex ${msg.sender === 'You' ? 'justify-end' : 'justify-start'}`}>
                       <div className={`max-w-xs px-2 py-1 rounded-lg ${
@@ -418,12 +418,12 @@ export default function MarketDetails() {
                           : 'bg-white text-gray-800 shadow-sm'
                       }`}>
                         {!msg.isSystem && msg.sender !== 'You' && (
-                          <div className="text-xs font-semibold mb-1 text-blue-600">
+                          <div className="text-xs font-semibold text-blue-600 leading-tight">
                             {msg.sender}
                           </div>
                         )}
-                        <div className="text-xs">{msg.text}</div>
-                        <div className={`text-xs mt-1 ${
+                        <div className="text-xs leading-tight">{msg.text}</div>
+                        <div className={`text-xs leading-tight ${
                           msg.isSystem 
                             ? 'text-yellow-600'
                             : msg.sender === 'You' 
