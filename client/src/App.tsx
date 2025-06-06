@@ -41,6 +41,7 @@ import Marketplace from "./pages/Marketplace";
 import AuctionDetail from "./pages/AuctionDetail";
 import AuctionPostProcess from "./components/AuctionPostProcess";
 import ProfessionalServices from "./pages/ProfessionalServices";
+import ServiceCategoryProfessionals from "./pages/ServiceCategoryProfessionals";
 import ProfessionalProfile from "./pages/ProfessionalProfile";
 import MarketsOverview from "./pages/MarketsOverview";
 
@@ -88,7 +89,10 @@ function Router() {
       <Route path="/marketplace" component={Marketplace} />
       <Route path="/auction/:id" component={AuctionDetail} />
       <Route path="/professional-services" component={ProfessionalServices} />
+      <Route path="/services" component={ProfessionalServices} />
+      <Route path="/services/:categoryId" component={ServiceCategoryProfessionals} />
       <Route path="/professional-profile/:username" component={ProfessionalProfile} />
+      <Route path="/professional/:id" component={ProfessionalProfile} />
       <Route component={NotFound} />
     </Switch>
   );

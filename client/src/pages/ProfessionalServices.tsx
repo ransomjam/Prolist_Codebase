@@ -10,7 +10,6 @@ export default function ProfessionalServices() {
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
   const [priceRange, setPriceRange] = useState('All Prices');
   const [experienceLevel, setExperienceLevel] = useState('All Experience');
-  const [expandedCard, setExpandedCard] = useState<string | null>(null);
   const [chatOpen, setChatOpen] = useState(false);
   const [selectedProfessional, setSelectedProfessional] = useState<Professional | null>(null);
 
@@ -87,10 +86,6 @@ export default function ProfessionalServices() {
 
     return filtered;
   }, [searchTerm, selectedCategory, priceRange, experienceLevel]);
-
-  const toggleCard = (categoryId: string) => {
-    setExpandedCard(expandedCard === categoryId ? null : categoryId);
-  };
 
   const handleSearchKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -204,91 +199,25 @@ export default function ProfessionalServices() {
             {filteredData.map((category) => (
               <div key={category.id} className="bg-white rounded-2xl shadow-lg overflow-hidden border-2 border-gray-100">
                 {/* Category Header */}
-                <div
-                  onClick={() => toggleCard(category.id)}
-                  className="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-50 transition-colors duration-200"
-                >
-                  <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                      <category.icon className="w-6 h-6 text-white" />
+                <Link href={`/services/${category.id}`}>
+                  <div className="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-50 transition-colors duration-200">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                        <category.icon className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold text-gray-800">{category.name}</h3>
+                        <p className="text-gray-600 text-sm">{category.professionals.length} professionals available</p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="text-xl font-bold text-gray-800">{category.name}</h3>
-                      <p className="text-gray-600 text-sm">{category.professionals.length} professionals available</p>
-                    </div>
-                  </div>
-                  <ChevronDown
-                    className={`w-6 h-6 text-gray-400 transition-transform duration-200 ${
-                      expandedCard === category.id ? 'rotate-180' : ''
-                    }`}
-                  />
-                </div>
-
-                {/* Professionals Grid */}
-                {expandedCard === category.id && (
-                  <div className="px-6 pb-6">
-                    <div className="grid md:grid-cols-2 gap-4">
-                      {category.professionals.map((professional) => (
-                        <div
-                          key={professional.id}
-                          className="border border-gray-200 rounded-xl p-4 hover:shadow-md transition-all duration-200 hover:border-blue-300"
-                        >
-                          <div className="flex items-start space-x-4">
-                            <img
-                              src={professional.avatar}
-                              alt={professional.name}
-                              className="w-14 h-14 rounded-full object-cover border-2 border-gray-200"
-                            />
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center justify-between">
-                                <h4 className="font-semibold text-gray-800 truncate">{professional.name}</h4>
-                                {professional.verified && (
-                                  <ShieldCheckIcon className="w-5 h-5 text-blue-500 flex-shrink-0" />
-                                )}
-                              </div>
-                              
-                              <div className="flex items-center space-x-2 mt-1">
-                                <div className="flex items-center">
-                                  <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                                  <span className="text-sm text-gray-600 ml-1">{professional.rating}</span>
-                                </div>
-                                <span className="text-gray-300">•</span>
-                                <span className="text-sm text-gray-600">{professional.experience} years</span>
-                              </div>
-
-                              <p className="text-sm text-gray-600 mt-2 line-clamp-2">{professional.bio}</p>
-                              
-                              <div className="flex items-center justify-between mt-3">
-                                <div className="flex items-center space-x-3">
-                                  <span className="text-sm font-semibold text-blue-600">{professional.rate}</span>
-                                  <div className="flex items-center text-sm text-gray-500">
-                                    <MapPin className="w-3 h-3 mr-1" />
-                                    <span className="truncate">{professional.location}</span>
-                                  </div>
-                                </div>
-                                
-                                <div className="flex space-x-2">
-                                  <button
-                                    onClick={() => openChat(professional)}
-                                    className="p-2 bg-blue-100 hover:bg-blue-200 rounded-lg transition-colors duration-200"
-                                    title="Chat with professional"
-                                  >
-                                    <ChatBubbleLeftRightIcon className="w-4 h-4 text-blue-600" />
-                                  </button>
-                                  <Link href={`/professional/${professional.id}`}>
-                                    <button className="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-colors duration-200">
-                                      View Profile
-                                    </button>
-                                  </Link>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
+                    <div className="flex items-center space-x-3">
+                      <span className="text-sm font-medium text-blue-600">View Professionals</span>
+                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                        <ChevronDown className="w-4 h-4 text-blue-600 -rotate-90" />
+                      </div>
                     </div>
                   </div>
-                )}
+                </Link>
               </div>
             ))}
           </div>
