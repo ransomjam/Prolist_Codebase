@@ -34,7 +34,7 @@ export default function LandingPage() {
           <h1 
             ref={(el) => setElementRef('hero-title', el)}
             data-animation-id="hero-title"
-            className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold drop-shadow-2xl mb-4 sm:mb-6 leading-tight max-w-4xl mx-auto gpu-accelerated will-change-transform ${getAnimationClass('hero-title', 1)}`}
+            className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold drop-shadow-2xl mb-4 sm:mb-6 leading-tight max-w-4xl mx-auto gpu-accelerated will-change-transform ${getAnimationClass('hero-title', 1, 'slide')}`}
             style={getAnimationStyle(1)}
           >
             Welcome to <span className="text-neonGreen">ProList</span>
@@ -42,7 +42,7 @@ export default function LandingPage() {
           <p 
             ref={(el) => setElementRef('hero-subtitle', el)}
             data-animation-id="hero-subtitle"
-            className={`text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl mb-6 sm:mb-8 lg:mb-10 drop-shadow-lg max-w-3xl mx-auto leading-relaxed gpu-accelerated will-change-transform ${getAnimationClass('hero-subtitle', 2)}`}
+            className={`text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl mb-6 sm:mb-8 lg:mb-10 drop-shadow-lg max-w-3xl mx-auto leading-relaxed gpu-accelerated will-change-transform ${getAnimationClass('hero-subtitle', 2, 'slide')}`}
             style={getAnimationStyle(2)}
           >
             Cameroon's #1 Digital Marketplace for Trust & Growth
