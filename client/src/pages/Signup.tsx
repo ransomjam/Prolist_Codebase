@@ -140,6 +140,7 @@ export default function Signup() {
               <option value="vendor">Vendor</option>
               <option value="user">User</option>
               <option value="investor">Investor</option>
+              <option value="professional">Professional Service Provider</option>
             </select>
           </div>
 
@@ -160,6 +161,30 @@ export default function Signup() {
                 <option value="">Select Vendor Type</option>
                 <option value="online">Online Vendor</option>
                 <option value="shop">Shop Owner</option>
+              </select>
+            </div>
+          )}
+
+          {/* Show service category selection only when professional is selected */}
+          {form.userType === 'professional' && (
+            <div>
+              <label htmlFor="serviceCategory" className="block text-sm font-medium text-gray-700 mb-1">
+                Service Category
+              </label>
+              <select
+                id="serviceCategory"
+                name="serviceCategory"
+                value={form.serviceCategory}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                required
+              >
+                <option value="">Select Service Category</option>
+                {serviceCategories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.icon} {category.name}
+                  </option>
+                ))}
               </select>
             </div>
           )}

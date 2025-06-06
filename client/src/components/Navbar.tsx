@@ -105,7 +105,11 @@ export default function Navbar() {
                       <StockIcon className="w-7 h-7 text-indigo-600 group-hover:scale-110 transition-transform duration-200" />
                       <div className="text-xs font-semibold text-indigo-800 text-center">Stocks</div>
                     </a>
-                    <a href="/verified" className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-emerald-50 via-emerald-100 to-emerald-150 hover:from-emerald-100 hover:via-emerald-150 hover:to-emerald-200 transition-all duration-300 border border-emerald-200 shadow-sm hover:shadow-md col-span-2">
+                    <a href="/professional-services" className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-teal-50 via-teal-100 to-teal-150 hover:from-teal-100 hover:via-teal-150 hover:to-teal-200 transition-all duration-300 border border-teal-200 shadow-sm hover:shadow-md">
+                      <div className="text-lg group-hover:scale-110 transition-transform duration-200">🔧</div>
+                      <div className="text-xs font-semibold text-teal-800 text-center">Services</div>
+                    </a>
+                    <a href="/verified" className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-emerald-50 via-emerald-100 to-emerald-150 hover:from-emerald-100 hover:via-emerald-150 hover:to-emerald-200 transition-all duration-300 border border-emerald-200 shadow-sm hover:shadow-md">
                       <CheckCircle className="w-7 h-7 text-emerald-600 group-hover:scale-110 transition-transform duration-200" />
                       <div className="text-xs font-semibold text-emerald-800 text-center">Verified Directory</div>
                     </a>

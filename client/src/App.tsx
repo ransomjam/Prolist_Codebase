@@ -40,6 +40,8 @@ import AdminEscrowPanel from "./pages/AdminEscrowPanel";
 import Marketplace from "./pages/Marketplace";
 import AuctionDetail from "./pages/AuctionDetail";
 import AuctionPostProcess from "./components/AuctionPostProcess";
+import ProfessionalServices from "./pages/ProfessionalServices";
+import ProfessionalProfile from "./pages/ProfessionalProfile";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -79,6 +81,8 @@ function Router() {
       <Route path="/admin-escrow" component={AdminEscrowPanel} />
       <Route path="/marketplace" component={Marketplace} />
       <Route path="/auction/:id" component={AuctionDetail} />
+      <Route path="/professional-services" component={ProfessionalServices} />
+      <Route path="/professional-profile/:username" component={ProfessionalProfile} />
       <Route component={NotFound} />
     </Switch>
   );

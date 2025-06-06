@@ -1,4 +1,4 @@
-import { Compass, Store, MapPin, Building, Gavel, Utensils, Shirt, Laptop, Wrench, ShoppingBag, Plus, TrendingUp } from "lucide-react";
+import { Compass, Store, MapPin, Building, Gavel, Utensils, Shirt, Laptop, Wrench, ShoppingBag, Plus, TrendingUp, Users } from "lucide-react";
 import Card from "../components/Card";
 import Button from "../components/Button";
 import { markets } from "../data/demoData";
@@ -11,8 +11,8 @@ export default function Homepage() {
   const quickActions = [
     { icon: ShoppingBag, label: "Browse Products", href: "/products", color: "from-blue-500 to-blue-600" },
     { icon: Gavel, label: "Live Auctions", href: "/auctions", color: "from-orange-500 to-red-500" },
-    { icon: Plus, label: "Add Listing", href: "/product-listing", color: "from-green-500 to-emerald-600" },
-    { icon: TrendingUp, label: "My Orders", href: "/buyer-orders", color: "from-purple-500 to-purple-600" }
+    { icon: Users, label: "Find Services", href: "/professional-services", color: "from-teal-500 to-cyan-600" },
+    { icon: Plus, label: "Add Listing", href: "/product-listing", color: "from-green-500 to-emerald-600" }
   ];
 
   const stats = [
