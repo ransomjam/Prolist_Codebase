@@ -1,0 +1,113 @@
+Build a Professional Services Page for ProList with the following features and design details:
+
+1. Professional Services Page (/src/pages/ProfessionalServices.jsx)
+Show a bold header:
+“Find Trusted Professionals for Any Job”
+
+Add a search bar to filter services/professionals by name or category.
+
+Display a responsive grid of professional service categories as cards. Each card:
+
+Has an icon or professional-looking image.
+
+Shows the service name (e.g., Architecture, Plumbing, Web Development).
+
+On click, filters the professionals list below by that category.
+
+Below categories, show a list of dummy professional providers with:
+
+Profile photo, name, rating/trust badge, and short expertise description.
+
+Each provider card links to their professional profile page.
+
+Add a “Chat” button on provider cards and profile pages for in-app messaging.
+
+Use neon borders and hover effects, clean spacing, and a professional color palette matching ProList’s branding.
+
+Mobile friendly, adjusts grid columns properly.
+
+2. Signup Page Update (/src/pages/Signup.jsx)
+Add a “Professional Service Provider” option under user types.
+
+When selected, show a dropdown to choose the service category they provide.
+
+On signup, save this info with the user profile.
+
+3. Professional Profile Page (/src/pages/ProfessionalProfile.jsx)
+Displays the provider’s:
+
+Name, profile photo, verified badge, trust score
+
+Service category, detailed bio or description
+
+List of professional listings (optional)
+
+Chat interface placeholder to message the professional
+
+Back button to go back to services page.
+
+4. In-App Chat (/src/components/ChatBox.jsx)
+A simple chat UI component supporting:
+
+Message input box
+
+Scrollable message window
+
+Messages showing sender name, time
+
+Use React state to store messages locally (simulate real chat)
+
+Integrate ChatBox in professional profiles and provider listings.
+
+5. Dummy Data
+Include an array of professional service categories (icons + names).
+
+Include an array of dummy professionals with:
+
+id, name, photo URL, service category, rating, trust count, bio, username.
+
+6. Routing and State Management
+Proper React Router setup to navigate between:
+
+/professional-services (services list)
+
+/professional-profile/:username (individual profiles)
+
+/signup updated for providers
+
+Manage professional user data and chat messages in React state or context for demo.
+
+7. Design & UX
+Use Tailwind CSS with neon glow effects for cards and buttons.
+
+Clean, modern fonts, spacing, and colors consistent with ProList brand.
+
+Responsive layout with mobile-first grid.
+
+Smooth hover animations on cards and buttons.
+
+BONUS: Optional search filter bar that filters professionals as you type.
+Example Data Snippets:
+
+js
+Copy
+const serviceCategories = [
+  { id: 'architecture', name: 'Architecture', icon: '🏛️' },
+  { id: 'plumbing', name: 'Plumbing & Repairs', icon: '🔧' },
+  { id: 'webdev', name: 'Web Development', icon: '💻' },
+  // ...more categories
+];
+
+const dummyProfessionals = [
+  {
+    id: 'john_doe',
+    name: 'John Doe',
+    photo: 'https://i.postimg.cc/jd1.jpg',
+    category: 'architecture',
+    rating: 4.8,
+    trustCount: 120,
+    bio: 'Experienced architect with 10 years in residential design.',
+    username: 'john_doe',
+  },
+  // ...more professionals
+];

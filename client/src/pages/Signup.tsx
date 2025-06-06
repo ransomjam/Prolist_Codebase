@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
+import { serviceCategories } from '../data/professionalData';
 
 interface SignupForm {
   fullName: string;
   username: string;
   userType: string;
   vendorType: string;
+  serviceCategory: string;
   location: string;
   password: string;
 }
@@ -17,6 +19,7 @@ export default function Signup() {
     username: '',
     userType: '',
     vendorType: '',
+    serviceCategory: '',
     location: '',
     password: '',
   });
@@ -40,6 +43,11 @@ export default function Signup() {
       return;
     }
 
+    if (form.userType === 'professional' && !form.serviceCategory) {
+      alert('Please select a service category');
+      return;
+    }
+
     // Check if username already exists
     const registeredUsers = JSON.parse(localStorage.getItem('prolist_registered_users') || '[]');
     const userExists = registeredUsers.find((u: any) => u.username === form.username);
@@ -56,6 +64,7 @@ export default function Signup() {
       name: form.fullName,
       userType: form.userType,
       vendorType: form.vendorType,
+      serviceCategory: form.serviceCategory,
       location: form.location,
       password: form.password
     };
