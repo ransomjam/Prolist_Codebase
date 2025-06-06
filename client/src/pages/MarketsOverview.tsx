@@ -195,77 +195,49 @@ export default function MarketsOverview() {
             {filteredMarkets.map((market, index) => (
             <div key={market.id} className="group">
               <Link to={`/markets/${market.id}`}>
-                <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] relative h-full">
-                  {/* Market Image */}
-                  <div className="relative h-56 lg:h-64 overflow-hidden">
+                <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-[1.02] relative">
+                  {/* Compact Market Image */}
+                  <div className="relative h-32 overflow-hidden">
                     <div className="w-full h-full bg-gradient-to-br from-blue-100 via-purple-100 to-teal-100 flex items-center justify-center">
-                      <div className="text-6xl sm:text-7xl opacity-30">🏪</div>
+                      <div className="text-4xl opacity-30">🏪</div>
                     </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent"></div>
                     
-                    {/* Market Stats Overlay */}
-                    <div className="absolute top-4 left-4 flex gap-2">
+                    {/* Compact Stats Overlay */}
+                    <div className="absolute top-2 left-2 flex gap-1">
                       {market.verified && (
-                        <div className="bg-emerald-500 text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-lg">
-                          <Shield size={12} />
+                        <div className="bg-emerald-500 text-white px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+                          <Shield size={10} />
                           Verified
                         </div>
                       )}
-                      <div className="bg-white/90 backdrop-blur-md text-gray-800 px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-lg">
-                        <Star size={12} />
+                      <div className="bg-white/90 backdrop-blur-md text-gray-800 px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+                        <Star size={10} />
                         {market.rating}
                       </div>
                     </div>
 
-                    <div className="absolute top-4 right-4">
-                      <div className="bg-white/90 backdrop-blur-md text-gray-800 px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-lg">
-                        <Users size={12} />
-                        {market.vendors}+ vendors
+                    <div className="absolute top-2 right-2">
+                      <div className="bg-white/90 backdrop-blur-md text-gray-800 px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+                        <Users size={10} />
+                        {market.vendors}+
                       </div>
                     </div>
                   </div>
                   
-                  {/* Market Info */}
-                  <div className="p-6 sm:p-8">
-                    <div className="flex items-start justify-between mb-4">
-                      <h2 className="text-xl sm:text-2xl font-bold text-gray-800 group-hover:text-blue-600 transition-colors duration-300 leading-tight">
+                  {/* Compact Market Info */}
+                  <div className="p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <h2 className="text-lg font-bold text-gray-800 group-hover:text-blue-600 transition-colors duration-300">
                         {market.name}
                       </h2>
-                      <MapPin className="text-gray-400 group-hover:text-blue-500 transition-colors duration-300 flex-shrink-0 ml-2" size={20} />
-                    </div>
-                    
-                    <p className="text-gray-600 text-sm sm:text-base leading-relaxed mb-6 group-hover:text-gray-700 transition-colors duration-300">
-                      {market.description}
-                    </p>
-
-                    {/* Market Sections */}
-                    <div className="mb-6">
-                      <div className="text-xs sm:text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Available Sections</div>
-                      <div className="flex flex-wrap gap-2">
-                        {market.sections.slice(0, 3).map((section, idx) => (
-                          <span
-                            key={idx}
-                            className="bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium"
-                          >
-                            {section}
-                          </span>
-                        ))}
-                        {market.sections.length > 3 && (
-                          <span className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-xs font-medium">
-                            +{market.sections.length - 3} more
-                          </span>
-                        )}
-                      </div>
+                      <MapPin className="text-gray-400 group-hover:text-blue-500 transition-colors duration-300" size={16} />
                     </div>
 
-                    {/* Action Button */}
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center text-sm text-gray-500">
-                        <div className="w-2 h-2 bg-emerald-500 rounded-full mr-2 animate-pulse"></div>
-                        Open Now
-                      </div>
-                      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold group-hover:from-blue-700 group-hover:to-purple-700 transition-all duration-300 shadow-lg">
-                        Explore Market →
+                    {/* Centered Action Button */}
+                    <div className="text-center">
+                      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold group-hover:from-blue-700 group-hover:to-purple-700 transition-all duration-300 shadow-lg inline-block">
+                        Explore Now →
                       </div>
                     </div>
                   </div>
