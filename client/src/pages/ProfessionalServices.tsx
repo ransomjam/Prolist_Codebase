@@ -1,35 +1,88 @@
-import { useState, KeyboardEvent, useEffect, useRef } from 'react';
+import { useState, KeyboardEvent, useEffect, useRef, useMemo } from 'react';
 import { Link } from 'wouter';
-import { Search, Star, MapPin, Calendar, Briefcase, ChevronDown } from 'lucide-react';
+import { Search, Star, MapPin, Calendar, Briefcase, ChevronDown, Filter } from 'lucide-react';
 import { ShieldCheckIcon, ChatBubbleLeftRightIcon } from '@heroicons/react/24/outline';
 import { serviceCategories, dummyProfessionals, type Professional, type ServiceCategory } from '../data/professionalData';
 import ChatBox from '../components/ChatBox';
 
 export default function ProfessionalServices() {
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All Categories');
+  const [priceRange, setPriceRange] = useState('All Prices');
+  const [experienceLevel, setExperienceLevel] = useState('All Experience');
   const [expandedCard, setExpandedCard] = useState<string | null>(null);
   const [chatOpen, setChatOpen] = useState(false);
   const [selectedProfessional, setSelectedProfessional] = useState<Professional | null>(null);
   const [visibleCards, setVisibleCards] = useState<Set<string>>(new Set());
   const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map());
 
+  // Filter categories and create arrays for filter dropdowns
+  const categoryOptions = ['All Categories', ...serviceCategories.map(cat => cat.name)];
+  const priceOptions = ['All Prices', 'Under 10,000 FCFA', '10,000 - 25,000 FCFA', '25,000 - 50,000 FCFA', 'Over 50,000 FCFA'];
+  const experienceOptions = ['All Experience', 'Entry Level (0-2 years)', 'Mid Level (3-5 years)', 'Senior Level (6+ years)', 'Expert Level (10+ years)'];
+
   // Get professionals by category for accordion display
   const getProfessionalsByCategory = (categoryId: string) => {
     return dummyProfessionals.filter(professional => professional.category === categoryId);
   };
 
-  // Filter categories based on search
-  const filteredCategories = serviceCategories.filter(category => {
-    if (!searchTerm) return true;
-    
-    const categoryMatches = category.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const professionalsMatch = getProfessionalsByCategory(category.id).some(professional =>
-      professional.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      professional.bio.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    
-    return categoryMatches || professionalsMatch;
-  });
+  // Enhanced filtering logic with multiple criteria
+  const filteredData = useMemo(() => {
+    let filtered = serviceCategories.map(category => ({
+      ...category,
+      professionals: getProfessionalsByCategory(category.id)
+    }));
+
+    // Apply search filter
+    if (searchTerm) {
+      filtered = filtered.map(category => ({
+        ...category,
+        professionals: category.professionals.filter(professional =>
+          professional.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          professional.bio.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          category.name.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      })).filter(category => 
+        category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        category.professionals.length > 0
+      );
+    }
+
+    // Apply category filter
+    if (selectedCategory !== 'All Categories') {
+      filtered = filtered.filter(category => category.name === selectedCategory);
+    }
+
+    // Apply experience level filter (using experience as years)
+    if (experienceLevel !== 'All Experience') {
+      filtered = filtered.map(category => ({
+        ...category,
+        professionals: category.professionals.filter(professional => {
+          // Extract years from experience string or use completedProjects as proxy
+          const experienceStr = professional.experience?.toString() || '0';
+          const experienceYears = parseInt(experienceStr.replace(/[^\d]/g, '')) || professional.completedProjects || 0;
+          
+          switch (experienceLevel) {
+            case 'Entry Level (0-2 years)':
+              return experienceYears <= 2;
+            case 'Mid Level (3-5 years)':
+              return experienceYears >= 3 && experienceYears <= 5;
+            case 'Senior Level (6+ years)':
+              return experienceYears >= 6 && experienceYears < 10;
+            case 'Expert Level (10+ years)':
+              return experienceYears >= 10;
+            default:
+              return true;
+          }
+        })
+      })).filter(category => category.professionals.length > 0);
+    }
+
+    return filtered;
+  }, [searchTerm, selectedCategory, priceRange, experienceLevel]);
+
+  // Count total professionals after filtering
+  const totalProfessionals = filteredData.reduce((total, category) => total + category.professionals.length, 0);
 
   // Enhanced Intersection Observer for bidirectional scroll animations
   useEffect(() => {
@@ -188,16 +241,86 @@ export default function ProfessionalServices() {
               Connect with verified local service providers for all your needs. Find trusted professionals in your area.
             </p>
             
-            {/* Search Bar */}
-            <div className="relative max-w-2xl mx-auto animate-scroll-up">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 z-10" size={20} />
-              <input
-                type="text"
-                placeholder="Search services or professionals..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 sm:py-5 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-teal-500/50 focus:border-teal-400 text-base sm:text-lg text-gray-900 shadow-xl transition-all duration-300 hover:shadow-2xl gpu-accelerated will-change-transform"
-              />
+            {/* Enhanced Search and Filter Interface */}
+            <div className="max-w-6xl mx-auto space-y-6">
+              {/* Search Bar */}
+              <div className="relative max-w-2xl mx-auto">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 z-10" size={20} />
+                <input
+                  type="text"
+                  placeholder="Search services or professionals..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-12 pr-4 py-4 sm:py-5 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-teal-500/50 focus:border-teal-400 text-base sm:text-lg text-gray-900 shadow-xl transition-all duration-300 hover:shadow-2xl"
+                />
+              </div>
+
+              {/* Filter Controls */}
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {/* Category Filter */}
+                  <div className="relative">
+                    <Filter className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
+                    <select
+                      value={selectedCategory}
+                      onChange={(e) => setSelectedCategory(e.target.value)}
+                      className="w-full pl-12 pr-8 py-3 border border-white/30 rounded-xl focus:ring-2 focus:ring-teal-400 focus:border-transparent text-gray-700 bg-white/90 cursor-pointer appearance-none"
+                    >
+                      {categoryOptions.map(option => (
+                        <option key={option} value={option}>{option}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Price Range Filter */}
+                  <div className="relative">
+                    <Briefcase className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
+                    <select
+                      value={priceRange}
+                      onChange={(e) => setPriceRange(e.target.value)}
+                      className="w-full pl-12 pr-8 py-3 border border-white/30 rounded-xl focus:ring-2 focus:ring-teal-400 focus:border-transparent text-gray-700 bg-white/90 cursor-pointer appearance-none"
+                    >
+                      {priceOptions.map(option => (
+                        <option key={option} value={option}>{option}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Experience Filter */}
+                  <div className="relative">
+                    <Star className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
+                    <select
+                      value={experienceLevel}
+                      onChange={(e) => setExperienceLevel(e.target.value)}
+                      className="w-full pl-12 pr-8 py-3 border border-white/30 rounded-xl focus:ring-2 focus:ring-teal-400 focus:border-transparent text-gray-700 bg-white/90 cursor-pointer appearance-none"
+                    >
+                      {experienceOptions.map(option => (
+                        <option key={option} value={option}>{option}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                {/* Results Summary */}
+                <div className="mt-4 text-center">
+                  <p className="text-white/90">
+                    Showing {totalProfessionals} professionals across {filteredData.length} categories
+                    {(searchTerm || selectedCategory !== 'All Categories' || priceRange !== 'All Prices' || experienceLevel !== 'All Experience') && (
+                      <button
+                        onClick={() => {
+                          setSearchTerm('');
+                          setSelectedCategory('All Categories');
+                          setPriceRange('All Prices');
+                          setExperienceLevel('All Experience');
+                        }}
+                        className="ml-4 bg-white/20 hover:bg-white/30 px-4 py-1 rounded-full text-sm transition-colors"
+                      >
+                        Clear Filters
+                      </button>
+                    )}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -216,11 +339,31 @@ export default function ProfessionalServices() {
           </div>
           
           {/* Enhanced Responsive Grid: 1 column mobile, 2 tablet, 3 desktop with better spacing */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-            {filteredCategories.map((category: ServiceCategory, index) => {
-              const categoryProfessionals = getProfessionalsByCategory(category.id);
-              const isExpanded = expandedCard === category.id;
-              const isVisible = visibleCards.has(category.id);
+          {filteredData.length === 0 ? (
+            <div className="text-center bg-white rounded-3xl shadow-xl p-12 col-span-full">
+              <div className="text-6xl mb-6">🔍</div>
+              <h3 className="text-2xl font-bold text-gray-800 mb-4">No Professionals Found</h3>
+              <p className="text-gray-600 mb-6">
+                No professionals match your search criteria. Try adjusting your filters or search terms.
+              </p>
+              <button
+                onClick={() => {
+                  setSearchTerm('');
+                  setSelectedCategory('All Categories');
+                  setPriceRange('All Prices');
+                  setExperienceLevel('All Experience');
+                }}
+                className="bg-gradient-to-r from-teal-600 to-blue-600 text-white px-6 py-3 rounded-full font-semibold hover:from-teal-700 hover:to-blue-700 transition-all duration-300"
+              >
+                Clear All Filters
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+              {filteredData.map((category, index) => {
+                const categoryProfessionals = category.professionals;
+                const isExpanded = expandedCard === category.id;
+                const isVisible = visibleCards.has(category.id);
               
               return (
                 <div
@@ -391,19 +534,9 @@ export default function ProfessionalServices() {
                 </div>
               );
             })}
-          </div>
-        </div>
-
-        {/* No Results */}
-        {filteredCategories.length === 0 && (
-          <div className="text-center py-12">
-            <div className="text-gray-400 mb-4">
-              <Search size={48} className="mx-auto" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No services found</h3>
-            <p className="text-gray-600 text-justify">Try adjusting your search terms to find relevant services</p>
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       {/* Chat Modal */}
