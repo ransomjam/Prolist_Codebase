@@ -1,5 +1,6 @@
 import { Link } from 'wouter';
-import { MapPin, Users, Star, Shield } from 'lucide-react';
+import { MapPin, Users, Star, Shield, Search, Filter } from 'lucide-react';
+import { useState, useMemo } from 'react';
 
 const markets = [
   {
@@ -9,7 +10,9 @@ const markets = [
     vendors: 450,
     rating: 4.8,
     verified: true,
-    sections: ['Electronics', 'Textiles', 'Food Items', 'Cosmetics']
+    sections: ['Electronics', 'Textiles', 'Food Items', 'Cosmetics'],
+    category: 'General',
+    location: 'Central Bamenda'
   },
   {
     id: 'food-market',
@@ -18,7 +21,9 @@ const markets = [
     vendors: 280,
     rating: 4.9,
     verified: true,
-    sections: ['Fresh Produce', 'Meat & Fish', 'Spices', 'Grains']
+    sections: ['Fresh Produce', 'Meat & Fish', 'Spices', 'Grains'],
+    category: 'Food & Agriculture',
+    location: 'Near Main Market'
   },
   {
     id: 'computer-village',
@@ -27,7 +32,9 @@ const markets = [
     vendors: 120,
     rating: 4.7,
     verified: true,
-    sections: ['Laptops', 'Smartphones', 'Accessories', 'Repairs']
+    sections: ['Laptops', 'Smartphones', 'Accessories', 'Repairs'],
+    category: 'Technology',
+    location: 'Commercial Avenue'
   },
   {
     id: 'craft-market',
@@ -36,7 +43,9 @@ const markets = [
     vendors: 85,
     rating: 4.6,
     verified: true,
-    sections: ['Traditional Art', 'Jewelry', 'Sculptures', 'Textiles']
+    sections: ['Traditional Art', 'Jewelry', 'Sculptures', 'Textiles'],
+    category: 'Arts & Culture',
+    location: 'Cultural Center Area'
   },
   {
     id: 'motor-park',
@@ -45,7 +54,9 @@ const markets = [
     vendors: 95,
     rating: 4.5,
     verified: true,
-    sections: ['Auto Parts', 'Tires', 'Repairs', 'Accessories']
+    sections: ['Auto Parts', 'Tires', 'Repairs', 'Accessories'],
+    category: 'Automotive',
+    location: 'Motor Park Area'
   },
   {
     id: 'night-market',
@@ -54,23 +65,87 @@ const markets = [
     vendors: 160,
     rating: 4.4,
     verified: true,
-    sections: ['Street Food', 'Beverages', 'Entertainment', 'Snacks']
+    sections: ['Street Food', 'Beverages', 'Entertainment', 'Snacks'],
+    category: 'Entertainment & Food',
+    location: 'City Center'
   }
 ];
 
+const categories = ['All Categories', 'General', 'Food & Agriculture', 'Technology', 'Arts & Culture', 'Automotive', 'Entertainment & Food'];
+
 export default function MarketsOverview() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All Categories');
+
+  const filteredMarkets = useMemo(() => {
+    return markets.filter(market => {
+      const matchesSearch = market.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                           market.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                           market.location.toLowerCase().includes(searchQuery.toLowerCase());
+      
+      const matchesCategory = selectedCategory === 'All Categories' || market.category === selectedCategory;
+      
+      return matchesSearch && matchesCategory;
+    });
+  }, [searchQuery, selectedCategory]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-teal-50 p-4 sm:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-          <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 mb-4 sm:mb-6">
+        <div className="text-center mb-8 sm:mb-12">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 mb-4">
             Bamenda Markets
           </h1>
-          <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+          <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto mb-8">
             Discover authentic local markets offering everything from fresh produce to electronics. 
             Connect with trusted vendors and explore the vibrant commercial heart of Bamenda.
           </p>
+
+          {/* Search and Filter Section */}
+          <div className="bg-white rounded-3xl shadow-xl p-6 sm:p-8 mb-8">
+            <div className="flex flex-col lg:flex-row gap-4 items-center justify-center">
+              {/* Search Input */}
+              <div className="relative flex-1 max-w-md">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                <input
+                  type="text"
+                  placeholder="Search markets, locations, or products..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-400"
+                />
+              </div>
+
+              {/* Category Filter */}
+              <div className="relative">
+                <Filter className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="pl-12 pr-8 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 bg-white cursor-pointer appearance-none min-w-[200px]"
+                >
+                  {categories.map(category => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Results Counter */}
+            <div className="mt-4 text-center">
+              <p className="text-gray-600">
+                Showing {filteredMarkets.length} of {markets.length} markets
+                {selectedCategory !== 'All Categories' && (
+                  <span className="ml-2">
+                    in <span className="font-semibold text-blue-600">{selectedCategory}</span>
+                  </span>
+                )}
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Statistics */}
@@ -96,8 +171,29 @@ export default function MarketsOverview() {
         </div>
 
         {/* Markets Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-8">
-          {markets.map((market, index) => (
+        {filteredMarkets.length === 0 ? (
+          <div className="text-center bg-white rounded-3xl shadow-xl p-12">
+            <div className="text-6xl mb-6">🔍</div>
+            <h3 className="text-2xl font-bold text-gray-800 mb-4">No Markets Found</h3>
+            <p className="text-gray-600 mb-6">
+              {searchQuery || selectedCategory !== 'All Categories' 
+                ? `No markets match your search criteria. Try adjusting your filters or search terms.`
+                : 'No markets are currently available.'
+              }
+            </p>
+            <button
+              onClick={() => {
+                setSearchQuery('');
+                setSelectedCategory('All Categories');
+              }}
+              className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-full font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300"
+            >
+              Clear Filters
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-8">
+            {filteredMarkets.map((market, index) => (
             <div key={market.id} className="group">
               <Link to={`/markets/${market.id}`}>
                 <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-2xl hover:scale-105 relative">
@@ -178,7 +274,8 @@ export default function MarketsOverview() {
               </Link>
             </div>
           ))}
-        </div>
+          </div>
+        )}
 
         {/* Footer CTA */}
         <div className="text-center mt-16 sm:mt-20">
