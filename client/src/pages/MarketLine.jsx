@@ -11,9 +11,8 @@ const dummyShops = [
     trusted: true, 
     rating: 4.7, 
     reviews: 156,
-    phone: '+237 670 123 456',
+    phone: '+237670123456',
     specialties: ['Smartphones', 'Laptops', 'Accessories'],
-    image: '/api/placeholder/300/200',
     verified: true,
     yearsInBusiness: 5,
     trustScore: 95
@@ -26,9 +25,8 @@ const dummyShops = [
     trusted: true, 
     rating: 4.9, 
     reviews: 203,
-    phone: '+237 681 234 567',
+    phone: '+237681234567',
     specialties: ['Traditional Wear', 'Modern Fashion', 'Alterations'],
-    image: '/api/placeholder/300/200',
     verified: true,
     yearsInBusiness: 8,
     trustScore: 98
@@ -41,9 +39,8 @@ const dummyShops = [
     trusted: false, 
     rating: 4.3, 
     reviews: 87,
-    phone: '+237 684 567 890',
+    phone: '+237684567890',
     specialties: ['Import Electronics', 'Wholesale'],
-    image: '/api/placeholder/300/200',
     verified: false,
     yearsInBusiness: 2,
     trustScore: 72
@@ -56,9 +53,8 @@ const dummyShops = [
     trusted: true, 
     rating: 4.8, 
     reviews: 134,
-    phone: '+237 681 234 567',
+    phone: '+237681234567',
     specialties: ['Fresh Fruits', 'Organic Produce', 'Juices'],
-    image: '/api/placeholder/300/200',
     verified: true,
     yearsInBusiness: 6,
     trustScore: 92
@@ -71,9 +67,8 @@ const dummyShops = [
     trusted: true, 
     rating: 4.6, 
     reviews: 98,
-    phone: '+237 692 345 678',
+    phone: '+237692345678',
     specialties: ['Vegetables', 'Herbs', 'Spices'],
-    image: '/api/placeholder/300/200',
     verified: true,
     yearsInBusiness: 4,
     trustScore: 89
@@ -86,9 +81,8 @@ const dummyShops = [
     trusted: true, 
     rating: 4.5, 
     reviews: 112,
-    phone: '+237 673 456 789',
+    phone: '+237673456789',
     specialties: ['Computer Repair', 'Software', 'Networking'],
-    image: '/api/placeholder/300/200',
     verified: true,
     yearsInBusiness: 7,
     trustScore: 91
@@ -101,9 +95,8 @@ const dummyShops = [
     trusted: false, 
     rating: 4.2, 
     reviews: 45,
-    phone: '+237 687 890 123',
+    phone: '+237687890123',
     specialties: ['Group Uniforms', 'Bulk Orders'],
-    image: '/api/placeholder/300/200',
     verified: false,
     yearsInBusiness: 1,
     trustScore: 68
@@ -116,9 +109,8 @@ const dummyShops = [
     trusted: true, 
     rating: 4.7, 
     reviews: 167,
-    phone: '+237 698 901 234',
+    phone: '+237698901234',
     specialties: ['Local Spices', 'International Flavors', 'Seasonings'],
-    image: '/api/placeholder/300/200',
     verified: true,
     yearsInBusiness: 9,
     trustScore: 94
@@ -131,9 +123,8 @@ const dummyShops = [
     trusted: true, 
     rating: 4.8, 
     reviews: 189,
-    phone: '+237 679 012 345',
+    phone: '+237679012345',
     specialties: ['Business Tech', 'Consulting', 'Installation'],
-    image: '/api/placeholder/300/200',
     verified: true,
     yearsInBusiness: 6,
     trustScore: 96
@@ -146,9 +137,8 @@ const dummyShops = [
     trusted: true, 
     rating: 4.6, 
     reviews: 145,
-    phone: '+237 690 123 456',
+    phone: '+237690123456',
     specialties: ['Designer Wear', 'Accessories', 'Styling'],
-    image: '/api/placeholder/300/200',
     verified: true,
     yearsInBusiness: 5,
     trustScore: 88
@@ -161,9 +151,8 @@ const dummyShops = [
     trusted: true, 
     rating: 4.9, 
     reviews: 234,
-    phone: '+237 676 789 012',
+    phone: '+237676789012',
     specialties: ['Mobile Phones', 'Tablets', 'Warranties'],
-    image: '/api/placeholder/300/200',
     verified: true,
     yearsInBusiness: 8,
     trustScore: 97
@@ -176,9 +165,8 @@ const dummyShops = [
     trusted: true, 
     rating: 4.4, 
     reviews: 76,
-    phone: '+237 687 234 567',
+    phone: '+237687234567',
     specialties: ['Gaming', 'Entertainment', 'Digital Media'],
-    image: '/api/placeholder/300/200',
     verified: true,
     yearsInBusiness: 3,
     trustScore: 85
@@ -193,16 +181,51 @@ export default function MarketLine() {
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
   const [chatOpen, setChatOpen] = useState(false);
   const [activeChat, setActiveChat] = useState('general');
+  
   const [generalMessages, setGeneralMessages] = useState([
-    { sender: 'Market Admin', text: 'Welcome to the Main Market general chat!', time: new Date().toLocaleTimeString(), isSystem: true },
-    { sender: 'Pierre Fotso', text: 'New smartphones just arrived at Onitsha Electronics!', time: new Date().toLocaleTimeString() },
-    { sender: 'Sophie Atanga', text: 'Fresh organic fruits available at Bali Fruits today.', time: new Date().toLocaleTimeString() },
+    { 
+      id: 1,
+      sender: 'Market Admin', 
+      text: 'Welcome to the Main Market general chat!', 
+      time: '9:30 AM',
+      isSystem: true 
+    },
+    { 
+      id: 2,
+      sender: 'Pierre Fotso', 
+      text: 'New smartphones just arrived at Onitsha Electronics!', 
+      time: '10:15 AM' 
+    },
+    { 
+      id: 3,
+      sender: 'Sophie Atanga', 
+      text: 'Fresh organic fruits available at Bali Fruits today.', 
+      time: '10:45 AM' 
+    },
   ]);
+  
   const [lineMessages, setLineMessages] = useState([
-    { sender: 'Line Moderator', text: 'Welcome to Onitsha Line chat - Electronics specialists!', time: new Date().toLocaleTimeString(), isSystem: true },
-    { sender: 'Ngwa Electronics', text: 'We have new phone accessories in stock!', time: new Date().toLocaleTimeString() },
-    { sender: 'Kamer Tech', text: 'Special discount on laptops this week!', time: new Date().toLocaleTimeString() },
+    { 
+      id: 1,
+      sender: 'Line Moderator', 
+      text: 'Welcome to Onitsha Line chat - Electronics specialists!', 
+      time: '9:00 AM',
+      isSystem: true 
+    },
+    { 
+      id: 2,
+      sender: 'Ngwa Electronics', 
+      text: 'We have new phone accessories in stock!', 
+      time: '9:30 AM' 
+    },
+    { 
+      id: 3,
+      sender: 'Kamer Tech', 
+      text: 'Special discount on laptops this week!', 
+      time: '10:00 AM' 
+    },
   ]);
+  
   const [newMessage, setNewMessage] = useState('');
 
   const filteredShops = useMemo(() => {
@@ -216,15 +239,18 @@ export default function MarketLine() {
 
   const handleSendMessage = () => {
     if (!newMessage.trim()) return;
+    
     const message = {
+      id: Date.now(),
       sender: 'You',
       text: newMessage.trim(),
-      time: new Date().toLocaleTimeString(),
+      time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
     };
+    
     if (activeChat === 'general') {
-      setGeneralMessages([...generalMessages, message]);
+      setGeneralMessages(prev => [...prev, message]);
     } else {
-      setLineMessages([...lineMessages, message]);
+      setLineMessages(prev => [...prev, message]);
     }
     setNewMessage('');
   };
@@ -236,9 +262,22 @@ export default function MarketLine() {
     }
   };
 
+  const handleWhatsAppClick = (phone) => {
+    window.open(`https://wa.me/${phone}`, '_blank');
+  };
+
+  const handleCallClick = (phone) => {
+    window.open(`tel:${phone}`, '_self');
+  };
+
+  const handleVendorChat = (vendor, shopName) => {
+    alert(`Opening direct chat with ${vendor} from ${shopName}`);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-teal-50 p-4 sm:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto">
+        
         {/* Header Navigation */}
         <div className="mb-6">
           <Link to="/markets">
@@ -257,7 +296,7 @@ export default function MarketLine() {
           <p className="text-lg text-gray-600">Electronics and imported goods from major suppliers</p>
         </div>
 
-        {/* Interactive Chat Button */}
+        {/* Interactive Chat Button at Top */}
         <div className="bg-white rounded-3xl shadow-2xl p-4 mb-8">
           <button
             onClick={() => setChatOpen(!chatOpen)}
@@ -282,7 +321,7 @@ export default function MarketLine() {
             </div>
           </button>
 
-          {/* Expandable Chat Section */}
+          {/* Expandable Chat Interface */}
           {chatOpen && (
             <div className="mt-4 border-t border-gray-200 pt-4">
               {/* Chat Tabs */}
@@ -297,6 +336,9 @@ export default function MarketLine() {
                 >
                   <Users size={18} />
                   General Market Chat
+                  <span className="bg-blue-100 text-blue-600 px-2 py-1 rounded-full text-xs">
+                    {generalMessages.length}
+                  </span>
                 </button>
                 <button
                   onClick={() => setActiveChat('line')}
@@ -308,40 +350,53 @@ export default function MarketLine() {
                 >
                   <ShoppingBag size={18} />
                   Onitsha Line Chat
+                  <span className="bg-purple-100 text-purple-600 px-2 py-1 rounded-full text-xs">
+                    {lineMessages.length}
+                  </span>
                 </button>
               </div>
 
               {/* Chat Messages */}
               <div className="h-64 overflow-y-auto mb-4 border border-gray-300 rounded-2xl p-4 bg-gray-50">
-                {(activeChat === 'general' ? generalMessages : lineMessages).map((msg, i) => (
-                  <div key={i} className={`mb-3 p-3 rounded-xl ${
-                    msg.isSystem 
-                      ? 'bg-yellow-100 text-yellow-800 text-center text-sm italic'
-                      : msg.sender === 'You' 
-                      ? 'bg-blue-600 text-white ml-auto max-w-xs' 
-                      : 'bg-white text-gray-800 shadow-sm max-w-xs'
-                  }`}>
-                    {!msg.isSystem && msg.sender !== 'You' && (
-                      <p className="font-semibold text-blue-600 text-sm mb-1">{msg.sender}</p>
-                    )}
-                    <p className="text-sm">{msg.text}</p>
-                    <p className={`text-xs mt-1 ${
-                      msg.isSystem ? 'text-yellow-600' : msg.sender === 'You' ? 'text-blue-200' : 'text-gray-500'
-                    }`}>
-                      {msg.time}
-                    </p>
-                  </div>
-                ))}
+                <div className="space-y-3">
+                  {(activeChat === 'general' ? generalMessages : lineMessages).map((msg) => (
+                    <div key={msg.id} className={`flex ${msg.sender === 'You' ? 'justify-end' : 'justify-start'}`}>
+                      <div className={`max-w-xs lg:max-w-md px-3 py-2 rounded-xl ${
+                        msg.isSystem
+                          ? 'bg-yellow-100 text-yellow-800 text-center text-sm italic'
+                          : msg.sender === 'You'
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-white text-gray-800 shadow-sm'
+                      }`}>
+                        {!msg.isSystem && msg.sender !== 'You' && (
+                          <div className="text-xs font-semibold mb-1 text-blue-600">
+                            {msg.sender}
+                          </div>
+                        )}
+                        <div className="text-sm">{msg.text}</div>
+                        <div className={`text-xs mt-1 ${
+                          msg.isSystem 
+                            ? 'text-yellow-600'
+                            : msg.sender === 'You' 
+                            ? 'text-blue-200' 
+                            : 'text-gray-500'
+                        }`}>
+                          {msg.time}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               {/* Message Input */}
               <div className="flex gap-3">
                 <input
                   type="text"
-                  placeholder="Type your message..."
+                  placeholder={`Message ${activeChat === 'general' ? 'general market' : 'Onitsha line'} chat...`}
                   className="flex-grow border border-gray-300 rounded-2xl p-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   value={newMessage}
-                  onChange={e => setNewMessage(e.target.value)}
+                  onChange={(e) => setNewMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
                 />
                 <button
@@ -356,7 +411,7 @@ export default function MarketLine() {
           )}
         </div>
 
-        {/* Search and Filter */}
+        {/* Search and Filter Section */}
         <div className="bg-white rounded-3xl shadow-2xl p-6 mb-8">
           <div className="flex flex-col sm:flex-row gap-4 items-center">
             <div className="relative flex-1 max-w-md">
@@ -365,7 +420,7 @@ export default function MarketLine() {
                 type="text"
                 placeholder="Search shops or vendors..."
                 value={searchTerm}
-                onChange={e => setSearchTerm(e.target.value)}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700"
               />
             </div>
@@ -373,7 +428,7 @@ export default function MarketLine() {
               <Filter className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
               <select
                 value={selectedCategory}
-                onChange={e => setSelectedCategory(e.target.value)}
+                onChange={(e) => setSelectedCategory(e.target.value)}
                 className="pl-12 pr-8 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 bg-white cursor-pointer appearance-none min-w-[200px]"
               >
                 {categories.map(cat => (
@@ -389,7 +444,7 @@ export default function MarketLine() {
           </div>
         </div>
 
-        {/* Shops Grid - 4+ per row on mobile */}
+        {/* Enhanced Shops Grid - 4+ per row on mobile */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
           {filteredShops.length === 0 ? (
             <div className="col-span-full text-center bg-white rounded-3xl shadow-xl p-12">
@@ -411,7 +466,7 @@ export default function MarketLine() {
           ) : (
             filteredShops.map(shop => (
               <div key={shop.id} className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] group overflow-hidden">
-                {/* Shop Image */}
+                {/* Shop Image Header */}
                 <div className="relative h-32 sm:h-36 bg-gradient-to-br from-blue-100 to-purple-100 overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-10" />
                   <div className="w-full h-full bg-gradient-to-br from-blue-200 to-purple-200 flex items-center justify-center">
@@ -421,7 +476,7 @@ export default function MarketLine() {
                     </div>
                   </div>
                   
-                  {/* Trust Badge */}
+                  {/* Verification Badge */}
                   {shop.verified && (
                     <div className="absolute top-2 right-2 z-20">
                       <div className="bg-emerald-500 text-white px-2 py-1 rounded-full flex items-center gap-1 text-xs font-medium shadow-lg">
@@ -441,7 +496,7 @@ export default function MarketLine() {
                 </div>
 
                 <div className="p-3 sm:p-4">
-                  {/* Shop Header */}
+                  {/* Shop Information */}
                   <div className="mb-3">
                     <div className="flex items-start justify-between mb-1">
                       <h3 className="text-sm sm:text-base font-bold text-gray-800 leading-tight group-hover:text-blue-600 transition-colors duration-300">
@@ -457,7 +512,7 @@ export default function MarketLine() {
                     </p>
                   </div>
 
-                  {/* Rating and Reviews */}
+                  {/* Rating and Business Info */}
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-1">
                       <Star size={14} className="text-yellow-500 fill-current" />
@@ -497,14 +552,14 @@ export default function MarketLine() {
                     
                     <div className="grid grid-cols-2 gap-2">
                       <button 
-                        onClick={() => window.open(`https://wa.me/${shop.phone.replace(/\s/g, '')}`, '_blank')}
+                        onClick={() => handleWhatsAppClick(shop.phone)}
                         className="bg-emerald-500 text-white py-2 px-3 rounded-xl text-xs font-medium hover:bg-emerald-600 transition-all duration-300 flex items-center justify-center gap-1"
                       >
                         <MessageCircle size={12} />
                         WhatsApp
                       </button>
                       <button 
-                        onClick={() => window.open(`tel:${shop.phone}`, '_self')}
+                        onClick={() => handleCallClick(shop.phone)}
                         className="bg-blue-500 text-white py-2 px-3 rounded-xl text-xs font-medium hover:bg-blue-600 transition-all duration-300 flex items-center justify-center gap-1"
                       >
                         <Phone size={12} />
@@ -512,9 +567,9 @@ export default function MarketLine() {
                       </button>
                     </div>
                     
-                    {/* Chat with Vendor */}
+                    {/* Direct Vendor Chat */}
                     <button 
-                      onClick={() => alert(`Opening chat with ${shop.vendor} from ${shop.name}`)}
+                      onClick={() => handleVendorChat(shop.vendor, shop.name)}
                       className="w-full bg-gray-100 text-gray-700 py-2 rounded-xl text-xs font-medium hover:bg-gray-200 transition-all duration-300 flex items-center justify-center gap-2"
                     >
                       <MessageSquare size={12} />
