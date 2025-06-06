@@ -31,26 +31,44 @@ export default function ProfessionalServices() {
     return categoryMatches || professionalsMatch;
   });
 
-  // Intersection Observer for scroll animations
+  // Enhanced Intersection Observer for bidirectional scroll animations
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const cardId = entry.target.getAttribute('data-card-id');
-            if (cardId) {
+          const cardId = entry.target.getAttribute('data-card-id');
+          if (cardId) {
+            if (entry.isIntersecting) {
+              // Element entering viewport
               setVisibleCards(prev => {
                 const newSet = new Set(prev);
                 newSet.add(cardId);
                 return newSet;
               });
+            } else {
+              // Element leaving viewport - remove with exit animation
+              const element = entry.target as HTMLElement;
+              element.style.transition = 'transform 0.3s ease-out, opacity 0.3s ease-out';
+              element.style.transform = 'translateY(20px)';
+              element.style.opacity = '0.7';
+              
+              // Reset after a short delay for re-entrance
+              setTimeout(() => {
+                setVisibleCards(prev => {
+                  const newSet = new Set(prev);
+                  newSet.delete(cardId);
+                  return newSet;
+                });
+                element.style.transform = '';
+                element.style.opacity = '';
+              }, 300);
             }
           }
         });
       },
       {
-        threshold: 0.1,
-        rootMargin: '50px 0px -50px 0px'
+        threshold: [0, 0.1, 0.9, 1],
+        rootMargin: '100px 0px -100px 0px'
       }
     );
 
@@ -61,6 +79,55 @@ export default function ProfessionalServices() {
 
     return () => observer.disconnect();
   }, [filteredCategories]);
+
+  // Scroll direction detection for enhanced animations
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+    let lastScrollX = window.scrollX;
+    let ticking = false;
+
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY;
+          const currentScrollX = window.scrollX;
+          const deltaY = currentScrollY - lastScrollY;
+          const deltaX = currentScrollX - lastScrollX;
+          
+          // Apply scroll-based transforms to visible cards
+          cardRefs.current.forEach((element, cardId) => {
+            if (element && visibleCards.has(cardId)) {
+              const rect = element.getBoundingClientRect();
+              const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
+              
+              if (isInViewport) {
+                // Parallax effect based on scroll direction
+                const parallaxY = deltaY * 0.1;
+                const parallaxX = deltaX * 0.05;
+                
+                element.style.transform = `translate3d(${-parallaxX}px, ${-parallaxY}px, 0) scale(${1 + Math.abs(deltaY) * 0.0001})`;
+                element.style.transition = 'transform 0.1s ease-out';
+                
+                // Reset transform after scroll stops
+                setTimeout(() => {
+                  element.style.transform = '';
+                  element.style.transition = 'transform 0.3s ease-out';
+                }, 150);
+              }
+            }
+          });
+
+          lastScrollY = currentScrollY;
+          lastScrollX = currentScrollX;
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [visibleCards]);
 
   const toggleCard = (categoryId: string) => {
     const newExpandedCard = expandedCard === categoryId ? null : categoryId;
@@ -105,31 +172,31 @@ export default function ProfessionalServices() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 scroll-smooth">
       {/* Header */}
-      <div className="bg-gradient-to-r from-teal-600 via-cyan-600 to-blue-700 text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-black/10"></div>
+      <div className="bg-gradient-to-r from-teal-600 via-cyan-600 to-blue-700 text-white relative overflow-hidden gpu-accelerated will-change-transform">
+        <div className="absolute inset-0 bg-black/10 animate-parallax-float"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
           <div className="text-center">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 animate-fade-in-up">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 animate-fade-in-up will-change-transform">
               Professional Services
             </h1>
-            <p className="text-xl sm:text-2xl md:text-3xl font-light mb-2 text-teal-100">
+            <p className="text-xl sm:text-2xl md:text-3xl font-light mb-2 text-teal-100 animate-scroll-zoom">
               in Bamenda
             </p>
-            <p className="text-teal-100 text-base sm:text-lg md:text-xl mb-8 max-w-3xl mx-auto text-justify leading-relaxed">
+            <p className="text-teal-100 text-base sm:text-lg md:text-xl mb-8 max-w-3xl mx-auto text-justify leading-relaxed animate-fadeIn">
               Connect with verified local service providers for all your needs. Find trusted professionals in your area.
             </p>
             
             {/* Search Bar */}
-            <div className="relative max-w-2xl mx-auto">
+            <div className="relative max-w-2xl mx-auto animate-scroll-up">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 z-10" size={20} />
               <input
                 type="text"
                 placeholder="Search services or professionals..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 sm:py-5 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-teal-500/50 focus:border-teal-400 text-base sm:text-lg text-gray-900 shadow-xl transition-all duration-300 hover:shadow-2xl"
+                className="w-full pl-12 pr-4 py-4 sm:py-5 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-teal-500/50 focus:border-teal-400 text-base sm:text-lg text-gray-900 shadow-xl transition-all duration-300 hover:shadow-2xl gpu-accelerated will-change-transform"
               />
             </div>
           </div>
@@ -160,17 +227,24 @@ export default function ProfessionalServices() {
                   key={category.id}
                   ref={(el) => setCardRef(category.id, el)}
                   data-card-id={category.id}
-                  className={`bg-white rounded-xl shadow-lg transition-all duration-500 overflow-hidden border-2 transform ${
+                  className={`bg-white rounded-xl shadow-lg transition-all duration-500 overflow-hidden border-2 transform gpu-accelerated will-change-transform ${
                     isVisible 
-                      ? 'translate-y-0 opacity-100' 
-                      : 'translate-y-8 opacity-0'
+                      ? 'entrance-visible animate-scroll-zoom' 
+                      : index % 4 === 0 
+                        ? 'entrance-from-left' 
+                        : index % 4 === 1 
+                          ? 'entrance-from-bottom' 
+                          : index % 4 === 2 
+                            ? 'entrance-from-right' 
+                            : 'entrance-from-top'
                   } ${
                     isExpanded 
-                      ? 'border-teal-400 shadow-2xl shadow-teal-200/50 scale-105' 
+                      ? 'border-teal-400 shadow-2xl shadow-teal-200/50 scale-105 animate-parallax-float' 
                       : 'border-gray-200 hover:border-teal-300 hover:shadow-xl hover:scale-102'
                   }`}
                   style={{
-                    transitionDelay: `${index * 100}ms`
+                    transitionDelay: `${index * 150}ms`,
+                    animationDelay: isVisible ? `${index * 150}ms` : '0ms'
                   }}
                 >
                   {/* Service Card Header */}
