@@ -444,6 +444,16 @@ export default function MarketLine() {
           )}
         </div>
 
+        {/* View Listings Button */}
+        <div className="bg-white rounded-xl shadow-sm p-3 mb-4">
+          <Link to={`/listings?line=${lineId}&market=${marketId}`}>
+            <button className="w-full bg-gradient-to-r from-emerald-600 to-green-600 text-white py-3 px-4 rounded-lg hover:from-emerald-700 hover:to-green-700 transition-all duration-300 flex items-center justify-center gap-2 font-medium">
+              <ShoppingBag size={18} />
+              View All Product Listings from {lineId?.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+            </button>
+          </Link>
+        </div>
+
         {/* Minimal Search and Filter */}
         <div className="flex items-center gap-2 mb-4">
           <div className="relative flex-1">
