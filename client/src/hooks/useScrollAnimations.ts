@@ -42,8 +42,8 @@ export function useScrollAnimations() {
     
     if (!isVisible) {
       if (animationType === 'slide') {
-        // Left to right slide-in entrance state
-        return 'opacity-0 -translate-x-16 scale-95';
+        // Enhanced left to right slide-in entrance state
+        return 'opacity-0 -translate-x-24 scale-90';
       } else {
         // Cool entrance states with 3D transforms
         const entranceTypes = [
@@ -57,8 +57,8 @@ export function useScrollAnimations() {
       }
     }
 
-    // Smooth slide-in visible states
-    return 'opacity-100 translate-x-0 translate-y-0 rotate-0 scale-100 transition-all duration-800 ease-out';
+    // Enhanced smooth slide-in visible states
+    return 'opacity-100 translate-x-0 translate-y-0 rotate-0 scale-100 transition-all duration-1000 ease-out';
   }, [visibleElements]);
 
   const getAnimationStyle = useCallback((index: number = 0) => {
