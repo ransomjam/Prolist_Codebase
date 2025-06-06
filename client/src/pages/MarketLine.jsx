@@ -1,20 +1,188 @@
 import { useState, useMemo } from 'react';
 import { useParams, Link } from 'wouter';
-import { ArrowLeft, Search, Filter, MessageSquare, Send, Users, ShoppingBag, Shield } from 'lucide-react';
+import { ArrowLeft, Search, Filter, MessageSquare, Send, Users, ShoppingBag, Shield, Star, Phone, MessageCircle, Eye, Clock, Award } from 'lucide-react';
 
 const dummyShops = [
-  { id: 1, name: 'Ngwa Electronics', category: 'Electronics', vendor: 'Emmanuel Ngwa', trusted: true, rating: 4.7, phone: '+237 670 123 456' },
-  { id: 2, name: 'Mama Fabrics', category: 'Tailoring', vendor: 'Theresa Mbi', trusted: true, rating: 4.9, phone: '+237 681 234 567' },
-  { id: 3, name: 'Onitsha Imports', category: 'Electronics', vendor: 'Pierre Fotso', trusted: false, rating: 4.3, phone: '+237 684 567 890' },
-  { id: 4, name: 'Bali Fruits', category: 'Food', vendor: 'Sophie Atanga', trusted: true, rating: 4.8, phone: '+237 681 234 567' },
-  { id: 5, name: 'Fresh Veggies', category: 'Food', vendor: 'David Nfah', trusted: true, rating: 4.6, phone: '+237 692 345 678' },
-  { id: 6, name: 'Kamer Tech', category: 'Electronics', vendor: 'Isaac Tanyi', trusted: true, rating: 4.5, phone: '+237 673 456 789' },
-  { id: 7, name: 'Tailors United', category: 'Tailoring', vendor: 'Felicity Njie', trusted: false, rating: 4.2, phone: '+237 687 890 123' },
-  { id: 8, name: 'Spice World', category: 'Food', vendor: 'James Mvondo', trusted: true, rating: 4.7, phone: '+237 698 901 234' },
-  { id: 9, name: 'Tech Solutions', category: 'Electronics', vendor: 'Grace Mundi', trusted: true, rating: 4.8, phone: '+237 679 012 345' },
-  { id: 10, name: 'Fashion Hub', category: 'Tailoring', vendor: 'John Bih', trusted: true, rating: 4.6, phone: '+237 690 123 456' },
-  { id: 11, name: 'Phone Palace', category: 'Electronics', vendor: 'Marie Kenne', trusted: true, rating: 4.9, phone: '+237 676 789 012' },
-  { id: 12, name: 'Digital World', category: 'Electronics', vendor: 'David Che', trusted: true, rating: 4.4, phone: '+237 687 234 567' },
+  { 
+    id: 1, 
+    name: 'Ngwa Electronics', 
+    category: 'Electronics', 
+    vendor: 'Emmanuel Ngwa', 
+    trusted: true, 
+    rating: 4.7, 
+    reviews: 156,
+    phone: '+237 670 123 456',
+    specialties: ['Smartphones', 'Laptops', 'Accessories'],
+    image: '/api/placeholder/300/200',
+    verified: true,
+    yearsInBusiness: 5,
+    trustScore: 95
+  },
+  { 
+    id: 2, 
+    name: 'Mama Fabrics', 
+    category: 'Tailoring', 
+    vendor: 'Theresa Mbi', 
+    trusted: true, 
+    rating: 4.9, 
+    reviews: 203,
+    phone: '+237 681 234 567',
+    specialties: ['Traditional Wear', 'Modern Fashion', 'Alterations'],
+    image: '/api/placeholder/300/200',
+    verified: true,
+    yearsInBusiness: 8,
+    trustScore: 98
+  },
+  { 
+    id: 3, 
+    name: 'Onitsha Imports', 
+    category: 'Electronics', 
+    vendor: 'Pierre Fotso', 
+    trusted: false, 
+    rating: 4.3, 
+    reviews: 87,
+    phone: '+237 684 567 890',
+    specialties: ['Import Electronics', 'Wholesale'],
+    image: '/api/placeholder/300/200',
+    verified: false,
+    yearsInBusiness: 2,
+    trustScore: 72
+  },
+  { 
+    id: 4, 
+    name: 'Bali Fruits', 
+    category: 'Food', 
+    vendor: 'Sophie Atanga', 
+    trusted: true, 
+    rating: 4.8, 
+    reviews: 134,
+    phone: '+237 681 234 567',
+    specialties: ['Fresh Fruits', 'Organic Produce', 'Juices'],
+    image: '/api/placeholder/300/200',
+    verified: true,
+    yearsInBusiness: 6,
+    trustScore: 92
+  },
+  { 
+    id: 5, 
+    name: 'Fresh Veggies', 
+    category: 'Food', 
+    vendor: 'David Nfah', 
+    trusted: true, 
+    rating: 4.6, 
+    reviews: 98,
+    phone: '+237 692 345 678',
+    specialties: ['Vegetables', 'Herbs', 'Spices'],
+    image: '/api/placeholder/300/200',
+    verified: true,
+    yearsInBusiness: 4,
+    trustScore: 89
+  },
+  { 
+    id: 6, 
+    name: 'Kamer Tech', 
+    category: 'Electronics', 
+    vendor: 'Isaac Tanyi', 
+    trusted: true, 
+    rating: 4.5, 
+    reviews: 112,
+    phone: '+237 673 456 789',
+    specialties: ['Computer Repair', 'Software', 'Networking'],
+    image: '/api/placeholder/300/200',
+    verified: true,
+    yearsInBusiness: 7,
+    trustScore: 91
+  },
+  { 
+    id: 7, 
+    name: 'Tailors United', 
+    category: 'Tailoring', 
+    vendor: 'Felicity Njie', 
+    trusted: false, 
+    rating: 4.2, 
+    reviews: 45,
+    phone: '+237 687 890 123',
+    specialties: ['Group Uniforms', 'Bulk Orders'],
+    image: '/api/placeholder/300/200',
+    verified: false,
+    yearsInBusiness: 1,
+    trustScore: 68
+  },
+  { 
+    id: 8, 
+    name: 'Spice World', 
+    category: 'Food', 
+    vendor: 'James Mvondo', 
+    trusted: true, 
+    rating: 4.7, 
+    reviews: 167,
+    phone: '+237 698 901 234',
+    specialties: ['Local Spices', 'International Flavors', 'Seasonings'],
+    image: '/api/placeholder/300/200',
+    verified: true,
+    yearsInBusiness: 9,
+    trustScore: 94
+  },
+  { 
+    id: 9, 
+    name: 'Tech Solutions', 
+    category: 'Electronics', 
+    vendor: 'Grace Mundi', 
+    trusted: true, 
+    rating: 4.8, 
+    reviews: 189,
+    phone: '+237 679 012 345',
+    specialties: ['Business Tech', 'Consulting', 'Installation'],
+    image: '/api/placeholder/300/200',
+    verified: true,
+    yearsInBusiness: 6,
+    trustScore: 96
+  },
+  { 
+    id: 10, 
+    name: 'Fashion Hub', 
+    category: 'Tailoring', 
+    vendor: 'John Bih', 
+    trusted: true, 
+    rating: 4.6, 
+    reviews: 145,
+    phone: '+237 690 123 456',
+    specialties: ['Designer Wear', 'Accessories', 'Styling'],
+    image: '/api/placeholder/300/200',
+    verified: true,
+    yearsInBusiness: 5,
+    trustScore: 88
+  },
+  { 
+    id: 11, 
+    name: 'Phone Palace', 
+    category: 'Electronics', 
+    vendor: 'Marie Kenne', 
+    trusted: true, 
+    rating: 4.9, 
+    reviews: 234,
+    phone: '+237 676 789 012',
+    specialties: ['Mobile Phones', 'Tablets', 'Warranties'],
+    image: '/api/placeholder/300/200',
+    verified: true,
+    yearsInBusiness: 8,
+    trustScore: 97
+  },
+  { 
+    id: 12, 
+    name: 'Digital World', 
+    category: 'Electronics', 
+    vendor: 'David Che', 
+    trusted: true, 
+    rating: 4.4, 
+    reviews: 76,
+    phone: '+237 687 234 567',
+    specialties: ['Gaming', 'Entertainment', 'Digital Media'],
+    image: '/api/placeholder/300/200',
+    verified: true,
+    yearsInBusiness: 3,
+    trustScore: 85
+  },
 ];
 
 const categories = ['All Categories', 'Electronics', 'Tailoring', 'Food'];
@@ -242,39 +410,116 @@ export default function MarketLine() {
             </div>
           ) : (
             filteredShops.map(shop => (
-              <div key={shop.id} className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
-                <div className="p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-lg font-semibold text-gray-800 leading-tight">{shop.name}</h3>
-                    {shop.trusted && (
-                      <Shield size={16} className="text-emerald-500 flex-shrink-0" />
-                    )}
-                  </div>
-                  <p className="text-sm text-gray-600 mb-2">by {shop.vendor}</p>
-                  <p className="text-xs text-blue-600 mb-3 font-medium">{shop.category}</p>
-                  
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="flex items-center gap-1">
-                      <span className="text-yellow-500">⭐</span>
-                      <span className="text-sm font-medium text-gray-700">{shop.rating}</span>
+              <div key={shop.id} className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] group overflow-hidden">
+                {/* Shop Image */}
+                <div className="relative h-32 sm:h-36 bg-gradient-to-br from-blue-100 to-purple-100 overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-10" />
+                  <div className="w-full h-full bg-gradient-to-br from-blue-200 to-purple-200 flex items-center justify-center">
+                    <div className="text-center text-gray-600">
+                      <ShoppingBag size={32} className="mx-auto mb-2 opacity-60" />
+                      <div className="text-xs font-medium opacity-80">{shop.category}</div>
                     </div>
-                    {shop.trusted && (
-                      <span className="text-emerald-600 text-xs font-semibold">Trusted</span>
-                    )}
+                  </div>
+                  
+                  {/* Trust Badge */}
+                  {shop.verified && (
+                    <div className="absolute top-2 right-2 z-20">
+                      <div className="bg-emerald-500 text-white px-2 py-1 rounded-full flex items-center gap-1 text-xs font-medium shadow-lg">
+                        <Shield size={12} />
+                        Verified
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Trust Score */}
+                  <div className="absolute bottom-2 left-2 z-20">
+                    <div className="bg-white/90 backdrop-blur-sm text-gray-800 px-2 py-1 rounded-full flex items-center gap-1 text-xs font-medium shadow-sm">
+                      <Award size={12} className="text-blue-600" />
+                      {shop.trustScore}%
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-3 sm:p-4">
+                  {/* Shop Header */}
+                  <div className="mb-3">
+                    <div className="flex items-start justify-between mb-1">
+                      <h3 className="text-sm sm:text-base font-bold text-gray-800 leading-tight group-hover:text-blue-600 transition-colors duration-300">
+                        {shop.name}
+                      </h3>
+                      {shop.trusted && (
+                        <Shield size={14} className="text-emerald-500 flex-shrink-0 mt-0.5" />
+                      )}
+                    </div>
+                    <p className="text-xs text-gray-600 mb-1">by {shop.vendor}</p>
+                    <p className="text-xs text-blue-600 font-medium bg-blue-50 px-2 py-1 rounded-full inline-block">
+                      {shop.category}
+                    </p>
                   </div>
 
+                  {/* Rating and Reviews */}
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-1">
+                      <Star size={14} className="text-yellow-500 fill-current" />
+                      <span className="text-sm font-medium text-gray-700">{shop.rating}</span>
+                      <span className="text-xs text-gray-500">({shop.reviews})</span>
+                    </div>
+                    <div className="flex items-center gap-1 text-xs text-gray-500">
+                      <Clock size={12} />
+                      {shop.yearsInBusiness}y
+                    </div>
+                  </div>
+
+                  {/* Specialties */}
+                  <div className="mb-3">
+                    <div className="flex flex-wrap gap-1">
+                      {shop.specialties.slice(0, 2).map((specialty, index) => (
+                        <span key={index} className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-full">
+                          {specialty}
+                        </span>
+                      ))}
+                      {shop.specialties.length > 2 && (
+                        <span className="text-xs text-blue-600 font-medium">
+                          +{shop.specialties.length - 2} more
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
                   <div className="space-y-2">
-                    <button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 rounded-lg text-sm font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300">
-                      View Shop
-                    </button>
+                    <Link to={`/shop-profile/${shop.id}`}>
+                      <button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 rounded-xl text-sm font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 flex items-center justify-center gap-2 group-hover:scale-105">
+                        <Eye size={14} />
+                        View Shop
+                      </button>
+                    </Link>
+                    
                     <div className="grid grid-cols-2 gap-2">
-                      <button className="bg-emerald-500 text-white py-1 px-2 rounded-lg text-xs font-medium hover:bg-emerald-600 transition-colors duration-300">
+                      <button 
+                        onClick={() => window.open(`https://wa.me/${shop.phone.replace(/\s/g, '')}`, '_blank')}
+                        className="bg-emerald-500 text-white py-2 px-3 rounded-xl text-xs font-medium hover:bg-emerald-600 transition-all duration-300 flex items-center justify-center gap-1"
+                      >
+                        <MessageCircle size={12} />
                         WhatsApp
                       </button>
-                      <button className="bg-gray-500 text-white py-1 px-2 rounded-lg text-xs font-medium hover:bg-gray-600 transition-colors duration-300">
+                      <button 
+                        onClick={() => window.open(`tel:${shop.phone}`, '_self')}
+                        className="bg-blue-500 text-white py-2 px-3 rounded-xl text-xs font-medium hover:bg-blue-600 transition-all duration-300 flex items-center justify-center gap-1"
+                      >
+                        <Phone size={12} />
                         Call
                       </button>
                     </div>
+                    
+                    {/* Chat with Vendor */}
+                    <button 
+                      onClick={() => alert(`Opening chat with ${shop.vendor} from ${shop.name}`)}
+                      className="w-full bg-gray-100 text-gray-700 py-2 rounded-xl text-xs font-medium hover:bg-gray-200 transition-all duration-300 flex items-center justify-center gap-2"
+                    >
+                      <MessageSquare size={12} />
+                      Chat with Vendor
+                    </button>
                   </div>
                 </div>
               </div>
