@@ -493,36 +493,39 @@ export default function MarketLine() {
             </div>
           ) : (
             filteredShops.map(shop => (
-              <div key={shop.id} className="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-sm transition-all duration-200">
-                <div className="flex items-center gap-4">
+              <div key={shop.id} className="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 hover:shadow-sm transition-all duration-200">
+                <div className="flex items-center gap-3 sm:gap-4">
                   {/* Shop Image Placeholder */}
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <ShoppingBag size={24} className="text-blue-600" />
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-blue-100 to-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <ShoppingBag size={20} className="sm:w-6 sm:h-6 text-blue-600" />
                   </div>
                   
                   {/* Shop Name & Status */}
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-lg font-semibold text-gray-900">{shop.name}</h3>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1 flex-wrap sm:flex-nowrap">
+                      <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">{shop.name}</h3>
                       {shop.verified && (
-                        <div className="flex items-center gap-1 bg-emerald-50 text-emerald-600 px-2 py-1 rounded-full text-xs">
-                          <Shield size={12} />
-                          Verified
+                        <div className="flex items-center gap-1 bg-emerald-50 text-emerald-600 px-2 py-1 rounded-full text-xs flex-shrink-0">
+                          <Shield size={10} className="sm:w-3 sm:h-3" />
+                          <span className="hidden sm:inline">Verified</span>
+                          <span className="sm:hidden">✓</span>
                         </div>
                       )}
                     </div>
                     
-                    <div className="flex items-center gap-1 text-sm">
-                      <Award size={14} className="text-blue-500" />
-                      <span className="text-blue-600 font-medium">{shop.trustScore}% Trust Score</span>
+                    <div className="flex items-center gap-1 text-xs sm:text-sm">
+                      <Award size={12} className="sm:w-4 sm:h-4 text-blue-500 flex-shrink-0" />
+                      <span className="text-blue-600 font-medium">{shop.trustScore}%</span>
+                      <span className="text-gray-500 hidden sm:inline">Trust Score</span>
                     </div>
                   </div>
                   
                   {/* View Button */}
-                  <Link to={`/shop-profile/${shop.id}`}>
-                    <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2">
-                      <Eye size={16} />
-                      View Shop
+                  <Link to={`/shop-profile/${shop.id}`} className="flex-shrink-0">
+                    <button className="bg-blue-600 text-white px-3 py-2 sm:px-6 sm:py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 text-sm">
+                      <Eye size={14} className="sm:w-4 sm:h-4" />
+                      <span className="hidden sm:inline">View Shop</span>
+                      <span className="sm:hidden">View</span>
                     </button>
                   </Link>
                 </div>
