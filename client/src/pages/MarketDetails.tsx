@@ -460,14 +460,16 @@ export default function MarketDetails() {
           )}
         </div>
 
-        {/* Sections Header */}
-        <div className="text-center mb-8 sm:mb-12">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-4">
-            Market Sections & Lines
-          </h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Explore the different sections within {market.name}. Each section specializes in specific products and services.
-          </p>
+        {/* Compact Sections Header */}
+        <div className="bg-white rounded-2xl shadow-lg p-3 mb-4">
+          <div className="text-center">
+            <h2 className="text-lg font-bold text-gray-800 mb-1">
+              Market Sections & Lines
+            </h2>
+            <p className="text-sm text-gray-600">
+              Explore the different market lines within {market.name}. Each line specializes in specific products and services.
+            </p>
+          </div>
         </div>
 
         {/* Market Lines Grid */}
