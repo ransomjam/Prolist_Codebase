@@ -470,7 +470,7 @@ export default function MarketLine() {
         </div>
 
         {/* Professional Shops Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 lg:gap-8">
+        <div className="grid grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-8 gap-3 md:gap-4 lg:gap-6">
           {filteredShops.length === 0 ? (
             <div className="col-span-full text-center bg-white rounded-3xl shadow-xl p-12">
               <div className="text-6xl mb-6">🔍</div>
@@ -492,12 +492,12 @@ export default function MarketLine() {
             filteredShops.map(shop => (
               <div key={shop.id} className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] group overflow-hidden">
                 {/* Shop Image Header */}
-                <div className="relative h-32 sm:h-36 bg-gradient-to-br from-blue-100 to-purple-100 overflow-hidden">
+                <div className="relative h-24 sm:h-32 md:h-36 bg-gradient-to-br from-blue-100 to-purple-100 overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-10" />
                   <div className="w-full h-full bg-gradient-to-br from-blue-200 to-purple-200 flex items-center justify-center">
                     <div className="text-center text-gray-600">
-                      <ShoppingBag size={32} className="mx-auto mb-2 opacity-60" />
-                      <div className="text-xs font-medium opacity-80">{shop.category}</div>
+                      <ShoppingBag size={20} className="mx-auto mb-1 opacity-60" />
+                      <div className="text-xs font-medium opacity-80 hidden sm:block">{shop.category}</div>
                     </div>
                   </div>
                   
@@ -520,7 +520,7 @@ export default function MarketLine() {
                   </div>
                 </div>
 
-                <div className="p-3 sm:p-4">
+                <div className="p-2 sm:p-3 md:p-4">
                   {/* Shop Information */}
                   <div className="mb-3">
                     <div className="flex items-start justify-between mb-1">
