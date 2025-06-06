@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useParams, Link } from 'wouter';
-import { ArrowLeft, Search, Filter, MessageSquare, Send, Users, ShoppingBag, Shield, Star, Phone, MessageCircle, Eye, Clock, Award } from 'lucide-react';
+import { ArrowLeft, Search, Filter, MessageSquare, Send, Users, ShoppingBag, Shield, Star, Phone, MessageCircle, Eye, Clock, Award, CheckCircle } from 'lucide-react';
 
 interface Shop {
   id: number;
