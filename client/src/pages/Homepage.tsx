@@ -8,10 +8,7 @@ import heroImage from "@assets/upstation-hill.jpg";
 
 export default function Homepage() {
   const { user } = useAuth();
-  const { setElementRef, getAnimationClass, getAnimationStyle } = useScrollAnimations({
-    enableParallax: true,
-    staggerDelay: 100
-  });
+  const { setElementRef, getAnimationClass, getAnimationStyle } = useScrollAnimations();
 
   const quickActions = [
     { icon: ShoppingBag, label: "Browse Products", href: "/products", color: "from-blue-500 to-blue-600" },
