@@ -254,7 +254,7 @@ const marketData = {
 };
 
 export default function MarketDetails() {
-  const { id: marketId } = useParams();
+  const { marketId } = useParams();
   const market = marketData[marketId as keyof typeof marketData];
 
   if (!market) {

@@ -270,7 +270,7 @@ const marketLinesData: MarketData = {
 };
 
 export default function LineDetails() {
-  const { id: marketId, sectionId } = useParams();
+  const { marketId, sectionId } = useParams();
   
   const sectionData = marketLinesData[marketId as string]?.[sectionId as string];
   const shops = sectionData?.shops || [];
