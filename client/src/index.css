@@ -4,6 +4,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Scrollbar utilities */
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 /* Cool Animation Effects */
 @keyframes float {
   0%, 100% { transform: translateY(0px) rotate(0deg); }

@@ -201,45 +201,38 @@ export default function ProfessionalServices() {
       </div>
 
       {/* Intro Card */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6">
-        <div className="bg-white rounded-xl shadow-lg border p-6 mb-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center space-x-6">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-purple-600">{dummyProfessionals.length}</div>
-                <div className="text-sm text-gray-600">Verified Professionals</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-blue-600">{serviceCategories.length}</div>
-                <div className="text-sm text-gray-600">Service Categories</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-teal-600">24/7</div>
-                <div className="text-sm text-gray-600">Support Available</div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-4 sm:-mt-6">
+        <div className="bg-white rounded-xl shadow-lg border p-4 sm:p-6 mb-4 sm:mb-6">
+          <div className="flex flex-col gap-4">
+            {/* Stats Row */}
+            <div className="flex justify-center sm:justify-start">
+              <div className="flex items-center space-x-4 sm:space-x-8">
+                <div className="text-center">
+                  <div className="text-xl sm:text-2xl font-bold text-purple-600">{dummyProfessionals.length}</div>
+                  <div className="text-xs sm:text-sm text-gray-600">Professionals</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-xl sm:text-2xl font-bold text-blue-600">{serviceCategories.length}</div>
+                  <div className="text-xs sm:text-sm text-gray-600">Categories</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-xl sm:text-2xl font-bold text-teal-600">24/7</div>
+                  <div className="text-xs sm:text-sm text-gray-600">Support</div>
+                </div>
               </div>
             </div>
             
-            <div className="flex gap-3">
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white"
-              >
-                <option value="all">All Categories</option>
-                {serviceCategories.map(category => (
-                  <option key={category.id} value={category.id}>{category.name}</option>
-                ))}
-              </select>
-              
-              <Link href="/service-listings">
-                <button className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors font-medium">
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+              <Link href="/service-listings" className="flex-1 sm:flex-none">
+                <button className="w-full sm:w-auto px-4 sm:px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors font-medium text-sm sm:text-base">
                   List Service
                 </button>
               </Link>
               
               <button
                 onClick={() => setShowServiceListings(!showServiceListings)}
-                className={`px-4 py-2 border rounded-lg transition-colors ${
+                className={`flex-1 sm:flex-none px-4 py-2 border rounded-lg transition-colors text-sm sm:text-base ${
                   showServiceListings 
                     ? 'bg-blue-50 border-blue-200 text-blue-700' 
                     : 'border-gray-200 hover:border-gray-300 text-gray-700'
@@ -252,142 +245,80 @@ export default function ProfessionalServices() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Navigation Tabs */}
-        <div className="bg-white rounded-xl shadow-sm border mb-6">
-          <div className="flex overflow-x-auto">
-            {categoryTypes.map((type) => (
-              <button
-                key={type.id}
-                onClick={() => setSelectedCategory(type.id)}
-                className={`flex-shrink-0 px-6 py-4 text-sm font-medium border-b-2 transition-colors ${
-                  selectedCategory === type.id
-                    ? 'border-blue-500 text-blue-600 bg-blue-50'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                {type.label}
-                <span className="ml-2 px-2 py-1 bg-gray-100 text-gray-600 rounded-full text-xs">
-                  {type.count}
-                </span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Search and Filters */}
-        <div className="bg-white rounded-xl shadow-sm border p-6 mb-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+        {/* Categories and Filters - Single Row */}
+        <div className="bg-white rounded-xl shadow-sm border p-4 mb-6">
+          {/* Mobile: Stack vertically, Desktop: Single row */}
           <div className="flex flex-col lg:flex-row gap-4">
-            {/* Search */}
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input
-                type="text"
-                placeholder="Search professionals by name or expertise..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
+            {/* Categories - Horizontal scroll on mobile */}
+            <div className="flex-1">
+              <div className="flex overflow-x-auto pb-2 lg:pb-0 scrollbar-hide gap-2">
+                {categoryTypes.map((type) => (
+                  <button
+                    key={type.id}
+                    onClick={() => setSelectedCategory(type.id)}
+                    className={`flex-shrink-0 px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                      selectedCategory === type.id
+                        ? 'bg-blue-100 text-blue-700 border border-blue-200'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200 border border-gray-200'
+                    }`}
+                  >
+                    {type.label}
+                    <span className="ml-1 text-xs">({type.count})</span>
+                  </button>
+                ))}
+              </div>
             </div>
 
-            {/* Quick Actions */}
-            <div className="flex gap-3">
-              <button
-                onClick={() => setShowFilters(!showFilters)}
-                className={`flex items-center gap-2 px-4 py-3 border rounded-lg transition-colors ${
-                  showFilters ? 'bg-blue-50 border-blue-200 text-blue-700' : 'border-gray-200 text-gray-700 hover:bg-gray-50'
-                }`}
+            {/* Filters - Compact row */}
+            <div className="flex flex-wrap sm:flex-nowrap gap-2 lg:gap-3 items-center">
+              <select
+                value={priceRange}
+                onChange={(e) => setPriceRange(e.target.value)}
+                className="px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white min-w-0 flex-1 sm:flex-none"
               >
-                <SlidersHorizontal className="w-4 h-4" />
-                Filters
-              </button>
+                {priceRanges.map(range => (
+                  <option key={range.id} value={range.id}>{range.label}</option>
+                ))}
+              </select>
 
-              <div className="flex border border-gray-200 rounded-lg overflow-hidden">
-                <button
-                  onClick={() => setViewMode('grid')}
-                  className={`px-3 py-3 ${viewMode === 'grid' ? 'bg-blue-50 text-blue-600' : 'text-gray-600 hover:bg-gray-50'}`}
-                >
-                  <Grid3X3 className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => setViewMode('list')}
-                  className={`px-3 py-3 border-l border-gray-200 ${viewMode === 'list' ? 'bg-blue-50 text-blue-600' : 'text-gray-600 hover:bg-gray-50'}`}
-                >
-                  <List className="w-4 h-4" />
-                </button>
-              </div>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white min-w-0 flex-1 sm:flex-none"
+              >
+                {sortOptions.map(option => (
+                  <option key={option.id} value={option.id}>{option.label}</option>
+                ))}
+              </select>
             </div>
           </div>
 
-          {/* Advanced Filters */}
-          {showFilters && (
-            <div className="mt-6 pt-6 border-t grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Price Range</label>
-                <select
-                  value={priceRange}
-                  onChange={(e) => setPriceRange(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  {priceRanges.map(range => (
-                    <option key={range.id} value={range.id}>{range.label}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Sort By</label>
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  {sortOptions.map(option => (
-                    <option key={option.id} value={option.id}>{option.label}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">View Options</label>
-                <Link href="/service-listings">
-                  <button className="w-full px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors">
-                    Service Listings
-                  </button>
-                </Link>
-              </div>
-            </div>
-          )}
+          {/* Search Bar */}
+          <div className="mt-4 relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <input
+              type="text"
+              placeholder="Search professionals by name or expertise..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
         </div>
 
         {/* Results Header */}
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-bold text-gray-800">
+        <div className="mb-4 sm:mb-6">
+          <h2 className="text-lg sm:text-xl font-bold text-gray-800">
             {showServiceListings ? (
               `${filteredServiceListings.length} Service${filteredServiceListings.length !== 1 ? 's' : ''} Available`
             ) : (
               `${filteredProfessionals.length} Professional${filteredProfessionals.length !== 1 ? 's' : ''} Found`
             )}
           </h2>
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-600">
-              {showServiceListings ? 'Service Packages' : 'Professionals'}
-            </span>
-            <div className="flex border border-gray-200 rounded-lg overflow-hidden">
-              <button
-                onClick={() => setViewMode('grid')}
-                className={`px-3 py-2 ${viewMode === 'grid' ? 'bg-blue-50 text-blue-600' : 'text-gray-600 hover:bg-gray-50'}`}
-              >
-                <Grid3X3 className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => setViewMode('list')}
-                className={`px-3 py-2 border-l border-gray-200 ${viewMode === 'list' ? 'bg-blue-50 text-blue-600' : 'text-gray-600 hover:bg-gray-50'}`}
-              >
-                <List className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
+          <p className="text-sm text-gray-600 mt-1">
+            {showServiceListings ? 'Ready-to-order service packages' : 'Verified professionals offering quality services'}
+          </p>
         </div>
 
         {/* Service Listings or Professionals Display */}
@@ -402,30 +333,26 @@ export default function ProfessionalServices() {
               <p className="text-gray-500">Try adjusting your search or filter criteria</p>
             </div>
           ) : (
-            <div className={viewMode === 'grid' ? 'grid md:grid-cols-2 lg:grid-cols-3 gap-6' : 'space-y-6'}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {filteredServiceListings.map((listing) => {
                 const category = serviceCategories.find(cat => cat.id === listing.category);
                 
                 return (
                   <div
                     key={listing.id}
-                    className={`bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden ${
-                      viewMode === 'list' ? 'flex gap-6' : ''
-                    }`}
+                    className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden"
                   >
                     {/* Service Image */}
-                    <div className={viewMode === 'list' ? 'flex-shrink-0 w-48' : ''}>
+                    <div>
                       <img
                         src={listing.image}
                         alt={listing.title}
-                        className={`object-cover ${
-                          viewMode === 'list' ? 'w-full h-full' : 'w-full h-48'
-                        }`}
+                        className="w-full h-40 sm:h-48 object-cover"
                       />
                     </div>
 
                     {/* Service Info */}
-                    <div className="p-6 flex-1">
+                    <div className="p-4 sm:p-6">
                       <div className="flex items-center gap-2 mb-3">
                         <div className={`w-3 h-3 bg-gradient-to-r ${category?.color} rounded-full`}></div>
                         <span className="text-sm text-gray-600">{category?.name}</span>
@@ -477,15 +404,23 @@ export default function ProfessionalServices() {
                       </div>
 
                       {/* Price and Actions */}
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="text-lg font-bold text-purple-600">{listing.price}</div>
-                          <div className="text-sm text-gray-500">{listing.deliveryTime}</div>
+                      <div className="flex flex-col gap-3">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="text-lg font-bold text-purple-600">{listing.price}</div>
+                            <div className="text-sm text-gray-500">{listing.deliveryTime}</div>
+                          </div>
+                          
+                          <Link href={`/service-checkout/${listing.professional.id}`}>
+                            <button className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors">
+                              Order Now
+                            </button>
+                          </Link>
                         </div>
                         
                         <div className="flex gap-2">
-                          <Link href={`/professional/${listing.professional.id}`}>
-                            <button className="flex items-center gap-1 px-3 py-2 border border-gray-200 hover:border-gray-300 text-gray-700 rounded-lg transition-colors text-sm">
+                          <Link href={`/professional/${listing.professional.id}`} className="flex-1">
+                            <button className="w-full flex items-center justify-center gap-1 px-3 py-2 border border-gray-200 hover:border-gray-300 text-gray-700 rounded-lg transition-colors text-sm">
                               <Eye className="w-4 h-4" />
                               Profile
                             </button>
@@ -493,17 +428,11 @@ export default function ProfessionalServices() {
                           
                           <button
                             onClick={() => openChat(listing.professional)}
-                            className="flex items-center gap-1 px-3 py-2 bg-purple-100 hover:bg-purple-200 text-purple-700 rounded-lg transition-colors text-sm"
+                            className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-purple-100 hover:bg-purple-200 text-purple-700 rounded-lg transition-colors text-sm"
                           >
                             <MessageCircle className="w-4 h-4" />
                             Chat
                           </button>
-
-                          <Link href={`/service-checkout/${listing.professional.id}`}>
-                            <button className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors">
-                              Order Now
-                            </button>
-                          </Link>
                         </div>
                       </div>
                     </div>
@@ -523,43 +452,39 @@ export default function ProfessionalServices() {
               <p className="text-gray-500">Try adjusting your search or filter criteria</p>
             </div>
           ) : (
-            <div className={viewMode === 'grid' ? 'grid md:grid-cols-2 lg:grid-cols-3 gap-6' : 'space-y-4'}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {filteredProfessionals.map((professional) => {
                 const category = serviceCategories.find(cat => cat.id === professional.category);
                 
                 return (
                   <div
                     key={professional.id}
-                    className={`bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 ${
-                      viewMode === 'list' ? 'flex p-6 gap-6' : 'p-6'
-                    }`}
+                    className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 p-4 sm:p-6"
                   >
                     {/* Professional Image */}
-                    <div className={viewMode === 'list' ? 'flex-shrink-0' : 'mb-4'}>
+                    <div className="mb-4">
                       <img
                         src={professional.avatar}
                         alt={professional.name}
-                        className={`rounded-full object-cover border-2 border-gray-200 ${
-                          viewMode === 'list' ? 'w-20 h-20' : 'w-24 h-24 mx-auto'
-                        }`}
+                        className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-2 border-gray-200 mx-auto"
                       />
                     </div>
 
                     {/* Professional Info */}
-                    <div className={`flex-1 ${viewMode === 'list' ? '' : 'text-center'}`}>
-                      <div className={`flex items-center gap-3 mb-3 ${viewMode === 'list' ? '' : 'justify-center'}`}>
+                    <div className="text-center">
+                      <div className="flex items-center justify-center gap-2 mb-3">
                         <h3 className="font-bold text-gray-800 text-lg">{professional.name}</h3>
                         {professional.verified && (
                           <ShieldCheckIcon className="w-5 h-5 text-blue-500 flex-shrink-0" />
                         )}
                       </div>
                       
-                      <div className={`flex items-center gap-2 mb-3 ${viewMode === 'list' ? '' : 'justify-center'}`}>
+                      <div className="flex items-center justify-center gap-2 mb-3">
                         <div className={`w-3 h-3 bg-gradient-to-r ${category?.color} rounded-full`}></div>
-                        <span className="text-gray-600">{category?.name}</span>
+                        <span className="text-gray-600 text-sm">{category?.name}</span>
                       </div>
 
-                      <div className={`flex items-center space-x-4 mb-3 ${viewMode === 'list' ? '' : 'justify-center'}`}>
+                      <div className="flex items-center justify-center space-x-4 mb-3">
                         <div className="flex items-center">
                           <Star className="w-4 h-4 text-yellow-400 fill-current mr-1" />
                           <span className="text-sm text-gray-600">{professional.rating}</span>
@@ -570,36 +495,38 @@ export default function ProfessionalServices() {
                         </div>
                       </div>
 
-                      <p className={`text-gray-600 mb-4 ${viewMode === 'list' ? 'line-clamp-2' : 'line-clamp-3'}`}>
+                      <p className="text-gray-600 mb-4 text-sm line-clamp-2">
                         {professional.bio}
                       </p>
 
-                      <div className={`flex items-center mb-4 ${viewMode === 'list' ? '' : 'justify-center'}`}>
+                      <div className="mb-4">
                         <span className="text-lg font-semibold text-blue-600">{professional.rate}</span>
                       </div>
 
                       {/* Action Buttons */}
-                      <div className={`flex gap-2 ${viewMode === 'list' ? '' : 'justify-center'}`}>
-                        <Link href={`/professional/${professional.id}`}>
-                          <button className="flex items-center gap-2 px-4 py-2 border border-gray-200 hover:border-gray-300 text-gray-700 rounded-lg transition-colors">
-                            <Eye className="w-4 h-4" />
-                            <span className="text-sm">View Profile</span>
-                          </button>
-                        </Link>
-                        
-                        <button
-                          onClick={() => openChat(professional)}
-                          className="flex items-center gap-2 px-4 py-2 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg transition-colors"
-                        >
-                          <MessageCircle className="w-4 h-4" />
-                          <span className="text-sm">Chat</span>
-                        </button>
-
+                      <div className="flex flex-col gap-2">
                         <Link href={`/service-checkout/${professional.id}`}>
-                          <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors">
+                          <button className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors">
                             Hire Now
                           </button>
                         </Link>
+                        
+                        <div className="flex gap-2">
+                          <Link href={`/professional/${professional.id}`} className="flex-1">
+                            <button className="w-full flex items-center justify-center gap-1 px-3 py-2 border border-gray-200 hover:border-gray-300 text-gray-700 rounded-lg transition-colors text-sm">
+                              <Eye className="w-4 h-4" />
+                              Profile
+                            </button>
+                          </Link>
+                          
+                          <button
+                            onClick={() => openChat(professional)}
+                            className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg transition-colors text-sm"
+                          >
+                            <MessageCircle className="w-4 h-4" />
+                            Chat
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
