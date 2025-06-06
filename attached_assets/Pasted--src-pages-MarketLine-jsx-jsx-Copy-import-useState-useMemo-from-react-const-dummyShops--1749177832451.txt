@@ -1,0 +1,158 @@
+/src/pages/MarketLine.jsx
+jsx
+Copy
+import { useState, useMemo } from 'react';
+
+const dummyShops = [
+  { id: 1, name: 'Ngwa Electronics', category: 'Electronics', vendor: 'Emmanuel Ngwa', trusted: true },
+  { id: 2, name: 'Mama Fabrics', category: 'Tailoring', vendor: 'Theresa Mbi', trusted: true },
+  { id: 3, name: 'Onitsha Imports', category: 'Electronics', vendor: 'Pierre Fotso', trusted: false },
+  { id: 4, name: 'Bali Fruits', category: 'Food', vendor: 'Sophie Atanga', trusted: true },
+  { id: 5, name: 'Fresh Veggies', category: 'Food', vendor: 'David Nfah', trusted: true },
+  { id: 6, name: 'Kamer Tech', category: 'Electronics', vendor: 'Isaac Tanyi', trusted: true },
+  { id: 7, name: 'Tailors United', category: 'Tailoring', vendor: 'Felicity Njie', trusted: false },
+  { id: 8, name: 'Spice World', category: 'Food', vendor: 'James Mvondo', trusted: true },
+  // Add more dummy shops here as needed
+];
+
+const categories = ['All', 'Electronics', 'Tailoring', 'Food'];
+
+export default function MarketLine() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [activeChat, setActiveChat] = useState('general'); // 'general' or 'line'
+  const [generalMessages, setGeneralMessages] = useState([
+    { sender: 'Market Admin', text: 'Welcome to the Main Market chat!', time: new Date().toLocaleTimeString() },
+  ]);
+  const [lineMessages, setLineMessages] = useState([
+    { sender: 'Ngwa Electronics', text: 'We have new phones in stock!', time: new Date().toLocaleTimeString() },
+  ]);
+  const [newMessage, setNewMessage] = useState('');
+
+  const filteredShops = useMemo(() => {
+    return dummyShops.filter(shop => {
+      const matchesCategory = selectedCategory === 'All' || shop.category === selectedCategory;
+      const matchesSearch = shop.name.toLowerCase().includes(searchTerm.toLowerCase()) || shop.vendor.toLowerCase().includes(searchTerm.toLowerCase());
+      return matchesCategory && matchesSearch;
+    });
+  }, [searchTerm, selectedCategory]);
+
+  const handleSendMessage = () => {
+    if (!newMessage.trim()) return;
+    const message = {
+      sender: 'You',
+      text: newMessage.trim(),
+      time: new Date().toLocaleTimeString(),
+    };
+    if (activeChat === 'general') {
+      setGeneralMessages([...generalMessages, message]);
+    } else {
+      setLineMessages([...lineMessages, message]);
+    }
+    setNewMessage('');
+  };
+
+  return (
+    <div className="p-6 max-w-7xl mx-auto">
+      <h1 className="text-4xl font-bold text-primary mb-6">Market Line: Onitsha Line</h1>
+
+      {/* Search and Filter */}
+      <div className="flex flex-col sm:flex-row gap-4 mb-6 items-center">
+        <input
+          type="text"
+          placeholder="Search shops or vendors..."
+          value={searchTerm}
+          onChange={e => setSearchTerm(e.target.value)}
+          className="border rounded p-3 flex-grow shadow-neonBlue focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <select
+          value={selectedCategory}
+          onChange={e => setSelectedCategory(e.target.value)}
+          className="border rounded p-3 shadow-neonBlue focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          {categories.map(cat => (
+            <option key={cat} value={cat}>{cat}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* Shops Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 mb-8">
+        {filteredShops.length === 0 ? (
+          <p className="col-span-full text-center text-gray-500">No shops match your search/filter.</p>
+        ) : (
+          filteredShops.map(shop => (
+            <div key={shop.id} className="bg-white rounded-xl p-4 shadow-neonBlue hover:shadow-neonGreen transition cursor-pointer">
+              <h3 className="text-lg font-semibold text-primary mb-1">{shop.name}</h3>
+              <p className="text-gray-600 text-justify mb-2">Vendor: {shop.vendor}</p>
+              <div className="flex items-center gap-2">
+                {shop.trusted && <span className="text-blue-600 flex items-center gap-1 font-semibold">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2l4 -4" /></svg>
+                  Trusted
+                </span>}
+                <button
+                  onClick={() => alert(`Open chat with ${shop.vendor} (to implement)`)}
+                  className="ml-auto bg-gradient-to-r from-blue-600 to-emerald-500 text-white px-3 py-1 rounded shadow hover:brightness-110 transition"
+                >
+                  Chat
+                </button>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* Chat Section */}
+      <div className="bg-white rounded-xl shadow-neonBlue p-4 max-w-4xl mx-auto">
+        <div className="flex gap-4 mb-4">
+          <button
+            onClick={() => setActiveChat('general')}
+            className={`flex-1 py-2 rounded ${activeChat === 'general' ? 'bg-gradient-to-r from-blue-600 to-emerald-500 text-white shadow-neonGreen' : 'bg-gray-100'}`}
+          >
+            General Market Chat
+          </button>
+          <button
+            onClick={() => setActiveChat('line')}
+            className={`flex-1 py-2 rounded ${activeChat === 'line' ? 'bg-gradient-to-r from-blue-600 to-emerald-500 text-white shadow-neonGreen' : 'bg-gray-100'}`}
+          >
+            Onitsha Line Chat
+          </button>
+        </div>
+
+        <div className="h-64 overflow-y-auto mb-4 border border-gray-300 rounded p-3 bg-gray-50">
+          {(activeChat === 'general' ? generalMessages : lineMessages).map((msg, i) => (
+            <div key={i} className={`mb-2 p-2 rounded ${msg.sender === 'You' ? 'bg-emerald-400 text-white self-end' : 'bg-gray-200'}`}>
+              <p className="font-semibold">{msg.sender}</p>
+              <p>{msg.text}</p>
+              <p className="text-xs text-gray-500 text-right">{msg.time}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex gap-3">
+          <input
+            type="text"
+            placeholder="Type your message..."
+            className="flex-grow border rounded p-2"
+            value={newMessage}
+            onChange={e => setNewMessage(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && handleSendMessage()}
+          />
+          <button
+            onClick={handleSendMessage}
+            className="bg-gradient-to-r from-blue-600 to-emerald-500 text-white px-4 py-2 rounded shadow-neonGreen hover:brightness-110 transition"
+          >
+            Send
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+Integration Notes:
+Replace dummy shops and messages with real data from your backend/state when ready.
+
+Extend chat with real-time backend later (Firebase, Socket.io).
+
+This page is for route /markets/:marketId/:lineId.
+
