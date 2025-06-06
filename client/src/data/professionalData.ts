@@ -1,110 +1,152 @@
 import { 
-  Building2, Wrench, Snowflake, Monitor, Printer, Laptop, 
-  Globe, Palette, Video, Smartphone, Zap, Scissors, 
-  Sparkles, Calendar, BarChart3, Camera, Hammer, TreePine 
+  Palette, Video, Globe, FileText, BarChart3
 } from 'lucide-react';
 
 export const serviceCategories = [
-  { id: 'architecture', name: 'Architecture & Building Design', icon: Building2, color: 'from-blue-500 to-indigo-600' },
-  { id: 'plumbing', name: 'Plumbing & Pipe Repairs', icon: Wrench, color: 'from-orange-500 to-red-500' },
-  { id: 'fridge-ac', name: 'Fridge & AC Repairs', icon: Snowflake, color: 'from-cyan-500 to-blue-500' },
-  { id: 'electronics', name: 'Electronics Repairs (TVs, Radios, etc.)', icon: Monitor, color: 'from-purple-500 to-pink-500' },
-  { id: 'printer', name: 'Printer & Copier Repairs', icon: Printer, color: 'from-gray-500 to-slate-600' },
-  { id: 'computer', name: 'Laptop & Computer Repairs', icon: Laptop, color: 'from-indigo-500 to-purple-600' },
-  { id: 'webdev', name: 'Web Development & Maintenance', icon: Globe, color: 'from-green-500 to-emerald-600' },
-  { id: 'graphics', name: 'Graphic Design & Branding', icon: Palette, color: 'from-pink-500 to-rose-500' },
-  { id: 'video', name: 'Video Editing & Production', icon: Video, color: 'from-red-500 to-orange-500' },
-  { id: 'mobile', name: 'Mobile Phone Repairs', icon: Smartphone, color: 'from-blue-500 to-cyan-500' },
-  { id: 'electrical', name: 'Electrical Installations & Repairs', icon: Zap, color: 'from-yellow-500 to-orange-500' },
-  { id: 'tailoring', name: 'Tailoring & Clothing Alterations', icon: Scissors, color: 'from-purple-500 to-indigo-500' },
-  { id: 'cleaning', name: 'Cleaning & Housekeeping Services', icon: Sparkles, color: 'from-teal-500 to-cyan-600' },
-  { id: 'events', name: 'Event Planning & Management', icon: Calendar, color: 'from-amber-500 to-yellow-500' },
-  { id: 'marketing', name: 'Digital Marketing & Social Media Management', icon: BarChart3, color: 'from-emerald-500 to-green-600' },
-  { id: 'photography', name: 'Photography & Videography', icon: Camera, color: 'from-rose-500 to-pink-500' },
-  { id: 'welding', name: 'Welding & Metal Fabrication', icon: Hammer, color: 'from-gray-600 to-slate-700' },
-  { id: 'carpentry', name: 'Carpentry & Furniture Making', icon: TreePine, color: 'from-amber-600 to-orange-600' }
+  { 
+    id: 'graphic-design', 
+    name: 'Graphic Design & Branding', 
+    icon: Palette, 
+    color: 'from-pink-500 to-rose-500',
+    description: 'Creative designs for logos, marketing, and branding.',
+    emoji: '🎨'
+  },
+  { 
+    id: 'video-editing', 
+    name: 'Video Editing & Production', 
+    icon: Video, 
+    color: 'from-red-500 to-orange-500',
+    description: 'Professional video editing for your projects and ads.',
+    emoji: '🎬'
+  },
+  { 
+    id: 'web-development', 
+    name: 'Website Design & Development', 
+    icon: Globe, 
+    color: 'from-green-500 to-emerald-600',
+    description: 'Modern, responsive websites tailored to your needs.',
+    emoji: '💻'
+  },
+  { 
+    id: 'resume-writing', 
+    name: 'Resume/CV Writing & Career Coaching', 
+    icon: FileText, 
+    color: 'from-blue-500 to-indigo-600',
+    description: 'Stand out with expert resume writing and career advice.',
+    emoji: '📄'
+  },
+  { 
+    id: 'data-analysis', 
+    name: 'Data Analysis & Visualization', 
+    icon: BarChart3, 
+    color: 'from-purple-500 to-pink-500',
+    description: 'Make data-driven decisions with professional analysis.',
+    emoji: '📊'
+  }
 ];
 
 export const dummyProfessionals = [
   {
-    id: 'john_doe',
-    name: 'John Nkembi',
-    photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150',
-    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150',
-    category: 'architecture',
-    rating: 4.8,
-    trustCount: 120,
-    bio: 'Licensed architect specializing in modern residential and commercial designs for Bamenda.',
-    username: 'john_doe',
-    location: 'Commercial Avenue, Bamenda',
-    experience: 10,
-    rate: '50,000 FCFA/project',
-    completedProjects: 45,
-    verified: true
-  },
-  {
-    id: 'marie_mbah',
-    name: 'Marie Mbah',
+    id: 'alice_mfo',
+    name: 'Alice Mfo',
     photo: 'https://images.unsplash.com/photo-1494790108755-2616b5b69d0e?w=150',
     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b5b69d0e?w=150',
-    category: 'plumbing',
+    category: 'graphic-design',
     rating: 4.9,
-    trustCount: 89,
-    bio: 'Professional plumber with expertise in pipe repairs and water system maintenance.',
-    username: 'marie_mbah',
-    location: 'Ntarikon, Bamenda',
+    trustCount: 120,
+    bio: 'Expert in branding and logo creation with 7 years experience. Specialized in creating stunning visual identities for Bamenda businesses.',
+    username: 'alice_mfo',
+    location: 'Commercial Avenue, Bamenda',
     experience: 7,
-    rate: '15,000 FCFA/hour',
+    rate: '25,000 FCFA/project',
+    completedProjects: 89,
+    verified: true,
+    services: ['Logo Design', 'Business Cards', 'Flyers', 'Social Media Graphics']
+  },
+  {
+    id: 'jean_pierre',
+    name: 'Jean Pierre',
+    photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
+    category: 'video-editing',
+    rating: 4.7,
+    trustCount: 95,
+    bio: 'Video editor specializing in social media content and promotional videos for local businesses.',
+    username: 'jean_pierre',
+    location: 'Up Station, Bamenda',
+    experience: 5,
+    rate: '35,000 FCFA/project',
     completedProjects: 156,
-    verified: true
+    verified: true,
+    services: ['Social Media Videos', 'Promotional Videos', 'Event Coverage', 'YouTube Content']
   },
   {
     id: 'frank_tech',
     name: 'Frank Ndi',
-    photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
-    category: 'webdev',
-    rating: 4.7,
+    photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150',
+    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150',
+    category: 'web-development',
+    rating: 4.8,
     trustCount: 67,
-    bio: 'Full-stack web developer creating modern websites for local businesses.',
+    bio: 'Full-stack web developer creating modern, responsive websites for local businesses and startups.',
     username: 'frank_tech',
-    location: 'Up Station, Bamenda',
-    experience: 5,
-    rate: '75,000 FCFA/project',
+    location: 'Ntarikon, Bamenda',
+    experience: 6,
+    rate: '85,000 FCFA/project',
     completedProjects: 78,
-    verified: true
+    verified: true,
+    services: ['Business Websites', 'E-commerce Sites', 'Landing Pages', 'Mobile Apps']
   },
   {
-    id: 'power_electric',
-    name: 'Emmanuel Tabe',
+    id: 'mary_writer',
+    name: 'Mary Asanga',
+    photo: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150',
+    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150',
+    category: 'resume-writing',
+    rating: 4.9,
+    trustCount: 134,
+    bio: 'Professional resume writer and career coach helping job seekers land their dream positions.',
+    username: 'mary_writer',
+    location: 'Nkwen, Bamenda',
+    experience: 8,
+    rate: '15,000 FCFA/resume',
+    completedProjects: 203,
+    verified: true,
+    services: ['Resume Writing', 'Cover Letters', 'LinkedIn Profiles', 'Career Coaching']
+  },
+  {
+    id: 'data_paul',
+    name: 'Paul Awah',
     photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150',
     avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150',
-    category: 'electrical',
+    category: 'data-analysis',
     rating: 4.6,
-    trustCount: 134,
-    bio: 'Licensed electrician providing electrical installations and repairs.',
-    username: 'power_electric',
-    location: 'Nkwen, Bamenda',
-    experience: 12,
-    rate: '25,000 FCFA/day',
-    completedProjects: 203,
-    verified: true
+    trustCount: 87,
+    bio: 'Data analyst and visualization expert helping businesses make informed decisions through data insights.',
+    username: 'data_paul',
+    location: 'Commercial Avenue, Bamenda',
+    experience: 4,
+    rate: '45,000 FCFA/project',
+    completedProjects: 92,
+    verified: true,
+    services: ['Data Analysis', 'Business Intelligence', 'Report Creation', 'Dashboard Design']
   },
   {
-    id: 'mobile_fix',
-    name: 'David Achiri',
-    photo: 'https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=150',
-    avatar: 'https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=150',
-    category: 'mobile',
-    rating: 4.7,
-    trustCount: 203,
-    bio: 'Mobile phone repair specialist for all brands and models.',
-    username: 'mobile_fix',
-    location: 'Commercial Avenue, Bamenda',
-    experience: 9,
-    rate: '8,000 FCFA/repair',
-    completedProjects: 205,
-    verified: true
+    id: 'design_sarah',
+    name: 'Sarah Fru',
+    photo: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=150',
+    avatar: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=150',
+    category: 'graphic-design',
+    rating: 4.8,
+    trustCount: 156,
+    bio: 'Creative graphic designer specializing in modern branding and marketing materials for startups.',
+    username: 'design_sarah',
+    location: 'Up Station, Bamenda',
+    experience: 6,
+    rate: '30,000 FCFA/project',
+    completedProjects: 112,
+    verified: true,
+    services: ['Brand Identity', 'Marketing Materials', 'Package Design', 'Web Graphics']
   }
 ];
 
@@ -123,6 +165,7 @@ export interface Professional {
   rate: string;
   completedProjects: number;
   verified: boolean;
+  services: string[];
 }
 
 export interface ServiceCategory {
@@ -130,4 +173,6 @@ export interface ServiceCategory {
   name: string;
   icon: any;
   color: string;
+  description: string;
+  emoji: string;
 }

@@ -1,0 +1,142 @@
+Build a Professional Services marketplace in ProList that includes:
+
+1. Professional Services Page (/src/pages/ProfessionalServices.jsx)
+Shows the 5 core online services as clickable cards:
+
+Graphic Design & Branding
+
+Video Editing & Production
+
+Website Design & Development
+
+Resume/CV Writing & Career Coaching
+
+Data Analysis & Visualization
+
+Each card includes a service icon, short description, and neon hover effect.
+
+Clicking a service filters the professional providers list below by category.
+
+The professionals list shows dummy providers with:
+
+Name, photo, rating/trust badge, short bio
+
+Button to view professional profile
+
+Button to chat (in-app)
+
+The professional cards should have a “Hire” button linking to the checkout flow for escrow-protected service purchase.
+
+2. Signup Page Update (/src/pages/Signup.jsx)
+Add “Professional Service Provider” user type.
+
+When selected, show dropdown to choose from the 5 core services.
+
+Save user type and service category to user profile on signup.
+
+3. Professional Profile Page (/src/pages/ProfessionalProfile.jsx)
+Show professional’s name, photo, verified badge, trust score.
+
+Display service category and detailed bio/portfolio.
+
+List of services offered (dummy data).
+
+In-app chat button.
+
+“Hire Now” button linking to checkout page.
+
+4. Checkout Page (/src/pages/Checkout.jsx)
+Same escrow workflow as listings checkout:
+
+Show service details, price.
+
+Select payment method (MTN, Orange Money, CPP).
+
+Confirm order stores order with escrow status.
+
+Redirect to order confirmation page.
+
+5. Order Confirmation Page
+Confirms order received and payment held in escrow.
+
+Explains next steps (service delivery, buyer confirmation).
+
+Link to track orders.
+
+6. Order Tracking & Confirmation Pages
+Buyer sees active orders, confirms delivery, uploads proof photo.
+
+Vendor sees orders, marks service delivered.
+
+Admin releases escrow funds and updates sales count.
+
+7. In-App Chat Integration
+Chat component for buyers and providers to communicate before/during service.
+
+Real-time or simulated chat using React state or Firebase.
+
+8. Design & UI
+Use Tailwind CSS with neon color palette consistent with ProList branding.
+
+Responsive layouts, clean typography, smooth animations.
+
+Use appropriate icons for services and trust badges.
+
+Example Dummy Data (to include in code):
+js
+Copy
+const professionalServices = [
+  {
+    id: 'graphic-design',
+    name: 'Graphic Design & Branding',
+    icon: '🎨',
+    description: 'Creative designs for logos, marketing, and branding.',
+  },
+  {
+    id: 'video-editing',
+    name: 'Video Editing & Production',
+    icon: '🎬',
+    description: 'Professional video editing for your projects and ads.',
+  },
+  {
+    id: 'web-development',
+    name: 'Website Design & Development',
+    icon: '💻',
+    description: 'Modern, responsive websites tailored to your needs.',
+  },
+  {
+    id: 'resume-writing',
+    name: 'Resume/CV Writing & Career Coaching',
+    icon: '📄',
+    description: 'Stand out with expert resume writing and career advice.',
+  },
+  {
+    id: 'data-analysis',
+    name: 'Data Analysis & Visualization',
+    icon: '📊',
+    description: 'Make data-driven decisions with professional analysis.',
+  },
+];
+
+const dummyProfessionals = [
+  {
+    id: 'pro1',
+    name: 'Alice Mfo',
+    service: 'graphic-design',
+    rating: 4.9,
+    trustCount: 120,
+    bio: 'Expert in branding and logo creation with 7 years experience.',
+    photo: 'https://i.postimg.cc/XYZ/alice.jpg',
+  },
+  {
+    id: 'pro2',
+    name: 'Jean Pierre',
+    service: 'video-editing',
+    rating: 4.7,
+    trustCount: 95,
+    bio: 'Video editor specializing in social media content.',
+    photo: 'https://i.postimg.cc/XYZ/jean.jpg',
+  },
+  // add more professionals similarly
+];
+When you implement this complete flow, reply:
