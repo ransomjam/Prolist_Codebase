@@ -474,14 +474,11 @@ export default function MarketDetails() {
           </p>
         </div>
 
-        {/* Sections Grid */}
+        {/* Market Lines Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-8 lg:gap-10">
           {market.sections.map((section, index) => {
-            // Special routing for market lines vs regular sections
-            const isMarketLine = section.id.includes('line');
-            const linkPath = isMarketLine 
-              ? `/markets/${marketId}/lines/${section.id}`
-              : `/markets/${marketId}/sections/${section.id}`;
+            // All items now route to MarketLine
+            const linkPath = `/markets/${marketId}/lines/${section.id}`;
             
             return (
               <div key={section.id} className="group">
