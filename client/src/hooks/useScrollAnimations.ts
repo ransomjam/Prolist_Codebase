@@ -20,6 +20,9 @@ export function useScrollAnimations() {
               const newSet = new Set(prev);
               if (entry.isIntersecting) {
                 newSet.add(elementId);
+              } else {
+                // Remove from visible when out of view to allow re-triggering
+                newSet.delete(elementId);
               }
               return newSet;
             });
@@ -27,8 +30,8 @@ export function useScrollAnimations() {
         });
       },
       {
-        threshold: 0.1,
-        rootMargin: '0px 0px -80px 0px'
+        threshold: 0.2,
+        rootMargin: '0px 0px -100px 0px'
       }
     );
 
@@ -42,8 +45,8 @@ export function useScrollAnimations() {
     
     if (!isVisible) {
       if (animationType === 'slide') {
-        // Enhanced left to right slide-in entrance state
-        return 'opacity-0 -translate-x-24 scale-90';
+        // Enhanced left to right slide-in entrance state with more dramatic effect
+        return 'opacity-0 -translate-x-32 scale-85 blur-sm';
       } else {
         // Cool entrance states with 3D transforms
         const entranceTypes = [
@@ -57,8 +60,8 @@ export function useScrollAnimations() {
       }
     }
 
-    // Enhanced smooth slide-in visible states
-    return 'opacity-100 translate-x-0 translate-y-0 rotate-0 scale-100 transition-all duration-1000 ease-out';
+    // Enhanced smooth slide-in visible states with better timing
+    return 'opacity-100 translate-x-0 translate-y-0 rotate-0 scale-100 blur-none transition-all duration-1200 ease-out';
   }, [visibleElements]);
 
   const getAnimationStyle = useCallback((index: number = 0) => {
