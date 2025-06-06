@@ -440,37 +440,33 @@ export default function MarketLine() {
           )}
         </div>
 
-        {/* Compact Search and Filter */}
-        <div className="bg-white rounded-2xl shadow-lg p-4 mb-6">
-          <div className="flex flex-col sm:flex-row gap-3">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-              <input
-                type="text"
-                placeholder="Search shops..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-500"
-              />
-            </div>
-            <div className="relative">
-              <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={18} />
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="pl-10 pr-8 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 cursor-pointer appearance-none min-w-[160px]"
-              >
-                {categories.map(cat => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
-              </select>
-            </div>
+        {/* Minimal Search and Filter */}
+        <div className="flex items-center gap-2 mb-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-8 pr-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-400"
+            />
           </div>
-          <div className="mt-3 text-center">
-            <p className="text-sm text-gray-600">
-              {filteredShops.length} shops
-            </p>
+          <div className="relative">
+            <Filter className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="pl-8 pr-6 py-2 bg-white border border-gray-200 rounded-lg text-sm cursor-pointer appearance-none min-w-[120px]"
+            >
+              {categories.map(cat => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}
+            </select>
           </div>
+          <span className="text-xs text-gray-500 whitespace-nowrap">
+            {filteredShops.length} shops
+          </span>
         </div>
 
         {/* Professional Shops Grid */}
