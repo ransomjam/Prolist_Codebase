@@ -3,10 +3,15 @@ import Card from "../components/Card";
 import Button from "../components/Button";
 import { markets } from "../data/demoData";
 import { useAuth } from "../hooks/useAuth";
+import { useScrollAnimations } from "../hooks/useScrollAnimations";
 import heroImage from "@assets/upstation-hill.jpg";
 
 export default function Homepage() {
   const { user } = useAuth();
+  const { setElementRef, getAnimationClass, getAnimationStyle } = useScrollAnimations({
+    enableParallax: true,
+    staggerDelay: 100
+  });
 
   const quickActions = [
     { icon: ShoppingBag, label: "Browse Products", href: "/products", color: "from-blue-500 to-blue-600" },
@@ -30,14 +35,29 @@ export default function Homepage() {
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 scroll-smooth">
       {/* Welcome Section */}
-      <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-green-600 rounded-2xl p-6 lg:p-8 text-white">
+      <div 
+        ref={(el) => setElementRef('welcome-section', el)}
+        data-animation-id="welcome-section"
+        className={`bg-gradient-to-r from-blue-600 via-purple-600 to-green-600 rounded-2xl p-6 lg:p-8 text-white gpu-accelerated will-change-transform ${getAnimationClass('welcome-section', 0)}`}
+        style={getAnimationStyle(0)}
+      >
         <div className="max-w-4xl">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2">
+          <h1 
+            ref={(el) => setElementRef('welcome-title', el)}
+            data-animation-id="welcome-title"
+            className={`text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 ${getAnimationClass('welcome-title', 1)}`}
+            style={getAnimationStyle(1)}
+          >
             Welcome back, {user?.name || user?.username}! 👋
           </h1>
-          <p className="text-blue-100 mb-6">
+          <p 
+            ref={(el) => setElementRef('welcome-text', el)}
+            data-animation-id="welcome-text"
+            className={`text-blue-100 mb-6 ${getAnimationClass('welcome-text', 2)}`}
+            style={getAnimationStyle(2)}
+          >
             Ready to explore the marketplace? Check out what's new in your community.
           </p>
           
@@ -48,8 +68,11 @@ export default function Homepage() {
               return (
                 <a
                   key={index}
+                  ref={(el) => setElementRef(`quick-action-${index}`, el)}
+                  data-animation-id={`quick-action-${index}`}
                   href={action.href}
-                  className="bg-white/10 backdrop-blur-sm rounded-lg p-3 text-center hover:bg-white/20 transition-all duration-300 transform hover:scale-105"
+                  className={`bg-white/10 backdrop-blur-sm rounded-lg p-3 text-center hover:bg-white/20 transition-all duration-300 transform hover:scale-105 gpu-accelerated will-change-transform ${getAnimationClass(`quick-action-${index}`, index + 3)}`}
+                  style={getAnimationStyle(index + 3)}
                 >
                   <div className={`w-10 h-10 bg-gradient-to-br ${action.color} rounded-lg mx-auto mb-2 flex items-center justify-center`}>
                     <Icon className="text-white" size={18} />
@@ -65,7 +88,13 @@ export default function Homepage() {
       {/* Quick Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat, index) => (
-          <div key={index} className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 text-center">
+          <div 
+            key={index} 
+            ref={(el) => setElementRef(`stat-${index}`, el)}
+            data-animation-id={`stat-${index}`}
+            className={`bg-white rounded-xl p-4 shadow-sm border border-gray-100 text-center gpu-accelerated will-change-transform hover:scale-105 transition-transform duration-300 ${getAnimationClass(`stat-${index}`, index + 7)}`}
+            style={getAnimationStyle(index + 7)}
+          >
             <div className={`text-2xl lg:text-3xl font-bold ${stat.color} mb-1`}>
               {stat.value}
             </div>
@@ -76,7 +105,12 @@ export default function Homepage() {
 
       {/* Featured Markets */}
       <section>
-        <div className="flex items-center justify-between mb-6">
+        <div 
+          ref={(el) => setElementRef('markets-header', el)}
+          data-animation-id="markets-header"
+          className={`flex items-center justify-between mb-6 ${getAnimationClass('markets-header', 11)}`}
+          style={getAnimationStyle(11)}
+        >
           <h2 className="text-2xl font-bold text-gray-800">Featured Markets</h2>
           <a href="/markets" className="text-neonBlue font-semibold hover:text-blue-600 transition-colors">
             View All →
@@ -84,8 +118,15 @@ export default function Homepage() {
         </div>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {markets.slice(0, 3).map((market) => (
-            <a key={market.id} href={`/markets/${market.id}`} className="block">
+          {markets.slice(0, 3).map((market, index) => (
+            <a 
+              key={market.id} 
+              ref={(el) => setElementRef(`market-${market.id}`, el)}
+              data-animation-id={`market-${market.id}`}
+              href={`/markets/${market.id}`} 
+              className={`block gpu-accelerated will-change-transform ${getAnimationClass(`market-${market.id}`, index + 12)}`}
+              style={getAnimationStyle(index + 12)}
+            >
               <Card
                 title={market.name}
                 description={`${market.shops.length} shops, ${market.importers.length} importers, ${market.vendors.length} vendors`}
@@ -104,15 +145,25 @@ export default function Homepage() {
 
       {/* Popular Categories */}
       <section>
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">Popular Categories</h2>
+        <h2 
+          ref={(el) => setElementRef('categories-header', el)}
+          data-animation-id="categories-header"
+          className={`text-2xl font-bold text-gray-800 mb-6 ${getAnimationClass('categories-header', 15)}`}
+          style={getAnimationStyle(15)}
+        >
+          Popular Categories
+        </h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {categories.map((category, index) => {
             const Icon = category.icon;
             return (
               <a 
                 key={index}
+                ref={(el) => setElementRef(`category-${index}`, el)}
+                data-animation-id={`category-${index}`}
                 href="/listings"
-                className="bg-white rounded-xl p-4 text-center shadow-sm hover:shadow-neonBlue transition-all duration-300 transform hover:scale-105 cursor-pointer block"
+                className={`bg-white rounded-xl p-4 text-center shadow-sm hover:shadow-neonBlue transition-all duration-300 transform hover:scale-105 cursor-pointer block gpu-accelerated will-change-transform ${getAnimationClass(`category-${index}`, index + 16)}`}
+                style={getAnimationStyle(index + 16)}
               >
                 <div className={`w-12 h-12 bg-gradient-to-br ${category.color} rounded-lg mx-auto mb-3 flex items-center justify-center`}>
                   <Icon className="text-white" size={20} />

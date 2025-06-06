@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Filter, ShoppingBag, Shield, Star, Eye } from 'lucide-react';
+import { useScrollAnimations } from '../hooks/useScrollAnimations';
 
 interface Product {
   id: number;
