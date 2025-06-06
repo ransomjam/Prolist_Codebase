@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { useParams, Link } from 'wouter';
-import { ArrowLeft, Shield, MapPin, Phone, Star, Clock, Users } from 'lucide-react';
+import { ArrowLeft, Shield, MapPin, Phone, Star, Clock, Users, MessageSquare, Send, ShoppingBag } from 'lucide-react';
 
 interface Shop {
   id: number;
@@ -11,6 +12,14 @@ interface Shop {
   specialties: string[];
   openHours: string;
   contact: string;
+}
+
+interface Message {
+  id: number;
+  sender: string;
+  text: string;
+  time: string;
+  isSystem?: boolean;
 }
 
 interface SectionData {
@@ -271,9 +280,70 @@ const marketLinesData: MarketData = {
 
 export default function LineDetails() {
   const { marketId, sectionId } = useParams();
+  const [chatOpen, setChatOpen] = useState(false);
+  const [activeChat, setActiveChat] = useState('general');
+  
+  const [generalMessages, setGeneralMessages] = useState<Message[]>([
+    { 
+      id: 1,
+      sender: 'Section Admin', 
+      text: `Welcome to ${sectionId?.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())} chat!`, 
+      time: '9:30 AM',
+      isSystem: true 
+    },
+    { 
+      id: 2,
+      sender: 'Shop Owner', 
+      text: 'New arrivals this week - check out our latest products!', 
+      time: '10:15 AM' 
+    },
+  ]);
+  
+  const [sectionMessages, setSectionMessages] = useState<Message[]>([
+    { 
+      id: 1,
+      sender: 'Section Moderator', 
+      text: `Welcome to ${sectionId?.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())} vendors chat!`, 
+      time: '9:00 AM',
+      isSystem: true 
+    },
+    { 
+      id: 2,
+      sender: 'Vendor Group', 
+      text: 'Special discounts available for bulk orders this month!', 
+      time: '9:30 AM' 
+    },
+  ]);
+  
+  const [newMessage, setNewMessage] = useState('');
   
   const sectionData = marketLinesData[marketId as string]?.[sectionId as string];
   const shops = sectionData?.shops || [];
+
+  const handleSendMessage = () => {
+    if (!newMessage.trim()) return;
+    
+    const message: Message = {
+      id: Date.now(),
+      sender: 'You',
+      text: newMessage.trim(),
+      time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+    };
+    
+    if (activeChat === 'general') {
+      setGeneralMessages(prev => [...prev, message]);
+    } else {
+      setSectionMessages(prev => [...prev, message]);
+    }
+    setNewMessage('');
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
 
   if (!sectionData) {
     return (
@@ -330,6 +400,121 @@ export default function LineDetails() {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Interactive Chat Button */}
+        <div className="bg-white rounded-3xl shadow-2xl p-4 mb-8">
+          <button
+            onClick={() => setChatOpen(!chatOpen)}
+            className="w-full flex items-center justify-between p-4 bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 text-white rounded-2xl hover:from-blue-700 hover:via-purple-700 hover:to-teal-700 transition-all duration-300"
+          >
+            <div className="flex items-center gap-3">
+              <MessageSquare size={24} />
+              <div className="text-left">
+                <div className="font-semibold">Section Chat Groups</div>
+                <div className="text-blue-100 text-sm">
+                  {generalMessages.length + sectionMessages.length} messages total
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
+                {chatOpen ? 'Close' : 'Open'} Chat
+              </span>
+              <div className={`transform transition-transform duration-300 ${chatOpen ? 'rotate-180' : ''}`}>
+                ▼
+              </div>
+            </div>
+          </button>
+
+          {/* Expandable Chat Interface */}
+          {chatOpen && (
+            <div className="mt-4 border-t border-gray-200 pt-4">
+              {/* Chat Tabs */}
+              <div className="flex space-x-1 bg-gray-100 rounded-2xl p-1 mb-4">
+                <button
+                  onClick={() => setActiveChat('general')}
+                  className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium transition-all duration-300 ${
+                    activeChat === 'general'
+                      ? 'bg-white text-blue-600 shadow-lg'
+                      : 'text-gray-600 hover:text-gray-800'
+                  }`}
+                >
+                  <Users size={18} />
+                  General Chat
+                  <span className="bg-blue-100 text-blue-600 px-2 py-1 rounded-full text-xs">
+                    {generalMessages.length}
+                  </span>
+                </button>
+                <button
+                  onClick={() => setActiveChat('section')}
+                  className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium transition-all duration-300 ${
+                    activeChat === 'section'
+                      ? 'bg-white text-purple-600 shadow-lg'
+                      : 'text-gray-600 hover:text-gray-800'
+                  }`}
+                >
+                  <ShoppingBag size={18} />
+                  Section Vendors
+                  <span className="bg-purple-100 text-purple-600 px-2 py-1 rounded-full text-xs">
+                    {sectionMessages.length}
+                  </span>
+                </button>
+              </div>
+
+              {/* Chat Messages */}
+              <div className="h-64 overflow-y-auto mb-4 border border-gray-300 rounded-2xl p-4 bg-gray-50">
+                <div className="space-y-3">
+                  {(activeChat === 'general' ? generalMessages : sectionMessages).map((msg) => (
+                    <div key={msg.id} className={`flex ${msg.sender === 'You' ? 'justify-end' : 'justify-start'}`}>
+                      <div className={`max-w-xs lg:max-w-md px-3 py-2 rounded-xl ${
+                        msg.isSystem
+                          ? 'bg-yellow-100 text-yellow-800 text-center text-sm italic'
+                          : msg.sender === 'You'
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-white text-gray-800 shadow-sm'
+                      }`}>
+                        {!msg.isSystem && msg.sender !== 'You' && (
+                          <div className="text-xs font-semibold mb-1 text-blue-600">
+                            {msg.sender}
+                          </div>
+                        )}
+                        <div className="text-sm">{msg.text}</div>
+                        <div className={`text-xs mt-1 ${
+                          msg.isSystem 
+                            ? 'text-yellow-600'
+                            : msg.sender === 'You' 
+                            ? 'text-blue-200' 
+                            : 'text-gray-500'
+                        }`}>
+                          {msg.time}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Message Input */}
+              <div className="flex gap-3">
+                <input
+                  type="text"
+                  placeholder={`Message ${activeChat === 'general' ? 'section chat' : 'vendors chat'}...`}
+                  className="flex-grow border border-gray-300 rounded-2xl p-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                />
+                <button
+                  onClick={handleSendMessage}
+                  disabled={!newMessage.trim()}
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-2xl shadow-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                >
+                  <Send size={18} />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Shops Grid */}
