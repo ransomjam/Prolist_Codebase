@@ -469,8 +469,8 @@ export default function MarketLine() {
           </span>
         </div>
 
-        {/* Professional Shops Grid */}
-        <div className="grid grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-8 gap-3 md:gap-4 lg:gap-6">
+        {/* Horizontal Shop Cards */}
+        <div className="space-y-3">
           {filteredShops.length === 0 ? (
             <div className="col-span-full text-center bg-white rounded-3xl shadow-xl p-12">
               <div className="text-6xl mb-6">🔍</div>
@@ -490,115 +490,75 @@ export default function MarketLine() {
             </div>
           ) : (
             filteredShops.map(shop => (
-              <div key={shop.id} className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] group overflow-hidden">
-                {/* Shop Image Header */}
-                <div className="relative h-24 sm:h-32 md:h-36 bg-gradient-to-br from-blue-100 to-purple-100 overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-10" />
-                  <div className="w-full h-full bg-gradient-to-br from-blue-200 to-purple-200 flex items-center justify-center">
-                    <div className="text-center text-gray-600">
-                      <ShoppingBag size={20} className="mx-auto mb-1 opacity-60" />
-                      <div className="text-xs font-medium opacity-80 hidden sm:block">{shop.category}</div>
-                    </div>
+              <div key={shop.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 hover:shadow-md transition-all duration-200">
+                <div className="flex items-center gap-4">
+                  {/* Shop Icon */}
+                  <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-blue-100 to-purple-100 rounded-lg flex items-center justify-center">
+                    <ShoppingBag size={20} className="text-blue-600" />
                   </div>
                   
-                  {/* Verification Badge */}
-                  {shop.verified && (
-                    <div className="absolute top-2 right-2 z-20">
-                      <div className="bg-emerald-500 text-white px-2 py-1 rounded-full flex items-center gap-1 text-xs font-medium shadow-lg">
-                        <Shield size={12} />
-                        Verified
-                      </div>
-                    </div>
-                  )}
-                  
-                  {/* Trust Score */}
-                  <div className="absolute bottom-2 left-2 z-20">
-                    <div className="bg-white/90 backdrop-blur-sm text-gray-800 px-2 py-1 rounded-full flex items-center gap-1 text-xs font-medium shadow-sm">
-                      <Award size={12} className="text-blue-600" />
-                      {shop.trustScore}%
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-2 sm:p-3 md:p-4">
-                  {/* Shop Information */}
-                  <div className="mb-3">
-                    <div className="flex items-start justify-between mb-1">
-                      <h3 className="text-sm sm:text-base font-bold text-gray-800 leading-tight group-hover:text-blue-600 transition-colors duration-300">
-                        {shop.name}
-                      </h3>
+                  {/* Main Shop Info */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="font-semibold text-gray-900 truncate">{shop.name}</h3>
+                      {shop.verified && (
+                        <Shield size={16} className="text-emerald-500 flex-shrink-0" />
+                      )}
                       {shop.trusted && (
-                        <Shield size={14} className="text-emerald-500 flex-shrink-0 mt-0.5" />
+                        <CheckCircle size={16} className="text-blue-500 flex-shrink-0" />
                       )}
                     </div>
-                    <p className="text-xs text-gray-600 mb-1">by {shop.vendor}</p>
-                    <p className="text-xs text-blue-600 font-medium bg-blue-50 px-2 py-1 rounded-full inline-block">
-                      {shop.category}
-                    </p>
-                  </div>
-
-                  {/* Rating and Business Info */}
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-1">
-                      <Star size={14} className="text-yellow-500 fill-current" />
-                      <span className="text-sm font-medium text-gray-700">{shop.rating}</span>
-                      <span className="text-xs text-gray-500">({shop.reviews})</span>
+                    
+                    <div className="flex items-center gap-4 text-sm text-gray-600 mb-2">
+                      <span>{shop.vendor}</span>
+                      <span className="flex items-center gap-1">
+                        <Star size={14} className="text-yellow-400 fill-current" />
+                        {shop.rating} ({shop.reviews})
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Award size={14} className="text-blue-500" />
+                        {shop.trustScore}%
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Clock size={14} className="text-gray-400" />
+                        {shop.yearsInBusiness} years
+                      </span>
                     </div>
-                    <div className="flex items-center gap-1 text-xs text-gray-500">
-                      <Clock size={12} />
-                      {shop.yearsInBusiness}y
-                    </div>
-                  </div>
-
-                  {/* Specialties */}
-                  <div className="mb-3">
+                    
                     <div className="flex flex-wrap gap-1">
-                      {shop.specialties.slice(0, 2).map((specialty, index) => (
-                        <span key={index} className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-full">
+                      <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">{shop.category}</span>
+                      {shop.specialties.slice(0, 3).map((specialty, idx) => (
+                        <span key={idx} className="px-2 py-1 bg-blue-50 text-blue-600 rounded text-xs">
                           {specialty}
                         </span>
                       ))}
-                      {shop.specialties.length > 2 && (
-                        <span className="text-xs text-blue-600 font-medium">
-                          +{shop.specialties.length - 2} more
+                      {shop.specialties.length > 3 && (
+                        <span className="px-2 py-1 bg-gray-50 text-gray-500 rounded text-xs">
+                          +{shop.specialties.length - 3} more
                         </span>
                       )}
                     </div>
                   </div>
-
+                  
                   {/* Action Buttons */}
-                  <div className="space-y-2">
+                  <div className="flex items-center gap-2 flex-shrink-0">
                     <Link to={`/shop-profile/${shop.id}`}>
-                      <button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 rounded-xl text-sm font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 flex items-center justify-center gap-2 group-hover:scale-105">
-                        <Eye size={14} />
-                        View Shop
+                      <button className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition-colors flex items-center gap-2">
+                        <Eye size={16} />
+                        <span className="hidden sm:inline">Visit</span>
                       </button>
                     </Link>
-                    
-                    <div className="grid grid-cols-2 gap-2">
-                      <button 
-                        onClick={() => handleWhatsAppClick(shop.phone)}
-                        className="bg-emerald-500 text-white py-2 px-3 rounded-xl text-xs font-medium hover:bg-emerald-600 transition-all duration-300 flex items-center justify-center gap-1"
-                      >
-                        <MessageCircle size={12} />
-                        WhatsApp
-                      </button>
-                      <button 
-                        onClick={() => handleCallClick(shop.phone)}
-                        className="bg-blue-500 text-white py-2 px-3 rounded-xl text-xs font-medium hover:bg-blue-600 transition-all duration-300 flex items-center justify-center gap-1"
-                      >
-                        <Phone size={12} />
-                        Call
-                      </button>
-                    </div>
-                    
-                    {/* Direct Vendor Chat */}
                     <button 
                       onClick={() => handleVendorChat(shop.vendor, shop.name)}
-                      className="w-full bg-gray-100 text-gray-700 py-2 rounded-xl text-xs font-medium hover:bg-gray-200 transition-all duration-300 flex items-center justify-center gap-2"
+                      className="bg-green-500 text-white px-3 py-2 rounded-lg text-sm hover:bg-green-600 transition-colors"
                     >
-                      <MessageSquare size={12} />
-                      Chat with Vendor
+                      <MessageCircle size={16} />
+                    </button>
+                    <button 
+                      onClick={() => handleCallClick(shop.phone)}
+                      className="bg-emerald-500 text-white px-3 py-2 rounded-lg text-sm hover:bg-emerald-600 transition-colors"
+                    >
+                      <Phone size={16} />
                     </button>
                   </div>
                 </div>
