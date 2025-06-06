@@ -45,7 +45,7 @@ export default function Auctions() {
       <div 
         ref={(el) => setElementRef('auction-header', el)}
         data-animation-id="auction-header"
-        className={`flex items-center justify-between mb-6 gpu-accelerated will-change-transform ${getAnimationClass('auction-header', 0)}`}
+        className={`flex items-center justify-between mb-6 gpu-accelerated will-change-transform ${getAnimationClass('auction-header', 0, 'slide')}`}
         style={getAnimationStyle(0)}
       >
         <div className="flex items-center gap-3">

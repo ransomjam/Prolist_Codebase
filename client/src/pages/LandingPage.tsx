@@ -28,7 +28,7 @@ export default function LandingPage() {
         <div 
           ref={(el) => setElementRef('hero-content', el)}
           data-animation-id="hero-content"
-          className={`relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 transform gpu-accelerated will-change-transform ${getAnimationClass('hero-content', 0)}`}
+          className={`relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 transform gpu-accelerated will-change-transform ${getAnimationClass('hero-content', 0, 'slide')}`}
           style={getAnimationStyle(0)}
         >
           <h1 

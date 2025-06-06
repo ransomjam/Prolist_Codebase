@@ -79,14 +79,14 @@ export default function ProductFeed() {
       <div 
         ref={(el) => setElementRef('header', el)}
         data-animation-id="header"
-        className={`flex items-center justify-between mb-6 gpu-accelerated will-change-transform ${getAnimationClass('header', 0)}`}
+        className={`flex items-center justify-between mb-6 gpu-accelerated will-change-transform ${getAnimationClass('header', 0, 'slide')}`}
         style={getAnimationStyle(0)}
       >
         <div>
           <h2 
             ref={(el) => setElementRef('title', el)}
             data-animation-id="title"
-            className={`text-2xl sm:text-3xl font-bold text-blue-600 leading-tight ${getAnimationClass('title', 1)}`}
+            className={`text-2xl sm:text-3xl font-bold text-blue-600 leading-tight ${getAnimationClass('title', 1, 'slide')}`}
             style={getAnimationStyle(1)}
           >
             Listings
@@ -94,7 +94,7 @@ export default function ProductFeed() {
           <p 
             ref={(el) => setElementRef('subtitle', el)}
             data-animation-id="subtitle"
-            className={`text-gray-600 text-sm mt-1 ${getAnimationClass('subtitle', 2)}`}
+            className={`text-gray-600 text-sm mt-1 ${getAnimationClass('subtitle', 2, 'slide')}`}
             style={getAnimationStyle(2)}
           >
             Trusted products from verified vendors
@@ -104,7 +104,7 @@ export default function ProductFeed() {
           ref={(el) => setElementRef('list-button', el)}
           data-animation-id="list-button"
           onClick={() => window.location.href = '/product-listing'}
-          className={`bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium shadow-sm hover:shadow-md transition-all duration-200 flex items-center gap-2 text-sm gpu-accelerated will-change-transform ${getAnimationClass('list-button', 3)}`}
+          className={`bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium shadow-sm hover:shadow-md transition-all duration-200 flex items-center gap-2 text-sm gpu-accelerated will-change-transform ${getAnimationClass('list-button', 3, 'slide')}`}
           style={getAnimationStyle(3)}
         >
           <ShoppingBag size={16} />
@@ -116,7 +116,7 @@ export default function ProductFeed() {
       <div 
         ref={(el) => setElementRef('filter-bar', el)}
         data-animation-id="filter-bar"
-        className={`mb-6 flex items-center gap-4 gpu-accelerated will-change-transform ${getAnimationClass('filter-bar', 4)}`}
+        className={`mb-6 flex items-center gap-4 gpu-accelerated will-change-transform ${getAnimationClass('filter-bar', 4, 'slide')}`}
         style={getAnimationStyle(4)}
       >
         <div className="flex items-center gap-2">
