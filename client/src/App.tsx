@@ -42,6 +42,7 @@ import AuctionDetail from "./pages/AuctionDetail";
 import AuctionPostProcess from "./components/AuctionPostProcess";
 import ProfessionalServices from "./pages/ProfessionalServices";
 import ServiceCategoryProfessionals from "./pages/ServiceCategoryProfessionals";
+import ServiceListings from "./pages/ServiceListings";
 import ServiceCheckout from "./pages/ServiceCheckout";
 import ServiceOrderConfirmed from "./pages/ServiceOrderConfirmed";
 import ProfessionalProfile from "./pages/ProfessionalProfile";
@@ -93,6 +94,7 @@ function Router() {
       <Route path="/professional-services" component={ProfessionalServices} />
       <Route path="/services" component={ProfessionalServices} />
       <Route path="/services/:categoryId" component={ServiceCategoryProfessionals} />
+      <Route path="/service-listings" component={ServiceListings} />
       <Route path="/service-checkout/:professionalId" component={ServiceCheckout} />
       <Route path="/service-order-confirmed/:orderId" component={ServiceOrderConfirmed} />
       <Route path="/professional-profile/:username" component={ProfessionalProfile} />
