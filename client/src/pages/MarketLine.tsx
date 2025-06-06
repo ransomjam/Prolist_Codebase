@@ -503,7 +503,7 @@ export default function MarketLine() {
                   {/* Shop Name & Status */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1 flex-wrap sm:flex-nowrap">
-                      <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">{shop.name}</h3>
+                      <h3 className="text-sm sm:text-base font-medium text-gray-900 truncate">{shop.name}</h3>
                       {shop.verified && (
                         <div className="flex items-center gap-1 bg-emerald-50 text-emerald-600 px-2 py-1 rounded-full text-xs flex-shrink-0">
                           <Shield size={10} className="sm:w-3 sm:h-3" />
@@ -522,9 +522,9 @@ export default function MarketLine() {
                   
                   {/* View Button */}
                   <Link to={`/shop-profile/${shop.id}`} className="flex-shrink-0">
-                    <button className="bg-blue-600 text-white px-3 py-2 sm:px-6 sm:py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 text-sm">
-                      <Eye size={14} className="sm:w-4 sm:h-4" />
-                      <span className="hidden sm:inline">View Shop</span>
+                    <button className="bg-blue-600 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center gap-1.5 text-xs sm:text-sm">
+                      <Eye size={12} className="sm:w-4 sm:h-4" />
+                      <span className="hidden sm:inline">View</span>
                       <span className="sm:hidden">View</span>
                     </button>
                   </Link>
