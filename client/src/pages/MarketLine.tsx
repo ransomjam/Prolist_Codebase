@@ -490,50 +490,54 @@ export default function MarketLine() {
             </div>
           ) : (
             filteredShops.map(shop => (
-              <div key={shop.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-3 hover:shadow-md transition-all duration-200">
-                <div className="flex items-center justify-between gap-3">
+              <div key={shop.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 hover:shadow-md transition-all duration-200">
+                <div className="flex items-center gap-4">
                   {/* Shop Icon */}
-                  <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-blue-100 to-purple-100 rounded-lg flex items-center justify-center">
-                    <ShoppingBag size={18} className="text-blue-600" />
+                  <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-blue-100 to-purple-100 rounded-lg flex items-center justify-center">
+                    <ShoppingBag size={20} className="text-blue-600" />
                   </div>
                   
-                  {/* Main Shop Info */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between mb-1">
-                      <div className="flex items-center gap-2">
+                  {/* Main Shop Info - Fixed Width */}
+                  <div className="flex-1 min-w-0 grid grid-cols-1 gap-1">
+                    {/* Top Row */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 min-w-0">
                         <h3 className="font-semibold text-gray-900 truncate text-sm">{shop.name}</h3>
-                        {shop.verified && (
-                          <Shield size={14} className="text-emerald-500 flex-shrink-0" />
-                        )}
-                        {shop.trusted && (
-                          <CheckCircle size={14} className="text-blue-500 flex-shrink-0" />
-                        )}
+                        <div className="flex gap-1">
+                          {shop.verified && (
+                            <Shield size={12} className="text-emerald-500 flex-shrink-0" />
+                          )}
+                          {shop.trusted && (
+                            <CheckCircle size={12} className="text-blue-500 flex-shrink-0" />
+                          )}
+                        </div>
                       </div>
-                      <div className="flex items-center gap-3 text-xs text-gray-600">
-                        <span className="flex items-center gap-1">
-                          <Star size={12} className="text-yellow-400 fill-current" />
-                          {shop.rating}
+                      <div className="flex items-center gap-2 text-xs text-gray-600 flex-shrink-0">
+                        <span className="flex items-center gap-0.5">
+                          <Star size={10} className="text-yellow-400 fill-current" />
+                          <span className="text-xs">{shop.rating}</span>
                         </span>
-                        <span className="flex items-center gap-1">
-                          <Award size={12} className="text-blue-500" />
-                          {shop.trustScore}%
+                        <span className="flex items-center gap-0.5">
+                          <Award size={10} className="text-blue-500" />
+                          <span className="text-xs">{shop.trustScore}%</span>
                         </span>
-                        <span className="flex items-center gap-1">
-                          <Clock size={12} className="text-gray-400" />
-                          {shop.yearsInBusiness}y
+                        <span className="flex items-center gap-0.5">
+                          <Clock size={10} className="text-gray-400" />
+                          <span className="text-xs">{shop.yearsInBusiness}y</span>
                         </span>
                       </div>
                     </div>
                     
+                    {/* Bottom Row */}
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2 text-xs text-gray-600">
-                        <span>{shop.vendor}</span>
+                      <div className="flex items-center gap-2 text-xs text-gray-600 min-w-0">
+                        <span className="truncate">{shop.vendor}</span>
                         <span className="text-gray-400">•</span>
-                        <span>{shop.category}</span>
+                        <span className="truncate">{shop.category}</span>
                       </div>
-                      <div className="flex gap-1">
+                      <div className="flex gap-1 flex-shrink-0">
                         {shop.specialties.slice(0, 2).map((specialty, idx) => (
-                          <span key={idx} className="px-1.5 py-0.5 bg-blue-50 text-blue-600 rounded text-xs">
+                          <span key={idx} className="px-1.5 py-0.5 bg-blue-50 text-blue-600 rounded text-xs whitespace-nowrap">
                             {specialty}
                           </span>
                         ))}
@@ -546,25 +550,25 @@ export default function MarketLine() {
                     </div>
                   </div>
                   
-                  {/* Action Buttons */}
-                  <div className="flex items-center gap-2 flex-shrink-0">
+                  {/* Action Buttons - Fixed Width */}
+                  <div className="flex items-center gap-1.5 flex-shrink-0">
                     <Link to={`/shop-profile/${shop.id}`}>
-                      <button className="bg-blue-600 text-white px-3 py-2 rounded-lg text-xs hover:bg-blue-700 transition-colors flex items-center gap-1">
-                        <Eye size={14} />
-                        <span className="hidden sm:inline">Visit</span>
+                      <button className="bg-blue-600 text-white px-2.5 py-1.5 rounded-md text-xs hover:bg-blue-700 transition-colors flex items-center gap-1">
+                        <Eye size={12} />
+                        <span className="hidden md:inline text-xs">Visit</span>
                       </button>
                     </Link>
                     <button 
                       onClick={() => handleVendorChat(shop.vendor, shop.name)}
-                      className="bg-green-500 text-white px-2 py-2 rounded-lg text-xs hover:bg-green-600 transition-colors"
+                      className="bg-green-500 text-white px-2 py-1.5 rounded-md text-xs hover:bg-green-600 transition-colors"
                     >
-                      <MessageCircle size={14} />
+                      <MessageCircle size={12} />
                     </button>
                     <button 
                       onClick={() => handleCallClick(shop.phone)}
-                      className="bg-emerald-500 text-white px-2 py-2 rounded-lg text-xs hover:bg-emerald-600 transition-colors"
+                      className="bg-emerald-500 text-white px-2 py-1.5 rounded-md text-xs hover:bg-emerald-600 transition-colors"
                     >
-                      <Phone size={14} />
+                      <Phone size={12} />
                     </button>
                   </div>
                 </div>
