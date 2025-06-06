@@ -377,24 +377,24 @@ export default function MarketDetails() {
           </div>
         </div>
 
-        {/* Market Chat Interface */}
-        <div className="bg-white rounded-3xl shadow-2xl p-4 mb-8">
+        {/* Compact Market Chat Interface */}
+        <div className="bg-white rounded-2xl shadow-lg p-3 mb-6">
           <button
             onClick={() => setChatOpen(!chatOpen)}
-            className="w-full flex items-center justify-between p-4 bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 text-white rounded-2xl hover:from-blue-700 hover:via-purple-700 hover:to-teal-700 transition-all duration-300"
+            className="w-full flex items-center justify-between p-2 bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 text-white rounded-xl hover:from-blue-700 hover:via-purple-700 hover:to-teal-700 transition-all duration-300"
           >
-            <div className="flex items-center gap-3">
-              <MessageSquare size={24} />
+            <div className="flex items-center gap-2">
+              <MessageSquare size={18} />
               <div className="text-left">
-                <div className="font-semibold">Market Community Chat</div>
-                <div className="text-blue-100 text-sm">
-                  {marketMessages.length} messages · Connect with vendors and customers
+                <div className="font-semibold text-sm">Market Community Chat</div>
+                <div className="text-blue-100 text-xs">
+                  {marketMessages.length} messages
                 </div>
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
-                {chatOpen ? 'Close' : 'Open'} Chat
+              <span className="bg-white/20 px-2 py-1 rounded-full text-xs">
+                {chatOpen ? 'Close' : 'Open'}
               </span>
               <div className={`transform transition-transform duration-300 ${chatOpen ? 'rotate-180' : ''}`}>
                 ▼
@@ -402,17 +402,17 @@ export default function MarketDetails() {
             </div>
           </button>
 
-          {/* Expandable Chat Interface */}
+          {/* Compact Expandable Chat Interface */}
           {chatOpen && (
-            <div className="mt-4 border-t border-gray-200 pt-4">
-              {/* Chat Messages */}
-              <div className="h-64 overflow-y-auto mb-4 border border-gray-300 rounded-2xl p-4 bg-gray-50">
-                <div className="space-y-3">
+            <div className="mt-3 border-t border-gray-200 pt-3">
+              {/* Horizontal Chat Messages */}
+              <div className="h-32 overflow-y-auto mb-3 border border-gray-300 rounded-xl p-3 bg-gray-50">
+                <div className="space-y-2">
                   {marketMessages.map((msg) => (
                     <div key={msg.id} className={`flex ${msg.sender === 'You' ? 'justify-end' : 'justify-start'}`}>
-                      <div className={`max-w-xs lg:max-w-md px-3 py-2 rounded-xl ${
+                      <div className={`max-w-xs px-2 py-1 rounded-lg ${
                         msg.isSystem
-                          ? 'bg-yellow-100 text-yellow-800 text-center text-sm italic'
+                          ? 'bg-yellow-100 text-yellow-800 text-center text-xs italic'
                           : msg.sender === 'You'
                           ? 'bg-blue-600 text-white'
                           : 'bg-white text-gray-800 shadow-sm'
@@ -422,7 +422,7 @@ export default function MarketDetails() {
                             {msg.sender}
                           </div>
                         )}
-                        <div className="text-sm">{msg.text}</div>
+                        <div className="text-xs">{msg.text}</div>
                         <div className={`text-xs mt-1 ${
                           msg.isSystem 
                             ? 'text-yellow-600'
@@ -438,12 +438,12 @@ export default function MarketDetails() {
                 </div>
               </div>
 
-              {/* Message Input */}
-              <div className="flex gap-3">
+              {/* Compact Message Input */}
+              <div className="flex gap-2">
                 <input
                   type="text"
-                  placeholder="Message the market community..."
-                  className="flex-grow border border-gray-300 rounded-2xl p-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Message the community..."
+                  className="flex-grow border border-gray-300 rounded-xl p-2 focus:ring-1 focus:ring-blue-500 focus:border-transparent text-sm"
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
@@ -451,9 +451,9 @@ export default function MarketDetails() {
                 <button
                   onClick={handleSendMessage}
                   disabled={!newMessage.trim()}
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-2xl shadow-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-xl shadow-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
                 >
-                  <Send size={18} />
+                  <Send size={14} />
                 </button>
               </div>
             </div>
