@@ -1,6 +1,5 @@
 import { useParams, Link } from 'wouter';
 import { ArrowLeft, MapPin, Users, Clock, Star, Shield } from 'lucide-react';
-import { useScrollAnimations } from '../hooks/useScrollAnimations';
 
 const marketData = {
   'main-market': {
@@ -256,7 +255,6 @@ const marketData = {
 
 export default function MarketDetails() {
   const { id: marketId } = useParams();
-  const { setElementRef, getAnimationClass, getAnimationStyle } = useScrollAnimations();
   const market = marketData[marketId as keyof typeof marketData];
 
   if (!market) {
@@ -280,12 +278,7 @@ export default function MarketDetails() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-teal-50 p-4 sm:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header Navigation */}
-        <div 
-          ref={(el) => setElementRef('header-nav', el)}
-          data-animation-id="header-nav"
-          className={`mb-6 sm:mb-8 ${getAnimationClass('header-nav', 0, 'slide')}`}
-          style={getAnimationStyle(0)}
-        >
+        <div className="mb-6 sm:mb-8">
           <Link to="/markets">
             <button className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors duration-200">
               <ArrowLeft size={20} />
@@ -295,12 +288,7 @@ export default function MarketDetails() {
         </div>
 
         {/* Market Header */}
-        <div 
-          ref={(el) => setElementRef('market-header', el)}
-          data-animation-id="market-header"
-          className={`bg-white rounded-3xl shadow-2xl p-6 sm:p-8 lg:p-12 mb-8 sm:mb-12 ${getAnimationClass('market-header', 1, 'slide')}`}
-          style={getAnimationStyle(1)}
-        >
+        <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 lg:p-12 mb-8 sm:mb-12">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 mb-4">
@@ -339,12 +327,7 @@ export default function MarketDetails() {
         </div>
 
         {/* Sections Header */}
-        <div 
-          ref={(el) => setElementRef('sections-header', el)}
-          data-animation-id="sections-header"
-          className={`text-center mb-8 sm:mb-12 ${getAnimationClass('sections-header', 2, 'slide')}`}
-          style={getAnimationStyle(2)}
-        >
+        <div className="text-center mb-8 sm:mb-12">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-4">
             Market Sections & Lines
           </h2>
@@ -356,21 +339,9 @@ export default function MarketDetails() {
         {/* Sections Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-8">
           {market.sections.map((section, index) => (
-            <div
-              key={section.id}
-              ref={(el) => setElementRef(`section-${section.id}`, el)}
-              data-animation-id={`section-${section.id}`}
-              className={`group ${getAnimationClass(`section-${section.id}`, index + 3, 'slide')}`}
-              style={getAnimationStyle(index + 3)}
-            >
+            <div key={section.id} className="group">
               <Link to={`/markets/${marketId}/${section.id}`}>
-                <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden cursor-pointer transition-all duration-500 hover:shadow-neon-blue hover:scale-105 hover:-translate-y-2 relative h-full">
-                  {/* Floating particles */}
-                  <div className="absolute inset-0 pointer-events-none z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <div className="particle w-2 h-2 animate-particle-float bg-gradient-to-br from-blue-400 to-purple-500 rounded-full" style={{ top: '15%', left: '10%', animationDelay: `${index * 0.2}s` }}></div>
-                    <div className="particle w-1 h-1 animate-particle-float bg-gradient-to-br from-emerald-400 to-teal-500 rounded-full" style={{ top: '80%', left: '85%', animationDelay: `${index * 0.2 + 1}s` }}></div>
-                  </div>
-
+                <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-2xl hover:scale-105 relative h-full">
                   {/* Section Header */}
                   <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 p-6 text-white relative">
                     <div className="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent"></div>
@@ -432,9 +403,6 @@ export default function MarketDetails() {
                       </div>
                     </div>
                   </div>
-
-                  {/* Neon border effect */}
-                  <div className="absolute inset-0 rounded-3xl border-2 border-transparent group-hover:border-blue-500/50 group-hover:shadow-neon-blue transition-all duration-500 pointer-events-none"></div>
                 </div>
               </Link>
             </div>
@@ -442,12 +410,7 @@ export default function MarketDetails() {
         </div>
 
         {/* Footer Info */}
-        <div 
-          ref={(el) => setElementRef('footer-info', el)}
-          data-animation-id="footer-info"
-          className={`text-center mt-16 sm:mt-20 ${getAnimationClass('footer-info', 10, 'slide')}`}
-          style={getAnimationStyle(10)}
-        >
+        <div className="text-center mt-16 sm:mt-20">
           <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 rounded-3xl p-8 sm:p-12 text-white shadow-2xl">
             <h3 className="text-2xl sm:text-3xl font-bold mb-4">
               Need Help Finding Something?

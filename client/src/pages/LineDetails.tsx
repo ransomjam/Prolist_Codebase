@@ -1,6 +1,5 @@
 import { useParams, Link } from 'wouter';
 import { ArrowLeft, Shield, MapPin, Phone, Star, Clock, Users } from 'lucide-react';
-import { useScrollAnimations } from '../hooks/useScrollAnimations';
 
 interface Shop {
   id: number;
@@ -272,7 +271,6 @@ const marketLinesData: MarketData = {
 
 export default function LineDetails() {
   const { id: marketId, sectionId } = useParams();
-  const { setElementRef, getAnimationClass, getAnimationStyle } = useScrollAnimations();
   
   const sectionData = marketLinesData[marketId as string]?.[sectionId as string];
   const shops = sectionData?.shops || [];
@@ -298,12 +296,7 @@ export default function LineDetails() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-teal-50 p-4 sm:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header Navigation */}
-        <div 
-          ref={(el) => setElementRef('header-nav', el)}
-          data-animation-id="header-nav"
-          className={`mb-6 sm:mb-8 ${getAnimationClass('header-nav', 0, 'slide')}`}
-          style={getAnimationStyle(0)}
-        >
+        <div className="mb-6 sm:mb-8">
           <Link to={`/markets/${marketId}`}>
             <button className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors duration-200">
               <ArrowLeft size={20} />
@@ -313,12 +306,7 @@ export default function LineDetails() {
         </div>
 
         {/* Section Header */}
-        <div 
-          ref={(el) => setElementRef('section-header', el)}
-          data-animation-id="section-header"
-          className={`bg-white rounded-3xl shadow-2xl p-6 sm:p-8 lg:p-12 mb-8 sm:mb-12 ${getAnimationClass('section-header', 1, 'slide')}`}
-          style={getAnimationStyle(1)}
-        >
+        <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 lg:p-12 mb-8 sm:mb-12">
           <div className="text-center">
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 mb-4">
               {sectionData.name}
@@ -346,33 +334,16 @@ export default function LineDetails() {
 
         {/* Shops Grid */}
         {shops.length === 0 ? (
-          <div 
-            ref={(el) => setElementRef('no-shops', el)}
-            data-animation-id="no-shops"
-            className={`text-center bg-white rounded-3xl shadow-xl p-12 ${getAnimationClass('no-shops', 2, 'slide')}`}
-            style={getAnimationStyle(2)}
-          >
+          <div className="text-center bg-white rounded-3xl shadow-xl p-12">
             <div className="text-6xl mb-4">🏪</div>
             <h3 className="text-2xl font-bold text-gray-800 mb-4">No Shops Found</h3>
             <p className="text-gray-600">This section is currently being developed. Check back soon!</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-8">
-            {shops.map((shop, index) => (
-              <div
-                key={shop.id}
-                ref={(el) => setElementRef(`shop-${shop.id}`, el)}
-                data-animation-id={`shop-${shop.id}`}
-                className={`group ${getAnimationClass(`shop-${shop.id}`, index + 2, 'slide')}`}
-                style={getAnimationStyle(index + 2)}
-              >
-                <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden cursor-pointer transition-all duration-500 hover:shadow-neon-blue hover:scale-105 hover:-translate-y-2 relative h-full">
-                  {/* Floating particles */}
-                  <div className="absolute inset-0 pointer-events-none z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <div className="particle w-2 h-2 animate-particle-float bg-gradient-to-br from-blue-400 to-purple-500 rounded-full" style={{ top: '20%', left: '15%', animationDelay: `${index * 0.2}s` }}></div>
-                    <div className="particle w-1 h-1 animate-particle-float bg-gradient-to-br from-emerald-400 to-teal-500 rounded-full" style={{ top: '75%', left: '80%', animationDelay: `${index * 0.2 + 1}s` }}></div>
-                  </div>
-
+            {shops.map((shop) => (
+              <div key={shop.id} className="group">
+                <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-2xl hover:scale-105 relative h-full">
                   {/* Shop Header */}
                   <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 p-6 text-white relative">
                     <div className="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent"></div>
@@ -456,9 +427,6 @@ export default function LineDetails() {
                       </div>
                     </div>
                   </div>
-
-                  {/* Neon border effect */}
-                  <div className="absolute inset-0 rounded-3xl border-2 border-transparent group-hover:border-blue-500/50 group-hover:shadow-neon-blue transition-all duration-500 pointer-events-none"></div>
                 </div>
               </div>
             ))}
@@ -466,12 +434,7 @@ export default function LineDetails() {
         )}
 
         {/* Footer CTA */}
-        <div 
-          ref={(el) => setElementRef('footer-cta', el)}
-          data-animation-id="footer-cta"
-          className={`text-center mt-16 sm:mt-20 ${getAnimationClass('footer-cta', 20, 'slide')}`}
-          style={getAnimationStyle(20)}
-        >
+        <div className="text-center mt-16 sm:mt-20">
           <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 rounded-3xl p-8 sm:p-12 text-white shadow-2xl">
             <h3 className="text-2xl sm:text-3xl font-bold mb-4">
               Want to List Your Shop Here?
