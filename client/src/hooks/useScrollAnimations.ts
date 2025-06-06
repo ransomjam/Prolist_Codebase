@@ -37,30 +37,35 @@ export function useScrollAnimations() {
     };
   }, []);
 
-  const getAnimationClass = useCallback((id: string, index: number = 0) => {
+  const getAnimationClass = useCallback((id: string, index: number = 0, animationType: 'slide' | 'default' = 'default') => {
     const isVisible = visibleElements.has(id);
     
     if (!isVisible) {
-      // Cool entrance states with 3D transforms
-      const entranceTypes = [
-        'opacity-0 translate-y-12 rotate-3 scale-95',
-        'opacity-0 translate-x-8 -translate-y-8 rotate-6 scale-90',
-        'opacity-0 -translate-x-8 translate-y-8 -rotate-3 scale-95',
-        'opacity-0 translate-y-16 skew-x-3 scale-90',
-        'opacity-0 -translate-y-12 rotate-12 scale-85'
-      ];
-      return entranceTypes[index % entranceTypes.length];
+      if (animationType === 'slide') {
+        // Slide-in entrance states
+        const slideEntranceTypes = [
+          'opacity-0 translate-x-16 scale-95',      // Slide from right
+          'opacity-0 -translate-x-16 scale-95',     // Slide from left
+          'opacity-0 translate-y-16 scale-95',      // Slide from bottom
+          'opacity-0 -translate-y-16 scale-95',     // Slide from top
+          'opacity-0 translate-x-12 translate-y-8 scale-95'  // Slide diagonally
+        ];
+        return slideEntranceTypes[index % slideEntranceTypes.length];
+      } else {
+        // Cool entrance states with 3D transforms
+        const entranceTypes = [
+          'opacity-0 translate-y-12 rotate-3 scale-95',
+          'opacity-0 translate-x-8 -translate-y-8 rotate-6 scale-90',
+          'opacity-0 -translate-x-8 translate-y-8 -rotate-3 scale-95',
+          'opacity-0 translate-y-16 skew-x-3 scale-90',
+          'opacity-0 -translate-y-12 rotate-12 scale-85'
+        ];
+        return entranceTypes[index % entranceTypes.length];
+      }
     }
 
-    // Cool visible states with smooth 3D transforms
-    const visibleTypes = [
-      'opacity-100 translate-x-0 translate-y-0 rotate-0 scale-100 transition-all duration-1000 ease-out',
-      'opacity-100 translate-x-0 translate-y-0 rotate-0 scale-100 transition-all duration-900 ease-out',
-      'opacity-100 translate-x-0 translate-y-0 rotate-0 scale-100 transition-all duration-1100 ease-out',
-      'opacity-100 translate-x-0 translate-y-0 rotate-0 scale-100 transition-all duration-800 ease-out',
-      'opacity-100 translate-x-0 translate-y-0 rotate-0 scale-100 transition-all duration-1200 ease-out'
-    ];
-    return visibleTypes[index % visibleTypes.length];
+    // Smooth slide-in visible states
+    return 'opacity-100 translate-x-0 translate-y-0 rotate-0 scale-100 transition-all duration-800 ease-out';
   }, [visibleElements]);
 
   const getAnimationStyle = useCallback((index: number = 0) => {

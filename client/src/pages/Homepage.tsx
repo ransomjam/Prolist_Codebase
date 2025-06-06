@@ -98,7 +98,7 @@ export default function Homepage() {
                   ref={(el) => setElementRef(`action-${index}`, el)}
                   data-animation-id={`action-${index}`}
                   href={action.href}
-                  className={`group bg-white/20 backdrop-blur-lg rounded-3xl p-4 sm:p-5 lg:p-6 text-center hover:bg-white/30 transition-all duration-500 hover-tilt border border-white/30 gpu-accelerated relative overflow-hidden ${getAnimationClass(`action-${index}`, index + 5)}`}
+                  className={`group bg-white/20 backdrop-blur-lg rounded-3xl p-4 sm:p-5 lg:p-6 text-center hover:bg-white/30 transition-all duration-500 hover-tilt border border-white/30 gpu-accelerated relative overflow-hidden ${getAnimationClass(`action-${index}`, index + 5, 'slide')}`}
                   style={getAnimationStyle(index + 5)}
                 >
                   {/* Floating particles for each action */}
@@ -141,7 +141,7 @@ export default function Homepage() {
               key={index} 
               ref={(el) => setElementRef(`stat-${index}`, el)}
               data-animation-id={`stat-${index}`}
-              className={`group bg-white rounded-3xl p-4 sm:p-6 lg:p-8 shadow-2xl border border-gray-100 text-center gpu-accelerated hover-lift transition-all duration-500 relative overflow-hidden ${getAnimationClass(`stat-${index}`, index + 10)}`}
+              className={`group bg-white rounded-3xl p-4 sm:p-6 lg:p-8 shadow-2xl border border-gray-100 text-center gpu-accelerated hover-lift transition-all duration-500 relative overflow-hidden ${getAnimationClass(`stat-${index}`, index + 10, 'slide')}`}
               style={getAnimationStyle(index + 10)}
             >
               {/* Animated Background Particles */}
@@ -205,7 +205,7 @@ export default function Homepage() {
               key={market.id} 
               ref={(el) => setElementRef(`market-${market.id}`, el)}
               data-animation-id={`market-${market.id}`}
-              className={`group relative gpu-accelerated will-change-transform ${getAnimationClass(`market-${market.id}`, index + 15)}`}
+              className={`group relative gpu-accelerated will-change-transform ${getAnimationClass(`market-${market.id}`, index + 15, 'slide')}`}
               style={getAnimationStyle(index + 15)}
             >
               <a 

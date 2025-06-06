@@ -25,7 +25,7 @@ export default function ListingCard({ listing }: ListingCardProps) {
       <div 
         ref={(el) => setElementRef(`listing-${listing.id}`, el)}
         data-animation-id={`listing-${listing.id}`}
-        className={`bg-white rounded-xl overflow-hidden shadow-neonBlue transition-transform hover:scale-105 cursor-pointer gpu-accelerated will-change-transform ${getAnimationClass(`listing-${listing.id}`, 0)}`}
+        className={`bg-white rounded-xl overflow-hidden shadow-neonBlue transition-transform hover:scale-105 cursor-pointer gpu-accelerated will-change-transform ${getAnimationClass(`listing-${listing.id}`, listing.id, 'slide')}`}
         style={getAnimationStyle(0)}
       >
       <img src={listing.image} alt={listing.title} className="h-48 w-full object-cover"/>
