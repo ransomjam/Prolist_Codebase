@@ -16,6 +16,7 @@ interface Shop {
   yearsInBusiness: number;
   trustScore: number;
   followers?: number;
+  shedNumber?: string;
 }
 
 interface Message {
@@ -515,15 +516,14 @@ export default function MarketLine() {
                     
                     <div className="flex items-center gap-1 text-xs sm:text-sm">
                       <Award size={12} className="sm:w-4 sm:h-4 text-blue-500 flex-shrink-0" />
-                      <span className="text-blue-600 font-medium">{shop.trustScore}%</span>
-                      <span className="text-gray-500 hidden sm:inline">Trust Score</span>
+                      <span className="text-blue-600 font-medium">{Math.floor(shop.trustScore * 10)} Trust</span>
                     </div>
                   </div>
                 </div>
                 
-                {/* Shop Phone Number - Top Right */}
+                {/* Shop Shed Number - Top Right */}
                 <div className="absolute top-2 right-2 text-xs text-gray-500">
-                  {shop.phone}
+                  {shop.shedNumber || `Shed ${shop.id}`}
                 </div>
                 
                 {/* View Button - Bottom Right */}
