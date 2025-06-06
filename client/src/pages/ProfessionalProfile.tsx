@@ -128,7 +128,7 @@ export default function ProfessionalProfile() {
             <div>
               <h3 className="text-lg font-semibold text-gray-900 mb-3">Primary Services</h3>
               <div className="space-y-2">
-                {category?.name === 'Architecture & Design' && (
+                {category?.name === 'Architecture & Building Design' && (
                   <>
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
@@ -140,39 +140,183 @@ export default function ProfessionalProfile() {
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Renovation Planning</span>
+                      <span className="text-gray-700">Building Plans & Permits</span>
                     </div>
                   </>
                 )}
-                {category?.name === 'Plumbing & Repairs' && (
+                {category?.name === 'Plumbing & Pipe Repairs' && (
                   <>
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Emergency Repairs</span>
+                      <span className="text-gray-700">Emergency Pipe Repairs</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Pipe Installation</span>
+                      <span className="text-gray-700">Water System Installation</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Water System Maintenance</span>
+                      <span className="text-gray-700">Drainage Solutions</span>
                     </div>
                   </>
                 )}
-                {category?.name === 'Web Development' && (
+                {category?.name === 'Web Development & Maintenance' && (
                   <>
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">React Applications</span>
+                      <span className="text-gray-700">Business Websites</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">E-commerce Sites</span>
+                      <span className="text-gray-700">E-commerce Platforms</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Mobile-Responsive Design</span>
+                      <span className="text-gray-700">Website Maintenance</span>
+                    </div>
+                  </>
+                )}
+                {category?.name === 'Fridge & AC Repairs' && (
+                  <>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-700">Refrigerator Repairs</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-700">Air Conditioning Service</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-700">Cooling System Installation</span>
+                    </div>
+                  </>
+                )}
+                {category?.name === 'Electronics Repairs (TVs, Radios, etc.)' && (
+                  <>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-700">TV & Audio Repairs</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-700">Home Appliance Fixes</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-700">Electronic Diagnostics</span>
+                    </div>
+                  </>
+                )}
+                {category?.name === 'Mobile Phone Repairs' && (
+                  <>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-700">Screen Replacements</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-700">Battery Replacements</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-700">Software Troubleshooting</span>
+                    </div>
+                  </>
+                )}
+                {category?.name === 'Tailoring & Clothing Alterations' && (
+                  <>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-700">Custom Clothing Design</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-700">Clothing Alterations</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-700">Traditional Wear</span>
+                    </div>
+                  </>
+                )}
+                {category?.name === 'Laptop & Computer Repairs' && (
+                  <>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-700">Hardware Repairs</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-700">Software Installation</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-700">Virus Removal</span>
+                    </div>
+                  </>
+                )}
+                {category?.name === 'Event Planning & Management' && (
+                  <>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-700">Wedding Planning</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-700">Corporate Events</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-700">Cultural Celebrations</span>
+                    </div>
+                  </>
+                )}
+                {category?.name === 'Photography & Videography' && (
+                  <>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-700">Wedding Photography</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-700">Event Documentation</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-700">Corporate Videos</span>
+                    </div>
+                  </>
+                )}
+                {category?.name === 'Cleaning & Housekeeping Services' && (
+                  <>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-700">Home Cleaning</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-700">Office Cleaning</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-700">Deep Cleaning Services</span>
+                    </div>
+                  </>
+                )}
+                {category?.name === 'Electrical Installations & Repairs' && (
+                  <>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-700">Home Wiring</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-700">Electrical Installations</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-700">Emergency Electrical Repairs</span>
                     </div>
                   </>
                 )}
