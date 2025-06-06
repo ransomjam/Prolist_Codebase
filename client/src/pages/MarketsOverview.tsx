@@ -148,9 +148,13 @@ export default function MarketsOverview() {
           </div>
         </div>
 
-        {/* Statistics */}
-        <div className="bg-white rounded-3xl shadow-xl p-6 sm:p-8 lg:p-12 mb-8 sm:mb-12">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+        {/* Statistics Dashboard */}
+        <div className="bg-white rounded-3xl shadow-xl p-8 lg:p-12 mb-12">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl lg:text-3xl font-bold text-gray-800 mb-2">Marketplace Statistics</h2>
+            <p className="text-gray-600">Real-time data from Bamenda's marketplace ecosystem</p>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
             <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-100 text-center">
               <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-600 mb-2">6</div>
               <div className="text-sm sm:text-base text-gray-600">Major Markets</div>
@@ -192,13 +196,13 @@ export default function MarketsOverview() {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-8 lg:gap-10">
             {filteredMarkets.map((market, index) => (
             <div key={market.id} className="group">
               <Link to={`/markets/${market.id}`}>
-                <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-2xl hover:scale-105 relative">
+                <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] relative h-full">
                   {/* Market Image */}
-                  <div className="relative h-48 sm:h-56 overflow-hidden">
+                  <div className="relative h-56 lg:h-64 overflow-hidden">
                     <div className="w-full h-full bg-gradient-to-br from-blue-100 via-purple-100 to-teal-100 flex items-center justify-center">
                       <div className="text-6xl sm:text-7xl opacity-30">🏪</div>
                     </div>

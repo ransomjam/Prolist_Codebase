@@ -475,7 +475,7 @@ export default function MarketDetails() {
         </div>
 
         {/* Sections Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-8 lg:gap-10">
           {market.sections.map((section, index) => {
             // Special routing for market lines vs regular sections
             const isMarketLine = section.id.includes('line');
@@ -486,7 +486,7 @@ export default function MarketDetails() {
             return (
               <div key={section.id} className="group">
                 <Link to={linkPath}>
-                  <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-2xl hover:scale-105 relative h-full">
+                  <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] relative h-full">
                     {/* Section Header */}
                     <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 p-6 text-white relative">
                       <div className="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent"></div>

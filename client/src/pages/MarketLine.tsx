@@ -469,8 +469,8 @@ export default function MarketLine() {
           </div>
         </div>
 
-        {/* Enhanced Shops Grid - 4+ per row on mobile */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
+        {/* Professional Shops Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 lg:gap-8">
           {filteredShops.length === 0 ? (
             <div className="col-span-full text-center bg-white rounded-3xl shadow-xl p-12">
               <div className="text-6xl mb-6">🔍</div>
