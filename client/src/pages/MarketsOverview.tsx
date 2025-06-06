@@ -92,38 +92,37 @@ export default function MarketsOverview() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-teal-50 p-4 sm:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8 sm:mb-12">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 mb-4">
+        {/* Compact Header */}
+        <div className="mb-4">
+          <h1 className="text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 mb-2 text-center">
             Bamenda Markets
           </h1>
-          <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            Discover authentic local markets offering everything from fresh produce to electronics. 
-            Connect with trusted vendors and explore the vibrant commercial heart of Bamenda.
+          <p className="text-sm text-gray-600 text-center mb-3">
+            Discover authentic local markets with trusted vendors
           </p>
 
-          {/* Search and Filter Section */}
-          <div className="bg-white rounded-3xl shadow-xl p-6 sm:p-8 mb-8">
-            <div className="flex flex-col lg:flex-row gap-4 items-center justify-center">
+          {/* Compact Search and Filter Section */}
+          <div className="bg-white rounded-2xl shadow-lg p-3 mb-3">
+            <div className="flex gap-2 items-center">
               {/* Search Input */}
-              <div className="relative flex-1 max-w-md">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
                 <input
                   type="text"
-                  placeholder="Search markets, locations, or products..."
+                  placeholder="Search markets..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-400"
+                  className="w-full pl-10 pr-3 py-2 border border-gray-200 rounded-xl focus:ring-1 focus:ring-blue-500 focus:border-transparent text-sm text-gray-700 placeholder-gray-400"
                 />
               </div>
 
               {/* Category Filter */}
               <div className="relative">
-                <Filter className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
+                <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="pl-12 pr-8 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 bg-white cursor-pointer appearance-none min-w-[200px]"
+                  className="pl-10 pr-6 py-2 border border-gray-200 rounded-xl focus:ring-1 focus:ring-blue-500 focus:border-transparent text-sm text-gray-700 bg-white cursor-pointer appearance-none min-w-[160px]"
                 >
                   {categories.map(category => (
                     <option key={category} value={category}>
@@ -134,42 +133,38 @@ export default function MarketsOverview() {
               </div>
             </div>
 
-            {/* Results Counter */}
-            <div className="mt-4 text-center">
-              <p className="text-gray-600">
-                Showing {filteredMarkets.length} of {markets.length} markets
-                {selectedCategory !== 'All Categories' && (
-                  <span className="ml-2">
-                    in <span className="font-semibold text-blue-600">{selectedCategory}</span>
-                  </span>
-                )}
+            {/* Compact Results Counter */}
+            <div className="mt-2 text-center">
+              <p className="text-xs text-gray-500">
+                {filteredMarkets.length} of {markets.length} markets
+                {selectedCategory !== 'All Categories' && ` in ${selectedCategory}`}
               </p>
             </div>
           </div>
         </div>
 
-        {/* Statistics Dashboard */}
-        <div className="bg-white rounded-3xl shadow-xl p-8 lg:p-12 mb-12">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl lg:text-3xl font-bold text-gray-800 mb-2">Marketplace Statistics</h2>
-            <p className="text-gray-600">Real-time data from Bamenda's marketplace ecosystem</p>
+        {/* Compact Statistics Dashboard */}
+        <div className="bg-white rounded-2xl shadow-lg p-4 mb-6">
+          <div className="text-center mb-3">
+            <h2 className="text-lg font-bold text-gray-800 mb-1">Marketplace Statistics</h2>
+            <p className="text-xs text-gray-500">Real-time data from Bamenda markets</p>
           </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
-            <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-100 text-center">
-              <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-600 mb-2">6</div>
-              <div className="text-sm sm:text-base text-gray-600">Major Markets</div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            <div className="bg-gray-50 rounded-xl p-3 text-center">
+              <div className="text-xl font-bold text-blue-600 mb-1">6</div>
+              <div className="text-xs text-gray-600">Major Markets</div>
             </div>
-            <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-100 text-center">
-              <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-emerald-600 mb-2">1,190+</div>
-              <div className="text-sm sm:text-base text-gray-600">Verified Vendors</div>
+            <div className="bg-gray-50 rounded-xl p-3 text-center">
+              <div className="text-xl font-bold text-emerald-600 mb-1">1,190+</div>
+              <div className="text-xs text-gray-600">Verified Vendors</div>
             </div>
-            <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-100 text-center">
-              <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-purple-600 mb-2">24/7</div>
-              <div className="text-sm sm:text-base text-gray-600">Market Hours</div>
+            <div className="bg-gray-50 rounded-xl p-3 text-center">
+              <div className="text-xl font-bold text-purple-600 mb-1">24/7</div>
+              <div className="text-xs text-gray-600">Market Hours</div>
             </div>
-            <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-100 text-center">
-              <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-teal-600 mb-2">4.7★</div>
-              <div className="text-sm sm:text-base text-gray-600">Avg Rating</div>
+            <div className="bg-gray-50 rounded-xl p-3 text-center">
+              <div className="text-xl font-bold text-teal-600 mb-1">4.7★</div>
+              <div className="text-xs text-gray-600">Avg Rating</div>
             </div>
           </div>
         </div>
