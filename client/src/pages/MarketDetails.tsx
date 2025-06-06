@@ -1,5 +1,14 @@
+import { useState } from 'react';
 import { useParams, Link } from 'wouter';
-import { ArrowLeft, MapPin, Users, Clock, Star, Shield } from 'lucide-react';
+import { ArrowLeft, MapPin, Users, Clock, Star, Shield, MessageSquare, Send } from 'lucide-react';
+
+interface Message {
+  id: number;
+  sender: string;
+  text: string;
+  time: string;
+  isSystem?: boolean;
+}
 
 const marketData = {
   'main-market': {
@@ -255,7 +264,53 @@ const marketData = {
 
 export default function MarketDetails() {
   const { marketId } = useParams();
+  const [chatOpen, setChatOpen] = useState(false);
+  const [newMessage, setNewMessage] = useState('');
+  
+  const [marketMessages, setMarketMessages] = useState<Message[]>([
+    { 
+      id: 1,
+      sender: 'Market Admin', 
+      text: `Welcome to ${marketId?.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())} chat! Connect with vendors and customers.`, 
+      time: '9:00 AM',
+      isSystem: true 
+    },
+    { 
+      id: 2,
+      sender: 'Vendor Association', 
+      text: 'New vendor registration drive starts next week - join us for better market coordination!', 
+      time: '10:30 AM' 
+    },
+    { 
+      id: 3,
+      sender: 'Customer Service', 
+      text: 'Report any issues or feedback to help us improve your market experience.', 
+      time: '11:15 AM' 
+    },
+  ]);
+  
   const market = marketData[marketId as keyof typeof marketData];
+
+  const handleSendMessage = () => {
+    if (!newMessage.trim()) return;
+    
+    const message: Message = {
+      id: Date.now(),
+      sender: 'You',
+      text: newMessage.trim(),
+      time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+    };
+    
+    setMarketMessages(prev => [...prev, message]);
+    setNewMessage('');
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
 
   if (!market) {
     return (
@@ -324,6 +379,89 @@ export default function MarketDetails() {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Market Chat Interface */}
+        <div className="bg-white rounded-3xl shadow-2xl p-4 mb-8">
+          <button
+            onClick={() => setChatOpen(!chatOpen)}
+            className="w-full flex items-center justify-between p-4 bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 text-white rounded-2xl hover:from-blue-700 hover:via-purple-700 hover:to-teal-700 transition-all duration-300"
+          >
+            <div className="flex items-center gap-3">
+              <MessageSquare size={24} />
+              <div className="text-left">
+                <div className="font-semibold">Market Community Chat</div>
+                <div className="text-blue-100 text-sm">
+                  {marketMessages.length} messages · Connect with vendors and customers
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
+                {chatOpen ? 'Close' : 'Open'} Chat
+              </span>
+              <div className={`transform transition-transform duration-300 ${chatOpen ? 'rotate-180' : ''}`}>
+                ▼
+              </div>
+            </div>
+          </button>
+
+          {/* Expandable Chat Interface */}
+          {chatOpen && (
+            <div className="mt-4 border-t border-gray-200 pt-4">
+              {/* Chat Messages */}
+              <div className="h-64 overflow-y-auto mb-4 border border-gray-300 rounded-2xl p-4 bg-gray-50">
+                <div className="space-y-3">
+                  {marketMessages.map((msg) => (
+                    <div key={msg.id} className={`flex ${msg.sender === 'You' ? 'justify-end' : 'justify-start'}`}>
+                      <div className={`max-w-xs lg:max-w-md px-3 py-2 rounded-xl ${
+                        msg.isSystem
+                          ? 'bg-yellow-100 text-yellow-800 text-center text-sm italic'
+                          : msg.sender === 'You'
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-white text-gray-800 shadow-sm'
+                      }`}>
+                        {!msg.isSystem && msg.sender !== 'You' && (
+                          <div className="text-xs font-semibold mb-1 text-blue-600">
+                            {msg.sender}
+                          </div>
+                        )}
+                        <div className="text-sm">{msg.text}</div>
+                        <div className={`text-xs mt-1 ${
+                          msg.isSystem 
+                            ? 'text-yellow-600'
+                            : msg.sender === 'You' 
+                            ? 'text-blue-200' 
+                            : 'text-gray-500'
+                        }`}>
+                          {msg.time}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Message Input */}
+              <div className="flex gap-3">
+                <input
+                  type="text"
+                  placeholder="Message the market community..."
+                  className="flex-grow border border-gray-300 rounded-2xl p-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                />
+                <button
+                  onClick={handleSendMessage}
+                  disabled={!newMessage.trim()}
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-2xl shadow-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                >
+                  <Send size={18} />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Sections Header */}
