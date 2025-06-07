@@ -90,7 +90,7 @@ export default function HelpSupport() {
                 <Mail className="text-blue-600 mt-1" size={20} />
                 <div>
                   <p className="font-medium text-gray-900">Email</p>
-                  <p className="text-gray-600">support@prolist.cm</p>
+                  <p className="text-gray-600">info.prolist@gmail.com</p>
                 </div>
               </div>
               
@@ -98,7 +98,7 @@ export default function HelpSupport() {
                 <Phone className="text-green-600 mt-1" size={20} />
                 <div>
                   <p className="font-medium text-gray-900">Phone</p>
-                  <p className="text-gray-600">+237 6XX XXX XXX</p>
+                  <p className="text-gray-600">+237 671 308 991</p>
                 </div>
               </div>
               

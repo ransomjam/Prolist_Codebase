@@ -138,8 +138,8 @@ export default function ServiceOrderConfirmed() {
                   Our support team is available 24/7 to assist you.
                 </p>
                 <div className="text-sm text-blue-600">
-                  <p>Email: support@prolist.cm</p>
-                  <p>Phone: +237 6XX XXX XXX</p>
+                  <p>Email: info.prolist@gmail.com</p>
+                  <p>Phone: +237 671 308 991</p>
                 </div>
               </div>
             </div>

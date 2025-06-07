@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Heart, Eye, MessageCircle, Share2, Star, Settings, User, MapPin, Calendar, Phone, Mail, Grid3X3, Bookmark, UserCheck, Plus, TrendingUp, Package, DollarSign, Award, Clock, CheckCircle, XCircle, Shield } from 'lucide-react';
+import { Heart, Eye, MessageCircle, Share2, Star, Settings, User, MapPin, Calendar, Phone, Mail, Grid3X3, Bookmark, UserCheck, Plus, TrendingUp, Package, DollarSign, Award, Clock, CheckCircle, XCircle, Shield, X, Save } from 'lucide-react';
 import { currentUser } from '../data/demoData';
 import { useAuth } from '../hooks/useAuth';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface VendorApplication {
   id: number;
@@ -13,13 +13,84 @@ interface VendorApplication {
 
 export default function Profile() {
   const { user } = useAuth();
+  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState("overview");
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [showCongrats, setShowCongrats] = useState(false);
   const [isPremiumUser, setIsPremiumUser] = useState(currentUser.accountType === 'premium');
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editForm, setEditForm] = useState({
+    username: '',
+    email: '',
+    phone: '',
+    location: '',
+    bio: ''
+  });
 
   const profileUser = user || currentUser;
   const isPremium = isPremiumUser;
+
+  // Initialize edit form with current user data
+  const openEditModal = () => {
+    setEditForm({
+      username: profileUser.username || '',
+      email: profileUser.email || '',
+      phone: (profileUser as any).phone || '',
+      location: (profileUser as any).location || '',
+      bio: (profileUser as any).bio || ''
+    });
+    setShowEditModal(true);
+  };
+
+  // Mutation for updating user profile
+  const updateProfileMutation = useMutation({
+    mutationFn: async (updates: any) => {
+      const response = await fetch(`/api/users/${profileUser.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updates)
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to update profile');
+      }
+      
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
+      setShowEditModal(false);
+      
+      // Show success notification
+      const notification = document.createElement('div');
+      notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform transition-all duration-300';
+      notification.innerHTML = `
+        <div class="flex items-center gap-2">
+          <div class="w-5 h-5 rounded-full bg-white bg-opacity-30 flex items-center justify-center">✓</div>
+          <span class="font-medium">Profile Updated Successfully</span>
+        </div>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 3000);
+    },
+    onError: (error) => {
+      console.error('Error updating profile:', error);
+      alert('Failed to update profile. Please try again.');
+    }
+  });
+
+  const handleSaveProfile = () => {
+    updateProfileMutation.mutate(editForm);
+  };
 
   // Fetch user's vendor application status
   const { data: vendorApplication } = useQuery({
@@ -209,7 +280,10 @@ export default function Profile() {
               </div>
             </div>
           </div>
-          <button className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition">
+          <button 
+            onClick={openEditModal}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition"
+          >
             Edit Profile
           </button>
         </div>

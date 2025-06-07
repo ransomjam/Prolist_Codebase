@@ -113,7 +113,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // TODO: Implement SendGrid email sending when API key is provided
       // const emailSent = await sendEmail({
-      //   to: 'support@prolist.cm',
+      //   to: 'info.prolist@gmail.com',
       //   from: email,
       //   subject: `[ProList Support] ${subject}`,
       //   html: `
