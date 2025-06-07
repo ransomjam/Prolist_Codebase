@@ -125,8 +125,8 @@ function App() {
   };
 
   // Define routes that don't need navigation
-  const authOnlyRoutes = ['/login', '/signup', '/apply-verification'];
-  const isAuthOnlyRoute = authOnlyRoutes.includes(location);
+  const publicRoutes = ['/', '/login', '/signup', '/apply-verification'];
+  const isPublicRoute = publicRoutes.includes(location);
 
   // Show loading state
   if (isLoading) {
@@ -148,14 +148,14 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        {isAuthOnlyRoute ? (
-          // Auth-only routes without navigation
+        {isPublicRoute || !isAuthenticated ? (
+          // Public routes without navigation
           <div className="min-h-screen">
             <Router />
             <Toaster />
           </div>
         ) : (
-          // All routes with navigation (landing page and authenticated routes)
+          // Authenticated routes with full navigation
           <div className="min-h-screen bg-grayLight pb-16">
             <div className="flex flex-col">
               <Navbar />
