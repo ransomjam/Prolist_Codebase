@@ -207,125 +207,81 @@ export default function MarketsOverview() {
         </div>
 
         {/* Market Groups Display */}
-        {filteredMarkets.length === 0 ? (
+        {marketGroups.length === 0 ? (
           <div className="text-center bg-white rounded-3xl shadow-xl p-12">
             <div className="text-6xl mb-6">🔍</div>
             <h3 className="text-2xl font-bold text-gray-800 mb-4">No Markets Found</h3>
-            <p className="text-gray-600 mb-6">
-              {searchQuery || selectedCategory !== 'All Categories' 
-                ? `No markets match your search criteria. Try adjusting your filters or search terms.`
-                : 'No markets are currently available.'
-              }
-            </p>
-            <button
-              onClick={() => {
-                setSearchQuery('');
-                setSelectedCategory('All Categories');
-              }}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-full font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300"
-            >
-              Clear Filters
-            </button>
+            <p className="text-gray-600 mb-6">No market regions are currently available.</p>
           </div>
         ) : (
-          <div className="space-y-12">
-            {marketGroups.map((group) => {
-              const groupMarkets = filteredMarkets.filter(market => market.groupId === group.id);
-              
-              if (groupMarkets.length === 0) return null;
-              
-              return (
-                <div key={group.id} className="space-y-6">
-                  {/* Market Group Header */}
-                  <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-                    <div className="text-center">
-                      <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-2">
-                        {group.name}
-                      </h2>
-                      <p className="text-gray-600 mb-4">{group.description}</p>
-                      <div className="flex justify-center gap-8">
-                        <div className="text-center">
-                          <div className="text-xl font-bold text-blue-600">{group.totalVendors}+</div>
-                          <div className="text-sm text-gray-600">Vendors</div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {marketGroups.map((group) => (
+              <div key={group.id} className="group">
+                <Link to={`/markets/${group.id}`}>
+                  <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-[1.02] relative">
+                    {/* Market Group Image */}
+                    <div className="relative h-48 overflow-hidden">
+                      {group.id === 'bamenda-markets' ? (
+                        <img 
+                          src={foodMarketImage} 
+                          alt="Bamenda Markets"
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-green-100 via-emerald-100 to-teal-100 flex items-center justify-center">
+                          <div className="text-6xl opacity-30">🏪</div>
                         </div>
-                        <div className="text-center">
-                          <div className="text-xl font-bold text-emerald-600">{group.markets.length}</div>
-                          <div className="text-sm text-gray-600">Markets</div>
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                      
+                      {/* Stats Overlay */}
+                      <div className="absolute top-4 left-4 flex gap-2">
+                        <div className="bg-emerald-500 text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
+                          <Shield size={12} />
+                          Verified Region
                         </div>
-                        <div className="text-center">
-                          <div className="text-xl font-bold text-teal-600">{group.averageRating}★</div>
-                          <div className="text-sm text-gray-600">Rating</div>
+                        <div className="bg-white/90 backdrop-blur-md text-gray-800 px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
+                          <Star size={12} />
+                          {group.averageRating}★
+                        </div>
+                      </div>
+
+                      <div className="absolute top-4 right-4">
+                        <div className="bg-white/90 backdrop-blur-md text-gray-800 px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
+                          <Users size={12} />
+                          {group.totalVendors}+
+                        </div>
+                      </div>
+
+                      {/* Market Group Title Overlay */}
+                      <div className="absolute bottom-4 left-4 right-4">
+                        <h2 className="text-2xl font-bold text-white mb-2 group-hover:text-blue-200 transition-colors duration-300">
+                          {group.name}
+                        </h2>
+                        <p className="text-white/90 text-sm mb-3">{group.description}</p>
+                        <div className="flex gap-4">
+                          <div className="text-center">
+                            <div className="text-lg font-bold text-white">{group.markets.length}</div>
+                            <div className="text-xs text-white/80">Markets</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-lg font-bold text-white">{group.totalVendors}+</div>
+                            <div className="text-xs text-white/80">Vendors</div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  
-                  {/* Individual Markets Grid */}
-                  <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6">
-                    {groupMarkets.map((market) => (
-                      <div key={market.id} className="group">
-                        <Link to={`/markets/${market.id}`}>
-                          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-[1.02] relative">
-                            {/* Market Image */}
-                            <div className="relative h-32 overflow-hidden">
-                              {market.id === 'food-market' ? (
-                                <img 
-                                  src={foodMarketImage} 
-                                  alt="Food Market"
-                                  className="w-full h-full object-cover"
-                                />
-                              ) : (
-                                <div className="w-full h-full bg-gradient-to-br from-blue-100 via-purple-100 to-teal-100 flex items-center justify-center">
-                                  <div className="text-4xl opacity-30">🏪</div>
-                                </div>
-                              )}
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent"></div>
-                              
-                              {/* Stats Overlay */}
-                              <div className="absolute top-2 left-2 flex gap-1">
-                                {market.verified && (
-                                  <div className="bg-emerald-500 text-white px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
-                                    <Shield size={10} />
-                                    Verified
-                                  </div>
-                                )}
-                                <div className="bg-white/90 backdrop-blur-md text-gray-800 px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
-                                  <Star size={10} />
-                                  {market.rating}
-                                </div>
-                              </div>
-
-                              <div className="absolute top-2 right-2">
-                                <div className="bg-white/90 backdrop-blur-md text-gray-800 px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
-                                  <Users size={10} />
-                                  {market.vendors}+
-                                </div>
-                              </div>
-                            </div>
-                            
-                            {/* Market Info */}
-                            <div className="p-4">
-                              <div className="flex items-center justify-between mb-3">
-                                <h3 className="text-lg font-bold text-gray-800 group-hover:text-blue-600 transition-colors duration-300">
-                                  {market.name}
-                                </h3>
-                                <MapPin className="text-gray-400 group-hover:text-blue-500 transition-colors duration-300" size={16} />
-                              </div>
-
-                              <div className="text-center">
-                                <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold group-hover:from-blue-700 group-hover:to-purple-700 transition-all duration-300 shadow-lg inline-block">
-                                  Explore Now →
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </Link>
+                    
+                    {/* Action Button */}
+                    <div className="p-6 text-center">
+                      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-full text-sm font-semibold group-hover:from-blue-700 group-hover:to-purple-700 transition-all duration-300 shadow-lg inline-block">
+                        Explore {group.name} →
                       </div>
-                    ))}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                </Link>
+              </div>
+            ))}
           </div>
         )}
 

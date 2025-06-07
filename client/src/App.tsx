@@ -47,6 +47,7 @@ import ServiceCheckout from "./pages/ServiceCheckout";
 import ServiceOrderConfirmed from "./pages/ServiceOrderConfirmed";
 import ProfessionalProfile from "./pages/ProfessionalProfile";
 import MarketsOverview from "./pages/MarketsOverview";
+import MarketGroupDetail from "./pages/MarketGroupDetail";
 
 import ShopProfile from "./pages/ShopProfile";
 import MarketLine from "./pages/MarketLine";
@@ -61,7 +62,8 @@ function Router() {
       <Route path="/apply-verification" component={Verification} />
       <Route path="/app" component={Homepage} />
       <Route path="/markets" component={MarketsOverview} />
-      <Route path="/markets/:marketId" component={MarketDetails} />
+      <Route path="/markets/:groupId" component={MarketGroupDetail} />
+      <Route path="/markets/:groupId/:marketId" component={MarketDetails} />
       <Route path="/markets/:marketId/lines/:lineId" component={MarketLine} />
       <Route path="/shop-profile/:shopId" component={ShopProfile} />
       <Route path="/listings" component={ProductFeed} />
