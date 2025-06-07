@@ -26,53 +26,10 @@ const markets = [
     category: 'Food & Agriculture',
     location: 'Near Main Market'
   },
-  {
-    id: 'computer-village',
-    name: 'Computer Village',
-    description: 'Technology hub specializing in computers, phones, and electronic accessories with expert repairs.',
-    vendors: 120,
-    rating: 4.7,
-    verified: true,
-    sections: ['Laptops', 'Smartphones', 'Accessories', 'Repairs'],
-    category: 'Technology',
-    location: 'Commercial Avenue'
-  },
-  {
-    id: 'craft-market',
-    name: 'Arts & Crafts Market',
-    description: 'Traditional Cameroonian arts, crafts, and cultural items made by local artisans.',
-    vendors: 85,
-    rating: 4.6,
-    verified: true,
-    sections: ['Traditional Art', 'Jewelry', 'Sculptures', 'Textiles'],
-    category: 'Arts & Culture',
-    location: 'Cultural Center Area'
-  },
-  {
-    id: 'motor-park',
-    name: 'Motor Park Market',
-    description: 'Automotive parts, accessories, and services including car repairs and maintenance.',
-    vendors: 95,
-    rating: 4.5,
-    verified: true,
-    sections: ['Auto Parts', 'Tires', 'Repairs', 'Accessories'],
-    category: 'Automotive',
-    location: 'Motor Park Area'
-  },
-  {
-    id: 'night-market',
-    name: 'Night Market',
-    description: 'Evening entertainment, street food, and late-night shopping destination in central Bamenda.',
-    vendors: 160,
-    rating: 4.4,
-    verified: true,
-    sections: ['Street Food', 'Beverages', 'Entertainment', 'Snacks'],
-    category: 'Entertainment & Food',
-    location: 'City Center'
-  }
+
 ];
 
-const categories = ['All Categories', 'General', 'Food & Agriculture', 'Technology', 'Arts & Culture', 'Automotive', 'Entertainment & Food'];
+const categories = ['All Categories', 'General', 'Food & Agriculture'];
 
 export default function MarketsOverview() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -152,11 +109,11 @@ export default function MarketsOverview() {
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             <div className="bg-gray-50 rounded-xl p-3 text-center">
-              <div className="text-xl font-bold text-blue-600 mb-1">6</div>
+              <div className="text-xl font-bold text-blue-600 mb-1">2</div>
               <div className="text-xs text-gray-600">Major Markets</div>
             </div>
             <div className="bg-gray-50 rounded-xl p-3 text-center">
-              <div className="text-xl font-bold text-emerald-600 mb-1">1,190+</div>
+              <div className="text-xl font-bold text-emerald-600 mb-1">835+</div>
               <div className="text-xs text-gray-600">Verified Vendors</div>
             </div>
             <div className="bg-gray-50 rounded-xl p-3 text-center">
@@ -164,7 +121,7 @@ export default function MarketsOverview() {
               <div className="text-xs text-gray-600">Market Hours</div>
             </div>
             <div className="bg-gray-50 rounded-xl p-3 text-center">
-              <div className="text-xl font-bold text-teal-600 mb-1">4.7★</div>
+              <div className="text-xl font-bold text-teal-600 mb-1">4.8★</div>
               <div className="text-xs text-gray-600">Avg Rating</div>
             </div>
           </div>
