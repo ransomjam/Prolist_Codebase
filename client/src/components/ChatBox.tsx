@@ -274,7 +274,19 @@ export default function ChatBox({ vendorName, vendorId, productTitle, buyerName 
                     </span>
                   </div>
                 </div>
-                <p className="text-sm leading-relaxed mb-1">{message.text}</p>
+                {message.imageUrl ? (
+                  <div className="space-y-2">
+                    <img 
+                      src={message.imageUrl} 
+                      alt="Shared image" 
+                      className="max-w-full h-auto rounded-lg border border-gray-200 cursor-pointer hover:opacity-90 transition-opacity"
+                      style={{ maxHeight: '200px' }}
+                    />
+                    <p className="text-sm text-gray-600">{message.text}</p>
+                  </div>
+                ) : (
+                  <p className="text-sm leading-relaxed mb-1">{message.text}</p>
+                )}
                 {message.isBuyer && (
                   <div className="flex items-center justify-end gap-1 mt-1">
                     {message.read ? (
@@ -340,6 +352,36 @@ export default function ChatBox({ vendorName, vendorId, productTitle, buyerName 
           </div>
         </div>
 
+        {/* Image Preview */}
+        {imagePreview && (
+          <div className="p-4 bg-gray-50 border-t border-gray-200">
+            <div className="relative inline-block">
+              <img 
+                src={imagePreview} 
+                alt="Preview" 
+                className="max-w-32 h-auto rounded-lg border border-gray-300"
+              />
+              <button
+                onClick={() => {
+                  setImagePreview(null);
+                  setSelectedImage(null);
+                }}
+                className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors"
+              >
+                <X size={12} />
+              </button>
+            </div>
+            <div className="mt-2 flex gap-2">
+              <button
+                onClick={sendImageMessage}
+                className="bg-blue-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-700 transition-colors"
+              >
+                Send Image
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Input */}
         <div className="p-4 bg-white">
           <div className="flex items-end gap-3">
@@ -347,13 +389,23 @@ export default function ChatBox({ vendorName, vendorId, productTitle, buyerName 
               <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors">
                 <Paperclip size={18} />
               </button>
-              <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors">
+              <button 
+                onClick={() => fileInputRef.current?.click()}
+                className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors"
+              >
                 <Image size={18} />
               </button>
               <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors">
                 <Smile size={18} />
               </button>
             </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleImageSelect}
+              className="hidden"
+            />
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}

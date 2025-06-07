@@ -38,14 +38,16 @@ export default function ProductChatButton({
       </button>
 
       {isChatOpen && (
-        <ChatBox
-          vendorName={vendorName}
-          vendorId={vendorId}
-          productTitle={productTitle}
-          buyerName={user?.firstName || user?.username || 'You'}
-          isOpen={isChatOpen}
-          onClose={() => setIsChatOpen(false)}
-        />
+        <div className="chat-container">
+          <ChatBox
+            vendorName={vendorName}
+            vendorId={vendorId}
+            productTitle={productTitle}
+            buyerName={user?.firstName || user?.username || 'You'}
+            isOpen={isChatOpen}
+            onClose={() => setIsChatOpen(false)}
+          />
+        </div>
       )}
     </>
   );
