@@ -1,10 +1,19 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { MapPin, Store, Search, Users, Clock, Star } from 'lucide-react';
 import { markets } from '../data/demoData';
 import MarketCard from '../components/MarketCard';
 
 export default function Markets() {
   const [searchTerm, setSearchTerm] = useState('');
+
+  // Check for search query from global search
+  useEffect(() => {
+    const savedSearchQuery = sessionStorage.getItem('searchQuery');
+    if (savedSearchQuery) {
+      setSearchTerm(savedSearchQuery);
+      sessionStorage.removeItem('searchQuery');
+    }
+  }, []);
 
   const filteredMarkets = markets.filter(market =>
     market.name.toLowerCase().includes(searchTerm.toLowerCase())

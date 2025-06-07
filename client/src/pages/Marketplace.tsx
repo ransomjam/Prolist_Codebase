@@ -28,6 +28,15 @@ export default function Marketplace() {
   const { user, isAuthenticated } = useAuth();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+
+  // Check for search query from global search
+  useEffect(() => {
+    const savedSearchQuery = sessionStorage.getItem('searchQuery');
+    if (savedSearchQuery) {
+      setSearchTerm(savedSearchQuery);
+      sessionStorage.removeItem('searchQuery');
+    }
+  }, []);
   const [verificationFilter, setVerificationFilter] = useState('all');
   const [sortBy, setSortBy] = useState('newest');
 

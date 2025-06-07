@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, Filter, Star, Shield, MessageCircle, Eye, Grid3X3, List, SlidersHorizontal, Package, ArrowUpDown } from 'lucide-react';
 import { Link } from 'wouter';
 import { ShieldCheckIcon } from '@heroicons/react/24/outline';
@@ -90,6 +90,15 @@ const dummyServiceListings = [
 export default function ProfessionalServices() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+
+  // Check for search query from global search
+  useEffect(() => {
+    const savedSearchQuery = sessionStorage.getItem('searchQuery');
+    if (savedSearchQuery) {
+      setSearchTerm(savedSearchQuery);
+      sessionStorage.removeItem('searchQuery');
+    }
+  }, []);
   const [priceRange, setPriceRange] = useState('all');
   const [sortBy, setSortBy] = useState('newest');
   const [chatOpen, setChatOpen] = useState(false);

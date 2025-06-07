@@ -221,7 +221,8 @@ export default function SearchDropdown() {
                 className="w-full text-center text-blue-600 hover:text-blue-700 text-sm font-medium"
                 onClick={() => {
                   setIsOpen(false);
-                  window.location.href = `/products?search=${encodeURIComponent(searchQuery)}`;
+                  sessionStorage.setItem('searchQuery', searchQuery);
+                  setLocation('/marketplace');
                 }}
               >
                 View all results for "{searchQuery}"
