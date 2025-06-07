@@ -1,161 +1,166 @@
 import { useState, useEffect, useCallback } from 'react';
-import { notifications as initialNotifications } from '../data/demoData';
+import { useAuth } from './useAuth';
 
 interface Notification {
-  id: number;
+  id: string;
   type: string;
   title: string;
   message: string;
-  time: string;
-  read: boolean;
-  icon: string;
+  timestamp: Date;
+  isRead: boolean;
+  actionUrl?: string;
+  data?: any;
 }
 
 export function useNotifications() {
-  const [notifications, setNotifications] = useState<Notification[]>(initialNotifications);
-  const [socket, setSocket] = useState<WebSocket | null>(null);
+  const { user } = useAuth();
+  const [notifications, setNotifications] = useState<Notification[]>([
+    {
+      id: '1',
+      type: 'new_bid',
+      title: 'New Bid Received',
+      message: 'Someone placed a bid of 45,000 FCFA on your iPhone 14 Pro Max',
+      timestamp: new Date(Date.now() - 5 * 60 * 1000),
+      isRead: false,
+      actionUrl: '/auctions'
+    },
+    {
+      id: '2',
+      type: 'message_reply',
+      title: 'New Message',
+      message: 'Sarah Kimeng sent you a message about Nike Air Force',
+      timestamp: new Date(Date.now() - 15 * 60 * 1000),
+      isRead: false,
+      actionUrl: '/chat'
+    },
+    {
+      id: '3',
+      type: 'account_verified',
+      title: 'Account Verified',
+      message: 'Your vendor account has been approved as Premium Verified',
+      timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
+      isRead: true,
+      actionUrl: '/profile'
+    },
+    {
+      id: '4',
+      type: 'auction_ending',
+      title: 'Auction Ending Soon',
+      message: 'Your bid on MacBook Air M2 auction ends in 30 minutes',
+      timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000),
+      isRead: false,
+      actionUrl: '/auctions'
+    },
+    {
+      id: '5',
+      type: 'payment_received',
+      title: 'Payment Received',
+      message: 'You received 25,000 FCFA for Samsung Galaxy S24',
+      timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000),
+      isRead: true,
+      actionUrl: '/orders'
+    }
+  ]);
+  
+  const [isConnected, setIsConnected] = useState(true);
+  const [permissionGranted, setPermissionGranted] = useState(false);
 
-  // Connect to WebSocket for real-time notifications
-  useEffect(() => {
-    const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-    const wsUrl = `${protocol}//${window.location.host}/ws`;
+  const unreadCount = notifications.filter(n => !n.isRead).length;
+
+  const addNotification = useCallback((notification: Omit<Notification, 'id' | 'timestamp' | 'isRead'>) => {
+    const newNotification: Notification = {
+      ...notification,
+      id: Date.now().toString(),
+      timestamp: new Date(),
+      isRead: false
+    };
     
-    const ws = new WebSocket(wsUrl);
-    
-    ws.onopen = () => {
-      console.log('Connected to notification service');
-      setSocket(ws);
-    };
-
-    ws.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data);
-        if (data.type === 'new_notification') {
-          addNotification(data.notification);
-        }
-      } catch (error) {
-        console.error('Error parsing notification:', error);
-      }
-    };
-
-    ws.onclose = () => {
-      console.log('Disconnected from notification service');
-      setSocket(null);
-      // Attempt to reconnect after 3 seconds
-      setTimeout(() => {
-        if (document.visibilityState === 'visible') {
-          // Recursively call useEffect to reconnect
-        }
-      }, 3000);
-    };
-
-    ws.onerror = (error) => {
-      console.error('WebSocket error:', error);
-    };
-
-    return () => {
-      ws.close();
-    };
-  }, []);
-
-  const addNotification = useCallback((newNotification: Omit<Notification, 'id'>) => {
-    const notification: Notification = {
-      ...newNotification,
-      id: Date.now() + Math.random(),
-    };
-    
-    setNotifications(prev => [notification, ...prev]);
+    setNotifications(prev => [newNotification, ...prev]);
     
     // Show browser notification if permission granted
-    if (Notification.permission === 'granted') {
+    if (permissionGranted && 'Notification' in window) {
       new Notification(notification.title, {
         body: notification.message,
         icon: '/favicon.ico',
-        tag: notification.id.toString(),
+        tag: newNotification.id
       });
     }
-  }, []);
+  }, [permissionGranted]);
 
-  const markAsRead = useCallback((id: number) => {
+  const markAsRead = useCallback((id: string) => {
     setNotifications(prev => 
-      prev.map(notification => 
-        notification.id === id 
-          ? { ...notification, read: true }
-          : notification
-      )
+      prev.map(n => n.id === id ? { ...n, isRead: true } : n)
     );
   }, []);
 
   const markAllAsRead = useCallback(() => {
     setNotifications(prev => 
-      prev.map(notification => ({ ...notification, read: true }))
+      prev.map(n => ({ ...n, isRead: true }))
     );
   }, []);
 
-  const removeNotification = useCallback((id: number) => {
+  const removeNotification = useCallback((id: string) => {
     setNotifications(prev => prev.filter(n => n.id !== id));
   }, []);
 
   const requestNotificationPermission = useCallback(async () => {
-    if ('Notification' in window && Notification.permission === 'default') {
+    if ('Notification' in window) {
       const permission = await Notification.requestPermission();
+      setPermissionGranted(permission === 'granted');
       return permission === 'granted';
     }
-    return Notification.permission === 'granted';
+    return false;
   }, []);
 
-  // Simulate real-time notifications for demo purposes
+  // Simulate real-time notifications
   useEffect(() => {
-    const demoNotifications = [
-      {
-        type: "new_bid",
-        title: "New Bid Received",
-        message: "Someone bid 280,000 FCFA on your iPhone 13 Pro",
-        time: "Just now",
-        read: false,
-        icon: "🔥"
-      },
-      {
-        type: "message_reply",
-        title: "New Message",
-        message: "Buyer interested in your Samsung TV - check messages",
-        time: "Just now",
-        read: false,
-        icon: "💬"
-      },
-      {
-        type: "auction_won",
-        title: "Auction Won!",
-        message: "Congratulations! You won the Nike Air Jordan auction",
-        time: "Just now",
-        read: false,
-        icon: "🎉"
-      }
-    ];
+    if (!user) return;
 
-    let notificationIndex = 0;
-    const interval = setInterval(() => {
-      if (notificationIndex < demoNotifications.length) {
-        addNotification(demoNotifications[notificationIndex]);
-        notificationIndex++;
-      } else {
-        clearInterval(interval);
-      }
-    }, 15000); // Add a new notification every 15 seconds
+    const simulateNotifications = () => {
+      const notificationTypes = [
+        {
+          type: 'new_bid',
+          title: 'New Bid Received',
+          message: 'Someone placed a higher bid on your item',
+          actionUrl: '/auctions'
+        },
+        {
+          type: 'message_reply',
+          title: 'New Message',
+          message: 'You have a new message from a potential buyer',
+          actionUrl: '/chat'
+        },
+        {
+          type: 'listing_featured',
+          title: 'Listing Featured',
+          message: 'Your product has been featured on the homepage',
+          actionUrl: '/marketplace'
+        }
+      ];
 
-    return () => clearInterval(interval);
-  }, [addNotification]);
+      // Randomly add notifications every 30-60 seconds for demo
+      const interval = setInterval(() => {
+        if (Math.random() > 0.7) { // 30% chance
+          const randomNotification = notificationTypes[Math.floor(Math.random() * notificationTypes.length)];
+          addNotification(randomNotification);
+        }
+      }, 45000);
 
-  const unreadCount = notifications.filter(n => !n.read).length;
+      return () => clearInterval(interval);
+    };
+
+    const cleanup = simulateNotifications();
+    return cleanup;
+  }, [user, addNotification]);
 
   return {
     notifications,
     unreadCount,
+    isConnected,
     markAsRead,
     markAllAsRead,
     removeNotification,
-    requestNotificationPermission,
     addNotification,
-    isConnected: socket?.readyState === WebSocket.OPEN,
+    requestNotificationPermission
   };
 }

@@ -2,7 +2,9 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 
 export function useScrollAnimations() {
   const [visibleElements, setVisibleElements] = useState<Set<string>>(new Set());
+  const [isScrolling, setIsScrolling] = useState(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const setElementRef = useCallback((id: string, element: HTMLElement | null) => {
     if (element && observerRef.current) {
@@ -11,6 +13,34 @@ export function useScrollAnimations() {
   }, []);
 
   useEffect(() => {
+    // Scroll detection with body class management
+    const handleScroll = () => {
+      setIsScrolling(true);
+      document.body.classList.add('scrolling');
+      
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+      
+      scrollTimeoutRef.current = setTimeout(() => {
+        setIsScrolling(false);
+        document.body.classList.remove('scrolling');
+      }, 150);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.body.classList.remove('scrolling');
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    // Intersection Observer for scroll-triggered animations
     observerRef.current = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -21,7 +51,6 @@ export function useScrollAnimations() {
               if (entry.isIntersecting) {
                 newSet.add(elementId);
               } else {
-                // Remove from visible when out of view to allow re-triggering
                 newSet.delete(elementId);
               }
               return newSet;
@@ -30,8 +59,8 @@ export function useScrollAnimations() {
         });
       },
       {
-        threshold: 0.2,
-        rootMargin: '0px 0px -100px 0px'
+        threshold: 0.15,
+        rootMargin: '0px 0px -50px 0px'
       }
     );
 
@@ -45,23 +74,20 @@ export function useScrollAnimations() {
     
     if (!isVisible) {
       if (animationType === 'slide') {
-        // Scale up from center entrance state
-        return 'opacity-0 scale-50';
+        return 'opacity-0 scale-95 translate-y-8';
       } else {
-        // Cool entrance states with 3D transforms
         const entranceTypes = [
-          'opacity-0 translate-y-12 rotate-3 scale-95',
-          'opacity-0 translate-x-8 -translate-y-8 rotate-6 scale-90',
-          'opacity-0 -translate-x-8 translate-y-8 -rotate-3 scale-95',
-          'opacity-0 translate-y-16 skew-x-3 scale-90',
-          'opacity-0 -translate-y-12 rotate-12 scale-85'
+          'opacity-0 translate-y-12 scale-95',
+          'opacity-0 translate-x-6 -translate-y-6 scale-90',
+          'opacity-0 -translate-x-6 translate-y-6 scale-95',
+          'opacity-0 translate-y-10 scale-90',
+          'opacity-0 -translate-y-8 scale-95'
         ];
         return entranceTypes[index % entranceTypes.length];
       }
     }
 
-    // Scale up from center visible state
-    return 'opacity-100 scale-100 transition-all duration-800 ease-out';
+    return 'opacity-100 scale-100 translate-x-0 translate-y-0 transition-all duration-700 ease-out';
   }, [visibleElements]);
 
   const getAnimationStyle = useCallback((index: number = 0) => {

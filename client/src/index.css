@@ -252,18 +252,43 @@
 
 .animate-float-gentle {
   animation: float-gentle 4s ease-in-out infinite;
+  animation-play-state: paused;
 }
 
 .animate-float-number {
   animation: float-number 3s ease-in-out infinite;
+  animation-play-state: paused;
 }
 
 .animate-float-icon {
   animation: float-icon 5s ease-in-out infinite;
+  animation-play-state: paused;
 }
 
 .animate-pulse-glow-enhanced {
   animation: pulse-glow-enhanced 2s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+/* Play animations on scroll or hover */
+.scrolling .animate-float-gentle,
+.group:hover .animate-float-gentle {
+  animation-play-state: running;
+}
+
+.scrolling .animate-float-number,
+.group:hover .animate-float-number {
+  animation-play-state: running;
+}
+
+.scrolling .animate-float-icon,
+.group:hover .animate-float-icon {
+  animation-play-state: running;
+}
+
+.scrolling .animate-pulse-glow-enhanced,
+.group:hover .animate-pulse-glow-enhanced {
+  animation-play-state: running;
 }
 
 /* Neon shadow effects */
