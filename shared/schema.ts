@@ -9,8 +9,9 @@ export const users = pgTable("users", {
   email: varchar("email", { length: 255 }),
   phone: varchar("phone", { length: 20 }),
   location: varchar("location", { length: 255 }),
-  accountType: varchar("account_type", { length: 50 }).default("user"), // user, vendor, investor
-  verificationStatus: varchar("verification_status", { length: 50 }).default("none"), // none, pending, basic_verified, premium_verified
+  accountType: varchar("account_type", { length: 50 }).default("user"), // user, shop_owner, professional, real_estate
+  specialization: varchar("specialization", { length: 100 }), // For professionals and specific business types
+  verificationStatus: varchar("verification_status", { length: 50 }).default("pending"), // pending, verified, rejected
   salesCount: integer("sales_count").default(0),
   rating: decimal("rating", { precision: 3, scale: 2 }).default("0.00"),
   createdAt: timestamp("created_at").defaultNow(),
@@ -23,6 +24,7 @@ export const insertUserSchema = createInsertSchema(users).pick({
   phone: true,
   location: true,
   accountType: true,
+  specialization: true,
 });
 
 // Vendor applications table
