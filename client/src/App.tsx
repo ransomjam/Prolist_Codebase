@@ -26,7 +26,7 @@ import NewListing from "./pages/NewListing";
 import Settings from "./pages/Settings";
 import HelpSupport from "./pages/HelpSupport";
 import VendorRegistration from "./pages/VendorRegistration";
-import VendorRegister from "./pages/VendorRegister";
+
 import AdminPanel from "./pages/AdminPanel";
 import AdminVerifyPanel from "./pages/AdminVerifyPanel";
 import ProductListingForm from "./pages/ProductListingForm";
@@ -61,7 +61,7 @@ function Router() {
       <Route path="/" component={LandingPage} />
       <Route path="/login" component={Login} />
       <Route path="/signup" component={Signup} />
-      <Route path="/apply-verification" component={VendorRegister} />
+      <Route path="/apply-verification" component={Signup} />
       <Route path="/app" component={Homepage} />
       <Route path="/markets" component={MarketsOverview} />
       <Route path="/markets/:groupId" component={MarketGroupDetail} />
@@ -78,7 +78,7 @@ function Router() {
       <Route path="/settings" component={Settings} />
       <Route path="/help" component={HelpSupport} />
       <Route path="/vendor/register" component={VendorRegistration} />
-      <Route path="/vendor-register" component={VendorRegister} />
+
       <Route path="/admin" component={AdminPanel} />
       <Route path="/admin-verify" component={AdminVerifyPanel} />
       <Route path="/add-listing" component={ProductListingForm} />

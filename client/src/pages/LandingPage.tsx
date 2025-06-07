@@ -9,7 +9,7 @@ export default function LandingPage() {
   return (
     <div className="bg-white text-primary scroll-smooth">
       {/* Hero Section */}
-      <div className="h-[80vh] sm:h-[90vh] md:h-[95vh] relative flex flex-col justify-center items-center text-white text-center overflow-hidden">
+      <div className="h-[50vh] sm:h-[90vh] md:h-[95vh] relative flex flex-col justify-center items-center text-white text-center overflow-hidden">
         <img 
           src={heroImage} 
           alt="Bamenda cityscape" 
@@ -35,42 +35,37 @@ export default function LandingPage() {
           <p 
             ref={(el) => setElementRef('hero-subtitle', el)}
             data-animation-id="hero-subtitle"
-            className={`text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl mb-6 sm:mb-8 lg:mb-10 drop-shadow-lg max-w-3xl mx-auto leading-relaxed gpu-accelerated will-change-transform ${getAnimationClass('hero-subtitle', 2, 'always-visible')}`}
+            className={`text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl mb-4 sm:mb-6 lg:mb-8 drop-shadow-lg max-w-3xl mx-auto leading-relaxed gpu-accelerated will-change-transform ${getAnimationClass('hero-subtitle', 2, 'always-visible')}`}
             style={getAnimationStyle(2)}
           >
-            Cameroon's #1 Digital Marketplace for Trust & Growth
+            Connecting Cameroon's Business Communities with Trust, Opportunity, and Growth
+          </p>
+          <p 
+            ref={(el) => setElementRef('hero-description', el)}
+            data-animation-id="hero-description"
+            className={`text-sm sm:text-base md:text-lg lg:text-xl mb-6 sm:mb-8 lg:mb-10 drop-shadow-lg max-w-4xl mx-auto leading-relaxed opacity-90 gpu-accelerated will-change-transform ${getAnimationClass('hero-description', 3, 'always-visible')}`}
+            style={getAnimationStyle(3)}
+          >
+            ProList is your go-to digital marketplace, empowering local businesses and entrepreneurs to thrive through verified connections, secure transactions, and a vibrant community built on trust.
           </p>
           <div 
             ref={(el) => setElementRef('hero-actions', el)}
             data-animation-id="hero-actions"
-            className={`flex flex-col sm:flex-row gap-4 lg:gap-6 justify-center max-w-lg mx-auto gpu-accelerated will-change-transform ${getAnimationClass('hero-actions', 3, 'always-visible')}`}
-            style={getAnimationStyle(3)}
+            className={`flex flex-col sm:flex-row gap-4 lg:gap-6 justify-center max-w-lg mx-auto gpu-accelerated will-change-transform ${getAnimationClass('hero-actions', 4, 'always-visible')}`}
+            style={getAnimationStyle(4)}
           >
-            <a 
-              href="/listings" 
-              className="bg-gradient-to-r from-emerald to-green-600 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 rounded-xl text-white font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-2xl border-2 border-emerald/50 transform hover:scale-105 text-sm sm:text-base lg:text-lg"
-            >
-              Browse Listings
-            </a>
             <a
               href="/signup"
-              className="bg-white/15 backdrop-blur-md text-white px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 rounded-xl font-semibold hover:bg-white/25 transition-all duration-300 border-2 border-white/30 transform hover:scale-105 text-sm sm:text-base lg:text-lg"
+              className="bg-gradient-to-r from-emerald to-green-600 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 rounded-xl text-white font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-2xl border-2 border-emerald/50 text-sm sm:text-base lg:text-lg"
             >
               Join ProList
             </a>
-          </div>
-          <div 
-            ref={(el) => setElementRef('hero-signin', el)}
-            data-animation-id="hero-signin"
-            className={`mt-6 sm:mt-8 lg:mt-10 gpu-accelerated will-change-transform ${getAnimationClass('hero-signin', 4)}`}
-            style={getAnimationStyle(4)}
-          >
-            <p className="text-white/90 text-sm sm:text-base lg:text-lg drop-shadow-md">
-              Already have an account?{' '}
-              <a href="/login" className="text-neonGreen hover:text-green-300 font-medium underline transition-colors duration-300">
-                Sign in here
-              </a>
-            </p>
+            <a 
+              href="/login" 
+              className="bg-white/15 backdrop-blur-md text-white px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 rounded-xl font-semibold hover:bg-white/25 transition-all duration-300 border-2 border-white/30 text-sm sm:text-base lg:text-lg"
+            >
+              Login
+            </a>
           </div>
         </div>
       </div>
