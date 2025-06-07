@@ -10,7 +10,7 @@ import { useAuth } from "../hooks/useAuth";
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isChatListOpen, setIsChatListOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [location] = useLocation();
   const { logout, isAuthenticated, user } = useAuth();
@@ -20,7 +20,7 @@ export default function Navbar() {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
       if (!target.closest('.dropdown-container')) {
-        setIsChatOpen(false);
+        setIsChatListOpen(false);
         setIsNotificationsOpen(false);
         setIsSearchOpen(false);
       }
@@ -56,7 +56,7 @@ export default function Navbar() {
             {/* Chat Button */}
             <button 
               className="relative w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center transition-colors"
-              onClick={() => setIsChatOpen(!isChatOpen)}
+              onClick={() => setIsChatListOpen(!isChatListOpen)}
             >
               <MessageSquare className="text-gray-700" size={20} />
               <div className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
@@ -155,7 +155,7 @@ export default function Navbar() {
         )}
 
         {/* Chat Dropdown */}
-        {isChatOpen && (
+        {false && (
           <div className="dropdown-container absolute top-full right-4 mt-2 w-80 bg-white rounded-lg shadow-xl border z-50">
             <div className="p-4 border-b border-gray-200">
               <h3 className="text-lg font-semibold text-gray-900">Platform Chat</h3>
@@ -411,6 +411,12 @@ export default function Navbar() {
           </div>
         </div>
       )}
+
+      {/* Chat List Component */}
+      <ChatList 
+        isOpen={isChatListOpen} 
+        onClose={() => setIsChatListOpen(false)} 
+      />
     </header>
   );
 }
