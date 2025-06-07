@@ -78,9 +78,9 @@ const marketData = {
       { 
         id: 'victory-line', 
         name: 'Victory Line', 
-        description: 'Sports equipment, fitness gear, and recreational items',
+        description: 'Quality clothing and apparel for men, women, and children',
         vendors: 40,
-        specialties: ['Sports Equipment', 'Fitness Gear', 'Recreational Items', 'Team Jerseys']
+        specialties: ['Men\'s Clothing', 'Women\'s Apparel', 'Children\'s Wear', 'Casual & Formal Attire']
       }
     ],
   },

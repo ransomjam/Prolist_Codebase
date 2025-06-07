@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, Filter, Star, Shield, MessageCircle, Eye, Grid3X3, List, SlidersHorizontal, Package } from 'lucide-react';
+import { Search, Filter, Star, Shield, MessageCircle, Eye, Grid3X3, List, SlidersHorizontal, Package, ArrowUpDown } from 'lucide-react';
 import { Link } from 'wouter';
 import { ShieldCheckIcon } from '@heroicons/react/24/outline';
 import { serviceCategories, dummyProfessionals, type Professional } from '../data/professionalData';
@@ -207,14 +207,14 @@ export default function ProfessionalServices() {
       <div className="bg-white shadow-lg border-b sticky top-0 z-10">
         <div className="px-4 py-4 max-w-7xl mx-auto">
           {/* Main Search Bar */}
-          <div className="relative mb-4">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+          <div className="relative mb-3">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
             <input
               type="text"
               placeholder="Search by professional name, service type, or expertise..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-lg shadow-sm"
+              className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm shadow-sm"
             />
           </div>
 
@@ -248,17 +248,18 @@ export default function ProfessionalServices() {
               </select>
             </div>
 
-            <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">Sort</label>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="w-full px-2 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-xs"
+            <div className="flex justify-center">
+              <button
+                onClick={() => {
+                  const currentIndex = sortOptions.findIndex(option => option.id === sortBy);
+                  const nextIndex = (currentIndex + 1) % sortOptions.length;
+                  setSortBy(sortOptions[nextIndex].id);
+                }}
+                className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors"
+                title={`Sort by: ${sortOptions.find(option => option.id === sortBy)?.label}`}
               >
-                {sortOptions.map(option => (
-                  <option key={option.id} value={option.id}>{option.label}</option>
-                ))}
-              </select>
+                <ArrowUpDown className="w-4 h-4 text-gray-600" />
+              </button>
             </div>
           </div>
         </div>
