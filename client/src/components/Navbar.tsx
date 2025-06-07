@@ -93,7 +93,7 @@ export default function Navbar() {
                       <User size={16} />
                     </div>
                     <div>
-                      <div className="font-semibold text-sm">Jam Ransom</div>
+                      <div className="font-semibold text-sm">{user?.firstName ? `${user.firstName} ${user.lastName || ''}`.trim() : user?.username || 'User'}</div>
                       <div className="text-xs text-gray-500">See your profile</div>
                     </div>
                   </Link>

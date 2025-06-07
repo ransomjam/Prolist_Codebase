@@ -12,6 +12,12 @@ interface SignupForm {
   location: string;
   password: string;
   profilePicture: File | null;
+  businessName: string;
+  marketLocation: string;
+  marketLine: string;
+  shopNumber: string;
+  acceptTerms: boolean;
+  physicalVerificationAvailable: boolean;
 }
 
 export default function Signup() {
@@ -26,12 +32,32 @@ export default function Signup() {
     location: '',
     password: '',
     profilePicture: null,
+    businessName: '',
+    marketLocation: '',
+    marketLine: '',
+    shopNumber: '',
+    acceptTerms: false,
+    physicalVerificationAvailable: false,
   });
   const [previewUrl, setPreviewUrl] = useState<string>('');
 
+  // Market data for location selection
+  const marketData = {
+    'Main Market': ['Electronics Line', 'Fashion Line', 'Food Line', 'Cosmetics Line', 'Hardware Line'],
+    'Ntarikon Market': ['Vegetable Line', 'Meat Line', 'Fish Line', 'Spices Line'],
+    'Food Market': ['Fresh Produce Line', 'Processed Foods Line', 'Beverages Line'],
+    'Mankon Market': ['Clothing Line', 'Shoes Line', 'Bags Line'],
+    'Commercial Avenue': ['Tech Shops Line', 'Phone Accessories Line', 'Computer Line'],
+    'Nkwen Market': ['Traditional Items Line', 'Crafts Line', 'Art Line']
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
+    setForm({ 
+      ...form, 
+      [name]: type === 'checkbox' ? checked : value 
+    });
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -275,6 +301,83 @@ export default function Signup() {
             </div>
           )}
 
+          {/* Business Details - Only for business accounts */}
+          {form.accountType === 'shop_owner' && (
+            <>
+              <div>
+                <label htmlFor="businessName" className="block text-sm font-medium text-gray-700 mb-1">
+                  Business Name *
+                </label>
+                <input
+                  id="businessName"
+                  name="businessName"
+                  type="text"
+                  value={form.businessName}
+                  onChange={handleChange}
+                  placeholder="Enter your business name"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  required
+                />
+              </div>
+
+              {/* Market Selection */}
+              <div>
+                <label htmlFor="marketLocation" className="block text-sm font-medium text-gray-700 mb-1">
+                  Market Location
+                </label>
+                <select
+                  id="marketLocation"
+                  name="marketLocation"
+                  value={form.marketLocation}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                >
+                  <option value="">Select Market (Optional)</option>
+                  {Object.keys(marketData).map(market => (
+                    <option key={market} value={market}>{market}</option>
+                  ))}
+                </select>
+              </div>
+
+              {form.marketLocation && (
+                <div>
+                  <label htmlFor="marketLine" className="block text-sm font-medium text-gray-700 mb-1">
+                    Market Line/Section
+                  </label>
+                  <select
+                    id="marketLine"
+                    name="marketLine"
+                    value={form.marketLine}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  >
+                    <option value="">Select Line/Section</option>
+                    {marketData[form.marketLocation as keyof typeof marketData]?.map(line => (
+                      <option key={line} value={line}>{line}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              {form.marketLine && (
+                <div>
+                  <label htmlFor="shopNumber" className="block text-sm font-medium text-gray-700 mb-1">
+                    Shop Number/Location
+                  </label>
+                  <input
+                    id="shopNumber"
+                    name="shopNumber"
+                    type="text"
+                    value={form.shopNumber}
+                    onChange={handleChange}
+                    placeholder="e.g., Shop 45, Stall B12, Corner near entrance"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  />
+                </div>
+              )}
+            </>
+          )}
+
           <div>
             <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-1">
               Location
@@ -307,9 +410,52 @@ export default function Signup() {
             />
           </div>
 
+          {/* Terms and Conditions */}
+          <div className="space-y-3">
+            <div className="flex items-start space-x-3">
+              <input
+                id="acceptTerms"
+                name="acceptTerms"
+                type="checkbox"
+                checked={form.acceptTerms}
+                onChange={handleChange}
+                className="mt-1 h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                required
+              />
+              <label htmlFor="acceptTerms" className="text-sm text-gray-700">
+                I accept the{' '}
+                <a href="#" className="text-primary hover:text-blue-700 underline">
+                  Terms and Conditions
+                </a>{' '}
+                and{' '}
+                <a href="#" className="text-primary hover:text-blue-700 underline">
+                  Privacy Policy
+                </a>
+              </label>
+            </div>
+
+            {/* Physical Verification Availability - Only for business accounts */}
+            {(form.accountType === 'shop_owner' || form.accountType === 'professional' || form.accountType === 'real_estate') && (
+              <div className="flex items-start space-x-3">
+                <input
+                  id="physicalVerificationAvailable"
+                  name="physicalVerificationAvailable"
+                  type="checkbox"
+                  checked={form.physicalVerificationAvailable}
+                  onChange={handleChange}
+                  className="mt-1 h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                />
+                <label htmlFor="physicalVerificationAvailable" className="text-sm text-gray-700">
+                  I'm available for physical verification if needed (recommended for faster approval)
+                </label>
+              </div>
+            )}
+          </div>
+
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-primary to-emerald text-white py-3 px-4 rounded-lg font-semibold hover:from-blue-700 hover:to-green-600 transition-all shadow-lg border-2 border-primary/20 hover:shadow-xl"
+            disabled={!form.acceptTerms}
+            className="w-full bg-gradient-to-r from-primary to-emerald text-white py-3 px-4 rounded-lg font-semibold hover:from-blue-700 hover:to-green-600 transition-all shadow-lg border-2 border-primary/20 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Create Account
           </button>
