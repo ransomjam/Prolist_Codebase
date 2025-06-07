@@ -300,6 +300,21 @@ export default function ProductFeed() {
           </button>
         </div>
       )}
+
+      {/* Chat Component */}
+      {selectedVendor && (
+        <ChatBox
+          vendorName={selectedVendor.vendorName}
+          vendorId={selectedVendor.vendorId}
+          productTitle={selectedVendor.productTitle}
+          buyerName="Buyer"
+          isOpen={showChat}
+          onClose={() => {
+            setShowChat(false);
+            setSelectedVendor(null);
+          }}
+        />
+      )}
     </div>
   );
 }
