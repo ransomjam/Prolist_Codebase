@@ -1,6 +1,7 @@
 import { Link } from 'wouter';
 import { MapPin, Users, Star, Shield, Search, Filter } from 'lucide-react';
 import { useState, useMemo } from 'react';
+import foodMarketImage from '@assets/image_1749255445560.png';
 
 const markets = [
   {
@@ -198,9 +199,17 @@ export default function MarketsOverview() {
                 <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-[1.02] relative">
                   {/* Compact Market Image */}
                   <div className="relative h-32 overflow-hidden">
-                    <div className="w-full h-full bg-gradient-to-br from-blue-100 via-purple-100 to-teal-100 flex items-center justify-center">
-                      <div className="text-4xl opacity-30">🏪</div>
-                    </div>
+                    {market.id === 'food-market' ? (
+                      <img 
+                        src={foodMarketImage} 
+                        alt="Bamenda Food Market"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-blue-100 via-purple-100 to-teal-100 flex items-center justify-center">
+                        <div className="text-4xl opacity-30">🏪</div>
+                      </div>
+                    )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent"></div>
                     
                     {/* Compact Stats Overlay */}
