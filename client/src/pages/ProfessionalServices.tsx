@@ -248,17 +248,19 @@ export default function ProfessionalServices() {
               </select>
             </div>
 
-            <div className="flex justify-center">
+            <div>
+              <label className="block text-xs font-medium text-gray-700 mb-1">Sort</label>
               <button
                 onClick={() => {
                   const currentIndex = sortOptions.findIndex(option => option.id === sortBy);
                   const nextIndex = (currentIndex + 1) % sortOptions.length;
                   setSortBy(sortOptions[nextIndex].id);
                 }}
-                className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors"
+                className="w-full px-2 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors text-xs flex items-center justify-center gap-1"
                 title={`Sort by: ${sortOptions.find(option => option.id === sortBy)?.label}`}
               >
-                <ArrowUpDown className="w-4 h-4 text-gray-600" />
+                <ArrowUpDown className="w-3 h-3 text-gray-600" />
+                <span className="text-gray-600 truncate">{sortOptions.find(option => option.id === sortBy)?.label}</span>
               </button>
             </div>
           </div>
@@ -269,12 +271,16 @@ export default function ProfessionalServices() {
 
         {/* Results Header */}
         <div className="mb-4 sm:mb-6">
-          <h2 className="text-lg sm:text-xl font-bold text-gray-800">
-            {filteredServiceListings.length} Service{filteredServiceListings.length !== 1 ? 's' : ''} Available
-          </h2>
-          <p className="text-sm text-gray-600 mt-1">
-            Ready-to-order service packages from verified professionals
-          </p>
+          <div className="border-b border-gray-200 pb-4">
+            <h2 className="text-lg sm:text-xl font-bold text-gray-800 text-center">
+              Verified Services
+            </h2>
+          </div>
+          <div className="mt-4">
+            <p className="text-sm text-gray-600">
+              {filteredServiceListings.length} Service{filteredServiceListings.length !== 1 ? 's' : ''} Available - Ready-to-order packages from verified professionals
+            </p>
+          </div>
         </div>
 
         {/* Service Listings Display */}
@@ -406,6 +412,14 @@ export default function ProfessionalServices() {
           onClose={() => setChatOpen(false)}
         />
       )}
+
+      {/* Floating List Service Button */}
+      <button className="fixed bottom-6 right-6 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 z-50">
+        <div className="flex items-center gap-2">
+          <Package className="w-5 h-5" />
+          <span className="font-semibold">List Service</span>
+        </div>
+      </button>
     </div>
   );
 }
