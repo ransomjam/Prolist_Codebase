@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
-import { Send, X, User, Clock, CheckCheck } from 'lucide-react';
+import { Send, X, User, Clock, CheckCheck, Phone, Video, MoreVertical, Paperclip, Smile, Image } from 'lucide-react';
+import { useAuth } from '../hooks/useAuth';
 
 interface Message {
   id: string;
@@ -21,6 +22,7 @@ interface ChatBoxProps {
 }
 
 export default function ChatBox({ vendorName, vendorId, productTitle, buyerName = 'You', isOpen, onClose }: ChatBoxProps) {
+  const { user } = useAuth();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -43,6 +45,7 @@ export default function ChatBox({ vendorName, vendorId, productTitle, buyerName 
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [isOnline, setIsOnline] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const sendMessage = () => {
@@ -157,17 +160,33 @@ export default function ChatBox({ vendorName, vendorId, productTitle, buyerName 
             <div>
               <h3 className="font-semibold text-lg">{vendorName}</h3>
               <div className="flex items-center gap-1 text-sm opacity-90">
-                <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
-                <span>Online</span>
+                <div className={`w-2 h-2 rounded-full ${isOnline ? 'bg-emerald-400 animate-pulse' : 'bg-gray-400'}`}></div>
+                <span>{isOnline ? 'Online' : 'Last seen recently'}</span>
               </div>
+              {productTitle && (
+                <div className="text-xs opacity-75 mt-1">
+                  About: {productTitle}
+                </div>
+              )}
             </div>
           </div>
-          <button
-            onClick={onClose}
-            className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30 transition-colors duration-200"
-          >
-            <X size={18} />
-          </button>
+          <div className="flex items-center gap-2">
+            <button className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30 transition-colors duration-200">
+              <Phone size={16} />
+            </button>
+            <button className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30 transition-colors duration-200">
+              <Video size={16} />
+            </button>
+            <button className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30 transition-colors duration-200">
+              <MoreVertical size={16} />
+            </button>
+            <button
+              onClick={onClose}
+              className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30 transition-colors duration-200"
+            >
+              <X size={18} />
+            </button>
+          </div>
         </div>
 
         {/* Messages */}
@@ -235,9 +254,50 @@ export default function ChatBox({ vendorName, vendorId, productTitle, buyerName 
           <div ref={messagesEndRef} />
         </div>
 
+        {/* Quick Actions */}
+        <div className="px-4 py-2 bg-gray-50 border-t border-gray-200">
+          <div className="flex gap-2 overflow-x-auto">
+            <button
+              onClick={() => setInput("What's the price for this item?")}
+              className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-medium hover:bg-blue-200 transition-colors whitespace-nowrap"
+            >
+              Ask Price
+            </button>
+            <button
+              onClick={() => setInput("Is this item available?")}
+              className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium hover:bg-green-200 transition-colors whitespace-nowrap"
+            >
+              Check Availability
+            </button>
+            <button
+              onClick={() => setInput("What are the delivery options?")}
+              className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-medium hover:bg-purple-200 transition-colors whitespace-nowrap"
+            >
+              Delivery Info
+            </button>
+            <button
+              onClick={() => setInput("Can we meet in person?")}
+              className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-medium hover:bg-orange-200 transition-colors whitespace-nowrap"
+            >
+              Meet in Person
+            </button>
+          </div>
+        </div>
+
         {/* Input */}
-        <div className="p-4 bg-white border-t border-gray-200">
-          <div className="flex gap-3">
+        <div className="p-4 bg-white">
+          <div className="flex items-end gap-3">
+            <div className="flex gap-2">
+              <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors">
+                <Paperclip size={18} />
+              </button>
+              <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors">
+                <Image size={18} />
+              </button>
+              <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors">
+                <Smile size={18} />
+              </button>
+            </div>
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}

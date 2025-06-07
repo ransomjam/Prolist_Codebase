@@ -4,6 +4,7 @@ import { Search, Plus, User, Settings, Heart, LogOut, Menu, Shield, Users, Messa
 import { HomeIcon, BuildingStorefrontIcon, HomeModernIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
 import NotificationDropdown from "./NotificationDropdown";
 import SearchDropdown from "./SearchDropdown";
+import ChatList from "./ChatList";
 import { useAuth } from "../hooks/useAuth";
 
 export default function Navbar() {
