@@ -49,12 +49,40 @@ export default function AccountVerification() {
     }
   };
 
-  const getAccountTypeLabel = () => {
+  const getAccountTypeDetails = () => {
     switch (user?.accountType) {
-      case 'shop_owner': return 'Shop Owner';
-      case 'professional': return 'Professional Service Provider';
-      case 'real_estate': return 'Real Estate Agent';
-      default: return 'Business Account';
+      case 'shop_owner': 
+        return {
+          label: 'Shop Owner',
+          title: 'Shop Verification',
+          description: 'Verify your shop to start selling products on ProList',
+          icon: '🏪',
+          benefits: ['List unlimited products', 'Access to analytics', 'Customer messaging', 'Payment processing']
+        };
+      case 'professional': 
+        return {
+          label: 'Professional Service Provider',
+          title: 'Professional Services Verification',
+          description: 'Verify your professional credentials to offer services',
+          icon: '💼',
+          benefits: ['Service portfolio showcase', 'Client booking system', 'Project management', 'Escrow payments']
+        };
+      case 'real_estate': 
+        return {
+          label: 'Real Estate Agent',
+          title: 'Real Estate License Verification',
+          description: 'Verify your real estate credentials to list properties',
+          icon: '🏠',
+          benefits: ['Property listing management', 'Virtual tours', 'Lead generation', 'Commission tracking']
+        };
+      default: 
+        return {
+          label: 'User Account',
+          title: 'Account Verification',
+          description: 'Verify your account for enhanced platform access',
+          icon: '👤',
+          benefits: ['Enhanced security', 'Priority support', 'Special offers', 'Trusted status']
+        };
     }
   };
 
@@ -166,9 +194,10 @@ export default function AccountVerification() {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
+          <div className="text-6xl mb-4">{getAccountTypeDetails().icon}</div>
           <Shield className="w-16 h-16 text-blue-600 mx-auto mb-4" />
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Account Verification</h1>
-          <p className="text-gray-600">Complete your {getAccountTypeLabel()} verification to access all platform features</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">{getAccountTypeDetails().title}</h1>
+          <p className="text-gray-600">{getAccountTypeDetails().description}</p>
         </div>
 
         {/* Required Documents Info */}
@@ -194,9 +223,9 @@ export default function AccountVerification() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {user?.accountType === 'shop_owner' ? 'Shop/Business Name' : 
-                   user?.accountType === 'professional' ? 'Professional/Company Name' :
-                   user?.accountType === 'real_estate' ? 'Agency/Office Name' : 'Business Name'}
+                  {user?.accountType === 'shop_owner' ? 'Shop/Store Name' : 
+                   user?.accountType === 'professional' ? 'Business/Professional Name' :
+                   user?.accountType === 'real_estate' ? 'Real Estate Agency Name' : 'Business Name'}
                 </label>
                 <input
                   type="text"
@@ -222,9 +251,9 @@ export default function AccountVerification() {
             {/* Business Description */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                {user?.accountType === 'shop_owner' ? 'Describe Your Products/Services' :
-                 user?.accountType === 'professional' ? 'Describe Your Professional Services' :
-                 user?.accountType === 'real_estate' ? 'Describe Your Real Estate Services' : 'Business Description'}
+                {user?.accountType === 'shop_owner' ? 'Products & Services You Offer' :
+                 user?.accountType === 'professional' ? 'Your Professional Services & Expertise' :
+                 user?.accountType === 'real_estate' ? 'Your Real Estate Services & Market Focus' : 'Business Description'}
               </label>
               <textarea
                 value={form.businessDescription}

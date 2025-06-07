@@ -49,6 +49,7 @@ import ProfessionalProfile from "./pages/ProfessionalProfile";
 import MarketsOverview from "./pages/MarketsOverview";
 import MarketGroupDetail from "./pages/MarketGroupDetail";
 import AccountVerification from "./pages/AccountVerification";
+import VerificationDashboard from "./pages/VerificationDashboard";
 
 import ShopProfile from "./pages/ShopProfile";
 import MarketLine from "./pages/MarketLine";
@@ -103,6 +104,7 @@ function Router() {
       <Route path="/professional-profile/:username" component={ProfessionalProfile} />
       <Route path="/professional/:id" component={ProfessionalProfile} />
       <Route path="/account-verification" component={AccountVerification} />
+      <Route path="/verification-dashboard" component={VerificationDashboard} />
       <Route component={NotFound} />
     </Switch>
   );

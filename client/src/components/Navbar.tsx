@@ -27,15 +27,33 @@ export default function Navbar() {
 
           {/* Right: 3 Icons */}
           <div className="flex items-center gap-2">
-            {/* Verification Button for Vendors */}
-            {isAuthenticated && (
+            {/* Account-Type Specific Verification Button */}
+            {isAuthenticated && user?.verificationStatus !== 'verified' && (
               <Link 
-                href="/apply-verification"
+                href="/account-verification"
                 className="flex items-center gap-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-4 py-2 rounded-lg font-semibold hover:from-yellow-600 hover:to-orange-600 transition-all shadow-lg text-sm"
               >
                 <Shield size={16} />
-                <span className="hidden sm:inline">Get Verified</span>
+                <span className="hidden sm:inline">
+                  {user?.accountType === 'shop_owner' && 'Verify Shop'}
+                  {user?.accountType === 'professional' && 'Verify Services'}
+                  {user?.accountType === 'real_estate' && 'Verify Agency'}
+                  {(!user?.accountType || user?.accountType === 'user') && 'Get Verified'}
+                </span>
               </Link>
+            )}
+
+            {/* Verified Badge */}
+            {isAuthenticated && user?.verificationStatus === 'verified' && (
+              <div className="flex items-center gap-2 bg-green-500 text-white px-4 py-2 rounded-lg font-semibold text-sm">
+                <CheckCircle size={16} />
+                <span className="hidden sm:inline">
+                  {user?.accountType === 'shop_owner' && 'Verified Shop'}
+                  {user?.accountType === 'professional' && 'Verified Professional'}
+                  {user?.accountType === 'real_estate' && 'Verified Agency'}
+                  {(!user?.accountType || user?.accountType === 'user') && 'Verified'}
+                </span>
+              </div>
             )}
 
             {/* List Button */}
