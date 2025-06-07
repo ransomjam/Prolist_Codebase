@@ -87,7 +87,7 @@ export default function Signup() {
         window.location.href = '/app';
       } else {
         // Redirect to verification page for business accounts
-        window.location.href = '/apply-verification';
+        window.location.href = '/vendor-register';
       }
     } catch (error) {
       console.error('Registration error:', error);

@@ -90,7 +90,7 @@ export default function Navbar() {
                   {/* Verification Button for Mobile */}
                   {isAuthenticated && (
                     <Link 
-                      href="/apply-verification"
+                      href="/vendor-register"
                       className="flex items-center gap-3 p-2 hover:bg-yellow-50 rounded-lg bg-gradient-to-r from-yellow-500 to-orange-500 text-white mb-2"
                     >
                       <Shield size={18} />
