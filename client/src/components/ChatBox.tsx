@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Send, X, User, Clock } from 'lucide-react';
+import { Send, X, User, Clock, CheckCheck } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -7,30 +7,38 @@ interface Message {
   text: string;
   time: string;
   isBuyer: boolean;
+  delivered?: boolean;
+  read?: boolean;
 }
 
 interface ChatBoxProps {
   vendorName: string;
+  vendorId?: number;
+  productTitle?: string;
   buyerName?: string;
   isOpen: boolean;
   onClose: () => void;
 }
 
-export default function ChatBox({ vendorName, buyerName = 'You', isOpen, onClose }: ChatBoxProps) {
+export default function ChatBox({ vendorName, vendorId, productTitle, buyerName = 'You', isOpen, onClose }: ChatBoxProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
       sender: vendorName,
-      text: 'Welcome! How can I help you today? I\'m here to answer any questions about my products and services.',
+      text: `Hello! Welcome to my shop. I see you're interested in ${productTitle || 'my products'}. How can I assist you today?`,
       time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
-      isBuyer: false
+      isBuyer: false,
+      delivered: true,
+      read: true
     },
     {
       id: '2',
       sender: vendorName,
-      text: 'Feel free to ask about pricing, availability, or any specific requirements you might have.',
+      text: 'Feel free to ask about pricing, availability, delivery options, or any specifications you need.',
       time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
-      isBuyer: false
+      isBuyer: false,
+      delivered: true,
+      read: true
     }
   ]);
   const [input, setInput] = useState('');
@@ -45,35 +53,81 @@ export default function ChatBox({ vendorName, buyerName = 'You', isOpen, onClose
       sender: buyerName,
       text: input.trim(),
       time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
-      isBuyer: true
+      isBuyer: true,
+      delivered: false,
+      read: false
     };
 
     setMessages(prev => [...prev, newMessage]);
     setInput('');
 
-    // Simulate vendor typing and response
-    setIsTyping(true);
+    // Simulate message delivery
     setTimeout(() => {
-      setIsTyping(false);
-      const responses = [
-        'Thank you for your interest! Let me check that for you.',
-        'I\'d be happy to help with that. Could you provide more details?',
-        'That\'s a great question! I have that item available.',
-        'Yes, I can definitely assist you with that. When would you like to visit?',
-        'I appreciate your message. Let me get back to you with the details.',
-        'Absolutely! I have experience with that. Would you like to schedule a consultation?'
-      ];
+      setMessages(prev => prev.map(msg => 
+        msg.id === newMessage.id ? { ...msg, delivered: true } : msg
+      ));
+    }, 500);
+
+    // Simulate vendor reading the message
+    setTimeout(() => {
+      setMessages(prev => prev.map(msg => 
+        msg.id === newMessage.id ? { ...msg, read: true } : msg
+      ));
+    }, 1000);
+
+    // Simulate vendor typing and response
+    setTimeout(() => {
+      setIsTyping(true);
       
-      const vendorResponse: Message = {
-        id: (Date.now() + 1).toString(),
-        sender: vendorName,
-        text: responses[Math.floor(Math.random() * responses.length)],
-        time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
-        isBuyer: false
-      };
-      
-      setMessages(prev => [...prev, vendorResponse]);
-    }, 2000 + Math.random() * 2000); // Random delay between 2-4 seconds
+      setTimeout(() => {
+        setIsTyping(false);
+        const vendorResponse: Message = {
+          id: (Date.now() + 1).toString(),
+          sender: vendorName,
+          text: getIntelligentResponse(newMessage.text),
+          time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+          isBuyer: false,
+          delivered: true,
+          read: true
+        };
+        
+        setMessages(prev => [...prev, vendorResponse]);
+      }, 1500 + Math.random() * 1000);
+    }, 1200);
+  };
+
+  const getIntelligentResponse = (userMessage: string): string => {
+    const message = userMessage.toLowerCase();
+    
+    if (message.includes('price') || message.includes('cost') || message.includes('how much')) {
+      return `Great question! For ${productTitle || 'this item'}, the price includes quality guarantee and fast delivery. I can offer competitive pricing - let me know if you'd like a detailed quote.`;
+    }
+    if (message.includes('available') || message.includes('stock') || message.includes('in stock')) {
+      return `Yes, this item is currently available! I maintain good stock levels and can usually fulfill orders within 1-2 days.`;
+    }
+    if (message.includes('delivery') || message.includes('shipping') || message.includes('transport')) {
+      return `I offer flexible delivery options across Bamenda. Local delivery is usually same-day or next-day. Would you like me to check delivery options for your location?`;
+    }
+    if (message.includes('quality') || message.includes('condition') || message.includes('warranty')) {
+      return `I take pride in offering high-quality products. All items come with quality assurance, and I stand behind everything I sell. Customer satisfaction is my priority!`;
+    }
+    if (message.includes('meet') || message.includes('visit') || message.includes('location')) {
+      return `Absolutely! I'm located in Bamenda and welcome customers to visit my shop. We can arrange a convenient time for you to see the products in person.`;
+    }
+    if (message.includes('thank') || message.includes('thanks')) {
+      return `You're very welcome! I'm here to help and ensure you have a great experience. Feel free to ask if you need anything else!`;
+    }
+    
+    const responses = [
+      `Thank you for your interest in ${productTitle || 'my products'}! I'd be happy to help with any questions you have.`,
+      'I appreciate you reaching out! Let me provide you with the best service possible.',
+      'That\'s a great question! I have good experience with this and can definitely assist you.',
+      'I understand what you\'re looking for. Let me give you all the details you need.',
+      'Thanks for your message! I\'m committed to providing excellent customer service.',
+      'I\'m glad you\'re interested! Quality and customer satisfaction are my top priorities.'
+    ];
+    
+    return responses[Math.floor(Math.random() * responses.length)];
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -145,7 +199,18 @@ export default function ChatBox({ vendorName, buyerName = 'You', isOpen, onClose
                     </span>
                   </div>
                 </div>
-                <p className="text-sm leading-relaxed">{message.text}</p>
+                <p className="text-sm leading-relaxed mb-1">{message.text}</p>
+                {message.isBuyer && (
+                  <div className="flex items-center justify-end gap-1 mt-1">
+                    {message.read ? (
+                      <CheckCheck size={12} className="text-blue-200" />
+                    ) : message.delivered ? (
+                      <CheckCheck size={12} className="text-blue-300 opacity-50" />
+                    ) : (
+                      <Clock size={12} className="text-blue-300 opacity-50" />
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           ))}

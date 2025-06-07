@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import ShareButton from '@/components/ShareButton';
 import VendorSalesStats from '@/components/VendorSalesStats';
+import ChatBox from '@/components/ChatBox';
 
 interface Product {
   id: number;
@@ -113,14 +114,6 @@ export default function ProductDetail() {
 
   const handleChat = () => {
     setShowChat(!showChat);
-  };
-
-  const handleSendMessage = () => {
-    if (chatMessage.trim()) {
-      alert(`Message sent to ${vendor?.fullName}: "${chatMessage}"`);
-      setChatMessage('');
-      setShowChat(false);
-    }
   };
 
   const handlePlaceOrder = () => {
