@@ -64,7 +64,7 @@ export default function Homepage() {
             className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 leading-tight max-w-5xl mx-auto ${getAnimationClass('hero-title', 1)}`}
             style={getAnimationStyle(1)}
           >
-            Welcome back, <span className="text-yellow-300">{user?.name || user?.username}</span>! 
+            Welcome back, <span className="text-yellow-300">{user?.username}</span>! 
           </h1>
           
           {/* Account Type and Verification Status */}
@@ -77,32 +77,30 @@ export default function Homepage() {
             <div className="flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-full">
               <Shield size={16} />
               <span className="text-sm font-medium">
-                {user?.accountType === 'user' && 'User Account'}
-                {user?.accountType === 'shop_owner' && 'Shop Owner'}
-                {user?.accountType === 'professional' && 'Professional Service Provider'}
-                {user?.accountType === 'real_estate' && 'Real Estate Agent'}
-                {!user?.accountType && 'User Account'}
+                {user?.role === 'buyer' && 'Buyer Account'}
+                {user?.role === 'vendor' && 'Vendor Account'}
+                {user?.role === 'admin' && 'Admin Account'}
+                {!user?.role && 'User Account'}
               </span>
             </div>
             <div className={`flex items-center gap-2 px-4 py-2 rounded-full ${
               user?.verificationStatus === 'verified' 
                 ? 'bg-green-500/20 text-green-100' 
-                : user?.verificationStatus === 'pending'
-                ? 'bg-yellow-500/20 text-yellow-100'
+                : user?.verificationStatus === 'premium_verified'
+                ? 'bg-blue-500/20 text-blue-100'
                 : 'bg-gray-500/20 text-gray-100'
             }`}>
               <div className={`w-2 h-2 rounded-full ${
                 user?.verificationStatus === 'verified' 
                   ? 'bg-green-400' 
-                  : user?.verificationStatus === 'pending'
-                  ? 'bg-yellow-400 animate-pulse'
+                  : user?.verificationStatus === 'premium_verified'
+                  ? 'bg-blue-400 animate-pulse'
                   : 'bg-gray-400'
               }`}></div>
               <span className="text-sm font-medium">
                 {user?.verificationStatus === 'verified' && 'Verified'}
-                {user?.verificationStatus === 'pending' && 'Verification Pending'}
-                {user?.verificationStatus === 'rejected' && 'Verification Rejected'}
-                {!user?.verificationStatus && 'Unverified'}
+                {user?.verificationStatus === 'premium_verified' && 'Premium Verified'}
+                {!user?.verificationStatus && 'Standard User'}
               </span>
             </div>
           </div>
