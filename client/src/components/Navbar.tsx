@@ -167,7 +167,7 @@ export default function Navbar() {
 
         {/* Chat Dropdown */}
         {isChatOpen && (
-          <div className="absolute top-full right-4 mt-2 w-80 bg-white rounded-lg shadow-xl border z-50">
+          <div className="dropdown-container absolute top-full right-4 mt-2 w-80 bg-white rounded-lg shadow-xl border z-50">
             <div className="p-4 border-b border-gray-200">
               <h3 className="text-lg font-semibold text-gray-900">Platform Chat</h3>
               <p className="text-sm text-gray-600">Recent discussions</p>
@@ -239,7 +239,7 @@ export default function Navbar() {
 
         {/* Notifications Dropdown */}
         {isNotificationsOpen && (
-          <div className="absolute top-full right-4 mt-2 w-80 bg-white rounded-lg shadow-xl border z-50">
+          <div className="dropdown-container absolute top-full right-4 mt-2 w-80 bg-white rounded-lg shadow-xl border z-50">
             <div className="p-4 border-b border-gray-200">
               <h3 className="text-lg font-semibold text-gray-900">Notifications</h3>
               <p className="text-sm text-gray-600">Recent platform activity</p>
