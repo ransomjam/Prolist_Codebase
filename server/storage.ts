@@ -127,6 +127,14 @@ export class MemStorage implements IStorage {
     return updatedUser;
   }
 
+  async updateUserVerificationStatus(id: number, status: string): Promise<User | undefined> {
+    return this.updateUser(id, { verificationStatus: status });
+  }
+
+  async getAllUsers(): Promise<User[]> {
+    return Array.from(this.users.values());
+  }
+
   async getComments(listingId: string, listingType: string): Promise<Comment[]> {
     const key = `${listingType}_${listingId}`;
     return this.comments.get(key) || [];
@@ -327,6 +335,19 @@ export class DatabaseStorage implements IStorage {
   async updateUser(id: number, updates: Partial<User>): Promise<User | undefined> {
     const [user] = await db.update(users).set(updates).where(eq(users.id, id)).returning();
     return user || undefined;
+  }
+
+  async updateUserVerificationStatus(id: number, status: string): Promise<User | undefined> {
+    const [user] = await db
+      .update(users)
+      .set({ verificationStatus: status })
+      .where(eq(users.id, id))
+      .returning();
+    return user || undefined;
+  }
+
+  async getAllUsers(): Promise<User[]> {
+    return await db.select().from(users);
   }
 
   async getComments(listingId: string, listingType: string): Promise<Comment[]> {

@@ -48,6 +48,7 @@ import ServiceOrderConfirmed from "./pages/ServiceOrderConfirmed";
 import ProfessionalProfile from "./pages/ProfessionalProfile";
 import MarketsOverview from "./pages/MarketsOverview";
 import MarketGroupDetail from "./pages/MarketGroupDetail";
+import AccountVerification from "./pages/AccountVerification";
 
 import ShopProfile from "./pages/ShopProfile";
 import MarketLine from "./pages/MarketLine";
@@ -101,6 +102,7 @@ function Router() {
       <Route path="/service-order-confirmed/:orderId" component={ServiceOrderConfirmed} />
       <Route path="/professional-profile/:username" component={ProfessionalProfile} />
       <Route path="/professional/:id" component={ProfessionalProfile} />
+      <Route path="/account-verification" component={AccountVerification} />
       <Route component={NotFound} />
     </Switch>
   );
