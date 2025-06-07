@@ -269,17 +269,12 @@ export default function ProfessionalServices() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
 
-        {/* Results Header */}
-        <div className="mb-4 sm:mb-6">
+        {/* Verified Services Title - Full Width */}
+        <div className="mb-6">
           <div className="border-b border-gray-200 pb-4">
             <h2 className="text-lg sm:text-xl font-bold text-gray-800 text-center">
               Verified Services
             </h2>
-          </div>
-          <div className="mt-4">
-            <p className="text-sm text-gray-600">
-              {filteredServiceListings.length} Service{filteredServiceListings.length !== 1 ? 's' : ''} Available - Ready-to-order packages from verified professionals
-            </p>
           </div>
         </div>
 
