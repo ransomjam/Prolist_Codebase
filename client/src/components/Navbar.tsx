@@ -198,6 +198,18 @@ export default function Navbar() {
             <HomeModernIcon className="h-7 w-7" />
           </Link>
 
+          {/* Services */}
+          <Link 
+            href="/services"
+            className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 ${
+              location === '/services' 
+                ? 'text-primary' 
+                : 'text-gray-600 hover:bg-gray-100'
+            }`}
+          >
+            <Briefcase className="h-7 w-7" />
+          </Link>
+
           {/* Auctions */}
           <Link 
             href="/auctions"
