@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Switch, Route } from "wouter";
+import { Switch, Route, useLocation } from "wouter";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/queryClient";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { auctions as initialAuctions } from "./data/demoData";
+import { useAuth } from "./hooks/useAuth";
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 import BottomNavigation from './components/BottomNavigation';
@@ -109,6 +110,8 @@ function Router() {
 
 function App() {
   const [auctions, setAuctions] = useState(initialAuctions);
+  const [location] = useLocation();
+  const { isAuthenticated, isLoading } = useAuth();
   
   // Simulate current user session
   const userSession = {
@@ -121,25 +124,55 @@ function App() {
     // In a real app, this would make an API call to update vendor stats
   };
 
+  // Define routes that don't need navigation
+  const publicRoutes = ['/', '/login', '/signup', '/apply-verification'];
+  const isPublicRoute = publicRoutes.includes(location);
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+              <p className="text-gray-600">Loading ProList...</p>
+            </div>
+          </div>
+          <Toaster />
+        </TooltipProvider>
+      </QueryClientProvider>
+    );
+  }
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <div className="min-h-screen bg-grayLight pb-16">
-          <div className="flex flex-col">
-            <Navbar />
-            <main className="flex-1 p-4 lg:p-6">
-              <Router />
-            </main>
+        {isPublicRoute || !isAuthenticated ? (
+          // Public routes without navigation
+          <div className="min-h-screen">
+            <Router />
+            <Toaster />
           </div>
-          <BottomNavigation />
-          <AuctionPostProcess
-            auctions={auctions}
-            setAuctions={setAuctions}
-            userSession={userSession}
-            incrementVendorSales={incrementVendorSales}
-          />
-        </div>
-        <Toaster />
+        ) : (
+          // Authenticated routes with full navigation
+          <div className="min-h-screen bg-grayLight pb-16">
+            <div className="flex flex-col">
+              <Navbar />
+              <main className="flex-1 p-4 lg:p-6">
+                <Router />
+              </main>
+            </div>
+            <BottomNavigation />
+            <AuctionPostProcess
+              auctions={auctions}
+              setAuctions={setAuctions}
+              userSession={userSession}
+              incrementVendorSales={incrementVendorSales}
+            />
+            <Toaster />
+          </div>
+        )}
       </TooltipProvider>
     </QueryClientProvider>
   );

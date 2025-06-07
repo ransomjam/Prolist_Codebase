@@ -67,11 +67,8 @@ export function useAuth(): AuthState & {
         console.error('Error parsing stored user:', error);
         localStorage.removeItem('prolist_user');
       }
-    } else {
-      // Default to first demo user for chat functionality
-      setUser(demoUsers[0]);
-      localStorage.setItem('prolist_user', JSON.stringify(demoUsers[0]));
     }
+    // Don't auto-login users - let them choose to login
     setIsLoading(false);
   }, []);
 

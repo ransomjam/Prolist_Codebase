@@ -4,14 +4,7 @@ import { useAuth } from "../hooks/useAuth";
 import { useScrollAnimations } from "../hooks/useScrollAnimations";
 
 export default function LandingPage() {
-  const { isAuthenticated } = useAuth();
   const { setElementRef, getAnimationClass, getAnimationStyle } = useScrollAnimations();
-
-  // Redirect authenticated users to their dashboard
-  if (isAuthenticated) {
-    window.location.href = "/app";
-    return null;
-  }
 
   return (
     <div className="bg-white text-primary scroll-smooth">
