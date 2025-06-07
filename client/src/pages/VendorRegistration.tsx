@@ -327,7 +327,7 @@ export default function VendorRegistration() {
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Shop/Business Photo *</label>
-          <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+          <div className="border-2 border-dashed border-gray-300 hover:border-blue-400 rounded-lg p-6 text-center transition-colors">
             <input
               type="file"
               accept="image/*"
@@ -335,19 +335,24 @@ export default function VendorRegistration() {
               className="hidden"
               id="shop-upload"
             />
-            <label htmlFor="shop-upload" className="cursor-pointer">
-              <Camera className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-              <p className="text-sm text-gray-600">Upload photo of your shop or workspace</p>
-              {form.shopPhoto && (
-                <p className="text-sm text-green-600 mt-2">✓ {form.shopPhoto.name}</p>
-              )}
-            </label>
+            <Camera className="w-12 h-12 text-gray-400 mx-auto mb-2" />
+            <p className="text-sm text-gray-600 mb-3">Upload photo of your shop front or workspace</p>
+            <div className="flex gap-2 justify-center">
+              <label htmlFor="shop-upload" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm cursor-pointer transition-colors">
+                Choose from Device
+              </label>
+            </div>
+            {form.shopPhoto && (
+              <div className="mt-3 p-2 bg-green-50 border border-green-200 rounded text-sm text-green-700">
+                ✓ {form.shopPhoto.name}
+              </div>
+            )}
           </div>
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Product Photos * (Up to 5 photos)</label>
-          <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+          <div className="border-2 border-dashed border-gray-300 hover:border-blue-400 rounded-lg p-6 text-center transition-colors">
             <input
               type="file"
               accept="image/*"
@@ -356,13 +361,18 @@ export default function VendorRegistration() {
               className="hidden"
               id="products-upload"
             />
-            <label htmlFor="products-upload" className="cursor-pointer">
-              <Camera className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-              <p className="text-sm text-gray-600">Upload photos of your products</p>
-              {form.productPhotos.length > 0 && (
-                <p className="text-sm text-green-600 mt-2">✓ {form.productPhotos.length} photos uploaded</p>
-              )}
-            </label>
+            <Camera className="w-12 h-12 text-gray-400 mx-auto mb-2" />
+            <p className="text-sm text-gray-600 mb-3">Upload clear photos of your products or services</p>
+            <div className="flex gap-2 justify-center">
+              <label htmlFor="products-upload" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm cursor-pointer transition-colors">
+                Choose from Device
+              </label>
+            </div>
+            {form.productPhotos.length > 0 && (
+              <div className="mt-3 p-2 bg-green-50 border border-green-200 rounded text-sm text-green-700">
+                ✓ {form.productPhotos.length} photos uploaded (max 5)
+              </div>
+            )}
           </div>
         </div>
       </div>

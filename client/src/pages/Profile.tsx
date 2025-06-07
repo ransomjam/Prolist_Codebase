@@ -315,6 +315,28 @@ export default function Profile() {
           )}
         </div>
 
+        {/* My Businesses Section */}
+        {vendorApplication && vendorApplication.businessName && (
+          <div className="bg-gradient-to-r from-blue-100 to-purple-100 rounded-lg p-3 mb-4">
+            <h3 className="text-sm font-semibold text-gray-800 mb-2">My Businesses</h3>
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="text-sm font-medium text-gray-800">{vendorApplication.businessName}</div>
+                <div className="text-xs text-gray-600">{vendorApplication.businessAddress || 'Business Location'}</div>
+              </div>
+              <div className="flex items-center gap-1">
+                {vendorApplication.status === 'Approved' ? (
+                  <div className="bg-green-500 text-white px-2 py-1 rounded text-xs font-medium">Active</div>
+                ) : vendorApplication.status === 'Pending' ? (
+                  <div className="bg-yellow-500 text-white px-2 py-1 rounded text-xs font-medium">Pending</div>
+                ) : (
+                  <div className="bg-red-500 text-white px-2 py-1 rounded text-xs font-medium">Inactive</div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Revenue Summary */}
         {vendorStats && (
           <div className="bg-gradient-to-r from-green-100 to-emerald-100 rounded-lg p-3 mb-4">
