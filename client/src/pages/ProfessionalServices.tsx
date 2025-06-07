@@ -409,10 +409,10 @@ export default function ProfessionalServices() {
       )}
 
       {/* Floating List Service Button */}
-      <button className="fixed bottom-6 right-6 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 z-50">
-        <div className="flex items-center gap-2">
-          <Package className="w-5 h-5" />
-          <span className="font-semibold">List Service</span>
+      <button className="fixed bottom-4 right-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-2 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 z-50">
+        <div className="flex items-center gap-1">
+          <Package className="w-4 h-4" />
+          <span className="font-medium text-sm">List Service</span>
         </div>
       </button>
     </div>
