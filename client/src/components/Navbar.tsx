@@ -74,7 +74,7 @@ export default function Navbar() {
             {/* Chat Button */}
             <button 
               className="relative w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center transition-colors"
-              onClick={(e) => handleAuthRequired(e, 'chat')}
+              onClick={(e) => isAuthenticated ? setIsChatListOpen(!isChatListOpen) : handleAuthRequired(e, 'chat')}
             >
               <MessageSquare className="text-gray-700" size={20} />
               {isAuthenticated && (
@@ -87,7 +87,7 @@ export default function Navbar() {
             {/* Notifications Button */}
             <button 
               className="relative w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center transition-colors"
-              onClick={(e) => handleAuthRequired(e, 'notifications')}
+              onClick={(e) => isAuthenticated ? setIsNotificationsOpen(!isNotificationsOpen) : handleAuthRequired(e, 'notifications')}
             >
               <Bell className="text-gray-700" size={20} />
               {isAuthenticated && (
@@ -125,26 +125,61 @@ export default function Navbar() {
 
                   
                   <div className="grid grid-cols-2 gap-3 p-3">
-                    <a href="/products" className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-blue-50 via-blue-100 to-blue-150 hover:from-blue-100 hover:via-blue-150 hover:to-blue-200 transition-all duration-300 border border-blue-200 shadow-sm hover:shadow-md">
-                      <ShoppingBag className="w-7 h-7 text-blue-600 group-hover:scale-110 transition-transform duration-200" />
-                      <div className="text-xs font-semibold text-blue-800 text-center">Marketplace</div>
-                    </a>
-                    <a href="/markets" className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-green-50 via-green-100 to-green-150 hover:from-green-100 hover:via-green-150 hover:to-green-200 transition-all duration-300 border border-green-200 shadow-sm hover:shadow-md">
-                      <BuildingStorefrontIcon className="w-7 h-7 text-green-600 group-hover:scale-110 transition-transform duration-200" />
-                      <div className="text-xs font-semibold text-green-800 text-center">Markets</div>
-                    </a>
-                    <a href="/realestate" className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-purple-50 via-purple-100 to-purple-150 hover:from-purple-100 hover:via-purple-150 hover:to-purple-200 transition-all duration-300 border border-purple-200 shadow-sm hover:shadow-md">
-                      <HomeModernIcon className="w-7 h-7 text-purple-600 group-hover:scale-110 transition-transform duration-200" />
-                      <div className="text-xs font-semibold text-purple-800 text-center">Real Estate</div>
-                    </a>
-                    <a href="/auctions" className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-red-50 via-red-100 to-red-150 hover:from-red-100 hover:via-red-150 hover:to-red-200 transition-all duration-300 border border-red-200 shadow-sm hover:shadow-md">
-                      <CurrencyDollarIcon className="w-7 h-7 text-red-600 group-hover:scale-110 transition-transform duration-200" />
-                      <div className="text-xs font-semibold text-red-800 text-center">Auctions</div>
-                    </a>
-                    <a href="/professional-services" className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-teal-50 via-teal-100 to-teal-150 hover:from-teal-100 hover:via-teal-150 hover:to-teal-200 transition-all duration-300 border border-teal-200 shadow-sm hover:shadow-md">
-                      <div className="text-lg group-hover:scale-110 transition-transform duration-200">🔧</div>
-                      <div className="text-xs font-semibold text-teal-800 text-center">Services</div>
-                    </a>
+                    {isAuthenticated ? (
+                      <Link href="/products" className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-blue-50 via-blue-100 to-blue-150 hover:from-blue-100 hover:via-blue-150 hover:to-blue-200 transition-all duration-300 border border-blue-200 shadow-sm hover:shadow-md">
+                        <ShoppingBag className="w-7 h-7 text-blue-600 group-hover:scale-110 transition-transform duration-200" />
+                        <div className="text-xs font-semibold text-blue-800 text-center">Marketplace</div>
+                      </Link>
+                    ) : (
+                      <button onClick={(e) => handleAuthRequired(e, 'marketplace')} className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-blue-50 via-blue-100 to-blue-150 hover:from-blue-100 hover:via-blue-150 hover:to-blue-200 transition-all duration-300 border border-blue-200 shadow-sm hover:shadow-md">
+                        <ShoppingBag className="w-7 h-7 text-blue-600 group-hover:scale-110 transition-transform duration-200" />
+                        <div className="text-xs font-semibold text-blue-800 text-center">Marketplace</div>
+                      </button>
+                    )}
+                    {isAuthenticated ? (
+                      <Link href="/markets" className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-green-50 via-green-100 to-green-150 hover:from-green-100 hover:via-green-150 hover:to-green-200 transition-all duration-300 border border-green-200 shadow-sm hover:shadow-md">
+                        <BuildingStorefrontIcon className="w-7 h-7 text-green-600 group-hover:scale-110 transition-transform duration-200" />
+                        <div className="text-xs font-semibold text-green-800 text-center">Markets</div>
+                      </Link>
+                    ) : (
+                      <button onClick={(e) => handleAuthRequired(e, 'markets')} className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-green-50 via-green-100 to-green-150 hover:from-green-100 hover:via-green-150 hover:to-green-200 transition-all duration-300 border border-green-200 shadow-sm hover:shadow-md">
+                        <BuildingStorefrontIcon className="w-7 h-7 text-green-600 group-hover:scale-110 transition-transform duration-200" />
+                        <div className="text-xs font-semibold text-green-800 text-center">Markets</div>
+                      </button>
+                    )}
+                    {isAuthenticated ? (
+                      <Link href="/realestate" className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-purple-50 via-purple-100 to-purple-150 hover:from-purple-100 hover:via-purple-150 hover:to-purple-200 transition-all duration-300 border border-purple-200 shadow-sm hover:shadow-md">
+                        <HomeModernIcon className="w-7 h-7 text-purple-600 group-hover:scale-110 transition-transform duration-200" />
+                        <div className="text-xs font-semibold text-purple-800 text-center">Real Estate</div>
+                      </Link>
+                    ) : (
+                      <button onClick={(e) => handleAuthRequired(e, 'realestate')} className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-purple-50 via-purple-100 to-purple-150 hover:from-purple-100 hover:via-purple-150 hover:to-purple-200 transition-all duration-300 border border-purple-200 shadow-sm hover:shadow-md">
+                        <HomeModernIcon className="w-7 h-7 text-purple-600 group-hover:scale-110 transition-transform duration-200" />
+                        <div className="text-xs font-semibold text-purple-800 text-center">Real Estate</div>
+                      </button>
+                    )}
+                    {isAuthenticated ? (
+                      <Link href="/auctions" className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-red-50 via-red-100 to-red-150 hover:from-red-100 hover:via-red-150 hover:to-red-200 transition-all duration-300 border border-red-200 shadow-sm hover:shadow-md">
+                        <CurrencyDollarIcon className="w-7 h-7 text-red-600 group-hover:scale-110 transition-transform duration-200" />
+                        <div className="text-xs font-semibold text-red-800 text-center">Auctions</div>
+                      </Link>
+                    ) : (
+                      <button onClick={(e) => handleAuthRequired(e, 'auctions')} className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-red-50 via-red-100 to-red-150 hover:from-red-100 hover:via-red-150 hover:to-red-200 transition-all duration-300 border border-red-200 shadow-sm hover:shadow-md">
+                        <CurrencyDollarIcon className="w-7 h-7 text-red-600 group-hover:scale-110 transition-transform duration-200" />
+                        <div className="text-xs font-semibold text-red-800 text-center">Auctions</div>
+                      </button>
+                    )}
+                    {isAuthenticated ? (
+                      <Link href="/professional-services" className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-teal-50 via-teal-100 to-teal-150 hover:from-teal-100 hover:via-teal-150 hover:to-teal-200 transition-all duration-300 border border-teal-200 shadow-sm hover:shadow-md">
+                        <div className="text-lg group-hover:scale-110 transition-transform duration-200">🔧</div>
+                        <div className="text-xs font-semibold text-teal-800 text-center">Services</div>
+                      </Link>
+                    ) : (
+                      <button onClick={(e) => handleAuthRequired(e, 'services')} className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-teal-50 via-teal-100 to-teal-150 hover:from-teal-100 hover:via-teal-150 hover:to-teal-200 transition-all duration-300 border border-teal-200 shadow-sm hover:shadow-md">
+                        <div className="text-lg group-hover:scale-110 transition-transform duration-200">🔧</div>
+                        <div className="text-xs font-semibold text-teal-800 text-center">Services</div>
+                      </button>
+                    )}
                   </div>
                   <hr className="my-2" />
                   <Link href="/settings" className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg">
