@@ -2,6 +2,7 @@ import { Link } from 'wouter';
 import { MapPin, Users, Star, Shield, Search, Filter } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import foodMarketImage from '@assets/image_1749255445560.png';
+import bamendaMarketsImage from '@assets/image_1749257345512.png';
 
 const marketGroups = [
   {
@@ -223,7 +224,7 @@ export default function MarketsOverview() {
                     <div className="relative h-48 overflow-hidden">
                       {group.id === 'bamenda-markets' ? (
                         <img 
-                          src={foodMarketImage} 
+                          src={bamendaMarketsImage} 
                           alt="Bamenda Markets"
                           className="w-full h-full object-cover"
                         />
