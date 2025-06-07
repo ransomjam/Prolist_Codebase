@@ -37,11 +37,24 @@ export default function VendorRegistration() {
     shopType: 'online',
     businessName: '',
     businessAddress: '',
+    marketLocation: '',
+    marketLine: '',
+    shopNumber: '',
     idDocument: null,
     shopPhoto: null,
     productPhotos: [],
     businessDescription: ''
   });
+
+  // Market data for location selection
+  const marketData = {
+    'Main Market': ['Electronics Line', 'Fashion Line', 'Food Line', 'Cosmetics Line', 'Hardware Line'],
+    'Ntarikon Market': ['Vegetable Line', 'Meat Line', 'Fish Line', 'Spices Line'],
+    'Food Market': ['Fresh Produce Line', 'Processed Foods Line', 'Beverages Line'],
+    'Mankon Market': ['Clothing Line', 'Shoes Line', 'Bags Line'],
+    'Commercial Avenue': ['Tech Shops Line', 'Phone Accessories Line', 'Computer Line'],
+    'Nkwen Market': ['Traditional Items Line', 'Crafts Line', 'Art Line']
+  };
 
   // Mock verification slots - in real app this would come from backend
   const [verificationSlots] = useState<VerificationSlot[]>([
@@ -210,6 +223,58 @@ export default function VendorRegistration() {
             placeholder="Full business address"
           />
         </div>
+
+        {/* Market Location Selection - Only for Physical Shops */}
+        {form.shopType === 'physical' && (
+          <>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Market Location *</label>
+              <select
+                name="marketLocation"
+                value={form.marketLocation}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="">Select Market</option>
+                {Object.keys(marketData).map(market => (
+                  <option key={market} value={market}>{market}</option>
+                ))}
+              </select>
+            </div>
+
+            {form.marketLocation && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Market Line *</label>
+                <select
+                  name="marketLine"
+                  value={form.marketLine}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="">Select Line/Section</option>
+                  {marketData[form.marketLocation as keyof typeof marketData]?.map(line => (
+                    <option key={line} value={line}>{line}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+            {form.marketLine && (
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Shop Number</label>
+                <input
+                  type="text"
+                  name="shopNumber"
+                  value={form.shopNumber}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="e.g., Shop 45, Stall B12, etc."
+                />
+                <p className="text-xs text-gray-500 mt-1">If you don't have a specific number, describe your location (e.g., "Corner shop near entrance")</p>
+              </div>
+            )}
+          </>
+        )}
 
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-gray-700 mb-2">Business Description</label>
