@@ -188,47 +188,52 @@ export default function Signup() {
             </select>
           </div>
 
-          {/* Show vendor type selection only when vendor is selected */}
-          {form.userType === 'vendor' && (
+          {/* Show specialization selection when business account is selected */}
+          {(form.accountType === 'shop_owner' || form.accountType === 'professional' || form.accountType === 'real_estate') && (
             <div>
-              <label htmlFor="vendorType" className="block text-sm font-medium text-gray-700 mb-1">
-                Vendor Type
+              <label htmlFor="specialization" className="block text-sm font-medium text-gray-700 mb-1">
+                {form.accountType === 'shop_owner' && 'Shop Category'}
+                {form.accountType === 'professional' && 'Service Category'}
+                {form.accountType === 'real_estate' && 'Real Estate Specialization'}
               </label>
               <select
-                id="vendorType"
-                name="vendorType"
-                value={form.vendorType}
+                id="specialization"
+                name="specialization"
+                value={form.specialization}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 required
               >
-                <option value="">Select Vendor Type</option>
-                <option value="online">Online Vendor</option>
-                <option value="shop">Shop Owner</option>
-              </select>
-            </div>
-          )}
-
-          {/* Show service category selection only when professional is selected */}
-          {form.userType === 'professional' && (
-            <div>
-              <label htmlFor="serviceCategory" className="block text-sm font-medium text-gray-700 mb-1">
-                Service Category
-              </label>
-              <select
-                id="serviceCategory"
-                name="serviceCategory"
-                value={form.serviceCategory}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                required
-              >
-                <option value="">Select Service Category</option>
-                {serviceCategories.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.icon} {category.name}
-                  </option>
-                ))}
+                <option value="">Select Specialization</option>
+                {form.accountType === 'shop_owner' && (
+                  <>
+                    <option value="electronics">Electronics & Tech</option>
+                    <option value="fashion">Fashion & Clothing</option>
+                    <option value="food">Food & Beverages</option>
+                    <option value="beauty">Beauty & Cosmetics</option>
+                    <option value="home">Home & Garden</option>
+                    <option value="sports">Sports & Recreation</option>
+                    <option value="books">Books & Education</option>
+                    <option value="crafts">Local Crafts & Art</option>
+                  </>
+                )}
+                {form.accountType === 'professional' && 
+                  serviceCategories.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))
+                }
+                {form.accountType === 'real_estate' && (
+                  <>
+                    <option value="residential_sales">Residential Sales</option>
+                    <option value="commercial_sales">Commercial Sales</option>
+                    <option value="rentals">Property Rentals</option>
+                    <option value="land_sales">Land Sales</option>
+                    <option value="property_management">Property Management</option>
+                    <option value="investment_consulting">Investment Consulting</option>
+                  </>
+                )}
               </select>
             </div>
           )}

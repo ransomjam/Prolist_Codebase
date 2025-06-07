@@ -66,6 +66,46 @@ export default function Homepage() {
           >
             Welcome back, <span className="text-yellow-300">{user?.name || user?.username}</span>! 
           </h1>
+          
+          {/* Account Type and Verification Status */}
+          <div 
+            ref={(el) => setElementRef('account-info', el)}
+            data-animation-id="account-info"
+            className={`flex flex-col sm:flex-row items-center justify-center gap-3 mb-4 ${getAnimationClass('account-info', 1.5)}`}
+            style={getAnimationStyle(1.5)}
+          >
+            <div className="flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-full">
+              <Shield size={16} />
+              <span className="text-sm font-medium">
+                {user?.accountType === 'user' && 'User Account'}
+                {user?.accountType === 'shop_owner' && 'Shop Owner'}
+                {user?.accountType === 'professional' && 'Professional Service Provider'}
+                {user?.accountType === 'real_estate' && 'Real Estate Agent'}
+                {!user?.accountType && 'User Account'}
+              </span>
+            </div>
+            <div className={`flex items-center gap-2 px-4 py-2 rounded-full ${
+              user?.verificationStatus === 'verified' 
+                ? 'bg-green-500/20 text-green-100' 
+                : user?.verificationStatus === 'pending'
+                ? 'bg-yellow-500/20 text-yellow-100'
+                : 'bg-gray-500/20 text-gray-100'
+            }`}>
+              <div className={`w-2 h-2 rounded-full ${
+                user?.verificationStatus === 'verified' 
+                  ? 'bg-green-400' 
+                  : user?.verificationStatus === 'pending'
+                  ? 'bg-yellow-400 animate-pulse'
+                  : 'bg-gray-400'
+              }`}></div>
+              <span className="text-sm font-medium">
+                {user?.verificationStatus === 'verified' && 'Verified'}
+                {user?.verificationStatus === 'pending' && 'Verification Pending'}
+                {user?.verificationStatus === 'rejected' && 'Verification Rejected'}
+                {!user?.verificationStatus && 'Unverified'}
+              </span>
+            </div>
+          </div>
           <p 
             ref={(el) => setElementRef('hero-subtitle', el)}
             data-animation-id="hero-subtitle"
