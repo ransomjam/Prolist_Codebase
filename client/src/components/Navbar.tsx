@@ -42,8 +42,10 @@ export default function Navbar() {
             <span className="font-bold text-2xl text-primary">ProList</span>
           </div>
 
-          {/* Right: Action Icons */}
+          {/* Right: 3 Icons */}
           <div className="flex items-center gap-2">
+
+
             {/* List Button */}
             <Link href="/product-listing" className="flex items-center gap-1 bg-gray-200 hover:bg-gray-300 rounded-full px-3 py-2 transition-colors">
               <Plus className="text-gray-700" size={16} />
@@ -324,7 +326,7 @@ export default function Navbar() {
         )}
       </div>
 
-      {/* Bottom Navigation Bar - Main Sections */}
+      {/* Navigation Icons Row - Facebook Lite style */}
       <div className="bg-white px-4 py-2 border-t border-gray-100">
         <div className="flex items-center justify-between max-w-6xl mx-auto">
           {/* Home */}
@@ -337,46 +339,56 @@ export default function Navbar() {
             }`}
           >
             <HomeIcon className="h-7 w-7" />
-            <span className="text-xs font-medium">Home</span>
           </Link>
 
-          {/* Listings */}
+          {/* Marketplace */}
           <Link 
-            href="/product-feed"
+            href="/products"
             className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 ${
-              location === '/product-feed' 
+              location === '/products' 
                 ? 'text-primary' 
                 : 'text-gray-600 hover:bg-gray-100'
             }`}
           >
             <ShoppingBag className="h-7 w-7" />
-            <span className="text-xs font-medium">Listings</span>
           </Link>
+
+
 
           {/* Markets */}
           <Link 
-            href="/markets-overview"
+            href="/markets"
             className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 ${
-              location === '/markets-overview' 
+              location === '/markets' 
                 ? 'text-primary' 
                 : 'text-gray-600 hover:bg-gray-100'
             }`}
           >
             <BuildingStorefrontIcon className="h-7 w-7" />
-            <span className="text-xs font-medium">Markets</span>
+          </Link>
+
+          {/* Real Estate */}
+          <Link 
+            href="/realestate"
+            className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 ${
+              location === '/realestate' 
+                ? 'text-primary' 
+                : 'text-gray-600 hover:bg-gray-100'
+            }`}
+          >
+            <HomeModernIcon className="h-7 w-7" />
           </Link>
 
           {/* Services */}
           <Link 
-            href="/professional-services"
+            href="/services"
             className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 ${
-              location === '/professional-services' 
+              location === '/services' 
                 ? 'text-primary' 
                 : 'text-gray-600 hover:bg-gray-100'
             }`}
           >
             <Briefcase className="h-7 w-7" />
-            <span className="text-xs font-medium">Services</span>
           </Link>
 
           {/* Auctions */}
@@ -394,8 +406,9 @@ export default function Navbar() {
                 3
               </div>
             </div>
-            <span className="text-xs font-medium">Auctions</span>
           </Link>
+
+
         </div>
       </div>
       
