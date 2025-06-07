@@ -61,11 +61,15 @@ export default function AdminVerifyPanel() {
   });
 
   const handleApprove = (vendor: VendorApplication) => {
-    updateStatusMutation.mutate({ id: vendor.id, status: 'Basic Verified' });
+    if (confirm(`Are you sure you want to APPROVE ${vendor.fullName}'s vendor application for "${vendor.businessName}"?\n\nThis will grant them verified vendor status and allow them to list products.`)) {
+      updateStatusMutation.mutate({ id: vendor.id, status: 'Basic Verified' });
+    }
   };
 
   const handleReject = (vendor: VendorApplication) => {
-    updateStatusMutation.mutate({ id: vendor.id, status: 'Rejected' });
+    if (confirm(`Are you sure you want to REJECT ${vendor.fullName}'s vendor application for "${vendor.businessName}"?\n\nThis action cannot be undone and they will need to reapply.`)) {
+      updateStatusMutation.mutate({ id: vendor.id, status: 'Rejected' });
+    }
   };
 
   const handleImageError = (imageKey: string) => {
@@ -104,7 +108,8 @@ export default function AdminVerifyPanel() {
             className="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-transparent hover:border-blue-300"
           >
             <div className="mb-4">
-              <h3 className="text-xl font-bold text-blue-600 mb-2">{vendor.fullName}</h3>
+              <h3 className="text-xl font-bold text-blue-600 mb-1">{vendor.fullName}</h3>
+              <p className="text-lg font-semibold text-gray-800 mb-3">{vendor.businessName}</p>
               <div className="space-y-2 text-sm text-gray-700">
                 <div className="flex items-center gap-2">
                   <Phone size={16} className="text-blue-500" />
@@ -175,35 +180,53 @@ export default function AdminVerifyPanel() {
             </p>
 
             {/* Action Buttons */}
-            {vendor.status.includes('Pending') && (
+            {vendor.status === 'pending' && (
               <div className="flex gap-2">
                 <button
                   onClick={() => handleApprove(vendor)}
                   disabled={updateStatusMutation.isPending}
-                  className="flex-1 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors font-medium flex items-center justify-center gap-2 disabled:opacity-50"
+                  className="flex-1 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-all duration-200 font-medium flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg transform hover:scale-105 active:scale-95"
                 >
-                  <CheckCircle size={16} />
-                  Approve
+                  {updateStatusMutation.isPending ? (
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  ) : (
+                    <CheckCircle size={16} />
+                  )}
+                  {updateStatusMutation.isPending ? 'Processing...' : 'Approve'}
                 </button>
                 <button
                   onClick={() => handleReject(vendor)}
                   disabled={updateStatusMutation.isPending}
-                  className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors font-medium flex items-center justify-center gap-2 disabled:opacity-50"
+                  className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all duration-200 font-medium flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg transform hover:scale-105 active:scale-95"
                 >
-                  <XCircle size={16} />
-                  Reject
+                  {updateStatusMutation.isPending ? (
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  ) : (
+                    <XCircle size={16} />
+                  )}
+                  {updateStatusMutation.isPending ? 'Processing...' : 'Reject'}
                 </button>
               </div>
             )}
 
             {/* Already processed */}
-            {!vendor.status.includes('Pending') && (
-              <div className={`text-center py-2 rounded-lg font-medium ${
+            {vendor.status !== 'pending' && (
+              <div className={`text-center py-3 rounded-lg font-medium ${
                 vendor.status === 'Basic Verified'
-                  ? 'bg-green-50 text-green-700'
-                  : 'bg-red-50 text-red-700'
+                  ? 'bg-green-50 text-green-700 border border-green-200'
+                  : 'bg-red-50 text-red-700 border border-red-200'
               }`}>
-                {vendor.status === 'Basic Verified' ? '✅ Approved' : '❌ Rejected'}
+                <div className="flex items-center justify-center gap-2">
+                  <span className="text-lg">
+                    {vendor.status === 'Basic Verified' ? '✅' : '❌'}
+                  </span>
+                  <span className="font-semibold">
+                    {vendor.status === 'Basic Verified' ? 'APPROVED' : 'REJECTED'}
+                  </span>
+                </div>
+                <p className="text-xs mt-1 opacity-75">
+                  Processed on {new Date(vendor.submittedAt).toLocaleDateString()}
+                </p>
               </div>
             )}
           </div>
