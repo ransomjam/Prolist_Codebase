@@ -13,8 +13,12 @@ export function useScrollAnimations() {
   }, []);
 
   useEffect(() => {
-    // Scroll detection with body class management
+    let isThrottled = false;
+    
+    // Optimized scroll detection with throttling
     const handleScroll = () => {
+      if (isThrottled) return;
+      
       setIsScrolling(true);
       document.body.classList.add('scrolling');
       
@@ -25,7 +29,13 @@ export function useScrollAnimations() {
       scrollTimeoutRef.current = setTimeout(() => {
         setIsScrolling(false);
         document.body.classList.remove('scrolling');
-      }, 150);
+      }, 100);
+      
+      // Throttle scroll events
+      isThrottled = true;
+      setTimeout(() => {
+        isThrottled = false;
+      }, 16); // ~60fps
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -87,7 +97,7 @@ export function useScrollAnimations() {
       }
     }
 
-    return 'opacity-100 scale-100 translate-x-0 translate-y-0 transition-all duration-700 ease-out';
+    return 'opacity-100 scale-100 translate-x-0 translate-y-0 transition-all duration-500 ease-out';
   }, [visibleElements]);
 
   const getAnimationStyle = useCallback((index: number = 0) => {
@@ -95,13 +105,13 @@ export function useScrollAnimations() {
     
     return {
       transitionDelay: `${delay}ms`,
-      willChange: 'transform, opacity',
+      willChange: isScrolling ? 'transform, opacity' : 'auto',
       backfaceVisibility: 'hidden' as const,
       perspective: '1000px',
       transformStyle: 'preserve-3d' as const,
-      filter: visibleElements.size > 0 ? 'drop-shadow(0 10px 25px rgba(0,0,0,0.1))' : 'none'
+      filter: 'none'
     };
-  }, [visibleElements]);
+  }, [isScrolling]);
 
   return {
     setElementRef,

@@ -199,11 +199,11 @@ export default function Profile() {
           <div className="flex items-center gap-3">
             <img
               src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100"
-              alt={profileUser.name || profileUser.username}
+              alt={(profileUser as any).name || profileUser.username}
               className="w-16 h-16 rounded-full object-cover"
             />
             <div>
-              <h1 className="text-xl font-bold text-gray-900">{profileUser.name || profileUser.username}</h1>
+              <h1 className="text-xl font-bold text-gray-900">{(profileUser as any).name || profileUser.username}</h1>
               <div className="flex items-center gap-2 mt-1">
                 {getVerificationBadge()}
               </div>
