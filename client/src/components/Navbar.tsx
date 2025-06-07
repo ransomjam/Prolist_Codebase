@@ -42,45 +42,77 @@ export default function Navbar() {
             <span className="font-bold text-2xl text-primary">ProList</span>
           </div>
 
-          {/* Right: 3 Icons */}
-          <div className="flex items-center gap-2">
-
-
-            {/* List Button */}
-            <Link href="/product-listing" className="flex items-center gap-1 bg-gray-200 hover:bg-gray-300 rounded-full px-3 py-2 transition-colors">
-              <Plus className="text-gray-700" size={16} />
-              <span className="text-sm font-medium text-gray-700 hidden sm:inline">List</span>
+          {/* Right: Main Navigation */}
+          <div className="flex items-center gap-4">
+            {/* Home */}
+            <Link 
+              href="/"
+              className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 ${
+                location === '/' 
+                  ? 'text-primary' 
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <HomeIcon className="h-6 w-6" />
+              <span className="text-xs font-medium hidden sm:inline">Home</span>
             </Link>
 
-            {/* Chat Button */}
-            <button 
-              className="relative w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center transition-colors"
-              onClick={() => setIsChatOpen(!isChatOpen)}
+            {/* Listings */}
+            <Link 
+              href="/product-feed"
+              className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 ${
+                location === '/product-feed' 
+                  ? 'text-primary' 
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
             >
-              <MessageSquare className="text-gray-700" size={20} />
-              <div className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
-                3
-              </div>
-            </button>
+              <ShoppingBag className="h-6 w-6" />
+              <span className="text-xs font-medium hidden sm:inline">Listings</span>
+            </Link>
 
-            {/* Notifications Button */}
-            <button 
-              className="relative w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center transition-colors"
-              onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
+            {/* Markets */}
+            <Link 
+              href="/markets-overview"
+              className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 ${
+                location === '/markets-overview' 
+                  ? 'text-primary' 
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
             >
-              <Bell className="text-gray-700" size={20} />
-              <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
-                7
+              <BuildingStorefrontIcon className="h-6 w-6" />
+              <span className="text-xs font-medium hidden sm:inline">Markets</span>
+            </Link>
+
+            {/* Services */}
+            <Link 
+              href="/professional-services"
+              className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 ${
+                location === '/professional-services' 
+                  ? 'text-primary' 
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <Briefcase className="h-6 w-6" />
+              <span className="text-xs font-medium hidden sm:inline">Services</span>
+            </Link>
+
+            {/* Auctions */}
+            <Link 
+              href="/auctions"
+              className={`relative flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 ${
+                location === '/auctions' 
+                  ? 'text-primary' 
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <div className="relative">
+                <CurrencyDollarIcon className="h-6 w-6" />
+                <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold">
+                  3
+                </div>
               </div>
-            </button>
-            
-            {/* Search Button */}
-            <button 
-              className="w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center transition-colors"
-              onClick={() => setIsSearchOpen(!isSearchOpen)}
-            >
-              <Search className="text-gray-700" size={20} />
-            </button>
+              <span className="text-xs font-medium hidden sm:inline">Auctions</span>
+            </Link>
             
             <div className="relative group">
               <button className="w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center transition-colors">
@@ -326,89 +358,47 @@ export default function Navbar() {
         )}
       </div>
 
-      {/* Navigation Icons Row - Facebook Lite style */}
+      {/* Bottom Action Bar */}
       <div className="bg-white px-4 py-2 border-t border-gray-100">
-        <div className="flex items-center justify-between max-w-6xl mx-auto">
-          {/* Home */}
-          <Link 
-            href="/"
-            className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 ${
-              location === '/' 
-                ? 'text-primary' 
-                : 'text-gray-600 hover:bg-gray-100'
-            }`}
-          >
-            <HomeIcon className="h-7 w-7" />
+        <div className="flex items-center justify-center gap-6 max-w-6xl mx-auto">
+          {/* List Button */}
+          <Link href="/product-listing" className="flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-colors hover:bg-gray-100">
+            <Plus className="text-gray-700 h-6 w-6" />
+            <span className="text-xs font-medium text-gray-700">List</span>
           </Link>
 
-          {/* Marketplace */}
-          <Link 
-            href="/products"
-            className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 ${
-              location === '/products' 
-                ? 'text-primary' 
-                : 'text-gray-600 hover:bg-gray-100'
-            }`}
+          {/* Chat Button */}
+          <button 
+            className="relative flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-colors hover:bg-gray-100"
+            onClick={() => setIsChatOpen(!isChatOpen)}
           >
-            <ShoppingBag className="h-7 w-7" />
-          </Link>
-
-
-
-          {/* Markets */}
-          <Link 
-            href="/markets"
-            className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 ${
-              location === '/markets' 
-                ? 'text-primary' 
-                : 'text-gray-600 hover:bg-gray-100'
-            }`}
-          >
-            <BuildingStorefrontIcon className="h-7 w-7" />
-          </Link>
-
-          {/* Real Estate */}
-          <Link 
-            href="/realestate"
-            className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 ${
-              location === '/realestate' 
-                ? 'text-primary' 
-                : 'text-gray-600 hover:bg-gray-100'
-            }`}
-          >
-            <HomeModernIcon className="h-7 w-7" />
-          </Link>
-
-          {/* Services */}
-          <Link 
-            href="/services"
-            className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 ${
-              location === '/services' 
-                ? 'text-primary' 
-                : 'text-gray-600 hover:bg-gray-100'
-            }`}
-          >
-            <Briefcase className="h-7 w-7" />
-          </Link>
-
-          {/* Auctions */}
-          <Link 
-            href="/auctions"
-            className={`relative flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 ${
-              location === '/auctions' 
-                ? 'text-primary' 
-                : 'text-gray-600 hover:bg-gray-100'
-            }`}
-          >
-            <div className="relative">
-              <CurrencyDollarIcon className="h-7 w-7" />
-              <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
-                3
-              </div>
+            <MessageSquare className="text-gray-700 h-6 w-6" />
+            <div className="absolute top-1 right-2 bg-blue-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold">
+              3
             </div>
-          </Link>
+            <span className="text-xs font-medium text-gray-700">Message</span>
+          </button>
 
-
+          {/* Notifications Button */}
+          <button 
+            className="relative flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-colors hover:bg-gray-100"
+            onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
+          >
+            <Bell className="text-gray-700 h-6 w-6" />
+            <div className="absolute top-1 right-2 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold">
+              7
+            </div>
+            <span className="text-xs font-medium text-gray-700">Alerts</span>
+          </button>
+          
+          {/* Search Button */}
+          <button 
+            className="flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-colors hover:bg-gray-100"
+            onClick={() => setIsSearchOpen(!isSearchOpen)}
+          >
+            <Search className="text-gray-700 h-6 w-6" />
+            <span className="text-xs font-medium text-gray-700">Search</span>
+          </button>
         </div>
       </div>
       
