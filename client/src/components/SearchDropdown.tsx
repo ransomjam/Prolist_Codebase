@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { Link, useLocation } from "wouter";
 import { Search, X, MapPin, Star, Shield, ShoppingBag } from "lucide-react";
 import { BuildingStorefrontIcon, HomeModernIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
 import { listings, markets, realEstate, auctions, verifiedBusinesses } from "../data/demoData";
@@ -9,6 +10,7 @@ export default function SearchDropdown() {
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [, setLocation] = useLocation();
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -67,12 +69,12 @@ export default function SearchDropdown() {
 
   const getResultLink = (result: any) => {
     switch (result.type) {
-      case 'listing': return '/products';
-      case 'market': return `/markets/${result.id}`;
-      case 'realestate': return '/realestate';
+      case 'listing': return '/marketplace';
+      case 'market': return '/markets';
+      case 'realestate': return '/real-estate';
       case 'auction': return '/auctions';
-      case 'business': return '/verified-directory';
-      default: return '/';
+      case 'business': return '/marketplace';
+      default: return '/marketplace';
     }
   };
 
@@ -144,13 +146,16 @@ export default function SearchDropdown() {
               </div>
             ) : (
               searchResults.map((result, index) => (
-                <a
+                <Link
                   key={`${result.type}-${result.id || index}`}
-                  href={getResultLink(result)}
+                  to={getResultLink(result)}
                   className="block p-4 hover:bg-gray-50 border-b border-gray-100 last:border-b-0"
                   onClick={() => {
                     setIsOpen(false);
                     setSearchQuery("");
+                    // Store search query in sessionStorage for destination page
+                    sessionStorage.setItem('searchQuery', searchQuery);
+                    sessionStorage.setItem('searchResult', JSON.stringify(result));
                   }}
                 >
                   <div className="flex items-start space-x-3">
@@ -205,7 +210,7 @@ export default function SearchDropdown() {
                       )}
                     </div>
                   </div>
-                </a>
+                </Link>
               ))
             )}
           </div>
