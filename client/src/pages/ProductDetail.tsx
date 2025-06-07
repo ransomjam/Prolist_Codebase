@@ -51,7 +51,6 @@ export default function ProductDetail() {
   const [following, setFollowing] = useState(false);
   const [trusted, setTrusted] = useState(false);
   const [showChat, setShowChat] = useState(false);
-  const [chatMessage, setChatMessage] = useState('');
 
   // Fetch product details
   const { data: product, isLoading: productLoading } = useQuery({
@@ -321,37 +320,15 @@ export default function ProductDetail() {
             </button>
           </div>
 
-          {/* Chat Box */}
-          {showChat && (
-            <div className="bg-white rounded-xl p-6 shadow-lg border border-blue-200">
-              <h4 className="font-semibold text-gray-900 mb-3">
-                Chat with {vendor?.fullName}
-              </h4>
-              <div className="space-y-3">
-                <textarea
-                  value={chatMessage}
-                  onChange={(e) => setChatMessage(e.target.value)}
-                  placeholder="Type your message..."
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                  rows={3}
-                />
-                <div className="flex gap-2">
-                  <button
-                    onClick={handleSendMessage}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-                  >
-                    Send Message
-                  </button>
-                  <button
-                    onClick={() => setShowChat(false)}
-                    className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
+          {/* Chat Component */}
+          <ChatBox
+            vendorName={vendor?.fullName || 'Vendor'}
+            vendorId={product?.vendorId}
+            productTitle={product?.title}
+            buyerName="Buyer"
+            isOpen={showChat}
+            onClose={() => setShowChat(false)}
+          />
         </div>
       </div>
 

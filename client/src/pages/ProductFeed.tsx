@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Filter, ShoppingBag, Shield, Star, Eye } from 'lucide-react';
+import { Filter, ShoppingBag, Shield, Star, Eye, MessageCircle } from 'lucide-react';
 import { useScrollAnimations } from '../hooks/useScrollAnimations';
+import ChatBox from '@/components/ChatBox';
 
 interface Product {
   id: number;
@@ -21,7 +22,34 @@ export default function ProductFeed() {
   const [filter, setFilter] = useState('');
   const [marketLineFilter, setMarketLineFilter] = useState('');
   const [marketFilter, setMarketFilter] = useState('');
+  const [showChat, setShowChat] = useState(false);
+  const [selectedVendor, setSelectedVendor] = useState<{vendorId: number, vendorName: string, productTitle: string} | null>(null);
   const { setElementRef, getAnimationClass, getAnimationStyle } = useScrollAnimations();
+
+  // Fetch vendor information for chat
+  const { data: vendors = {} } = useQuery({
+    queryKey: ['/api/vendor/applications'],
+    queryFn: async () => {
+      const response = await fetch('/api/vendor/applications');
+      if (!response.ok) return {};
+      const vendorList = await response.json();
+      // Convert array to object for quick lookup
+      return vendorList.reduce((acc: any, vendor: any) => {
+        acc[vendor.userId] = vendor;
+        return acc;
+      }, {});
+    }
+  });
+
+  const handleChatVendor = (product: Product) => {
+    const vendor = vendors[product.vendorId];
+    setSelectedVendor({
+      vendorId: product.vendorId,
+      vendorName: vendor?.fullName || `Vendor #${product.vendorId}`,
+      productTitle: product.title
+    });
+    setShowChat(true);
+  };
 
   // Check URL parameters for market line filtering
   useEffect(() => {
@@ -233,6 +261,30 @@ export default function ProductFeed() {
                 {/* Time Posted */}
                 <div className="mt-2 text-xs text-gray-400">
                   Posted {new Date(item.createdAt).toLocaleDateString()}
+                </div>
+
+                {/* Action Buttons */}
+                <div className="mt-3 flex gap-2">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleChatVendor(item);
+                    }}
+                    className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-colors"
+                  >
+                    <MessageCircle size={12} />
+                    Chat
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      window.location.href = `/product/${item.id}`;
+                    }}
+                    className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium rounded-lg transition-colors"
+                  >
+                    <Eye size={12} />
+                    View
+                  </button>
                 </div>
               </div>
             </div>
