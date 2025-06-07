@@ -27,34 +27,7 @@ export default function Navbar() {
 
           {/* Right: 3 Icons */}
           <div className="flex items-center gap-2">
-            {/* Account-Type Specific Verification Button */}
-            {isAuthenticated && user?.verificationStatus !== 'verified' && (
-              <Link 
-                href="/account-verification"
-                className="flex items-center gap-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-4 py-2 rounded-lg font-semibold hover:from-yellow-600 hover:to-orange-600 transition-all shadow-lg text-sm"
-              >
-                <Shield size={16} />
-                <span className="hidden sm:inline">
-                  {user?.accountType === 'shop_owner' && 'Verify Shop'}
-                  {user?.accountType === 'professional' && 'Verify Services'}
-                  {user?.accountType === 'real_estate' && 'Verify Agency'}
-                  {(!user?.accountType || user?.accountType === 'user') && 'Get Verified'}
-                </span>
-              </Link>
-            )}
 
-            {/* Verified Badge */}
-            {isAuthenticated && user?.verificationStatus === 'verified' && (
-              <div className="flex items-center gap-2 bg-green-500 text-white px-4 py-2 rounded-lg font-semibold text-sm">
-                <CheckCircle size={16} />
-                <span className="hidden sm:inline">
-                  {user?.accountType === 'shop_owner' && 'Verified Shop'}
-                  {user?.accountType === 'professional' && 'Verified Professional'}
-                  {user?.accountType === 'real_estate' && 'Verified Agency'}
-                  {(!user?.accountType || user?.accountType === 'user') && 'Verified'}
-                </span>
-              </div>
-            )}
 
             {/* List Button */}
             <Link href="/product-listing" className="flex items-center gap-1 bg-gray-200 hover:bg-gray-300 rounded-full px-3 py-2 transition-colors">
@@ -87,16 +60,7 @@ export default function Navbar() {
                   </Link>
                   <hr className="my-2" />
                   
-                  {/* Verification Button for Mobile */}
-                  {isAuthenticated && (
-                    <Link 
-                      href="/vendor-register"
-                      className="flex items-center gap-3 p-2 hover:bg-yellow-50 rounded-lg bg-gradient-to-r from-yellow-500 to-orange-500 text-white mb-2"
-                    >
-                      <Shield size={18} />
-                      <span className="text-sm font-medium">Get Verified</span>
-                    </Link>
-                  )}
+
                   
                   <div className="grid grid-cols-2 gap-3 p-3">
                     <a href="/products" className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-blue-50 via-blue-100 to-blue-150 hover:from-blue-100 hover:via-blue-150 hover:to-blue-200 transition-all duration-300 border border-blue-200 shadow-sm hover:shadow-md">

@@ -49,6 +49,15 @@ export default function AccountVerification() {
     }
   };
 
+  const getAccountTypeLabel = () => {
+    switch (user?.accountType) {
+      case 'shop_owner': return 'Shop Owner';
+      case 'professional': return 'Professional Service Provider';
+      case 'real_estate': return 'Real Estate Agent';
+      default: return 'User';
+    }
+  };
+
   const getAccountTypeDetails = () => {
     switch (user?.accountType) {
       case 'shop_owner': 
