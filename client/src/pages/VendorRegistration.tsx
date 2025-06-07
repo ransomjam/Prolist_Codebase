@@ -10,6 +10,9 @@ interface VendorForm {
   shopType: 'online' | 'physical';
   businessName: string;
   businessAddress: string;
+  marketLocation: string;
+  marketLine: string;
+  shopNumber: string;
   idDocument: File | null;
   shopPhoto: File | null;
   productPhotos: File[];

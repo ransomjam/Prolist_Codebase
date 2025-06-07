@@ -11,6 +11,7 @@ interface SignupForm {
   specialization: string;
   location: string;
   password: string;
+  profilePicture: File | null;
 }
 
 export default function Signup() {
@@ -24,11 +25,22 @@ export default function Signup() {
     specialization: '',
     location: '',
     password: '',
+    profilePicture: null,
   });
+  const [previewUrl, setPreviewUrl] = useState<string>('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setForm({ ...form, profilePicture: file });
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -72,15 +84,7 @@ export default function Signup() {
       const newUser = await response.json();
       
       // Auto-login the new user
-      const userData = {
-        id: newUser.id,
-        username: newUser.username,
-        name: form.fullName,
-        accountType: newUser.accountType,
-        verificationStatus: newUser.verificationStatus
-      };
-
-      login(userData);
+      await login(newUser.username, form.password);
       
       // Redirect based on account type
       if (form.accountType === 'user') {
@@ -150,6 +154,39 @@ export default function Signup() {
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
               required
             />
+          </div>
+
+          {/* Profile Picture Upload */}
+          <div>
+            <label htmlFor="profilePicture" className="block text-sm font-medium text-gray-700 mb-1">
+              Profile Picture (Optional)
+            </label>
+            <div className="flex items-center space-x-4">
+              <div className="flex-shrink-0">
+                {previewUrl ? (
+                  <img
+                    className="h-16 w-16 rounded-full object-cover border-2 border-gray-300"
+                    src={previewUrl}
+                    alt="Profile preview"
+                  />
+                ) : (
+                  <div className="h-16 w-16 rounded-full bg-gray-200 flex items-center justify-center">
+                    <span className="text-gray-400 text-xs">No Image</span>
+                  </div>
+                )}
+              </div>
+              <div className="flex-1">
+                <input
+                  id="profilePicture"
+                  name="profilePicture"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary file:text-white hover:file:bg-primary/90"
+                />
+                <p className="text-xs text-gray-500 mt-1">PNG, JPG up to 2MB</p>
+              </div>
+            </div>
           </div>
 
           <div>

@@ -96,6 +96,8 @@ export function useAuth(): AuthState & {
   const logout = () => {
     setUser(null);
     localStorage.removeItem('prolist_user');
+    // Redirect to landing page after logout
+    window.location.href = '/';
   };
 
   const switchUser = (userId: number) => {
