@@ -19,8 +19,7 @@ export default function Navbar() {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
-      if (!target.closest('.dropdown-container')) {
-        setIsChatListOpen(false);
+      if (!target.closest('.dropdown-container') && !target.closest('.chat-container')) {
         setIsNotificationsOpen(false);
         setIsSearchOpen(false);
       }

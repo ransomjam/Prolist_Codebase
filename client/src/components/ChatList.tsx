@@ -105,7 +105,7 @@ export default function ChatList({ isOpen, onClose }: ChatListProps) {
       {/* Chat List Modal */}
       {isOpen && !activeChat && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md h-[600px] flex flex-col overflow-hidden">
+          <div className="chat-container bg-white rounded-3xl shadow-2xl w-full max-w-md h-[600px] flex flex-col overflow-hidden">
             {/* Header */}
             <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 text-white p-4 flex items-center justify-between">
               <div className="flex items-center gap-3">

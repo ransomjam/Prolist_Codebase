@@ -10,6 +10,7 @@ interface Message {
   isBuyer: boolean;
   delivered?: boolean;
   read?: boolean;
+  imageUrl?: string;
 }
 
 interface ChatBoxProps {
@@ -46,10 +47,65 @@ export default function ChatBox({ vendorName, vendorId, productTitle, buyerName 
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [isOnline, setIsOnline] = useState(true);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file && file.type.startsWith('image/')) {
+      setSelectedImage(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const sendImageMessage = () => {
+    if (!selectedImage || !imagePreview) return;
+
+    const imageMessage: Message = {
+      id: Date.now().toString(),
+      sender: buyerName,
+      text: `📷 Image: ${selectedImage.name}`,
+      time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+      isBuyer: true,
+      delivered: false,
+      read: false,
+      imageUrl: imagePreview
+    };
+
+    setMessages(prev => [...prev, imageMessage]);
+    setSelectedImage(null);
+    setImagePreview(null);
+    
+    // Mark as delivered after a short delay
+    setTimeout(() => {
+      setMessages(prev => prev.map(msg => 
+        msg.id === imageMessage.id ? { ...msg, delivered: true } : msg
+      ));
+    }, 500);
+
+    // Simulate vendor response
+    setTimeout(() => {
+      const vendorResponse: Message = {
+        id: (Date.now() + 1).toString(),
+        sender: vendorName,
+        text: "Thanks for sharing the image! I can see what you're looking for. Let me check the details for you.",
+        time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+        isBuyer: false,
+        delivered: true,
+        read: false
+      };
+      setMessages(prev => [...prev, vendorResponse]);
+    }, 2000);
+  };
 
   const sendMessage = () => {
-    if (!input.trim()) return;
+    if (!input.trim() && !selectedImage) return;
 
     const newMessage: Message = {
       id: Date.now().toString(),
@@ -150,7 +206,7 @@ export default function ChatBox({ vendorName, vendorId, productTitle, buyerName 
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md h-[600px] flex flex-col overflow-hidden">
+      <div className="chat-container bg-white rounded-3xl shadow-2xl w-full max-w-md h-[600px] flex flex-col overflow-hidden">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 text-white p-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
