@@ -7,7 +7,7 @@ const markets = [
     id: 'main-market',
     name: 'Main Market',
     description: 'Bamenda\'s busiest commercial hub with diverse sections offering everything from textiles to electronics.',
-    vendors: 450,
+    vendors: 555,
     rating: 4.8,
     verified: true,
     sections: ['Electronics', 'Textiles', 'Fashion', 'Food Items', 'Cosmetics'],

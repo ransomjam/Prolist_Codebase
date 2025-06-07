@@ -16,7 +16,7 @@ const marketData = {
     description: 'Bamenda\'s largest and most diverse commercial center',
     location: 'Central Bamenda',
     openHours: '6:00 AM - 8:00 PM',
-    totalVendors: 450,
+    totalVendors: 555,
     rating: 4.8,
     sections: [
       { 
@@ -67,6 +67,20 @@ const marketData = {
         description: 'Household items, cleaning supplies, and daily essentials',
         vendors: 95,
         specialties: ['Household Items', 'Cleaning Supplies', 'Toiletries', 'Basics']
+      },
+      { 
+        id: 'best-line', 
+        name: 'Best Line', 
+        description: 'Premium quality goods and luxury items from top vendors',
+        vendors: 65,
+        specialties: ['Premium Products', 'Luxury Items', 'High-End Electronics', 'Designer Goods']
+      },
+      { 
+        id: 'victory-line', 
+        name: 'Victory Line', 
+        description: 'Sports equipment, fitness gear, and recreational items',
+        vendors: 40,
+        specialties: ['Sports Equipment', 'Fitness Gear', 'Recreational Items', 'Team Jerseys']
       }
     ],
   },
