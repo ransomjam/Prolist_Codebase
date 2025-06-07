@@ -103,13 +103,15 @@ export class MemStorage implements IStorage {
   async createUser(insertUser: InsertUser): Promise<User> {
     const id = this.currentId++;
     const user: User = { 
-      ...insertUser, 
       id,
+      username: insertUser.username,
+      password: insertUser.password,
       email: insertUser.email || null,
       phone: insertUser.phone || null,
       location: insertUser.location || null,
       accountType: insertUser.accountType || "user",
-      verificationStatus: "none",
+      specialization: insertUser.specialization || null,
+      verificationStatus: "pending",
       salesCount: 0,
       rating: "0.00",
       createdAt: new Date()
@@ -208,6 +210,8 @@ export class MemStorage implements IStorage {
       description: product.description || null,
       imageUrls: null,
       location: product.location || null,
+      marketId: null,
+      marketLine: null,
       status: "active",
       viewCount: 0,
       salesCount: 0,

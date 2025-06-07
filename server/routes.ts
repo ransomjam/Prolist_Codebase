@@ -1,9 +1,66 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertCommentSchema, insertVendorApplicationSchema, insertProductSchema } from "@shared/schema";
+import { insertCommentSchema, insertVendorApplicationSchema, insertProductSchema, insertUserSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // User registration endpoint
+  app.post('/api/users', async (req, res) => {
+    try {
+      const userData = insertUserSchema.parse(req.body);
+      
+      // Check if username already exists
+      const existingUser = await storage.getUserByUsername(userData.username);
+      if (existingUser) {
+        return res.status(400).json({ message: 'Username already exists' });
+      }
+      
+      const user = await storage.createUser(userData);
+      const { password, ...userWithoutPassword } = user;
+      res.status(201).json(userWithoutPassword);
+    } catch (error) {
+      console.error("Error creating user:", error);
+      res.status(500).json({ message: 'Registration failed' });
+    }
+  });
+
+  // Login endpoint
+  app.post('/api/login', async (req, res) => {
+    try {
+      const { username, password } = req.body;
+      const user = await storage.getUserByUsername(username);
+      
+      if (!user || user.password !== password) {
+        return res.status(401).json({ message: 'Invalid credentials' });
+      }
+      
+      const { password: _, ...userWithoutPassword } = user;
+      res.json(userWithoutPassword);
+    } catch (error) {
+      console.error("Error during login:", error);
+      res.status(500).json({ message: 'Login failed' });
+    }
+  });
+
+  // User verification status update
+  app.patch('/api/users/:id/verification', async (req, res) => {
+    try {
+      const userId = parseInt(req.params.id);
+      const { status } = req.body;
+      
+      const user = await storage.updateUserVerificationStatus(userId, status);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      
+      const { password, ...userWithoutPassword } = user;
+      res.json(userWithoutPassword);
+    } catch (error) {
+      console.error("Error updating verification status:", error);
+      res.status(500).json({ message: 'Failed to update verification status' });
+    }
+  });
+
   // Comment routes
   app.get("/api/comments/:listingType/:listingId", async (req, res) => {
     try {
