@@ -31,7 +31,7 @@ const dummyServiceListings = [
     features: ['Front & Back Design', 'Print-Ready Files', 'Multiple Formats', 'Revisions'],
     rating: 4.8,
     orders: 89,
-    image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400'
+    image: '@assets/Stylish Business Cards _ _ Graphic Design Junction.jfif'
   },
   {
     id: 'video-edit-1',
@@ -295,7 +295,7 @@ export default function ProfessionalServices() {
               return (
                 <div
                   key={listing.id}
-                  className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden"
+                  className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-500 border border-gray-100 overflow-hidden transform hover:scale-105 hover:-translate-y-2 animate-fade-in-up"
                 >
                   {/* Service Image */}
                   <div>

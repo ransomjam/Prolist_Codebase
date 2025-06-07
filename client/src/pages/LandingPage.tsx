@@ -16,11 +16,11 @@ export default function LandingPage() {
   return (
     <div className="bg-white text-primary scroll-smooth">
       {/* Hero Section */}
-      <div className="h-[90vh] sm:h-[95vh] relative flex flex-col justify-center items-center text-white text-center overflow-hidden">
+      <div className="h-[80vh] sm:h-[90vh] md:h-[95vh] relative flex flex-col justify-center items-center text-white text-center overflow-hidden">
         <img 
           src={heroImage} 
           alt="Bamenda cityscape" 
-          className="absolute inset-0 w-full h-full object-cover object-center scale-105"
+          className="absolute inset-0 w-full h-full object-cover object-center scale-105 md:scale-110 lg:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/50 to-black/70"></div>
         
