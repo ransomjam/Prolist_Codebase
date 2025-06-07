@@ -139,7 +139,7 @@ export default function LandingPage() {
           <h2 
             ref={(el) => setElementRef('cta-title', el)}
             data-animation-id="cta-title"
-            className={`text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold mb-6 lg:mb-8 max-w-4xl mx-auto gpu-accelerated will-change-transform ${getAnimationClass('cta-title', 9)}`}
+            className={`text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold mb-6 lg:mb-8 max-w-4xl mx-auto gpu-accelerated will-change-transform ${getAnimationClass('cta-title', 9, 'always-visible')}`}
             style={getAnimationStyle(9)}
           >
             Ready to Join Bamenda's Digital Revolution?
@@ -147,7 +147,7 @@ export default function LandingPage() {
           <p 
             ref={(el) => setElementRef('cta-subtitle', el)}
             data-animation-id="cta-subtitle"
-            className={`text-base sm:text-lg lg:text-xl xl:text-2xl mb-8 lg:mb-12 opacity-90 max-w-3xl mx-auto leading-relaxed gpu-accelerated will-change-transform ${getAnimationClass('cta-subtitle', 10)}`}
+            className={`text-base sm:text-lg lg:text-xl xl:text-2xl mb-8 lg:mb-12 opacity-90 max-w-3xl mx-auto leading-relaxed gpu-accelerated will-change-transform ${getAnimationClass('cta-subtitle', 10, 'always-visible')}`}
             style={getAnimationStyle(10)}
           >
             Connect with thousands of local businesses and customers today
@@ -155,7 +155,7 @@ export default function LandingPage() {
           <div 
             ref={(el) => setElementRef('cta-actions', el)}
             data-animation-id="cta-actions"
-            className={`flex flex-col sm:flex-row gap-4 lg:gap-6 justify-center max-w-lg mx-auto gpu-accelerated will-change-transform ${getAnimationClass('cta-actions', 11)}`}
+            className={`flex flex-col sm:flex-row gap-4 lg:gap-6 justify-center max-w-lg mx-auto gpu-accelerated will-change-transform ${getAnimationClass('cta-actions', 11, 'always-visible')}`}
             style={getAnimationStyle(11)}
           >
             <a 
