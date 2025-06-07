@@ -219,13 +219,13 @@ export default function ProfessionalServices() {
           </div>
 
           {/* Category, Price, and Sort in one line */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div className="grid grid-cols-3 gap-2">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Service Category</label>
+              <label className="block text-xs font-medium text-gray-700 mb-1">Category</label>
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
+                className="w-full px-2 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-xs"
               >
                 {categoryTypes.map((type) => (
                   <option key={type.id} value={type.id}>
@@ -236,11 +236,11 @@ export default function ProfessionalServices() {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Price Range</label>
+              <label className="block text-xs font-medium text-gray-700 mb-1">Price</label>
               <select
                 value={priceRange}
                 onChange={(e) => setPriceRange(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
+                className="w-full px-2 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-xs"
               >
                 {priceRanges.map(range => (
                   <option key={range.id} value={range.id}>{range.label}</option>
@@ -249,11 +249,11 @@ export default function ProfessionalServices() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Sort By</label>
+              <label className="block text-xs font-medium text-gray-700 mb-1">Sort</label>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
+                className="w-full px-2 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-xs"
               >
                 {sortOptions.map(option => (
                   <option key={option.id} value={option.id}>{option.label}</option>
