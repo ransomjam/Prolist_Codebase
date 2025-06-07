@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from "wouter";
 import { HomeIcon, BuildingStorefrontIcon, TagIcon, HomeModernIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
-import { User, Shield, ShoppingBag } from "lucide-react";
+import { User, Shield, ShoppingBag, Briefcase } from "lucide-react";
 
 export default function Sidebar() {
   const [expanded, setExpanded] = useState(false);
