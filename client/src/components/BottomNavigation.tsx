@@ -1,9 +1,21 @@
+import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { HomeIcon, BuildingStorefrontIcon, HomeModernIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
-import { ShoppingBag, Briefcase } from "lucide-react";
+import { ShoppingBag, Briefcase, User } from "lucide-react";
+import { useAuth } from "../hooks/useAuth";
 
 export default function BottomNavigation() {
   const [location] = useLocation();
+  const [showAccountPrompt, setShowAccountPrompt] = useState(false);
+  const { isAuthenticated } = useAuth();
+
+  const handleAuthRequired = (e: React.MouseEvent, href: string) => {
+    if (!isAuthenticated && href !== "/") {
+      e.preventDefault();
+      setShowAccountPrompt(true);
+      setTimeout(() => setShowAccountPrompt(false), 3000);
+    }
+  };
 
   const navItems = [
     {
@@ -48,6 +60,7 @@ export default function BottomNavigation() {
             <Link
               key={item.href}
               href={item.href}
+              onClick={(e) => handleAuthRequired(e, item.href)}
               className={`flex flex-col items-center gap-1 py-2 px-3 rounded-lg transition-all duration-200 ${
                 item.active
                   ? 'text-blue-600'

@@ -154,13 +154,13 @@ export default function LandingPage() {
             style={getAnimationStyle(11)}
           >
             <a 
-              href="/vendor-register" 
+              href="/signup" 
               className="bg-white text-primary px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 rounded-xl font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg text-sm sm:text-base lg:text-lg"
             >
               List Your Business
             </a>
             <a 
-              href="/markets" 
+              href="/signup" 
               className="bg-transparent border-2 border-white text-white px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 rounded-xl font-semibold hover:bg-white hover:text-primary transition-all duration-300 transform hover:scale-105 text-sm sm:text-base lg:text-lg"
             >
               Start Shopping

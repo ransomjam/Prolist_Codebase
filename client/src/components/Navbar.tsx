@@ -12,8 +12,17 @@ export default function Navbar() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isChatListOpen, setIsChatListOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [showAccountPrompt, setShowAccountPrompt] = useState(false);
   const [location] = useLocation();
   const { logout, isAuthenticated, user } = useAuth();
+
+  const handleAuthRequired = (e: React.MouseEvent, feature: string) => {
+    if (!isAuthenticated) {
+      e.preventDefault();
+      setShowAccountPrompt(true);
+      setTimeout(() => setShowAccountPrompt(false), 3000);
+    }
+  };
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -47,37 +56,51 @@ export default function Navbar() {
 
 
             {/* List Button */}
-            <Link href="/product-listing" className="flex items-center gap-1 bg-gray-200 hover:bg-gray-300 rounded-full px-3 py-2 transition-colors">
-              <Plus className="text-gray-700" size={16} />
-              <span className="text-sm font-medium text-gray-700 hidden sm:inline">List</span>
-            </Link>
+            {isAuthenticated ? (
+              <Link href="/product-listing" className="flex items-center gap-1 bg-gray-200 hover:bg-gray-300 rounded-full px-3 py-2 transition-colors">
+                <Plus className="text-gray-700" size={16} />
+                <span className="text-sm font-medium text-gray-700 hidden sm:inline">List</span>
+              </Link>
+            ) : (
+              <button 
+                onClick={(e) => handleAuthRequired(e, 'listing')}
+                className="flex items-center gap-1 bg-gray-200 hover:bg-gray-300 rounded-full px-3 py-2 transition-colors"
+              >
+                <Plus className="text-gray-700" size={16} />
+                <span className="text-sm font-medium text-gray-700 hidden sm:inline">List</span>
+              </button>
+            )}
 
             {/* Chat Button */}
             <button 
               className="relative w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center transition-colors"
-              onClick={() => setIsChatListOpen(!isChatListOpen)}
+              onClick={(e) => handleAuthRequired(e, 'chat')}
             >
               <MessageSquare className="text-gray-700" size={20} />
-              <div className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
-                3
-              </div>
+              {isAuthenticated && (
+                <div className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                  3
+                </div>
+              )}
             </button>
 
             {/* Notifications Button */}
             <button 
               className="relative w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center transition-colors"
-              onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
+              onClick={(e) => handleAuthRequired(e, 'notifications')}
             >
               <Bell className="text-gray-700" size={20} />
-              <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
-                7
-              </div>
+              {isAuthenticated && (
+                <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                  7
+                </div>
+              )}
             </button>
             
             {/* Search Button */}
             <button 
               className="w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center transition-colors"
-              onClick={() => setIsSearchOpen(!isSearchOpen)}
+              onClick={(e) => isAuthenticated ? setIsSearchOpen(!isSearchOpen) : handleAuthRequired(e, 'search')}
             >
               <Search className="text-gray-700" size={20} />
             </button>
@@ -416,6 +439,35 @@ export default function Navbar() {
         isOpen={isChatListOpen} 
         onClose={() => setIsChatListOpen(false)} 
       />
+
+      {/* Account Creation Prompt */}
+      {showAccountPrompt && (
+        <div className="fixed top-20 right-4 bg-blue-600 text-white px-6 py-4 rounded-lg shadow-xl z-50 max-w-sm">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+              <User size={16} />
+            </div>
+            <div>
+              <p className="font-semibold text-sm">Create Account Required</p>
+              <p className="text-sm opacity-90">Join ProList to access this feature</p>
+            </div>
+          </div>
+          <div className="flex gap-2 mt-3">
+            <a 
+              href="/signup" 
+              className="bg-white text-blue-600 px-3 py-1 rounded text-sm font-medium hover:bg-gray-100 transition-colors"
+            >
+              Join Now
+            </a>
+            <a 
+              href="/login" 
+              className="bg-white/20 text-white px-3 py-1 rounded text-sm font-medium hover:bg-white/30 transition-colors"
+            >
+              Login
+            </a>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
