@@ -10,7 +10,7 @@ const markets = [
     vendors: 450,
     rating: 4.8,
     verified: true,
-    sections: ['Electronics', 'Textiles', 'Food Items', 'Cosmetics'],
+    sections: ['Electronics', 'Textiles', 'Fashion', 'Food Items', 'Cosmetics'],
     category: 'General',
     location: 'Central Bamenda'
   },

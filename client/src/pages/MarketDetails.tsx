@@ -48,6 +48,13 @@ const marketData = {
         specialties: ['Beauty Products', 'Hair Care', 'Skincare', 'Makeup']
       },
       { 
+        id: 'fashion-line', 
+        name: 'Fashion Line', 
+        description: 'Latest fashion trends, clothing, and accessories from local and international brands',
+        vendors: 85,
+        specialties: ['Ladies Fashion', 'Men\'s Clothing', 'Accessories', 'Jewelry', 'Bags & Shoes']
+      },
+      { 
         id: 'shoe-line', 
         name: 'Shoe Line', 
         description: 'Footwear for all occasions from local and international brands',
