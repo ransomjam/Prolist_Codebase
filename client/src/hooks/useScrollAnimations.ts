@@ -79,8 +79,13 @@ export function useScrollAnimations() {
     };
   }, []);
 
-  const getAnimationClass = useCallback((id: string, index: number = 0, animationType: 'slide' | 'default' = 'default') => {
+  const getAnimationClass = useCallback((id: string, index: number = 0, animationType: 'slide' | 'default' | 'always-visible' = 'default') => {
     const isVisible = visibleElements.has(id);
+    
+    // Always visible content that only animates during scroll
+    if (animationType === 'always-visible') {
+      return `opacity-100 scale-100 translate-x-0 translate-y-0 transition-all duration-500 ease-out ${isScrolling ? 'transform-gpu' : ''}`;
+    }
     
     if (!isVisible) {
       if (animationType === 'slide') {
@@ -98,7 +103,7 @@ export function useScrollAnimations() {
     }
 
     return 'opacity-100 scale-100 translate-x-0 translate-y-0 transition-all duration-500 ease-out';
-  }, [visibleElements]);
+  }, [visibleElements, isScrolling]);
 
   const getAnimationStyle = useCallback((index: number = 0) => {
     const delay = Math.min(index * 150, 800);

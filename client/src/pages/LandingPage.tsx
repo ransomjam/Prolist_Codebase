@@ -21,13 +21,13 @@ export default function LandingPage() {
         <div 
           ref={(el) => setElementRef('hero-content', el)}
           data-animation-id="hero-content"
-          className={`relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 transform gpu-accelerated will-change-transform ${getAnimationClass('hero-content', 0, 'slide')}`}
+          className={`relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 transform gpu-accelerated will-change-transform ${getAnimationClass('hero-content', 0, 'always-visible')}`}
           style={getAnimationStyle(0)}
         >
           <h1 
             ref={(el) => setElementRef('hero-title', el)}
             data-animation-id="hero-title"
-            className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold drop-shadow-2xl mb-4 sm:mb-6 leading-tight max-w-4xl mx-auto gpu-accelerated will-change-transform ${getAnimationClass('hero-title', 1, 'slide')}`}
+            className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold drop-shadow-2xl mb-4 sm:mb-6 leading-tight max-w-4xl mx-auto gpu-accelerated will-change-transform ${getAnimationClass('hero-title', 1, 'always-visible')}`}
             style={getAnimationStyle(1)}
           >
             Welcome to <span className="text-neonGreen">ProList</span>
@@ -35,7 +35,7 @@ export default function LandingPage() {
           <p 
             ref={(el) => setElementRef('hero-subtitle', el)}
             data-animation-id="hero-subtitle"
-            className={`text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl mb-6 sm:mb-8 lg:mb-10 drop-shadow-lg max-w-3xl mx-auto leading-relaxed gpu-accelerated will-change-transform ${getAnimationClass('hero-subtitle', 2, 'slide')}`}
+            className={`text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl mb-6 sm:mb-8 lg:mb-10 drop-shadow-lg max-w-3xl mx-auto leading-relaxed gpu-accelerated will-change-transform ${getAnimationClass('hero-subtitle', 2, 'always-visible')}`}
             style={getAnimationStyle(2)}
           >
             Cameroon's #1 Digital Marketplace for Trust & Growth
@@ -43,7 +43,7 @@ export default function LandingPage() {
           <div 
             ref={(el) => setElementRef('hero-actions', el)}
             data-animation-id="hero-actions"
-            className={`flex flex-col sm:flex-row gap-4 lg:gap-6 justify-center max-w-lg mx-auto gpu-accelerated will-change-transform ${getAnimationClass('hero-actions', 3)}`}
+            className={`flex flex-col sm:flex-row gap-4 lg:gap-6 justify-center max-w-lg mx-auto gpu-accelerated will-change-transform ${getAnimationClass('hero-actions', 3, 'always-visible')}`}
             style={getAnimationStyle(3)}
           >
             <a 
@@ -81,7 +81,7 @@ export default function LandingPage() {
           <h2 
             ref={(el) => setElementRef('features-title', el)}
             data-animation-id="features-title"
-            className={`text-2xl sm:text-3xl lg:text-4xl font-bold mb-8 lg:mb-16 text-primary max-w-4xl mx-auto gpu-accelerated will-change-transform ${getAnimationClass('features-title', 5)}`}
+            className={`text-2xl sm:text-3xl lg:text-4xl font-bold mb-8 lg:mb-16 text-primary max-w-4xl mx-auto gpu-accelerated will-change-transform ${getAnimationClass('features-title', 5, 'always-visible')}`}
             style={getAnimationStyle(5)}
           >
             Why Choose ProList?
@@ -90,12 +90,12 @@ export default function LandingPage() {
             <div 
               ref={(el) => setElementRef('feature-1', el)}
               data-animation-id="feature-1"
-              className={`bg-white p-6 lg:p-8 rounded-2xl shadow-lg border-2 border-emerald/20 hover:border-emerald/40 transition-all duration-300 transform hover:scale-105 hover:-rotate-1 gpu-accelerated will-change-transform ${getAnimationClass('feature-1', 6)}`}
+              className={`bg-white p-6 lg:p-8 rounded-2xl shadow-lg border-2 border-emerald/20 hover:border-emerald/40 transition-all duration-300 transform hover:scale-105 hover:-rotate-1 gpu-accelerated will-change-transform ${getAnimationClass('feature-1', 6, 'always-visible')}`}
               style={getAnimationStyle(6)}
             >
               <div className="flex justify-center mb-4 lg:mb-6">
-                <div className="w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg">
-                  <Shield className="w-8 h-8 lg:w-10 lg:h-10 text-white" />
+                <div className="w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg animate-bounce-slow">
+                  <Shield className="w-8 h-8 lg:w-10 lg:h-10 text-white animate-pulse" />
                 </div>
               </div>
               <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 lg:mb-4 text-primary">Verified Businesses</h3>
@@ -104,12 +104,12 @@ export default function LandingPage() {
             <div 
               ref={(el) => setElementRef('feature-2', el)}
               data-animation-id="feature-2"
-              className={`bg-white p-6 lg:p-8 rounded-2xl shadow-lg border-2 border-neonBlue/20 hover:border-neonBlue/40 transition-all duration-300 transform hover:scale-105 hover:rotate-1 gpu-accelerated will-change-transform ${getAnimationClass('feature-2', 7)}`}
+              className={`bg-white p-6 lg:p-8 rounded-2xl shadow-lg border-2 border-neonBlue/20 hover:border-neonBlue/40 transition-all duration-300 transform hover:scale-105 hover:rotate-1 gpu-accelerated will-change-transform ${getAnimationClass('feature-2', 7, 'always-visible')}`}
               style={getAnimationStyle(7)}
             >
               <div className="flex justify-center mb-4 lg:mb-6">
-                <div className="w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
-                  <Star className="w-8 h-8 lg:w-10 lg:h-10 text-white" />
+                <div className="w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg animate-float">
+                  <Star className="w-8 h-8 lg:w-10 lg:h-10 text-white animate-spin-slow" />
                 </div>
               </div>
               <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 lg:mb-4 text-primary">Trust System</h3>
@@ -118,12 +118,12 @@ export default function LandingPage() {
             <div 
               ref={(el) => setElementRef('feature-3', el)}
               data-animation-id="feature-3"
-              className={`bg-white p-6 lg:p-8 rounded-2xl shadow-lg border-2 border-neonGreen/20 hover:border-neonGreen/40 transition-all duration-300 transform hover:scale-105 hover:-rotate-1 gpu-accelerated will-change-transform ${getAnimationClass('feature-3', 8)}`}
+              className={`bg-white p-6 lg:p-8 rounded-2xl shadow-lg border-2 border-neonGreen/20 hover:border-neonGreen/40 transition-all duration-300 transform hover:scale-105 hover:-rotate-1 gpu-accelerated will-change-transform ${getAnimationClass('feature-3', 8, 'always-visible')}`}
               style={getAnimationStyle(8)}
             >
               <div className="flex justify-center mb-4 lg:mb-6">
-                <div className="w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-green-400 to-green-600 rounded-2xl flex items-center justify-center shadow-lg">
-                  <Gavel className="w-8 h-8 lg:w-10 lg:h-10 text-white" />
+                <div className="w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-green-400 to-green-600 rounded-2xl flex items-center justify-center shadow-lg animate-wiggle">
+                  <Gavel className="w-8 h-8 lg:w-10 lg:h-10 text-white animate-bounce" />
                 </div>
               </div>
               <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 lg:mb-4 text-primary">Live Auctions</h3>
