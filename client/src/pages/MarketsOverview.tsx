@@ -85,12 +85,6 @@ export default function MarketsOverview() {
       <div className="max-w-7xl mx-auto">
         {/* Compact Header */}
         <div className="mb-4">
-          <h1 className="text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 mb-2 text-center">
-            Bamenda Markets
-          </h1>
-          <p className="text-sm text-gray-600 text-center mb-3">
-            Discover authentic local markets with trusted vendors
-          </p>
 
           {/* Compact Search and Filter Section */}
           <div className="bg-white rounded-2xl shadow-lg p-3 mb-3">
@@ -132,6 +126,14 @@ export default function MarketsOverview() {
               </p>
             </div>
           </div>
+        </div>
+
+        {/* Bamenda Markets Header */}
+        <div className="text-center mb-6">
+          <h1 className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 mb-2">
+            Bamenda Markets
+          </h1>
+          <p className="text-gray-600">Authentic local markets with verified vendors across Bamenda</p>
         </div>
 
         {/* Compact Statistics Dashboard */}
