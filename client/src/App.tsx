@@ -8,7 +8,7 @@ import { auctions as initialAuctions } from "./data/demoData";
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 import BottomNavigation from './components/BottomNavigation';
-import Footer from "./components/Footer";
+
 import LandingPage from './pages/LandingPage';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -21,9 +21,7 @@ import RealEstate from "./pages/RealEstate";
 import Auctions from "./pages/Auctions";
 import Profile from "./pages/Profile";
 import NewListing from "./pages/NewListing";
-import Investments from "./pages/Investments";
-import Stocks from "./pages/Stocks";
-import VerifiedDirectory from "./pages/VerifiedDirectory";
+
 import Settings from "./pages/Settings";
 import HelpSupport from "./pages/HelpSupport";
 import VendorRegistration from "./pages/VendorRegistration";
@@ -75,9 +73,7 @@ function Router() {
       <Route path="/auctions" component={Auctions} />
       <Route path="/profile" component={Profile} />
       <Route path="/new-listing" component={NewListing} />
-      <Route path="/investments" component={Investments} />
-      <Route path="/stocks" component={Stocks} />
-      <Route path="/verified" component={VerifiedDirectory} />
+
       <Route path="/settings" component={Settings} />
       <Route path="/help" component={HelpSupport} />
       <Route path="/vendor/register" component={VendorRegistration} />
@@ -134,7 +130,6 @@ function App() {
             <main className="flex-1 p-4 lg:p-6">
               <Router />
             </main>
-            <Footer />
           </div>
           <BottomNavigation />
           <AuctionPostProcess

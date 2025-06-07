@@ -399,6 +399,26 @@ export default function Navbar() {
               <span className="font-medium">Notifications</span>
               <span className="ml-auto bg-red-500 text-white text-xs rounded-full px-2 py-1">4</span>
             </div>
+            
+            {/* About Section */}
+            <div className="border-t border-gray-200 mt-4 pt-4">
+              <div className="px-4 py-2">
+                <h3 className="text-sm font-semibold text-gray-900 mb-3">About ProList</h3>
+                <div className="space-y-2 text-sm text-gray-600">
+                  <p>Your trusted marketplace for Bamenda & Kumba communities</p>
+                  <div className="flex flex-wrap gap-4 text-xs">
+                    <span>© 2024 ProList</span>
+                    <span>Privacy Policy</span>
+                    <span>Terms of Service</span>
+                  </div>
+                  <div className="flex flex-wrap gap-4 text-xs">
+                    <span>Support: help@prolist.cm</span>
+                    <span>Contact: +237 6XX XXX XXX</span>
+                  </div>
+                  <p className="text-xs">Empowering local commerce through trust and verification</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}
