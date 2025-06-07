@@ -7,6 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { auctions as initialAuctions } from "./data/demoData";
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
+import BottomNavigation from './components/BottomNavigation';
 import Footer from "./components/Footer";
 import LandingPage from './pages/LandingPage';
 import Login from './pages/Login';
@@ -127,7 +128,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <div className="min-h-screen bg-grayLight">
+        <div className="min-h-screen bg-grayLight pb-16">
           <div className="flex flex-col">
             <Navbar />
             <main className="flex-1 p-4 lg:p-6">
@@ -135,6 +136,7 @@ function App() {
             </main>
             <Footer />
           </div>
+          <BottomNavigation />
           <AuctionPostProcess
             auctions={auctions}
             setAuctions={setAuctions}

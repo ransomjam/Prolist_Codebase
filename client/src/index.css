@@ -13,6 +13,15 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+  
+  /* Safe area utilities for mobile devices */
+  .safe-area-pb {
+    padding-bottom: env(safe-area-inset-bottom, 0.5rem);
+  }
+  
+  .safe-area-pt {
+    padding-top: env(safe-area-inset-top, 0.5rem);
+  }
 }
 
 /* Cool Animation Effects */
