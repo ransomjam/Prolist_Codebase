@@ -13,6 +13,7 @@ export default function Sidebar() {
     { icon: ShoppingBag, label: 'Marketplace', path: '/marketplace' },
     { icon: TagIcon, label: 'Listings', path: '/listings' },
     { icon: BuildingStorefrontIcon, label: 'Markets', path: '/markets' },
+    { icon: Briefcase, label: 'Services', path: '/services' },
     { icon: HomeModernIcon, label: 'Real Estate', path: '/realestate' },
     { icon: CurrencyDollarIcon, label: 'Auctions', path: '/auctions' },
   ];

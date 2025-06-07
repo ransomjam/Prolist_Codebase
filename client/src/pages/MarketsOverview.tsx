@@ -26,6 +26,39 @@ const markets = [
     category: 'Food & Agriculture',
     location: 'Near Main Market'
   },
+  {
+    id: 'mile-4-market',
+    name: 'Mile 4 Market',
+    description: 'Vibrant commercial hub serving the Mile 4 community with diverse goods and services.',
+    vendors: 180,
+    rating: 4.6,
+    verified: true,
+    sections: ['General Goods', 'Clothing', 'Food Items', 'Electronics'],
+    category: 'General',
+    location: 'Mile 4, Bamenda'
+  },
+  {
+    id: 'nkwen-market',
+    name: 'Nkwen Market',
+    description: 'Community market in Nkwen offering fresh produce and essential household items.',
+    vendors: 120,
+    rating: 4.5,
+    verified: true,
+    sections: ['Fresh Produce', 'Household Items', 'Local Crafts', 'Provisions'],
+    category: 'General',
+    location: 'Nkwen, Bamenda'
+  },
+  {
+    id: 'ntarinkon-market',
+    name: 'Ntarinkon Market',
+    description: 'Traditional market serving Ntarinkon area with agricultural products and daily necessities.',
+    vendors: 95,
+    rating: 4.4,
+    verified: true,
+    sections: ['Agricultural Products', 'Traditional Items', 'Food Supplies', 'Textiles'],
+    category: 'Food & Agriculture',
+    location: 'Ntarinkon, Bamenda'
+  },
 
 ];
 
@@ -109,11 +142,11 @@ export default function MarketsOverview() {
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             <div className="bg-gray-50 rounded-xl p-3 text-center">
-              <div className="text-xl font-bold text-blue-600 mb-1">2</div>
+              <div className="text-xl font-bold text-blue-600 mb-1">5</div>
               <div className="text-xs text-gray-600">Major Markets</div>
             </div>
             <div className="bg-gray-50 rounded-xl p-3 text-center">
-              <div className="text-xl font-bold text-emerald-600 mb-1">835+</div>
+              <div className="text-xl font-bold text-emerald-600 mb-1">1,230+</div>
               <div className="text-xs text-gray-600">Verified Vendors</div>
             </div>
             <div className="bg-gray-50 rounded-xl p-3 text-center">
@@ -121,7 +154,7 @@ export default function MarketsOverview() {
               <div className="text-xs text-gray-600">Market Hours</div>
             </div>
             <div className="bg-gray-50 rounded-xl p-3 text-center">
-              <div className="text-xl font-bold text-teal-600 mb-1">4.8★</div>
+              <div className="text-xl font-bold text-teal-600 mb-1">4.6★</div>
               <div className="text-xs text-gray-600">Avg Rating</div>
             </div>
           </div>
