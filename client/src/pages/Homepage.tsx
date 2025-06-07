@@ -18,10 +18,10 @@ export default function Homepage() {
   ];
 
   const stats = [
-    { label: "Local Businesses", value: "150+", color: "text-primary" },
-    { label: "Active Markets", value: "12", color: "text-emerald" },
-    { label: "Properties", value: "89", color: "text-neonBlue" },
-    { label: "Live Auctions", value: "24", color: "text-neonGreen" }
+    { label: "Local Businesses", value: "150+", color: "text-primary", icon: Store },
+    { label: "Active Markets", value: "12", color: "text-emerald", icon: MapPin },
+    { label: "Properties", value: "89", color: "text-neonBlue", icon: Building },
+    { label: "Live Auctions", value: "24", color: "text-neonGreen", icon: Gavel }
   ];
 
   const categories = [
@@ -194,7 +194,7 @@ export default function Homepage() {
               <div className="absolute inset-0 bg-gradient-to-br from-blue-50/80 via-purple-50/60 to-teal-50/80 opacity-0 group-hover:opacity-100 transition-all duration-500 animate-gradient-shift"></div>
               
               <div className="relative z-10">
-                <div className={`text-2xl sm:text-3xl lg:text-4xl xl:text-6xl font-bold ${stat.color} mb-2 lg:mb-3 group-hover:scale-125 transition-all duration-500 animate-bounce-in relative`} style={{ animationDelay: `${index * 100}ms` }}>
+                <div className={`text-2xl sm:text-3xl lg:text-4xl xl:text-6xl font-bold ${stat.color} mb-2 lg:mb-3 group-hover:scale-125 transition-all duration-500 animate-bounce-in animate-float-number relative`} style={{ animationDelay: `${index * 100}ms` }}>
                   {stat.value}
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 animate-gradient-shift"></div>
                 </div>
@@ -210,9 +210,36 @@ export default function Homepage() {
                   </div>
                 </div>
 
-                {/* Floating icon effect */}
-                <div className="absolute top-4 right-4 opacity-20 group-hover:opacity-60 transition-opacity duration-500">
-                  <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full animate-float"></div>
+                {/* Floating stat icon */}
+                <div className="absolute top-3 right-3 opacity-40 group-hover:opacity-80 transition-all duration-500">
+                  <div className="w-10 h-10 bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-sm rounded-full flex items-center justify-center animate-float-icon shadow-lg border border-white/20" style={{ animationDelay: `${index * 0.2}s` }}>
+                    <stat.icon className={`w-5 h-5 ${stat.color.replace('text-', 'text-')}`} />
+                  </div>
+                </div>
+                
+                {/* Additional floating elements */}
+                <div className="absolute top-6 left-4 opacity-20 group-hover:opacity-50 transition-opacity duration-700">
+                  <div className="w-4 h-4 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-full animate-float-gentle" style={{ animationDelay: `${index * 0.5 + 1}s` }}></div>
+                </div>
+                
+                <div className="absolute bottom-6 right-6 opacity-15 group-hover:opacity-40 transition-opacity duration-600">
+                  <div className="w-6 h-6 bg-gradient-to-br from-pink-400 to-orange-500 rounded-full animate-float-icon" style={{ animationDelay: `${index * 0.3 + 2}s` }}></div>
+                </div>
+                
+                {/* Animated particles around numbers */}
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+                  <div className="w-2 h-2 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full animate-float-gentle opacity-30" style={{ 
+                    position: 'absolute', 
+                    top: '-30px', 
+                    left: '-20px',
+                    animationDelay: `${index * 0.4 + 0.5}s` 
+                  }}></div>
+                  <div className="w-1 h-1 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full animate-float-icon opacity-25" style={{ 
+                    position: 'absolute', 
+                    top: '20px', 
+                    right: '-15px',
+                    animationDelay: `${index * 0.6 + 1.2}s` 
+                  }}></div>
                 </div>
               </div>
             </div>

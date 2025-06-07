@@ -36,19 +36,28 @@ export default function Markets() {
 
           {/* Market Stats */}
           <div className="grid grid-cols-3 gap-3">
-            <div className="bg-blue-50 rounded-lg p-3 text-center">
-              <Store className="text-blue-600 mx-auto mb-1" size={20} />
-              <div className="text-lg font-bold text-blue-600">{totalMarkets}</div>
+            <div className="bg-blue-50 rounded-lg p-3 text-center relative overflow-hidden group hover:bg-blue-100 transition-all duration-300">
+              <div className="absolute inset-0 opacity-20">
+                <div className="w-1 h-1 bg-blue-400 rounded-full animate-float-gentle absolute top-2 right-2" style={{ animationDelay: '0.5s' }}></div>
+              </div>
+              <Store className="text-blue-600 mx-auto mb-1 animate-float-icon" size={20} />
+              <div className="text-lg font-bold text-blue-600 animate-float-number">{totalMarkets}</div>
               <div className="text-xs text-blue-700">Total Markets</div>
             </div>
-            <div className="bg-green-50 rounded-lg p-3 text-center">
-              <Users className="text-green-600 mx-auto mb-1" size={20} />
-              <div className="text-lg font-bold text-green-600">{totalVendors}+</div>
+            <div className="bg-green-50 rounded-lg p-3 text-center relative overflow-hidden group hover:bg-green-100 transition-all duration-300">
+              <div className="absolute inset-0 opacity-20">
+                <div className="w-1 h-1 bg-green-400 rounded-full animate-float-gentle absolute top-2 left-2" style={{ animationDelay: '1s' }}></div>
+              </div>
+              <Users className="text-green-600 mx-auto mb-1 animate-float-icon" size={20} style={{ animationDelay: '0.3s' }} />
+              <div className="text-lg font-bold text-green-600 animate-float-number" style={{ animationDelay: '0.1s' }}>{totalVendors}+</div>
               <div className="text-xs text-green-700">Active Vendors</div>
             </div>
-            <div className="bg-purple-50 rounded-lg p-3 text-center">
-              <MapPin className="text-purple-600 mx-auto mb-1" size={20} />
-              <div className="text-lg font-bold text-purple-600">6+</div>
+            <div className="bg-purple-50 rounded-lg p-3 text-center relative overflow-hidden group hover:bg-purple-100 transition-all duration-300">
+              <div className="absolute inset-0 opacity-20">
+                <div className="w-1 h-1 bg-purple-400 rounded-full animate-float-gentle absolute bottom-2 right-2" style={{ animationDelay: '1.5s' }}></div>
+              </div>
+              <MapPin className="text-purple-600 mx-auto mb-1 animate-float-icon" size={20} style={{ animationDelay: '0.6s' }} />
+              <div className="text-lg font-bold text-purple-600 animate-float-number" style={{ animationDelay: '0.2s' }}>6+</div>
               <div className="text-xs text-purple-700">Locations</div>
             </div>
           </div>
