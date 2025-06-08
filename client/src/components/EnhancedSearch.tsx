@@ -157,7 +157,7 @@ export default function EnhancedSearch() {
       setSearchResults([]);
       setIsSearching(false);
     }
-  }, [searchQuery, typedProducts]);
+  }, [searchQuery]); // Remove typedProducts from dependencies
 
   const handleResultClick = (result: SearchResult) => {
     setLocation(result.link);
