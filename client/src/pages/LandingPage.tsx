@@ -95,8 +95,13 @@ export default function LandingPage() {
               style={getAnimationStyle(6)}
             >
               <div className="flex justify-center mb-4 lg:mb-6">
-                <div className="w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg animate-bounce-slow">
-                  <Shield className="w-8 h-8 lg:w-10 lg:h-10 text-white animate-pulse" />
+                <div className="w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg animate-bounce-slow relative">
+                  <Shield 
+                    className="w-8 h-8 lg:w-10 lg:h-10 text-white drop-shadow-lg" 
+                    strokeWidth={2.5} 
+                    fill="currentColor"
+                    style={{ display: 'block', opacity: 1 }}
+                  />
                 </div>
               </div>
               <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 lg:mb-4 text-primary">Verified Businesses</h3>
