@@ -3,7 +3,7 @@ import { Link, useLocation } from "wouter";
 import { Search, Plus, User, Settings, Heart, LogOut, Menu, Shield, Users, MessageCircle, Monitor, TrendingUp, Bell, ShoppingBag, List, Building2, Home, Flame, Briefcase, TrendingUp as StockIcon, CheckCircle, Tag, MessageSquare, DollarSign, AlertTriangle } from "lucide-react";
 import { HomeIcon, BuildingStorefrontIcon, HomeModernIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
 import NotificationDropdown from "./NotificationDropdown";
-import SearchDropdown from "./SearchDropdown";
+import EnhancedSearch from "./EnhancedSearch";
 import ChatList from "./ChatList";
 import { useAuth } from "../hooks/useAuth";
 
@@ -85,9 +85,14 @@ export default function Navbar() {
               </div>
             </button>
             
-            {/* Search Button */}
+            {/* Enhanced Search */}
+            <div className="hidden sm:block w-64">
+              <EnhancedSearch />
+            </div>
+            
+            {/* Mobile Search Button */}
             <button 
-              className="w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center transition-colors"
+              className="sm:hidden w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center transition-colors"
               onClick={() => setIsSearchOpen(!isSearchOpen)}
             >
               <Search className="text-gray-700" size={20} />
@@ -161,10 +166,10 @@ export default function Navbar() {
           </div>
         </div>
         
-        {/* Search Bar */}
+        {/* Mobile Search Bar */}
         {isSearchOpen && (
-          <div className="mt-3">
-            <SearchDropdown />
+          <div className="mt-3 sm:hidden">
+            <EnhancedSearch />
           </div>
         )}
 
