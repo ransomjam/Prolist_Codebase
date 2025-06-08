@@ -25,6 +25,12 @@ export default function BottomNavigation() {
       active: location === "/markets"
     },
     {
+      href: "/realestate",
+      icon: HomeModernIcon,
+      label: "Real Estate",
+      active: location === "/realestate"
+    },
+    {
       href: "/professional-services",
       icon: Briefcase,
       label: "Services",
