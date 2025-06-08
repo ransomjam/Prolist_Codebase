@@ -34,13 +34,24 @@ export default function Navbar() {
       {/* Top Bar - Facebook style with blue text */}
       <div className="px-4 py-3">
         <div className="flex items-center justify-between">
-          {/* Left: Logo with Shield */}
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-              <Shield className="text-white" size={16} />
+          {/* Left: Logo with modern styling */}
+          <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+            <div className="relative">
+              <div className="w-10 h-10 bg-gradient-to-br from-emerald via-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg border-2 border-neonGreen/40 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:border-neonGreen/60">
+                <div className="flex items-center justify-center relative">
+                  <span className="text-white font-bold text-lg drop-shadow-sm">P</span>
+                  <div className="absolute inset-0 bg-white/20 rounded-lg opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+              </div>
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-neonGreen rounded-full border-2 border-white shadow-md animate-pulse"></div>
             </div>
-            <span className="font-bold text-2xl text-primary">ProList</span>
-          </div>
+            <div className="flex flex-col">
+              <h1 className="text-xl font-bold bg-gradient-to-r from-primary via-emerald to-green-600 bg-clip-text text-transparent">
+                ProList
+              </h1>
+              <span className="text-xs text-gray-500 font-medium -mt-1">Marketplace</span>
+            </div>
+          </Link>
 
           {/* Right: 3 Icons */}
           <div className="flex items-center gap-2">
