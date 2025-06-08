@@ -91,11 +91,11 @@ export default function LandingPage() {
             <div 
               ref={(el) => setElementRef('feature-1', el)}
               data-animation-id="feature-1"
-              className={`bg-white p-6 lg:p-8 rounded-2xl shadow-lg border-2 border-emerald/20 hover:border-emerald/40 transition-all duration-300 transform hover:scale-105 hover:-rotate-1 gpu-accelerated will-change-transform ${getAnimationClass('feature-1', 6, 'always-visible')}`}
+              className={`bg-white p-6 lg:p-8 rounded-2xl shadow-lg border-2 border-blue/20 hover:border-blue/40 transition-all duration-300 transform hover:scale-105 hover:-rotate-1 gpu-accelerated will-change-transform ${getAnimationClass('feature-1', 6, 'always-visible')}`}
               style={getAnimationStyle(6)}
             >
               <div className="flex justify-center mb-4 lg:mb-6">
-                <div className="w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg animate-bounce-slow relative">
+                <div className="w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg animate-bounce-slow relative">
                   <Shield 
                     className="w-8 h-8 lg:w-10 lg:h-10 text-white drop-shadow-lg" 
                     strokeWidth={2.5} 
