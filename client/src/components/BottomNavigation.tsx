@@ -27,7 +27,7 @@ export default function BottomNavigation() {
     {
       href: "/realestate",
       icon: HomeModernIcon,
-      label: "Real Estate",
+      label: "Assets",
       active: location === "/realestate"
     },
     {
