@@ -47,20 +47,20 @@ export default function BottomNavigation() {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 safe-area-pb">
-      <div className="flex items-center justify-around py-2 px-4 max-w-md mx-auto">
+      <div className="flex items-center justify-evenly py-2 px-2 max-w-lg mx-auto">
         {navItems.map((item) => {
           const IconComponent = item.icon;
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center gap-1 py-2 px-3 rounded-lg transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center gap-1 py-2 px-1 rounded-lg transition-all duration-200 min-w-0 flex-1 ${
                 item.active
                   ? 'text-blue-600'
                   : 'text-gray-600 hover:text-gray-900'
               }`}
             >
-              <div className="relative">
+              <div className="relative flex items-center justify-center">
                 <IconComponent className={`h-6 w-6 ${item.active ? 'text-blue-600' : 'text-gray-600'}`} />
                 {item.badge && (
                   <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
@@ -68,7 +68,7 @@ export default function BottomNavigation() {
                   </div>
                 )}
               </div>
-              <span className={`text-xs font-medium ${
+              <span className={`text-xs font-medium text-center leading-tight ${
                 item.active ? 'text-blue-600' : 'text-gray-600'
               }`}>
                 {item.label}
