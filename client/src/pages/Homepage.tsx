@@ -1,11 +1,10 @@
 import { Compass, Store, MapPin, Building, Gavel, Utensils, Shirt, Laptop, Wrench, ShoppingBag, Plus, TrendingUp, Users, Shield } from "lucide-react";
 import Card from "../components/Card";
 import Button from "../components/Button";
+import { markets } from "../data/demoData";
 import { useAuth } from "../hooks/useAuth";
 import { useScrollAnimations } from "../hooks/useScrollAnimations";
 import heroImage from "@assets/upstation-hill.jpg";
-import foodMarketImage from '@assets/image_1749255445560.png';
-import bamendaMarketsImage from '@assets/image_1749257345512.png';
 
 export default function Homepage() {
   const { user } = useAuth();
@@ -15,47 +14,7 @@ export default function Homepage() {
     { icon: ShoppingBag, label: "Browse Products", href: "/products", color: "from-blue-500 to-blue-600" },
     { icon: Gavel, label: "Live Auctions", href: "/auctions", color: "from-orange-500 to-red-500" },
     { icon: Users, label: "Find Services", href: "/professional-services", color: "from-teal-500 to-cyan-600" },
-    { icon: Plus, label: "List Service", href: "/product-listing", color: "from-green-500 to-emerald-600" }
-  ];
-
-  // Actual markets data from Markets page
-  const featuredMarkets = [
-    {
-      id: 'main-market',
-      name: 'Main Market',
-      description: 'Bamenda\'s busiest commercial hub with diverse sections offering everything from textiles to electronics.',
-      vendors: 555,
-      rating: 4.8,
-      verified: true,
-      sections: ['Electronics', 'Textiles', 'Fashion', 'Food Items', 'Cosmetics'],
-      category: 'General',
-      location: 'Central Bamenda',
-      image: bamendaMarketsImage
-    },
-    {
-      id: 'food-market',
-      name: 'Food Market',
-      description: 'Fresh produce and food items at competitive prices. The best place for organic vegetables and local spices.',
-      vendors: 280,
-      rating: 4.9,
-      verified: true,
-      sections: ['Fresh Produce', 'Meat & Fish', 'Spices', 'Grains'],
-      category: 'Food & Agriculture',
-      location: 'Near Main Market',
-      image: foodMarketImage
-    },
-    {
-      id: 'mile-4-market',
-      name: 'Mile 4 Market',
-      description: 'Vibrant commercial hub serving the Mile 4 community with diverse goods and services.',
-      vendors: 180,
-      rating: 4.6,
-      verified: true,
-      sections: ['General Goods', 'Clothing', 'Food Items', 'Electronics'],
-      category: 'General',
-      location: 'Mile 4, Bamenda',
-      image: bamendaMarketsImage
-    }
+    { icon: Plus, label: "Add Listing", href: "/product-listing", color: "from-green-500 to-emerald-600" }
   ];
 
   const stats = [
@@ -306,7 +265,7 @@ export default function Homepage() {
         </div>
         
         <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 px-4 sm:px-0">
-          {featuredMarkets.map((market, index) => (
+          {markets.slice(0, 3).map((market, index) => (
             <div
               key={market.id} 
               ref={(el) => setElementRef(`market-${market.id}`, el)}
@@ -315,7 +274,7 @@ export default function Homepage() {
               style={getAnimationStyle(index + 15)}
             >
               <a 
-                href={`/markets/bamenda-markets/${market.id}`} 
+                href={`/markets/${market.id}`} 
                 className="block transform transition-all duration-300 hover:scale-105"
               >
                 <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100 group-hover:shadow-3xl transition-all duration-500 hover-lift relative">
@@ -358,19 +317,16 @@ export default function Homepage() {
                       {market.name}
                     </h3>
                     <p className="text-gray-600 text-sm lg:text-base mb-4">
-                      {market.vendors} vendors • {market.sections.length} sections • {market.location}
+                      {market.shops.length} shops • {market.importers.length} importers • {market.vendors.length} vendors
                     </p>
                     
                     {/* Rating */}
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <div className="flex text-yellow-400 text-sm lg:text-base">
-                          {"★".repeat(Math.floor(market.rating))}
+                          {"★".repeat(5)}
                         </div>
-                        <span className="text-xs sm:text-sm text-gray-600">{market.rating} rating</span>
-                        {market.verified && (
-                          <Shield className="w-4 h-4 text-blue-600" />
-                        )}
+                        <span className="text-xs sm:text-sm text-gray-600">4.8 (120 reviews)</span>
                       </div>
                       <div className="text-blue-600 font-semibold text-sm lg:text-base">
                         Visit →
