@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Heart, Eye, MessageCircle, Share2, Star, Settings, User, MapPin, Calendar, Phone, Mail, Grid3X3, Bookmark, UserCheck, Plus, TrendingUp, Package, DollarSign, Award, Clock, CheckCircle, XCircle, Shield, X, Save } from 'lucide-react';
-import { currentUser } from '../data/demoData';
 import { useAuth } from '../hooks/useAuth';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -17,7 +16,7 @@ export default function Profile() {
   const [activeTab, setActiveTab] = useState("overview");
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [showCongrats, setShowCongrats] = useState(false);
-  const [isPremiumUser, setIsPremiumUser] = useState(currentUser.accountType === 'premium');
+  const [isPremiumUser, setIsPremiumUser] = useState(user?.role === 'premium');
   const [showEditModal, setShowEditModal] = useState(false);
   const [editForm, setEditForm] = useState({
     username: '',
@@ -27,7 +26,18 @@ export default function Profile() {
     bio: ''
   });
 
-  const profileUser = user || currentUser;
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Please Login</h2>
+          <p className="text-gray-600">You need to be logged in to view your profile.</p>
+        </div>
+      </div>
+    );
+  }
+
+  const profileUser = user;
   const isPremium = isPremiumUser;
 
   // Initialize edit form with current user data
@@ -291,15 +301,15 @@ export default function Profile() {
         {/* Stats Row */}
         <div className="grid grid-cols-4 gap-2 mb-4">
           <div className="text-center">
-            <span className="text-lg font-bold text-gray-900">{currentUser.listingsPosted}</span>
+            <span className="text-lg font-bold text-gray-900">{userProducts?.length || 0}</span>
             <span className="text-gray-600 block text-xs">Posts</span>
           </div>
           <div className="text-center">
-            <span className="text-lg font-bold text-gray-900">{currentUser.followers}</span>
+            <span className="text-lg font-bold text-gray-900">0</span>
             <span className="text-gray-600 block text-xs">Followers</span>
           </div>
           <div className="text-center">
-            <span className="text-lg font-bold text-gray-900">{currentUser.following}</span>
+            <span className="text-lg font-bold text-gray-900">0</span>
             <span className="text-gray-600 block text-xs">Following</span>
           </div>
           <div className="text-center">
@@ -316,13 +326,13 @@ export default function Profile() {
                 <Shield className="text-green-600" size={18} />
                 <span className="font-semibold text-gray-900">Trust Score</span>
               </div>
-              <div className="text-2xl font-bold text-green-600">{currentUser.trustCount}</div>
+              <div className="text-2xl font-bold text-green-600">0</div>
             </div>
             <div className="text-right">
               <div className="text-sm text-gray-600">Rating</div>
               <div className="flex items-center gap-1">
                 <Star className="text-yellow-500 fill-current" size={16} />
-                <span className="font-semibold">{vendorStats?.averageRating || currentUser.rating}</span>
+                <span className="font-semibold">{vendorStats?.averageRating || 0}</span>
               </div>
             </div>
           </div>
@@ -330,15 +340,15 @@ export default function Profile() {
 
         {/* Bio */}
         <div className="mb-4">
-          <p className="text-gray-700 text-sm mb-2">{currentUser.bio}</p>
+          <p className="text-gray-700 text-sm mb-2">{(profileUser as any).bio || 'No bio added yet'}</p>
           <div className="flex flex-wrap gap-3 text-xs text-gray-600">
             <span className="flex items-center gap-1">
               <MapPin size={12} />
-              {currentUser.location}
+              {(profileUser as any).location || 'No location set'}
             </span>
             <span className="flex items-center gap-1">
               <Phone size={12} />
-              {currentUser.phone}
+              {(profileUser as any).phone || 'No phone number'}
             </span>
           </div>
         </div>
