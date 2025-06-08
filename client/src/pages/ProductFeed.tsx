@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Filter, ShoppingBag, Shield, Star, Eye, MessageCircle } from 'lucide-react';
 import ChatBox from '@/components/ChatBox';
+import { listings, realEstate } from '../data/demoData';
 
 interface Product {
   id: number;
@@ -65,7 +66,7 @@ export default function ProductFeed() {
   }, []);
 
   // Fetch products from the API
-  const { data: products = [], isLoading, error } = useQuery({
+  const { data: dbProducts = [], isLoading, error } = useQuery({
     queryKey: ['/api/products'],
     queryFn: async () => {
       const response = await fetch('/api/products');
@@ -76,7 +77,38 @@ export default function ProductFeed() {
     }
   });
 
-  const filtered = products.filter((p: Product) => {
+  // Transform demo data to match Product interface
+  const demoProducts = [
+    ...listings.map(item => ({
+      id: item.id + 1000, // Offset to avoid ID conflicts
+      title: item.title,
+      category: item.category,
+      price: item.price.replace(' FCFA', ''),
+      description: `Quality ${item.category.toLowerCase()} item available in ${item.location}`,
+      location: item.location,
+      vendorId: 999, // Demo vendor ID
+      viewCount: Math.floor(Math.random() * 100),
+      createdAt: new Date().toISOString(),
+      image: item.image
+    })),
+    ...realEstate.map(item => ({
+      id: item.id + 2000, // Offset to avoid ID conflicts
+      title: item.title,
+      category: 'Real Estate',
+      price: item.price.replace(' FCFA', '').replace('/month', ''),
+      description: `Premium real estate property in ${item.location}`,
+      location: item.location,
+      vendorId: 999, // Demo vendor ID
+      viewCount: Math.floor(Math.random() * 150),
+      createdAt: new Date().toISOString(),
+      image: item.image
+    }))
+  ];
+
+  // Combine database products with demo products
+  const allProducts = [...dbProducts, ...demoProducts];
+
+  const filtered = allProducts.filter((p: Product) => {
     const categoryMatch = filter ? p.category === filter : true;
     const marketLineMatch = marketLineFilter ? p.marketLine === marketLineFilter : true;
     const marketMatch = marketFilter ? p.marketId === marketFilter : true;
@@ -86,13 +118,13 @@ export default function ProductFeed() {
 
   const categories = [
     { value: '', label: 'All Categories' },
+    { value: 'Phones', label: 'Phones' },
+    { value: 'Shoes', label: 'Shoes' },
+    { value: 'Clothes', label: 'Clothes' },
     { value: 'Electronics', label: 'Electronics' },
-    { value: 'Fashion', label: 'Fashion' },
-    { value: 'Home & Garden', label: 'Home & Garden' },
-    { value: 'Sports', label: 'Sports' },
-    { value: 'Books', label: 'Books' },
-    { value: 'Automotive', label: 'Automotive' },
-    { value: 'Services', label: 'Services' }
+    { value: 'Assets', label: 'Assets' },
+    { value: 'Services', label: 'Services' },
+    { value: 'Real Estate', label: 'Real Estate' }
   ];
 
   if (isLoading) {
@@ -237,9 +269,9 @@ export default function ProductFeed() {
         <ChatBox
           isOpen={showChat}
           onClose={() => setShowChat(false)}
-          recipientId={selectedVendor.vendorId}
-          recipientName={selectedVendor.vendorName}
-          productContext={selectedVendor.productTitle}
+          vendorId={selectedVendor.vendorId}
+          vendorName={selectedVendor.vendorName}
+          productTitle={selectedVendor.productTitle}
         />
       )}
     </div>
