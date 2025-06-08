@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Filter, ShoppingBag, Shield, Star, Eye, MessageCircle } from 'lucide-react';
-import { useScrollAnimations } from '../hooks/useScrollAnimations';
 import ChatBox from '@/components/ChatBox';
 
 interface Product {
@@ -14,6 +13,7 @@ interface Product {
   vendorId: number;
   viewCount: number;
   createdAt: string;
+  image?: string;
   marketId?: string;
   marketLine?: string;
 }
@@ -24,7 +24,6 @@ export default function ProductFeed() {
   const [marketFilter, setMarketFilter] = useState('');
   const [showChat, setShowChat] = useState(false);
   const [selectedVendor, setSelectedVendor] = useState<{vendorId: number, vendorName: string, productTitle: string} | null>(null);
-  const { setElementRef, getAnimationClass, getAnimationStyle } = useScrollAnimations();
 
   // Fetch vendor information for chat
   const { data: vendors = {} } = useQuery({
@@ -87,15 +86,13 @@ export default function ProductFeed() {
 
   const categories = [
     { value: '', label: 'All Categories' },
-    { value: 'shoes', label: 'Shoes' },
-    { value: 'phones', label: 'Phones' },
-    { value: 'clothes', label: 'Clothes' },
-    { value: 'electronics', label: 'Electronics' },
-    { value: 'food-beverages', label: 'Food & Beverages' },
-    { value: 'arts-crafts', label: 'Arts & Crafts' },
-    { value: 'services', label: 'Services' },
-    { value: 'home-garden', label: 'Home & Garden' },
-    { value: 'automotive', label: 'Automotive' }
+    { value: 'Electronics', label: 'Electronics' },
+    { value: 'Fashion', label: 'Fashion' },
+    { value: 'Home & Garden', label: 'Home & Garden' },
+    { value: 'Sports', label: 'Sports' },
+    { value: 'Books', label: 'Books' },
+    { value: 'Automotive', label: 'Automotive' },
+    { value: 'Services', label: 'Services' }
   ];
 
   if (isLoading) {
@@ -104,7 +101,7 @@ export default function ProductFeed() {
         <div className="flex items-center justify-center min-h-64">
           <div className="text-center">
             <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading marketplace...</p>
+            <p className="text-gray-600">Loading products...</p>
           </div>
         </div>
       </div>
@@ -124,166 +121,109 @@ export default function ProductFeed() {
   }
 
   return (
-    <div className="p-4 max-w-7xl mx-auto scroll-smooth">
+    <div className="p-4 max-w-7xl mx-auto">
       {/* Header */}
-      <div 
-        ref={(el) => setElementRef('header', el)}
-        data-animation-id="header"
-        className={`flex items-center justify-between mb-6 gpu-accelerated will-change-transform ${getAnimationClass('header', 0, 'slide')}`}
-        style={getAnimationStyle(0)}
-      >
+      <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 
-            ref={(el) => setElementRef('title', el)}
-            data-animation-id="title"
-            className={`text-2xl sm:text-3xl font-bold text-blue-600 leading-tight ${getAnimationClass('title', 1, 'slide')}`}
-            style={getAnimationStyle(1)}
-          >
-            {marketLineFilter ? `${marketLineFilter.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())} Listings` : 'Listings'}
+          <h2 className="text-2xl sm:text-3xl font-bold text-blue-600 leading-tight">
+            {marketLineFilter ? `${marketLineFilter.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())} Products` : 'All Products'}
           </h2>
-          <p 
-            ref={(el) => setElementRef('subtitle', el)}
-            data-animation-id="subtitle"
-            className={`text-gray-600 text-sm mt-1 ${getAnimationClass('subtitle', 2, 'slide')}`}
-            style={getAnimationStyle(2)}
-          >
+          <p className="text-gray-600 text-sm mt-1">
             Trusted products from verified vendors
           </p>
         </div>
-        <button 
-          ref={(el) => setElementRef('list-button', el)}
-          data-animation-id="list-button"
-          onClick={() => window.location.href = '/product-listing'}
-          className={`bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium shadow-sm hover:shadow-md transition-all duration-200 flex items-center gap-2 text-sm gpu-accelerated will-change-transform ${getAnimationClass('list-button', 3, 'slide')}`}
-          style={getAnimationStyle(3)}
-        >
-          <ShoppingBag size={16} />
-          List Product
-        </button>
-      </div>
-
-      {/* Filter Bar */}
-      <div 
-        ref={(el) => setElementRef('filter-bar', el)}
-        data-animation-id="filter-bar"
-        className={`mb-6 flex items-center gap-4 gpu-accelerated will-change-transform ${getAnimationClass('filter-bar', 4, 'slide')}`}
-        style={getAnimationStyle(4)}
-      >
-        <div className="flex items-center gap-2">
-          <Filter size={20} className="text-gray-600" />
-          <select 
-            value={filter}
-            onChange={e => setFilter(e.target.value)} 
-            className="border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
-          >
-            {categories.map(cat => (
-              <option key={cat.value} value={cat.value}>{cat.label}</option>
-            ))}
-          </select>
-        </div>
-        <div 
-          ref={(el) => setElementRef('product-count', el)}
-          data-animation-id="product-count"
-          className={`text-sm text-gray-600 ${getAnimationClass('product-count', 5)}`}
-          style={getAnimationStyle(5)}
-        >
-          {filtered.length} {filtered.length === 1 ? 'product' : 'products'} found
+        <div className="text-right text-sm text-gray-500">
+          <p>{filtered.length} product{filtered.length !== 1 ? 's' : ''} found</p>
         </div>
       </div>
 
-      {/* Product Grid - Facebook Marketplace Style */}
+      {/* Filters */}
+      <div className="mb-6">
+        <div className="flex flex-wrap gap-4">
+          <div className="min-w-48">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              <Filter className="inline w-4 h-4 mr-1" />
+              Category
+            </label>
+            <select
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              {categories.map(cat => (
+                <option key={cat.value} value={cat.value}>{cat.label}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Products Grid */}
       {filtered.length === 0 ? (
         <div className="text-center py-12">
-          <ShoppingBag className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">No products found</h3>
-          <p className="text-gray-600">Try adjusting your filters or check back later for new listings</p>
+          <div className="text-gray-400 mb-4">
+            <ShoppingBag className="w-16 h-16 mx-auto" />
+          </div>
+          <h3 className="text-xl font-semibold text-gray-700 mb-2">No products found</h3>
+          <p className="text-gray-500 mb-6">
+            {filter || marketLineFilter 
+              ? "Try adjusting your filters to see more products." 
+              : "No products have been listed yet. Be the first to add a product!"}
+          </p>
+          <a
+            href="/product-listing"
+            className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+          >
+            <ShoppingBag className="w-5 h-5" />
+            Add Product
+          </a>
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          {filtered.map((item: Product, index: number) => (
-            <div
-              key={item.id}
-              ref={(el) => setElementRef(`product-${item.id}`, el)}
-              data-animation-id={`product-${item.id}`}
-              onClick={() => window.location.href = `/product/${item.id}`}
-              className={`bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer hover:scale-[1.02] border border-gray-100 gpu-accelerated will-change-transform ${getAnimationClass(`product-${item.id}`, index + 6)}`}
-              style={getAnimationStyle(index + 6)}
-            >
-              {/* Product Image */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filtered.map((product: Product) => (
+            <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
               <div className="relative">
-                <div className="w-full h-40 bg-gray-100 rounded-t-xl flex items-center justify-center">
-                  <ShoppingBag className="w-12 h-12 text-gray-400" />
-                </div>
-                {/* View Count Badge */}
-                <div className="absolute top-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1">
-                  <Eye size={12} />
-                  {item.viewCount || 0}
-                </div>
-              </div>
-
-              {/* Product Info */}
-              <div className="p-3">
-                {/* Price */}
-                <p className="text-green-600 font-bold text-lg">
-                  {parseInt(item.price).toLocaleString()} XAF
-                </p>
-                
-                {/* Title */}
-                <h3 className="text-sm font-semibold text-gray-900 truncate mb-1">
-                  {item.title}
-                </h3>
-                
-                {/* Location */}
-                <p className="text-xs text-gray-500 mb-2">{item.location}</p>
-
-                {/* Vendor Info */}
-                <div className="flex items-center justify-between text-xs">
-                  <div className="flex items-center gap-1">
-                    <div className="w-4 h-4 bg-blue-100 rounded-full flex items-center justify-center">
-                      <Shield size={10} className="text-blue-600" />
-                    </div>
-                    <span className="text-gray-600">Vendor #{item.vendorId}</span>
-                  </div>
-                  
-                  <div className="flex items-center gap-1 text-blue-600">
-                    <Shield size={12} />
-                    <span className="font-medium">Verified</span>
-                  </div>
-                </div>
-
-                {/* Category Badge */}
-                <div className="mt-2">
-                  <span className="inline-block bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full capitalize">
-                    {item.category.replace('-', ' ')}
+                <img 
+                  src={product.image || "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300"} 
+                  alt={product.title}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="absolute top-2 left-2">
+                  <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
+                    {product.category}
                   </span>
                 </div>
-
-                {/* Time Posted */}
-                <div className="mt-2 text-xs text-gray-400">
-                  Posted {new Date(item.createdAt).toLocaleDateString()}
+              </div>
+              
+              <div className="p-4">
+                <h3 className="font-semibold text-lg text-gray-900 mb-2 line-clamp-1">{product.title}</h3>
+                <p className="text-gray-600 text-sm mb-3 line-clamp-2">{product.description}</p>
+                
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-2xl font-bold text-blue-600">${product.price}</span>
+                  <div className="flex items-center text-gray-500 text-sm">
+                    <Eye className="w-4 h-4 mr-1" />
+                    {product.viewCount || 0}
+                  </div>
                 </div>
-
-                {/* Action Buttons */}
-                <div className="mt-3 flex gap-2">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleChatVendor(item);
-                    }}
-                    className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-colors"
+                
+                <div className="flex items-center justify-between text-sm text-gray-500 mb-3">
+                  <span>{product.location || 'Bamenda'}</span>
+                  <span>{new Date(product.createdAt).toLocaleDateString()}</span>
+                </div>
+                
+                <div className="flex gap-2">
+                  <a
+                    href={`/product/${product.id}`}
+                    className="flex-1 bg-blue-600 text-white py-2 px-3 rounded-lg text-center text-sm font-medium hover:bg-blue-700 transition-colors"
                   >
-                    <MessageCircle size={12} />
-                    Chat
-                  </button>
+                    View Details
+                  </a>
                   <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      window.location.href = `/product/${item.id}`;
-                    }}
-                    className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium rounded-lg transition-colors"
+                    onClick={() => handleChatVendor(product)}
+                    className="bg-gray-100 text-gray-700 py-2 px-3 rounded-lg hover:bg-gray-200 transition-colors"
                   >
-                    <Eye size={12} />
-                    View
+                    <MessageCircle className="w-4 h-4" />
                   </button>
                 </div>
               </div>
@@ -292,27 +232,14 @@ export default function ProductFeed() {
         </div>
       )}
 
-      {/* Load More Button (if needed for pagination) */}
-      {filtered.length > 0 && (
-        <div className="text-center mt-8">
-          <button className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-2 rounded-lg transition-colors">
-            Load More Products
-          </button>
-        </div>
-      )}
-
       {/* Chat Component */}
-      {selectedVendor && (
+      {showChat && selectedVendor && (
         <ChatBox
-          vendorName={selectedVendor.vendorName}
-          vendorId={selectedVendor.vendorId}
-          productTitle={selectedVendor.productTitle}
-          buyerName="Buyer"
           isOpen={showChat}
-          onClose={() => {
-            setShowChat(false);
-            setSelectedVendor(null);
-          }}
+          onClose={() => setShowChat(false)}
+          recipientId={selectedVendor.vendorId}
+          recipientName={selectedVendor.vendorName}
+          productContext={selectedVendor.productTitle}
         />
       )}
     </div>
