@@ -148,31 +148,24 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        {isPublicRoute || !isAuthenticated ? (
-          // Public routes without navigation
-          <div className="min-h-screen">
-            <Router />
-            <Toaster />
+        <div className="min-h-screen bg-grayLight pb-16">
+          <div className="flex flex-col">
+            <Navbar />
+            <main className="flex-1">
+              <Router />
+            </main>
           </div>
-        ) : (
-          // Authenticated routes with full navigation
-          <div className="min-h-screen bg-grayLight pb-16">
-            <div className="flex flex-col">
-              <Navbar />
-              <main className="flex-1 p-4 lg:p-6">
-                <Router />
-              </main>
-            </div>
-            <BottomNavigation />
+          <BottomNavigation />
+          {isAuthenticated && (
             <AuctionPostProcess
               auctions={auctions}
               setAuctions={setAuctions}
               userSession={userSession}
               incrementVendorSales={incrementVendorSales}
             />
-            <Toaster />
-          </div>
-        )}
+          )}
+          <Toaster />
+        </div>
       </TooltipProvider>
     </QueryClientProvider>
   );
