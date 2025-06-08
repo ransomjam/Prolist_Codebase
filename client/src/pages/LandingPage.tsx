@@ -40,14 +40,7 @@ export default function LandingPage() {
           >
             Connecting Cameroon's Business Communities with Trust, Opportunity, and Growth
           </p>
-          <p 
-            ref={(el) => setElementRef('hero-description', el)}
-            data-animation-id="hero-description"
-            className={`text-sm sm:text-base md:text-lg lg:text-xl mb-4 sm:mb-6 lg:mb-8 drop-shadow-lg max-w-4xl mx-auto leading-relaxed opacity-90 gpu-accelerated will-change-transform ${getAnimationClass('hero-description', 3, 'always-visible')}`}
-            style={getAnimationStyle(3)}
-          >
-            ProList is your go-to digital marketplace, empowering local businesses and entrepreneurs to thrive through verified connections, secure transactions, and a vibrant community built on trust.
-          </p>
+
           <div 
             ref={(el) => setElementRef('about-link', el)}
             data-animation-id="about-link"
