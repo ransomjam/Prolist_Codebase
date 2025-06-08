@@ -18,10 +18,10 @@ export default function About() {
         {/* Mission Statement */}
         <div className="mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-6">Our Mission</h2>
-          <p className="text-lg text-gray-700 leading-relaxed mb-6">
+          <p className="text-lg text-gray-700 leading-relaxed mb-6 text-justify">
             ProList is Cameroon's leading digital marketplace designed to connect local businesses, entrepreneurs, and customers through a safe, simple, and secure platform. We verify every seller, hold payments securely in escrow until buyers confirm receipt, and enable direct in-app communication — ensuring trust and transparency across all transactions.
           </p>
-          <p className="text-lg text-gray-700 leading-relaxed">
+          <p className="text-lg text-gray-700 leading-relaxed text-justify">
             Our platform offers a comprehensive ecosystem of features tailored for Cameroon's diverse economy.
           </p>
         </div>
@@ -35,7 +35,7 @@ export default function About() {
               </div>
               <h3 className="text-xl font-semibold text-gray-900">Marketplace Listings</h3>
             </div>
-            <p className="text-gray-700">
+            <p className="text-gray-700 text-justify">
               Browse and post a wide range of products with detailed, verified listings to maximize your visibility.
             </p>
           </div>
@@ -47,7 +47,7 @@ export default function About() {
               </div>
               <h3 className="text-xl font-semibold text-gray-900">Local Markets</h3>
             </div>
-            <p className="text-gray-700">
+            <p className="text-gray-700 text-justify">
               Explore authentic local markets in Bamenda with their unique sections and shop lines, bringing the real community feel online.
             </p>
           </div>
@@ -59,7 +59,7 @@ export default function About() {
               </div>
               <h3 className="text-xl font-semibold text-gray-900">Real Estate</h3>
             </div>
-            <p className="text-gray-700">
+            <p className="text-gray-700 text-justify">
               Discover property listings with options for featured promotions and lead generation, connecting buyers and sellers effectively.
             </p>
           </div>
@@ -71,7 +71,7 @@ export default function About() {
               </div>
               <h3 className="text-xl font-semibold text-gray-900">Professional Services</h3>
             </div>
-            <p className="text-gray-700">
+            <p className="text-gray-700 text-justify">
               Access trusted experts offering graphic design, web development, resume writing, data analysis, and more — all deliverable and payable online.
             </p>
           </div>
@@ -83,7 +83,7 @@ export default function About() {
               </div>
               <h3 className="text-xl font-semibold text-gray-900">Auctions</h3>
             </div>
-            <p className="text-gray-700">
+            <p className="text-gray-700 text-justify">
               Participate in live bidding for the best deals with transparent countdowns and secure escrow payments.
             </p>
           </div>
@@ -95,7 +95,7 @@ export default function About() {
               </div>
               <h3 className="text-xl font-semibold text-gray-900">Community Focus</h3>
             </div>
-            <p className="text-gray-700">
+            <p className="text-gray-700 text-justify">
               Building a thriving community where businesses gain visibility, buyers find trusted options, and everyone grows together.
             </p>
           </div>
@@ -110,7 +110,7 @@ export default function About() {
                 <Shield className="text-blue-600" size={32} />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Trust</h3>
-              <p className="text-gray-700">
+              <p className="text-gray-700 text-justify">
                 Every seller is verified and all transactions are secured through our escrow system.
               </p>
             </div>
