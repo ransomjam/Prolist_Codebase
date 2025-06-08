@@ -129,51 +129,55 @@ export default function AdminPanel() {
     }
   ];
 
-  const renderOverview = () => (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Total Users</p>
-              <p className="text-2xl font-bold text-gray-900">2,847</p>
+  const renderOverview = () => {
+    const pendingApplications = applications.filter(app => app.status === 'pending').length;
+    const escrowOrders = orders.filter(order => order.paymentStatus === 'escrow').length;
+    
+    return (
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Total Users</p>
+                <p className="text-2xl font-bold text-gray-900">{users.length}</p>
+              </div>
+              <Users className="w-8 h-8 text-blue-500" />
             </div>
-            <Users className="w-8 h-8 text-blue-500" />
+          </div>
+          
+          <div className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Pending Verifications</p>
+                <p className="text-2xl font-bold text-gray-900">{pendingApplications}</p>
+              </div>
+              <Clock className="w-8 h-8 text-green-500" />
+            </div>
+          </div>
+          
+          <div className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-purple-500">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Escrow Transactions</p>
+                <p className="text-2xl font-bold text-gray-900">{escrowOrders}</p>
+              </div>
+              <CreditCard className="w-8 h-8 text-purple-500" />
+            </div>
+          </div>
+          
+          <div className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-orange-500">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Active Products</p>
+                <p className="text-2xl font-bold text-gray-900">{products.length}</p>
+              </div>
+              <Package className="w-8 h-8 text-orange-500" />
+            </div>
           </div>
         </div>
-        
-        <div className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Pending Verifications</p>
-              <p className="text-2xl font-bold text-gray-900">12</p>
-            </div>
-            <Clock className="w-8 h-8 text-green-500" />
-          </div>
-        </div>
-        
-        <div className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-purple-500">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Escrow Transactions</p>
-              <p className="text-2xl font-bold text-gray-900">156</p>
-            </div>
-            <CreditCard className="w-8 h-8 text-purple-500" />
-          </div>
-        </div>
-        
-        <div className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-orange-500">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Active Products</p>
-              <p className="text-2xl font-bold text-gray-900">1,923</p>
-            </div>
-            <Package className="w-8 h-8 text-orange-500" />
-          </div>
-        </div>
-      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white rounded-xl shadow-lg p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activities</h3>
           <div className="space-y-4">
@@ -237,6 +241,7 @@ export default function AdminPanel() {
       </div>
     </div>
   );
+  };
 
   const renderVendorVerification = () => {
     const pendingCount = applications.filter((app: any) => app.status === 'pending').length;

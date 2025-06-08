@@ -558,15 +558,15 @@ export default function Profile() {
               <h3 className="font-semibold text-gray-900 mb-3 text-sm">Platform Activity</h3>
               <div className="grid grid-cols-3 gap-3">
                 <div className="text-center">
-                  <div className="text-lg font-bold text-blue-600">{currentUser.listingsPosted}</div>
+                  <div className="text-lg font-bold text-blue-600">{userProducts?.length || 0}</div>
                   <div className="text-xs text-gray-600">Listings</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-lg font-bold text-green-600">{currentUser.realEstatePosted}</div>
+                  <div className="text-lg font-bold text-green-600">0</div>
                   <div className="text-xs text-gray-600">Real Estate</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-lg font-bold text-orange-600">{currentUser.auctionsPosted}</div>
+                  <div className="text-lg font-bold text-orange-600">0</div>
                   <div className="text-xs text-gray-600">Auctions</div>
                 </div>
               </div>

@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
-import { currentUser } from '../data/demoData';
 
 export default function Login() {
   const { login } = useAuth();
