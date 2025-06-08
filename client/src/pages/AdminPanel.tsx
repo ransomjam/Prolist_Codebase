@@ -130,8 +130,8 @@ export default function AdminPanel() {
   ];
 
   const renderOverview = () => {
-    const pendingApplications = applications.filter(app => app.status === 'pending').length;
-    const escrowOrders = orders.filter(order => order.paymentStatus === 'escrow').length;
+    const pendingApplications = applications.filter((app: any) => app.status === 'pending').length;
+    const escrowOrders = orders.filter((order: any) => order.paymentStatus === 'escrow').length;
     
     return (
       <div className="space-y-6">
