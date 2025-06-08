@@ -49,7 +49,7 @@ const demoUsers: User[] = [
 ];
 
 export function useAuth(): AuthState & {
-  login: (username: string, password: string) => Promise<boolean>;
+  login: (userData: User) => void;
   logout: () => void;
   switchUser: (userId: number) => void;
 } {
@@ -72,22 +72,9 @@ export function useAuth(): AuthState & {
     setIsLoading(false);
   }, []);
 
-  const login = async (username: string, password: string): Promise<boolean> => {
-    setIsLoading(true);
-    
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    const foundUser = demoUsers.find(u => u.username === username);
-    if (foundUser) {
-      setUser(foundUser);
-      localStorage.setItem('prolist_user', JSON.stringify(foundUser));
-      setIsLoading(false);
-      return true;
-    }
-    
-    setIsLoading(false);
-    return false;
+  const login = (userData: User) => {
+    setUser(userData);
+    localStorage.setItem('prolist_user', JSON.stringify(userData));
   };
 
   const logout = () => {

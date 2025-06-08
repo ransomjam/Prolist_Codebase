@@ -110,7 +110,7 @@ export default function Signup() {
       const newUser = await response.json();
       
       // Auto-login the new user
-      await login(newUser.username, form.password);
+      login(newUser);
       
       // Redirect based on account type
       if (form.accountType === 'user') {

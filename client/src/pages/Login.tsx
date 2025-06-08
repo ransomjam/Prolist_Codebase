@@ -12,24 +12,26 @@ export default function Login() {
     e.preventDefault();
     setIsLoading(true);
 
-    // Check if user exists in localStorage (registered users)
-    const registeredUsers = JSON.parse(localStorage.getItem('prolist_registered_users') || '[]');
-    const foundUser = registeredUsers.find((u: any) => u.username === username && u.password === password);
-    
-    // Also check demo user
-    const isDemoUser = username === currentUser.username && password === "1234";
+    try {
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
 
-    if (foundUser || isDemoUser) {
-      const userData = foundUser || {
-        id: currentUser.id,
-        username: currentUser.username,
-        name: currentUser.name
-      };
-      
-      login(userData);
-      window.location.href = '/app';
-    } else {
-      alert("Invalid credentials. Please check your username and password, or sign up for a new account.");
+      if (response.ok) {
+        const userData = await response.json();
+        login(userData);
+        window.location.href = '/app';
+      } else {
+        const error = await response.json();
+        alert(error.message || "Invalid credentials. Please check your username and password.");
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      alert("Login failed. Please try again.");
     }
     
     setIsLoading(false);
