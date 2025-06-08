@@ -53,6 +53,7 @@ import VerificationDashboard from "./pages/VerificationDashboard";
 
 import ShopProfile from "./pages/ShopProfile";
 import MarketLine from "./pages/MarketLine";
+import About from "./pages/About";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -77,6 +78,7 @@ function Router() {
 
       <Route path="/settings" component={Settings} />
       <Route path="/help" component={HelpSupport} />
+      <Route path="/about" component={About} />
       <Route path="/vendor/register" component={VendorRegistration} />
 
       <Route path="/admin" component={AdminPanel} />

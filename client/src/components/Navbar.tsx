@@ -132,6 +132,10 @@ export default function Navbar() {
                     <Heart size={18} className="text-gray-600" />
                     <span className="text-sm">Help & Support</span>
                   </Link>
+                  <Link href="/about" className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg">
+                    <Shield size={18} className="text-gray-600" />
+                    <span className="text-sm">About</span>
+                  </Link>
                   <hr className="my-2" />
                   <button 
                     onClick={logout}
