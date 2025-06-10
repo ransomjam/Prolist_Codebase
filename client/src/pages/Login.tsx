@@ -22,10 +22,12 @@ export default function Login() {
 
       if (response.ok) {
         const userData = await response.json();
+        console.log('Login successful:', userData);
         login(userData);
         window.location.href = '/app';
       } else {
         const error = await response.json();
+        console.error('Login failed:', error);
         alert(error.message || "Invalid credentials. Please check your username and password.");
       }
     } catch (error) {

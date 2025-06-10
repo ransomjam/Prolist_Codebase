@@ -102,12 +102,14 @@ export default function Signup() {
       });
 
       if (!response.ok) {
-        const error = await response.text();
-        alert(error || 'Registration failed');
+        const error = await response.json();
+        console.error('Registration failed:', error);
+        alert(error.message || 'Registration failed');
         return;
       }
 
       const newUser = await response.json();
+      console.log('Registration successful:', newUser);
       
       // Auto-login the new user
       login(newUser);

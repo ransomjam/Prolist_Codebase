@@ -12,14 +12,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Check if username already exists
       const existingUser = await storage.getUserByUsername(userData.username);
       if (existingUser) {
+        console.log(`Registration failed: Username '${userData.username}' already exists`);
         return res.status(400).json({ message: 'Username already exists' });
       }
       
+      // Check if email already exists (if provided)
+      if (userData.email) {
+        const users = await storage.getAllUsers();
+        const emailExists = users.some(user => user.email === userData.email);
+        if (emailExists) {
+          console.log(`Registration failed: Email '${userData.email}' already exists`);
+          return res.status(400).json({ message: 'Email already exists' });
+        }
+      }
+      
       const user = await storage.createUser(userData);
+      console.log(`✅ New user registered: ${user.username} (ID: ${user.id})`);
+      
       const { password, ...userWithoutPassword } = user;
       res.status(201).json(userWithoutPassword);
     } catch (error) {
       console.error("Error creating user:", error);
+      if (error.name === 'ZodError') {
+        return res.status(400).json({ message: 'Invalid user data provided' });
+      }
       res.status(500).json({ message: 'Registration failed' });
     }
   });
@@ -28,12 +44,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/login', async (req, res) => {
     try {
       const { username, password } = req.body;
+      
+      if (!username || !password) {
+        return res.status(400).json({ message: 'Username and password are required' });
+      }
+      
       const user = await storage.getUserByUsername(username);
       
-      if (!user || user.password !== password) {
+      if (!user) {
+        console.log(`Login attempt failed: User '${username}' not found`);
         return res.status(401).json({ message: 'Invalid credentials' });
       }
       
+      if (user.password !== password) {
+        console.log(`Login attempt failed: Invalid password for user '${username}'`);
+        return res.status(401).json({ message: 'Invalid credentials' });
+      }
+      
+      console.log(`✅ Successful login for user: ${username}`);
       const { password: _, ...userWithoutPassword } = user;
       res.json(userWithoutPassword);
     } catch (error) {
@@ -166,16 +194,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // User creation route
-  app.post('/api/users', async (req, res) => {
-    try {
-      const user = await storage.createUser(req.body);
-      res.status(201).json(user);
-    } catch (error) {
-      console.error("Error creating user:", error);
-      res.status(500).json({ message: "Failed to create user" });
-    }
-  });
+  // Remove duplicate - already handled above
 
   app.post('/api/vendor/register', async (req, res) => {
     try {

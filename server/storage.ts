@@ -95,12 +95,14 @@ export class MemStorage implements IStorage {
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
+    console.log(`Looking up user by username: ${username}`);
     return Array.from(this.users.values()).find(
       (user) => user.username === username,
     );
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
+    console.log('Creating user with data:', { ...insertUser, password: '[HIDDEN]' });
     const id = this.currentId++;
     const user: User = { 
       id,
@@ -320,6 +322,7 @@ export class MemStorage implements IStorage {
 import { db } from "./db";
 import type { User, VendorApplication, Product, Order, Comment, Rating, InsertVendorApplication, InsertProduct, InsertOrder, InsertComment, InsertRating } from "@shared/schema";
 import { users, vendorApplications, products, orders, comments, ratings } from "@shared/schema";
+import { eq } from "drizzle-orm";
 
 export class DatabaseStorage implements IStorage {
   async getUser(id: number): Promise<User | undefined> {
@@ -328,11 +331,13 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
+    console.log(`Looking up user by username: ${username}`);
     const [user] = await db.select().from(users).where(eq(users.username, username));
     return user || undefined;
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
+    console.log('Creating user with data:', { ...insertUser, password: '[HIDDEN]' });
     const [user] = await db.insert(users).values(insertUser).returning();
     return user;
   }
@@ -508,7 +513,7 @@ export class DatabaseStorage implements IStorage {
   async seedDummyProducts(): Promise<void> {
     // First seed vendors
     await this.seedDummyVendors();
-    
+
     // Check if dummy products already exist
     const existingProducts = await db.select().from(products).limit(1);
     if (existingProducts.length > 0) {
