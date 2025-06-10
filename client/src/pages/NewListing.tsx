@@ -60,11 +60,17 @@ export default function NewListing() {
           <option value="">Select Category</option>
           <option value="Phones">Phones</option>
           <option value="Shoes">Shoes</option>
-          <option value="Clothes">Clothes</option>
+          <option value="Clothes">Clothes & Fashion</option>
           <option value="Electronics">Electronics</option>
-          <option value="Assets">Assets</option>
           <option value="Real Estate">Real Estate</option>
+          <option value="Assets">Assets & Vehicles</option>
           <option value="Services">Professional Services</option>
+          <option value="Food & Beverages">Food & Beverages</option>
+          <option value="Home & Garden">Home & Garden</option>
+          <option value="Arts & Crafts">Arts & Crafts</option>
+          <option value="Automotive">Automotive</option>
+          <option value="Books">Books & Media</option>
+          <option value="Sports">Sports & Recreation</option>
         </select>
 
         <input 

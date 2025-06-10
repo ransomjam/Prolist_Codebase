@@ -211,15 +211,19 @@ export default function ProductListingForm() {
   }
 
   const categories = [
-    { value: 'shoes', label: 'Shoes' },
-    { value: 'phones', label: 'Phones' },
-    { value: 'clothes', label: 'Clothes' },
-    { value: 'electronics', label: 'Electronics' },
-    { value: 'food-beverages', label: 'Food & Beverages' },
-    { value: 'arts-crafts', label: 'Arts & Crafts' },
-    { value: 'services', label: 'Services' },
-    { value: 'home-garden', label: 'Home & Garden' },
-    { value: 'automotive', label: 'Automotive' }
+    { value: 'Phones', label: 'Phones' },
+    { value: 'Shoes', label: 'Shoes' },
+    { value: 'Clothes', label: 'Clothes & Fashion' },
+    { value: 'Electronics', label: 'Electronics' },
+    { value: 'Real Estate', label: 'Real Estate' },
+    { value: 'Assets', label: 'Assets & Vehicles' },
+    { value: 'Services', label: 'Professional Services' },
+    { value: 'Food & Beverages', label: 'Food & Beverages' },
+    { value: 'Home & Garden', label: 'Home & Garden' },
+    { value: 'Arts & Crafts', label: 'Arts & Crafts' },
+    { value: 'Automotive', label: 'Automotive' },
+    { value: 'Books', label: 'Books & Media' },
+    { value: 'Sports', label: 'Sports & Recreation' }
   ];
 
   return (
