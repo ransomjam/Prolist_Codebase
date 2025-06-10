@@ -4,12 +4,25 @@ import { Shield, Upload, Calendar, CheckCircle } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
 
+const fileToBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      const result = reader.result as string;
+      // Remove the data URL prefix to get just the base64 string
+      resolve(result.split(',')[1]);
+    };
+    reader.onerror = error => reject(error);
+  });
+};
+
 interface VendorForm {
   fullName: string;
   phone: string;
   location: string;
-  idCard: string;
-  photo: string;
+  idCard: File | null;
+  photo: File | null;
   appointment: string;
 }
 
@@ -21,8 +34,8 @@ export default function VendorRegister() {
     fullName: user?.username || '',
     phone: '',
     location: '',
-    idCard: '',
-    photo: '',
+    idCard: null,
+    photo: null,
     appointment: '',
   });
 
@@ -67,6 +80,11 @@ export default function VendorRegister() {
     setForm({ ...form, [name]: value });
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, fieldName: string) => {
+    const file = e.target.files?.[0] || null;
+    setForm({ ...form, [fieldName]: file });
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -76,7 +94,15 @@ export default function VendorRegister() {
       return;
     }
 
-    submitMutation.mutate(form);
+    // Convert files to base64 or use placeholder URLs for demo
+    const idCardUrl = form.idCard ? `data:${form.idCard.type};base64,${await fileToBase64(form.idCard)}` : '';
+    const photoUrl = form.photo ? `data:${form.photo.type};base64,${await fileToBase64(form.photo)}` : '';
+
+    submitMutation.mutate({
+      ...form,
+      idCard: idCardUrl,
+      photo: photoUrl
+    });
   };
 
   if (submitted) {
@@ -154,35 +180,51 @@ export default function VendorRegister() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">ID Card Photo URL *</label>
-          <div className="flex gap-2">
-            <Upload className="text-gray-400 mt-3" size={20} />
+          <label className="block text-sm font-medium text-gray-700 mb-2">ID Card Photo *</label>
+          <div className="border-2 border-dashed border-gray-300 hover:border-blue-400 rounded-lg p-6 text-center transition-colors">
             <input
-              name="idCard"
-              value={form.idCard}
-              onChange={handleChange}
-              placeholder="https://example.com/id-photo.jpg"
-              className="flex-1 border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileChange(e, 'idCard')}
+              className="hidden"
+              id="id-upload"
               required
             />
+            <Upload className="w-12 h-12 text-gray-400 mx-auto mb-2" />
+            <p className="text-sm text-gray-600 mb-3">Upload clear photo of your government-issued ID</p>
+            <label htmlFor="id-upload" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm cursor-pointer transition-colors">
+              Choose from Device
+            </label>
+            {form.idCard && (
+              <div className="mt-3 p-2 bg-green-50 border border-green-200 rounded text-sm text-green-700">
+                ✓ {form.idCard.name}
+              </div>
+            )}
           </div>
-          <p className="text-xs text-gray-500 mt-1">Upload your ID to a cloud service and paste the URL</p>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Shop/Product Photo URL *</label>
-          <div className="flex gap-2">
-            <Upload className="text-gray-400 mt-3" size={20} />
+          <label className="block text-sm font-medium text-gray-700 mb-2">Shop/Product Photo *</label>
+          <div className="border-2 border-dashed border-gray-300 hover:border-blue-400 rounded-lg p-6 text-center transition-colors">
             <input
-              name="photo"
-              value={form.photo}
-              onChange={handleChange}
-              placeholder="https://example.com/shop-photo.jpg"
-              className="flex-1 border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileChange(e, 'photo')}
+              className="hidden"
+              id="shop-upload"
               required
             />
+            <Upload className="w-12 h-12 text-gray-400 mx-auto mb-2" />
+            <p className="text-sm text-gray-600 mb-3">Clear photo of your shop front or products you sell</p>
+            <label htmlFor="shop-upload" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm cursor-pointer transition-colors">
+              Choose from Device
+            </label>
+            {form.photo && (
+              <div className="mt-3 p-2 bg-green-50 border border-green-200 rounded text-sm text-green-700">
+                ✓ {form.photo.name}
+              </div>
+            )}
           </div>
-          <p className="text-xs text-gray-500 mt-1">Clear photo of your shop front or products you sell</p>
         </div>
 
         <div>

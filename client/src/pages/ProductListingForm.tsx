@@ -9,9 +9,9 @@ interface ProductForm {
   category: string;
   description: string;
   price: string;
-  image1: string;
-  image2: string;
-  image3: string;
+  image1: File | null;
+  image2: File | null;
+  image3: File | null;
 }
 
 export default function ProductListingForm() {
@@ -40,9 +40,9 @@ export default function ProductListingForm() {
     category: '',
     description: '',
     price: '',
-    image1: '',
-    image2: '',
-    image3: ''
+    image1: null,
+    image2: null,
+    image3: null
   });
 
   const createProductMutation = useMutation({
@@ -76,7 +76,24 @@ export default function ProductListingForm() {
     setForm(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, fieldName: string) => {
+    const file = e.target.files?.[0] || null;
+    setForm(prev => ({ ...prev, [fieldName]: file }));
+  };
+
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const result = reader.result as string;
+        resolve(result.split(',')[1]);
+      };
+      reader.onerror = error => reject(error);
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!form.title || !form.category || !form.description || !form.price) {
@@ -166,9 +183,9 @@ export default function ProductListingForm() {
                   category: '',
                   description: '',
                   price: '',
-                  image1: '',
-                  image2: '',
-                  image3: ''
+                  image1: null,
+                  image2: null,
+                  image3: null
                 });
               }}
               className="bg-gray-100 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-200 transition-colors"
@@ -278,40 +295,76 @@ export default function ProductListingForm() {
           </h3>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Main Image URL</label>
-            <input
-              name="image1"
-              value={form.image1}
-              onChange={handleChange}
-              placeholder="https://example.com/image1.jpg"
-              className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
+            <label className="block text-sm font-medium text-gray-700 mb-2">Main Product Image</label>
+            <div className="border-2 border-dashed border-gray-300 hover:border-blue-400 rounded-lg p-6 text-center transition-colors">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleFileChange(e, 'image1')}
+                className="hidden"
+                id="image1-upload"
+              />
+              <Image className="w-12 h-12 text-gray-400 mx-auto mb-2" />
+              <p className="text-sm text-gray-600 mb-3">Upload main product image</p>
+              <label htmlFor="image1-upload" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm cursor-pointer transition-colors">
+                Choose from Device
+              </label>
+              {form.image1 && (
+                <div className="mt-3 p-2 bg-green-50 border border-green-200 rounded text-sm text-green-700">
+                  ✓ {form.image1.name}
+                </div>
+              )}
+            </div>
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Additional Image URL 2</label>
-            <input
-              name="image2"
-              value={form.image2}
-              onChange={handleChange}
-              placeholder="https://example.com/image2.jpg"
-              className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
+            <label className="block text-sm font-medium text-gray-700 mb-2">Additional Image 2 (Optional)</label>
+            <div className="border-2 border-dashed border-gray-300 hover:border-blue-400 rounded-lg p-6 text-center transition-colors">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleFileChange(e, 'image2')}
+                className="hidden"
+                id="image2-upload"
+              />
+              <Image className="w-12 h-12 text-gray-400 mx-auto mb-2" />
+              <p className="text-sm text-gray-600 mb-3">Upload additional product image</p>
+              <label htmlFor="image2-upload" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm cursor-pointer transition-colors">
+                Choose from Device
+              </label>
+              {form.image2 && (
+                <div className="mt-3 p-2 bg-green-50 border border-green-200 rounded text-sm text-green-700">
+                  ✓ {form.image2.name}
+                </div>
+              )}
+            </div>
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Additional Image URL 3</label>
-            <input
-              name="image3"
-              value={form.image3}
-              onChange={handleChange}
-              placeholder="https://example.com/image3.jpg"
-              className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
+            <label className="block text-sm font-medium text-gray-700 mb-2">Additional Image 3 (Optional)</label>
+            <div className="border-2 border-dashed border-gray-300 hover:border-blue-400 rounded-lg p-6 text-center transition-colors">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleFileChange(e, 'image3')}
+                className="hidden"
+                id="image3-upload"
+              />
+              <Image className="w-12 h-12 text-gray-400 mx-auto mb-2" />
+              <p className="text-sm text-gray-600 mb-3">Upload additional product image</p>
+              <label htmlFor="image3-upload" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm cursor-pointer transition-colors">
+                Choose from Device
+              </label>
+              {form.image3 && (
+                <div className="mt-3 p-2 bg-green-50 border border-green-200 rounded text-sm text-green-700">
+                  ✓ {form.image3.name}
+                </div>
+              )}
+            </div>
           </div>
           
           <p className="text-xs text-gray-500">
-            Upload your images to a cloud service (like Imgur, Cloudinary) and paste the URLs here.
+            Select images from your device. Supported formats: JPG, PNG, GIF
           </p>
         </div>
 
