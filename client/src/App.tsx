@@ -25,7 +25,8 @@ import NewListing from "./pages/NewListing";
 
 import Settings from "./pages/Settings";
 import HelpSupport from "./pages/HelpSupport";
-import VendorRegistration from "./pages/VendorRegistration";
+import VendorRegister from './pages/VendorRegister';
+import VendorRegistration from './pages/VendorRegistration';
 
 import AdminPanel from "./pages/AdminPanel";
 import AdminVerifyPanel from "./pages/AdminVerifyPanel";
@@ -79,7 +80,8 @@ function Router() {
       <Route path="/settings" component={Settings} />
       <Route path="/help" component={HelpSupport} />
       <Route path="/about" component={About} />
-      <Route path="/vendor/register" component={VendorRegistration} />
+      <Route path="/vendor-register" component={VendorRegister} />
+      <Route path="/vendor-registration" component={VendorRegistration} />
 
       <Route path="/admin" component={AdminPanel} />
       <Route path="/admin-verify" component={AdminVerifyPanel} />
@@ -120,7 +122,7 @@ function App() {
   const [auctions, setAuctions] = useState(initialAuctions);
   const [location] = useLocation();
   const { isAuthenticated, isLoading } = useAuth();
-  
+
   // Simulate current user session
   const userSession = {
     username: "gamer_pro_bda", // This matches one of the highest bidders

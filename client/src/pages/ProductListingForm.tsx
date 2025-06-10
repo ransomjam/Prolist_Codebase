@@ -122,7 +122,7 @@ export default function ProductListingForm() {
           <div className="space-y-2">
             {!vendorApplication ? (
               <a
-                href="/vendor-register"
+                href="/vendor-registration"
                 className="inline-block bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors"
               >
                 Apply for Vendor Verification
