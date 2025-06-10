@@ -13,11 +13,12 @@ interface VendorApplication {
 export default function Profile() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState("posts");
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [showCongrats, setShowCongrats] = useState(false);
   const [isPremiumUser, setIsPremiumUser] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showProductSuccess, setShowProductSuccess] = useState(false);
   const [editForm, setEditForm] = useState({
     username: '',
     email: '',
@@ -82,17 +83,17 @@ export default function Profile() {
         },
         body: JSON.stringify(updates)
       });
-      
+
       if (!response.ok) {
         throw new Error('Failed to update profile');
       }
-      
+
       return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
       setShowEditModal(false);
-      
+
       // Show success notification
       const notification = document.createElement('div');
       notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform transition-all duration-300';
@@ -105,7 +106,7 @@ export default function Profile() {
         </div>
       `;
       document.body.appendChild(notification);
-      
+
       setTimeout(() => {
         notification.remove();
       }, 3000);
@@ -237,7 +238,7 @@ export default function Profile() {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 h-32"></div>
-      
+
       <div className="max-w-4xl mx-auto px-4 pb-8">
         {/* Profile Card */}
         <div className="bg-white rounded-xl shadow-lg -mt-16 relative z-10 p-6 mb-6">
@@ -248,7 +249,7 @@ export default function Profile() {
               </div>
               {getVerificationBadge()}
             </div>
-            
+
             <div className="flex-1 text-center sm:text-left">
               <h1 className="text-2xl font-bold text-gray-900">{profileUser.username}</h1>
               <p className="text-gray-600">{profileUser.email}</p>
@@ -263,13 +264,21 @@ export default function Profile() {
                 </span>
               </div>
             </div>
-            
+
             <button 
               onClick={openEditModal}
               className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition"
             >
               Edit Profile
             </button>
+             {/* Upgrade to Premium Icon */}
+             <button
+                onClick={() => setShowUpgrade(true)}
+                className="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-yellow-600 transition"
+              >
+                <TrendingUp size={16} className="mr-2 inline-block" />
+                Upgrade to Premium
+              </button>
           </div>
 
           {/* Stats Row */}
@@ -376,7 +385,7 @@ export default function Profile() {
                     <Package className="w-8 h-8 text-blue-500" />
                   </div>
                 </div>
-                
+
                 <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-4">
                   <div className="flex items-center justify-between">
                     <div>
@@ -386,7 +395,7 @@ export default function Profile() {
                     <DollarSign className="w-8 h-8 text-green-500" />
                   </div>
                 </div>
-                
+
                 <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-4">
                   <div className="flex items-center justify-between">
                     <div>
@@ -432,6 +441,14 @@ export default function Profile() {
                   </a>
                 </div>
               )}
+               {/* Add Product Button */}
+               <a
+                    href="/product-listing"
+                    className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+                  >
+                    <Plus size={16} />
+                    Add Product
+                  </a>
             </div>
           )}
 
@@ -480,7 +497,7 @@ export default function Profile() {
                 <X size={20} />
               </button>
             </div>
-            
+
             <form onSubmit={handleEditSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
@@ -491,7 +508,7 @@ export default function Profile() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
                 <input
@@ -501,7 +518,7 @@ export default function Profile() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
                 <input
@@ -511,7 +528,7 @@ export default function Profile() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
                 <input
@@ -521,7 +538,7 @@ export default function Profile() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Bio</label>
                 <textarea
@@ -531,7 +548,7 @@ export default function Profile() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
-              
+
               <div className="flex gap-3 pt-4">
                 <button
                   type="button"
