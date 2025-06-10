@@ -271,10 +271,14 @@ export default function ProductDetail() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
               <button
                 onClick={handleChat}
-                className="flex items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition-all shadow-lg hover:shadow-blue-200 font-medium"
+                className={`flex items-center justify-center gap-2 px-6 py-3 rounded-xl transition-all shadow-lg font-medium ${
+                  showChat 
+                    ? 'bg-green-600 text-white hover:bg-green-700 shadow-green-200' 
+                    : 'bg-blue-600 text-white hover:bg-blue-700 shadow-blue-200'
+                }`}
               >
                 <MessageCircle size={18} />
-                Chat Vendor
+                {showChat ? 'Close Chat' : 'Chat Vendor'}
               </button>
               
               <button
