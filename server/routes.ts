@@ -8,14 +8,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/users', async (req, res) => {
     try {
       const userData = insertUserSchema.parse(req.body);
-      
+
       // Check if username already exists
       const existingUser = await storage.getUserByUsername(userData.username);
       if (existingUser) {
         console.log(`Registration failed: Username '${userData.username}' already exists`);
         return res.status(400).json({ message: 'Username already exists' });
       }
-      
+
       // Check if email already exists (if provided)
       if (userData.email) {
         const users = await storage.getAllUsers();
@@ -25,10 +25,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
           return res.status(400).json({ message: 'Email already exists' });
         }
       }
-      
+
       const user = await storage.createUser(userData);
       console.log(`✅ New user registered: ${user.username} (ID: ${user.id})`);
-      
+
       const { password, ...userWithoutPassword } = user;
       res.status(201).json(userWithoutPassword);
     } catch (error) {
@@ -44,29 +44,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/login', async (req, res) => {
     try {
       const { username, password } = req.body;
-      
+
       if (!username || !password) {
         return res.status(400).json({ message: 'Username and password are required' });
       }
-      
+
       let user = await storage.getUserByUsername(username);
-      
+
       // If not found by username, try to find by email
       if (!user) {
         const users = await storage.getAllUsers();
         user = users.find(u => u.email === username);
       }
-      
+
       if (!user) {
         console.log(`Login attempt failed: User '${username}' not found`);
         return res.status(401).json({ message: 'Invalid credentials' });
       }
-      
+
       if (user.password !== password) {
         console.log(`Login attempt failed: Invalid password for user '${username}'`);
         return res.status(401).json({ message: 'Invalid credentials' });
       }
-      
+
       console.log(`✅ Successful login for user: ${user.username}`);
       const { password: _, ...userWithoutPassword } = user;
       res.json(userWithoutPassword);
@@ -97,12 +97,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = parseInt(req.params.id);
       const { status } = req.body;
-      
+
       const user = await storage.updateUserVerificationStatus(userId, status);
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
-      
+
       const { password, ...userWithoutPassword } = user;
       res.json(userWithoutPassword);
     } catch (error) {
@@ -138,7 +138,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/support/contact', async (req, res) => {
     try {
       const { name, email, category, subject, message, priority } = req.body;
-      
+
       // Basic validation
       if (!name || !email || !category || !subject || !message) {
         return res.status(400).json({ message: "All required fields must be filled" });
@@ -205,7 +205,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/vendor/register', async (req, res) => {
     try {
       const { userId, fullName, phone, location, shopType, businessName, verificationSlot, idCardUrl, shopPhotoUrl } = req.body;
-      
+
       // Validate required fields
       if (!userId || !fullName || !phone || !location || !verificationSlot) {
         return res.status(400).json({ message: "Missing required fields" });
@@ -223,16 +223,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Create application with auto-approved status for MVP
       const application = await storage.createVendorApplication(applicationData);
-      
+
       // Immediately approve the application and update user status
       const approvedApplication = await storage.updateVendorApplicationStatus(application.id, 'Basic Verified');
-      
+
       // Update user account to vendor with verified status
       await storage.updateUser(userId, {
         verificationStatus: 'basic_verified',
         accountType: 'vendor'
       });
-      
+
       // Log the auto-approval
       console.log('✅ AUTO-APPROVED (MVP): Vendor registration for', {
         id: application.id,
@@ -284,11 +284,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = parseInt(req.params.userId);
       const application = await storage.getVendorApplication(userId);
-      
+
       if (!application) {
         return res.status(404).json({ message: "No application found for this user" });
       }
-      
+
       res.json(application);
     } catch (error) {
       console.error("Error fetching vendor application:", error);
@@ -306,7 +306,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const updatedApplication = await storage.updateVendorApplicationStatus(id, status);
-      
+
       if (!updatedApplication) {
         return res.status(404).json({ message: "Application not found" });
       }
@@ -317,7 +317,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           verificationStatus: 'basic_verified',
           accountType: 'vendor'
         });
-        
+
         console.log(`✅ APPROVED: Vendor application ${id} for ${updatedApplication.fullName}`);
         console.log(`📧 NOTIFICATION: User ${updatedApplication.userId} - Your vendor application has been approved! You now have Basic Verified status.`);
       } else if (status === 'Rejected') {
@@ -364,11 +364,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const order = await storage.getOrder(id);
-      
+
       if (!order) {
         return res.status(404).json({ message: "Order not found" });
       }
-      
+
       res.json(order);
     } catch (error) {
       console.error("Error fetching order:", error);
@@ -402,11 +402,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const user = await storage.getUser(id);
-      
+
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-      
+
       res.json(user);
     } catch (error) {
       console.error("Error fetching user:", error);
@@ -419,21 +419,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const updates = req.body;
-      
+
       const updatedUser = await storage.updateUser(id, updates);
-      
+
       if (!updatedUser) {
         return res.status(404).json({ message: "User not found" });
       }
-      
+
       // Remove password from response
       const { password, ...userWithoutPassword } = updatedUser;
-      
+
       // Log premium upgrade
       if (updates.accountType === 'premium') {
         console.log(`✅ PREMIUM UPGRADE: User ${updatedUser.username} (ID: ${id}) upgraded to Premium`);
       }
-      
+
       res.json(userWithoutPassword);
     } catch (error) {
       console.error("Error updating user:", error);
@@ -445,20 +445,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       // Get all orders from all vendors
       const allOrders = [];
-      
+
       // Get all users to find vendors
       const users = await storage.getAllUsers();
       const vendors = users.filter(user => user.accountType === 'vendor');
-      
+
       for (const vendor of vendors) {
         const vendorOrders = await storage.getOrdersByVendor(vendor.id);
         allOrders.push(...vendorOrders);
       }
-      
+
       // Also get orders from other sources if needed
       const buyerOrders = await storage.getOrdersByBuyer(1); // Get sample buyer orders
       const uniqueOrders = [...new Map([...allOrders, ...buyerOrders].map(order => [order.id, order])).values()];
-      
+
       res.json(uniqueOrders);
     } catch (error) {
       console.error("Error fetching all orders:", error);
@@ -469,15 +469,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.patch('/api/orders/:id/release-funds', async (req, res) => {
     try {
       const id = parseInt(req.params.id);
-      
+
       const updatedOrder = await storage.updateOrderStatus(id, {
         paymentStatus: 'released'
       });
-      
+
       if (!updatedOrder) {
         return res.status(404).json({ message: "Order not found" });
       }
-      
+
       console.log(`Funds released for Order ${id}`);
       res.json(updatedOrder);
     } catch (error) {
@@ -489,25 +489,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/vendor/stats/:vendorId', async (req, res) => {
     try {
       const vendorId = parseInt(req.params.vendorId);
-      
+
       // Get all orders for this vendor
       const orders = await storage.getOrdersByVendor(vendorId);
-      
+
       // Calculate sales statistics
       const completedOrders = orders.filter(order => order.buyerConfirmed);
       const totalSales = completedOrders.length;
       const totalRevenue = completedOrders.reduce((sum, order) => sum + parseInt(order.totalAmount), 0);
-      
+
       // Get average rating for this vendor
       const averageRating = await storage.getAverageRating(vendorId);
-      
+
       const stats = {
         totalSales,
         totalRevenue,
         averageRating,
         completedOrders: completedOrders.length
       };
-      
+
       res.json(stats);
     } catch (error) {
       console.error("Error fetching vendor stats:", error);
@@ -519,13 +519,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const { status } = req.body;
-      
+
       if (!status) {
         return res.status(400).json({ message: "Status is required" });
       }
-      
+
       let updateData: any = {};
-      
+
       // Map status to appropriate fields
       switch (status) {
         case 'buyer_confirmed':
@@ -545,13 +545,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         default:
           updateData = { paymentStatus: status };
       }
-      
+
       const updatedOrder = await storage.updateOrderStatus(id, updateData);
-      
+
       if (!updatedOrder) {
         return res.status(404).json({ message: "Order not found" });
       }
-      
+
       console.log(`Order ${id} status updated:`, updateData);
       res.json(updatedOrder);
     } catch (error) {
@@ -586,29 +586,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const product = await storage.getProduct(id);
-      
+
       if (!product) {
         return res.status(404).json({ message: "Product not found" });
       }
-      
+
       // Increment view count
       await storage.updateProductViewCount(id);
-      
+
       res.json(product);
     } catch (error) {
       console.error("Error fetching product:", error);
       res.status(500).json({ message: "Failed to fetch product" });
-    }
-  });
-
-  app.get('/api/products/vendor/:vendorId', async (req, res) => {
-    try {
-      const vendorId = parseInt(req.params.vendorId);
-      const products = await storage.getProductsByVendor(vendorId);
-      res.json(products);
-    } catch (error) {
-      console.error("Error fetching vendor products:", error);
-      res.status(500).json({ message: "Failed to fetch vendor products" });
     }
   });
 
