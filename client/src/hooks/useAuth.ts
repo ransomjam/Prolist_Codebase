@@ -20,7 +20,23 @@ interface AuthState {
 
 export function useAuth(): AuthState & {
   login: (username: string, password: string) => Promise<{ success: boolean; message?: string; user?: User }>;
-  register: (userData: any) => Promise<{ success: boolean; message?: string; user?: User }>;
+  register: (userData: {
+    username: string;
+    email?: string;
+    password: string;
+    accountType: string;
+    specialization?: string | null;
+    phone?: string;
+    location?: string;
+    fullName?: string;
+    businessName?: string;
+    marketLocation?: string;
+    marketLine?: string;
+    shopNumber?: string;
+    acceptTerms?: boolean;
+    physicalVerificationAvailable?: boolean;
+    profilePicture?: File | null;
+  }) => Promise<{ success: boolean; message?: string; user?: User }>;
   logout: () => void;
   setUser: (user: User) => void;
 } {
@@ -71,14 +87,52 @@ export function useAuth(): AuthState & {
     }
   };
 
-  const register = async (userData: any) => {
+  const register = async (userData: {
+    username: string;
+    email?: string;
+    password: string;
+    accountType: string;
+    specialization?: string | null;
+    phone?: string;
+    location?: string;
+    fullName?: string;
+    businessName?: string;
+    marketLocation?: string;
+    marketLine?: string;
+    shopNumber?: string;
+    acceptTerms?: boolean;
+    physicalVerificationAvailable?: boolean;
+    profilePicture?: File | null;
+  }) => {
     try {
+      // Convert profile picture to base64 if provided
+      let profilePictureData = null;
+      if (userData.profilePicture) {
+        profilePictureData = await new Promise<string>((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            const base64 = reader.result as string;
+            resolve(base64.split(',')[1]); // Remove data:image/jpeg;base64, prefix
+          };
+          reader.readAsDataURL(userData.profilePicture!);
+        });
+      }
+
       const response = await fetch('/api/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(userData),
+        body: JSON.stringify({
+          username: userData.username,
+          email: userData.email,
+          password: userData.password,
+          accountType: userData.accountType,
+          specialization: userData.specialization,
+          phone: userData.phone,
+          location: userData.location,
+          profilePicture: profilePictureData
+        }),
       });
 
       const data = await response.json();

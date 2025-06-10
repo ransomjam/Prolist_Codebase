@@ -287,10 +287,20 @@ export default function Profile() {
         <div className="bg-white rounded-xl shadow-lg -mt-16 relative z-10 p-6 mb-6">
           <div className="flex flex-col sm:flex-row items-center gap-6">
             <div className="relative">
-              <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-bold">
-                {profileUser.username.charAt(0).toUpperCase()}
+              {(profileUser as any).profilePictureUrl ? (
+                <img
+                  src={(profileUser as any).profilePictureUrl}
+                  alt={`${profileUser.username}'s profile`}
+                  className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg"
+                />
+              ) : (
+                <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                  {profileUser.username.charAt(0).toUpperCase()}
+                </div>
+              )}
+              <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2">
+                {getVerificationBadge()}
               </div>
-              {getVerificationBadge()}
             </div>
 
             <div className="flex-1 text-center sm:text-left">

@@ -14,6 +14,7 @@ export const users = pgTable("users", {
   verificationStatus: varchar("verification_status", { length: 50 }).default("pending"), // pending, verified, rejected
   salesCount: integer("sales_count").default(0),
   rating: decimal("rating", { precision: 3, scale: 2 }).default("0.00"),
+  profilePictureUrl: text("profile_picture_url"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 

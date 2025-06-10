@@ -116,6 +116,7 @@ export class MemStorage implements IStorage {
       verificationStatus: "pending",
       salesCount: 0,
       rating: "0.00",
+      profilePictureUrl: insertUser.profilePictureUrl || null,
       createdAt: new Date()
     };
     this.users.set(id, user);

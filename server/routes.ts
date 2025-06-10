@@ -7,7 +7,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // User registration endpoint
   app.post('/api/users', async (req, res) => {
     try {
-      const userData = insertUserSchema.parse(req.body);
+      // Handle profile picture if provided
+      let profilePictureUrl = null;
+      if (req.body.profilePicture) {
+        // For now, we'll create a placeholder URL. In production, you'd upload to cloud storage
+        profilePictureUrl = `data:image/jpeg;base64,${req.body.profilePicture}`;
+      }
+
+      const userData = insertUserSchema.parse({
+        ...req.body,
+        profilePictureUrl
+      });
 
       // Check if username already exists
       const existingUser = await storage.getUserByUsername(userData.username);

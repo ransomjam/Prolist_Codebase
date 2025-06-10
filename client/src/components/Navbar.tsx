@@ -105,9 +105,17 @@ export default function Navbar() {
               <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 border">
                 <div className="p-2">
                   <Link href="/profile" className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg">
-                    <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                      <User size={16} />
-                    </div>
+                    {(user as any)?.profilePictureUrl ? (
+                      <img
+                        src={(user as any).profilePictureUrl}
+                        alt="Profile"
+                        className="w-8 h-8 rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                        <User size={16} />
+                      </div>
+                    )}
                     <div>
                       <div className="font-semibold text-sm">{user?.firstName ? `${user.firstName} ${user.lastName || ''}`.trim() : user?.username || 'User'}</div>
                       <div className="text-xs text-gray-500">See your profile</div>
