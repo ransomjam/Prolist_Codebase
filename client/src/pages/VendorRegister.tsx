@@ -30,6 +30,7 @@ export default function VendorRegister() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [submitted, setSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const [form, setForm] = useState<VendorForm>({
     fullName: user?.username || '',
     phone: '',
@@ -40,7 +41,7 @@ export default function VendorRegister() {
   });
 
   const submitMutation = useMutation({
-    mutationFn: async (data: VendorForm) => {
+    mutationFn: async (data: any) => {
       const response = await fetch('/api/vendor/register', {
         method: 'POST',
         headers: {
@@ -60,7 +61,8 @@ export default function VendorRegister() {
       });
       
       if (!response.ok) {
-        throw new Error('Failed to submit application');
+        const errorData = await response.json().catch(() => ({ message: 'Failed to submit application' }));
+        throw new Error(errorData.message || 'Failed to submit application');
       }
       
       return response.json();
@@ -69,9 +71,9 @@ export default function VendorRegister() {
       setSubmitted(true);
       queryClient.invalidateQueries({ queryKey: ['/api/vendor/applications'] });
     },
-    onError: (error) => {
-      console.error('Error submitting vendor application:', error);
-      alert('Failed to submit application. Please try again.');
+    onError: (error: Error) => {
+      console.error('Submission error:', error);
+      alert(`Failed to submit application: ${error.message}`);
     },
   });
 
@@ -100,7 +102,10 @@ export default function VendorRegister() {
       const photoUrl = form.photo ? `data:${form.photo.type};base64,${await fileToBase64(form.photo)}` : '';
 
       submitMutation.mutate({
-        ...form,
+        fullName: form.fullName,
+        phone: form.phone,
+        location: form.location,
+        appointment: form.appointment,
         idCard: idCardUrl,
         photo: photoUrl
       });
