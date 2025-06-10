@@ -18,6 +18,7 @@ import {
 import ShareButton from '@/components/ShareButton';
 import VendorSalesStats from '@/components/VendorSalesStats';
 import ChatBox from '@/components/ChatBox';
+import { listings, realEstate } from '../data/demoData';
 
 interface Product {
   id: number;
@@ -27,10 +28,11 @@ interface Product {
   price: string;
   description: string;
   location: string;
-  status: string;
+  status?: string;
   viewCount: number;
-  salesCount: number;
+  salesCount?: number;
   createdAt: string;
+  image?: string;
 }
 
 interface VendorApplication {
@@ -52,21 +54,69 @@ export default function ProductDetail() {
   const [trusted, setTrusted] = useState(false);
   const [showChat, setShowChat] = useState(false);
 
-  // Fetch product details
-  const { data: product, isLoading: productLoading } = useQuery({
-    queryKey: ['/api/products', id],
+  // Fetch database products
+  const { data: dbProducts = [] } = useQuery({
+    queryKey: ['/api/products'],
     queryFn: async () => {
-      const response = await fetch(`/api/products/${id}`);
-      if (!response.ok) throw new Error('Product not found');
+      const response = await fetch('/api/products');
+      if (!response.ok) return [];
       return response.json();
     }
   });
 
-  // Fetch vendor info
+  // Transform demo data to match Product interface
+  const demoProducts = [
+    ...listings.map(item => ({
+      id: item.id + 1000, // Offset to avoid ID conflicts
+      title: item.title,
+      category: item.category,
+      price: item.price.replace(' FCFA', ''),
+      description: `Quality ${item.category.toLowerCase()} item available in ${item.location}`,
+      location: item.location,
+      vendorId: 999, // Demo vendor ID
+      viewCount: Math.floor(Math.random() * 100),
+      createdAt: new Date().toISOString(),
+      image: item.image
+    })),
+    ...realEstate.map(item => ({
+      id: item.id + 2000, // Offset to avoid ID conflicts
+      title: item.title,
+      category: 'Real Estate',
+      price: item.price.replace(' FCFA', '').replace('/month', ''),
+      description: `Premium real estate property in ${item.location}`,
+      location: item.location,
+      vendorId: 999, // Demo vendor ID
+      viewCount: Math.floor(Math.random() * 150),
+      createdAt: new Date().toISOString(),
+      image: item.image
+    }))
+  ];
+
+  // Combine database products with demo products
+  const allProducts = [...dbProducts, ...demoProducts];
+
+  // Find the specific product
+  const product = allProducts.find(p => p.id === parseInt(id!));
+  const productLoading = false;
+
+  // Fetch vendor info or use demo vendor for demo products
   const { data: vendor } = useQuery({
     queryKey: ['/api/vendor/application', product?.vendorId],
     queryFn: async () => {
       if (!product?.vendorId) return null;
+      
+      // For demo products, return a demo vendor
+      if (product.vendorId === 999) {
+        return {
+          id: 999,
+          userId: 999,
+          fullName: "Demo Vendor",
+          phone: "+237 6XX XXX XXX",
+          location: "Bamenda",
+          status: "Basic Verified"
+        };
+      }
+      
       const response = await fetch(`/api/vendor/application/${product.vendorId}`);
       if (!response.ok) return null;
       return response.json();
@@ -74,28 +124,15 @@ export default function ProductDetail() {
     enabled: !!product?.vendorId
   });
 
-  // Fetch products from same vendor
-  const { data: vendorProducts = [] } = useQuery({
-    queryKey: ['/api/products/vendor', product?.vendorId],
-    queryFn: async () => {
-      if (!product?.vendorId) return [];
-      const response = await fetch(`/api/products/vendor/${product.vendorId}`);
-      if (!response.ok) return [];
-      return response.json();
-    },
-    enabled: !!product?.vendorId
-  });
-
-  // Fetch similar products by category
-  const { data: allProducts = [] } = useQuery({
-    queryKey: ['/api/products'],
-  });
-
-  const similarProducts = (allProducts as Product[]).filter((p: Product) => 
+  // Get similar products by category
+  const similarProducts = allProducts.filter((p: Product) => 
     p.category === product?.category && p.id !== parseInt(id!)
   ).slice(0, 3);
 
-  const otherVendorProducts = vendorProducts.filter((p: Product) => p.id !== parseInt(id!)).slice(0, 3);
+  // Get other products from same vendor
+  const otherVendorProducts = allProducts.filter((p: Product) => 
+    p.vendorId === product?.vendorId && p.id !== parseInt(id!)
+  ).slice(0, 3);
 
   const handleSave = () => {
     setSaved(!saved);
@@ -162,15 +199,31 @@ export default function ProductDetail() {
         <div className="space-y-4">
           <div className="bg-white rounded-xl shadow-lg overflow-hidden">
             <div className="h-96 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-              <Package className="w-24 h-24 text-gray-400" />
+              {product.image ? (
+                <img 
+                  src={product.image} 
+                  alt={product.title}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <Package className="w-24 h-24 text-gray-400" />
+              )}
             </div>
           </div>
           
-          {/* Thumbnail images placeholder */}
+          {/* Thumbnail images */}
           <div className="grid grid-cols-3 gap-2">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-20 bg-gray-200 rounded-lg flex items-center justify-center">
-                <Package className="w-8 h-8 text-gray-400" />
+              <div key={i} className="h-20 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
+                {product.image ? (
+                  <img 
+                    src={product.image} 
+                    alt={`${product.title} view ${i}`}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <Package className="w-8 h-8 text-gray-400" />
+                )}
               </div>
             ))}
           </div>
@@ -347,8 +400,16 @@ export default function ProductDetail() {
                   onClick={() => setLocation(`/product/${item.id}`)}
                   className="bg-gray-50 rounded-lg p-4 cursor-pointer hover:shadow-md transition-shadow"
                 >
-                  <div className="h-32 bg-gray-200 rounded-lg mb-3 flex items-center justify-center">
-                    <Package className="w-8 h-8 text-gray-400" />
+                  <div className="h-32 bg-gray-200 rounded-lg mb-3 flex items-center justify-center overflow-hidden">
+                    {item.image ? (
+                      <img 
+                        src={item.image} 
+                        alt={item.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <Package className="w-8 h-8 text-gray-400" />
+                    )}
                   </div>
                   <h4 className="font-semibold text-gray-900 text-sm mb-1 truncate">{item.title}</h4>
                   <p className="text-green-600 font-bold text-sm">
@@ -376,8 +437,16 @@ export default function ProductDetail() {
                   onClick={() => setLocation(`/product/${item.id}`)}
                   className="bg-gray-50 rounded-lg p-4 cursor-pointer hover:shadow-md transition-shadow"
                 >
-                  <div className="h-32 bg-gray-200 rounded-lg mb-3 flex items-center justify-center">
-                    <Package className="w-8 h-8 text-gray-400" />
+                  <div className="h-32 bg-gray-200 rounded-lg mb-3 flex items-center justify-center overflow-hidden">
+                    {item.image ? (
+                      <img 
+                        src={item.image} 
+                        alt={item.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <Package className="w-8 h-8 text-gray-400" />
+                    )}
                   </div>
                   <h4 className="font-semibold text-gray-900 text-sm mb-1 truncate">{item.title}</h4>
                   <p className="text-green-600 font-bold text-sm">
