@@ -121,16 +121,37 @@ export default function VendorRegister() {
       <div className="p-6 max-w-2xl mx-auto">
         <div className="bg-white p-8 rounded-xl shadow-lg text-center">
           <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Application Submitted!</h2>
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-            <p className="text-yellow-800 font-medium">Status: Pending Basic Verification</p>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">🎉 Congratulations!</h2>
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+            <p className="text-green-800 font-bold text-lg">✅ VERIFIED VENDOR</p>
+            <p className="text-green-700 text-sm mt-1">Your application has been automatically approved!</p>
           </div>
-          <p className="text-gray-600 mb-4">
-            Admin will confirm your appointment and review your documents.
-          </p>
-          <p className="text-sm text-gray-500">
-            You'll receive updates on your verification status via phone or email.
-          </p>
+          
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <h3 className="font-semibold text-blue-900 mb-2">🚀 Your New Benefits:</h3>
+            <ul className="text-sm text-blue-800 space-y-1 text-left">
+              <li>• ✅ List unlimited products</li>
+              <li>• ✅ Receive orders and payments</li>
+              <li>• ✅ Verified vendor badge</li>
+              <li>• ✅ Access to vendor dashboard</li>
+              <li>• ✅ Customer messaging system</li>
+            </ul>
+          </div>
+
+          <div className="space-y-3">
+            <a
+              href="/product-listing"
+              className="block bg-gradient-to-r from-blue-500 to-emerald-400 text-white py-3 px-6 rounded-xl font-semibold hover:from-blue-600 hover:to-emerald-500 transition-all shadow-lg"
+            >
+              🛍️ Start Listing Products
+            </a>
+            <a
+              href="/profile"
+              className="block bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors text-sm"
+            >
+              View My Profile
+            </a>
+          </div>
         </div>
       </div>
     );

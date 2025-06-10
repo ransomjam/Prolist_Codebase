@@ -175,6 +175,16 @@ export default function Profile() {
   ];
 
   const getVerificationBadge = () => {
+    // Check if user is a verified vendor
+    if (user?.accountType === 'vendor' && user?.verificationStatus === 'basic_verified') {
+      return (
+        <div className="flex items-center gap-1 text-green-600">
+          <CheckCircle size={14} />
+          <span className="text-xs font-medium">✅ Verified Vendor</span>
+        </div>
+      );
+    }
+
     if (!vendorApplication) {
       return (
         <div className="flex items-center gap-1 text-gray-500">
@@ -189,7 +199,7 @@ export default function Profile() {
         return (
           <div className="flex items-center gap-1 text-green-600">
             <CheckCircle size={14} />
-            <span className="text-xs font-medium">Basic Verified</span>
+            <span className="text-xs font-medium">✅ Verified Vendor</span>
           </div>
         );
       case 'Premium Verified':

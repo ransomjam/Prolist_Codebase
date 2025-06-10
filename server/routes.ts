@@ -215,25 +215,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
         verificationSlot
       };
 
+      // Create application with auto-approved status for MVP
       const application = await storage.createVendorApplication(applicationData);
       
-      // Log the application for admin review
-      console.log('New vendor registration:', {
+      // Immediately approve the application and update user status
+      const approvedApplication = await storage.updateVendorApplicationStatus(application.id, 'Basic Verified');
+      
+      // Update user account to vendor with verified status
+      await storage.updateUser(userId, {
+        verificationStatus: 'basic_verified',
+        accountType: 'vendor'
+      });
+      
+      // Log the auto-approval
+      console.log('✅ AUTO-APPROVED (MVP): Vendor registration for', {
         id: application.id,
         fullName,
         phone,
         location,
         verificationSlot,
-        idCardUrl,
-        shopPhotoUrl,
-        status: 'Pending Basic Verification',
+        status: 'Basic Verified (Auto-approved)',
         submittedAt: new Date().toISOString()
       });
 
       res.status(201).json({ 
-        ...application, 
-        message: "Application submitted successfully",
-        status: "Pending Basic Verification"
+        ...approvedApplication, 
+        message: "Application approved successfully! You are now a verified vendor.",
+        status: "Basic Verified",
+        autoApproved: true
       });
     } catch (error) {
       console.error("Error creating vendor registration:", error);
