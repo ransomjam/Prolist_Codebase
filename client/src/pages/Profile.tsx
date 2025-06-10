@@ -16,9 +16,11 @@ export default function Profile() {
   const [activeTab, setActiveTab] = useState("posts");
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [showCongrats, setShowCongrats] = useState(false);
-  const [isPremiumUser, setIsPremiumUser] = useState(false);
+  const [isPremiumUser, setIsPremiumUser] = useState(user?.accountType === 'premium' || false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showProductSuccess, setShowProductSuccess] = useState(false);
+  const [upgradeStep, setUpgradeStep] = useState(1);
+  const [paymentMethod, setPaymentMethod] = useState('mobile_money');
   const [editForm, setEditForm] = useState({
     username: '',
     email: '',
@@ -70,6 +72,39 @@ export default function Profile() {
       return response.json();
     },
     enabled: !!user?.id
+  });
+
+  // Mutation for upgrading to premium
+  const upgradeToPremiumMutation = useMutation({
+    mutationFn: async () => {
+      if (!user?.id) throw new Error('User not found');
+      const response = await fetch(`/api/users/${user.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          accountType: 'premium',
+          verificationStatus: 'premium_verified'
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to upgrade to premium');
+      }
+
+      return response.json();
+    },
+    onSuccess: () => {
+      setIsPremiumUser(true);
+      setShowUpgrade(false);
+      setShowCongrats(true);
+      queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
+    },
+    onError: (error) => {
+      console.error('Error upgrading to premium:', error);
+      alert('Failed to upgrade to premium. Please try again.');
+    }
   });
 
   // Mutation for updating user profile
@@ -176,6 +211,16 @@ export default function Profile() {
   ];
 
   const getVerificationBadge = () => {
+    // Check if user is premium
+    if (isPremiumUser || user?.accountType === 'premium') {
+      return (
+        <div className="flex items-center gap-1 text-purple-600">
+          <Award size={14} />
+          <span className="text-xs font-medium">👑 Premium Member</span>
+        </div>
+      );
+    }
+
     // Check if user is a verified vendor
     if (user?.accountType === 'vendor' && user?.verificationStatus === 'basic_verified') {
       return (
@@ -271,14 +316,23 @@ export default function Profile() {
             >
               Edit Profile
             </button>
-             {/* Upgrade to Premium Icon */}
-             <button
-                onClick={() => setShowUpgrade(true)}
-                className="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-yellow-600 transition"
-              >
-                <TrendingUp size={16} className="mr-2 inline-block" />
-                Upgrade to Premium
-              </button>
+             {/* Upgrade to Premium Button */}
+             {!isPremiumUser && (
+               <button
+                 onClick={() => setShowUpgrade(true)}
+                 className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:from-yellow-600 hover:to-orange-600 transition shadow-lg"
+               >
+                 <TrendingUp size={16} className="mr-2 inline-block" />
+                 Upgrade to Premium
+               </button>
+             )}
+             
+             {isPremiumUser && (
+               <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-lg">
+                 <Award size={16} className="mr-2 inline-block" />
+                 Premium Member
+               </div>
+             )}
           </div>
 
           {/* Stats Row */}
@@ -566,6 +620,188 @@ export default function Profile() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Premium Upgrade Modal */}
+      {showUpgrade && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl max-w-md w-full">
+            {upgradeStep === 1 && (
+              <div className="p-6">
+                <div className="text-center mb-6">
+                  <div className="w-16 h-16 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Award className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Upgrade to Premium</h3>
+                  <p className="text-gray-600">Unlock exclusive features and boost your business</p>
+                </div>
+
+                <div className="space-y-4 mb-6">
+                  <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-lg">
+                    <h4 className="font-semibold text-purple-900 mb-2">🚀 Premium Benefits:</h4>
+                    <ul className="text-sm text-purple-800 space-y-1">
+                      <li>• ✨ Premium vendor badge</li>
+                      <li>• 📈 Priority listing placement</li>
+                      <li>• 📊 Advanced analytics dashboard</li>
+                      <li>• 💬 Priority customer support</li>
+                      <li>• 🎯 Featured product promotions</li>
+                      <li>• 📱 Enhanced profile customization</li>
+                    </ul>
+                  </div>
+
+                  <div className="bg-green-50 p-4 rounded-lg text-center">
+                    <div className="text-3xl font-bold text-green-600 mb-1">5,000 XAF</div>
+                    <div className="text-sm text-green-700">per month</div>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <button
+                    onClick={() => setUpgradeStep(2)}
+                    className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-3 px-6 rounded-lg font-semibold hover:from-yellow-600 hover:to-orange-600 transition shadow-lg"
+                  >
+                    Continue to Payment
+                  </button>
+                  <button
+                    onClick={() => setShowUpgrade(false)}
+                    className="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition"
+                  >
+                    Maybe Later
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {upgradeStep === 2 && (
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-xl font-semibold">Payment Method</h3>
+                  <button 
+                    onClick={() => setUpgradeStep(1)}
+                    className="text-gray-400 hover:text-gray-600"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+
+                <div className="space-y-4 mb-6">
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium">Premium Subscription</span>
+                      <span className="font-bold">5,000 XAF/month</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h4 className="font-medium text-gray-900">Select Payment Method:</h4>
+                    
+                    <label className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                      <input
+                        type="radio"
+                        name="payment"
+                        value="mobile_money"
+                        checked={paymentMethod === 'mobile_money'}
+                        onChange={(e) => setPaymentMethod(e.target.value)}
+                        className="text-blue-600"
+                      />
+                      <div>
+                        <div className="font-medium">Mobile Money</div>
+                        <div className="text-sm text-gray-600">MTN/Orange Money</div>
+                      </div>
+                    </label>
+
+                    <label className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                      <input
+                        type="radio"
+                        name="payment"
+                        value="bank_transfer"
+                        checked={paymentMethod === 'bank_transfer'}
+                        onChange={(e) => setPaymentMethod(e.target.value)}
+                        className="text-blue-600"
+                      />
+                      <div>
+                        <div className="font-medium">Bank Transfer</div>
+                        <div className="text-sm text-gray-600">Direct bank payment</div>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <button
+                    onClick={() => {
+                      // Simulate payment processing
+                      setUpgradeStep(3);
+                      setTimeout(() => {
+                        upgradeToPremiumMutation.mutate();
+                      }, 2000);
+                    }}
+                    className="w-full bg-gradient-to-r from-green-500 to-emerald-500 text-white py-3 px-6 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-600 transition shadow-lg"
+                  >
+                    Pay 5,000 XAF
+                  </button>
+                  <button
+                    onClick={() => setShowUpgrade(false)}
+                    className="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {upgradeStep === 3 && (
+              <div className="p-6 text-center">
+                <div className="w-16 h-16 border-4 border-green-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Processing Payment</h3>
+                <p className="text-gray-600">Please wait while we process your payment...</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Congratulations Modal */}
+      {showCongrats && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl max-w-md w-full p-6 text-center">
+            <div className="w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Award className="w-10 h-10 text-white" />
+            </div>
+            
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">🎉 Welcome to Premium!</h2>
+            <p className="text-gray-600 mb-6">You've successfully upgraded to Premium membership</p>
+
+            <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-lg mb-6">
+              <h3 className="font-semibold text-purple-900 mb-2">Your New Benefits Are Now Active:</h3>
+              <ul className="text-sm text-purple-800 space-y-1 text-left">
+                <li>• ✨ Premium vendor badge displayed</li>
+                <li>• 📈 Priority placement in search results</li>
+                <li>• 📊 Access to advanced analytics</li>
+                <li>• 💬 Priority customer support</li>
+                <li>• 🎯 Featured product promotions</li>
+              </ul>
+            </div>
+
+            <div className="space-y-3">
+              <button
+                onClick={() => {
+                  setShowCongrats(false);
+                  window.location.reload(); // Refresh to show premium features
+                }}
+                className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 px-6 rounded-lg font-semibold hover:from-purple-600 hover:to-pink-600 transition shadow-lg"
+              >
+                Explore Premium Features
+              </button>
+              <button
+                onClick={() => setShowCongrats(false)}
+                className="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition"
+              >
+                Continue
+              </button>
+            </div>
           </div>
         </div>
       )}

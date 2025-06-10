@@ -414,6 +414,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Update user endpoint
+  app.patch('/api/users/:id', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updates = req.body;
+      
+      const updatedUser = await storage.updateUser(id, updates);
+      
+      if (!updatedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      // Remove password from response
+      const { password, ...userWithoutPassword } = updatedUser;
+      
+      // Log premium upgrade
+      if (updates.accountType === 'premium') {
+        console.log(`✅ PREMIUM UPGRADE: User ${updatedUser.username} (ID: ${id}) upgraded to Premium`);
+      }
+      
+      res.json(userWithoutPassword);
+    } catch (error) {
+      console.error("Error updating user:", error);
+      res.status(500).json({ message: "Failed to update user" });
+    }
+  });
+
   app.get('/api/orders/all', async (req, res) => {
     try {
       // Get all orders from all vendors

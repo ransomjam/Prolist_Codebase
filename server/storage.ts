@@ -400,9 +400,20 @@ export class DatabaseStorage implements IStorage {
     return await db.select().from(vendorApplications);
   }
 
-  async createProduct(product: InsertProduct): Promise<Product> {
-    const [newProduct] = await db.insert(products).values(product).returning();
-    return newProduct;
+  async updateUserVerificationStatus(userId: number, status: string) {
+    const [updatedUser] = await db.update(users)
+      .set({ verificationStatus: status })
+      .where(eq(users.id, userId))
+      .returning();
+    return updatedUser;
+  }
+
+  async updateUser(userId: number, updates: any) {
+    const [updatedUser] = await db.update(users)
+      .set(updates)
+      .where(eq(users.id, userId))
+      .returning();
+    return updatedUser;
   }
 
   async seedDummyVendors(): Promise<void> {
