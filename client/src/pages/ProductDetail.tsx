@@ -310,6 +310,40 @@ export default function ProductDetail() {
               </button>
             </div>
 
+            {/* Escrow Workflow Overview */}
+            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
+              <div className="flex items-start gap-3 mb-3">
+                <Shield className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                <div>
+                  <h4 className="font-semibold text-blue-900 mb-2">Secure Escrow Protection</h4>
+                  <p className="text-sm text-blue-800 mb-3">
+                    Your payment is protected through our trust-based escrow system:
+                  </p>
+                </div>
+              </div>
+              
+              <div className="space-y-2 text-sm text-blue-800">
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 bg-blue-200 rounded-full flex items-center justify-center text-xs font-bold text-blue-900">1</div>
+                  <span>Payment held in escrow → Vendor ships product</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 bg-blue-200 rounded-full flex items-center justify-center text-xs font-bold text-blue-900">2</div>
+                  <span>You receive item → Upload photo proof</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 bg-blue-200 rounded-full flex items-center justify-center text-xs font-bold text-blue-900">3</div>
+                  <span>Admin releases funds to vendor (72hr auto-release)</span>
+                </div>
+              </div>
+              
+              <div className="mt-3 pt-3 border-t border-blue-200">
+                <p className="text-xs text-blue-700">
+                  <strong>Protection:</strong> Funds only released after delivery confirmation
+                </p>
+              </div>
+            </div>
+
             {/* Secondary Actions */}
             <div className="flex items-center justify-end mb-6">
               <ShareButton 
