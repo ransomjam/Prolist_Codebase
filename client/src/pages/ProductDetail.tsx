@@ -53,6 +53,7 @@ export default function ProductDetail() {
   const [following, setFollowing] = useState(false);
   const [trusted, setTrusted] = useState(false);
   const [showChat, setShowChat] = useState(false);
+  const [orderInProgress, setOrderInProgress] = useState(false);
 
   // Fetch database products
   const { data: dbProducts = [] } = useQuery({
@@ -153,7 +154,12 @@ export default function ProductDetail() {
   };
 
   const handlePlaceOrder = () => {
-    setLocation(`/checkout/${id}`);
+    setOrderInProgress(true);
+    // Brief loading state before navigation
+    setTimeout(() => {
+      setLocation(`/checkout/${id}`);
+      setOrderInProgress(false);
+    }, 500);
   };
 
   if (productLoading) {
@@ -283,10 +289,24 @@ export default function ProductDetail() {
               
               <button
                 onClick={handlePlaceOrder}
-                className="flex items-center justify-center gap-2 bg-green-600 text-white px-6 py-3 rounded-xl hover:bg-green-700 transition-all shadow-lg hover:shadow-green-200 font-medium"
+                disabled={orderInProgress}
+                className={`flex items-center justify-center gap-2 px-6 py-3 rounded-xl transition-all shadow-lg font-medium ${
+                  orderInProgress 
+                    ? 'bg-blue-600 text-white shadow-blue-200 cursor-not-allowed' 
+                    : 'bg-green-600 text-white hover:bg-green-700 shadow-green-200'
+                }`}
               >
-                <ShoppingCart size={18} />
-                Place Order
+                {orderInProgress ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <ShoppingCart size={18} />
+                    Place Order
+                  </>
+                )}
               </button>
             </div>
 
