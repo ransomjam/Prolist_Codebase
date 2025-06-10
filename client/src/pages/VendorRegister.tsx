@@ -85,7 +85,7 @@ export default function VendorRegister() {
     setForm({ ...form, [fieldName]: file });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Basic validation
@@ -94,15 +94,20 @@ export default function VendorRegister() {
       return;
     }
 
-    // Convert files to base64 or use placeholder URLs for demo
-    const idCardUrl = form.idCard ? `data:${form.idCard.type};base64,${await fileToBase64(form.idCard)}` : '';
-    const photoUrl = form.photo ? `data:${form.photo.type};base64,${await fileToBase64(form.photo)}` : '';
+    try {
+      // Convert files to base64 or use placeholder URLs for demo
+      const idCardUrl = form.idCard ? `data:${form.idCard.type};base64,${await fileToBase64(form.idCard)}` : '';
+      const photoUrl = form.photo ? `data:${form.photo.type};base64,${await fileToBase64(form.photo)}` : '';
 
-    submitMutation.mutate({
-      ...form,
-      idCard: idCardUrl,
-      photo: photoUrl
-    });
+      submitMutation.mutate({
+        ...form,
+        idCard: idCardUrl,
+        photo: photoUrl
+      });
+    } catch (error) {
+      console.error('Error processing files:', error);
+      alert('Error processing files. Please try again.');
+    }
   };
 
   if (submitted) {
