@@ -54,16 +54,28 @@ export default function ProductListingForm() {
         },
         body: JSON.stringify(productData),
       });
-      
+
       if (!response.ok) {
         throw new Error('Failed to create product listing');
       }
-      
+
       return response.json();
     },
     onSuccess: () => {
       setSubmitted(true);
+      // Invalidate queries to refresh data
       queryClient.invalidateQueries({ queryKey: ['/api/products'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/products/vendor', user?.id] });
+
+      // Trigger storage event to notify other pages
+      localStorage.setItem('product_added', 'true');
+      window.dispatchEvent(new StorageEvent('storage', {
+        key: 'product_added',
+        newValue: 'true'
+      }));
+
+      // Redirect to profile page with success parameter
+      setLocation('/profile?product_added=true');
     },
     onError: (error) => {
       console.error('Error creating product:', error);
@@ -95,7 +107,7 @@ export default function ProductListingForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!form.title || !form.category || !form.description || !form.price) {
       alert('Please fill in all required fields');
       return;
@@ -293,7 +305,7 @@ export default function ProductListingForm() {
             <Image size={20} />
             Product Images
           </h3>
-          
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Main Product Image</label>
             <div className="border-2 border-dashed border-gray-300 hover:border-blue-400 rounded-lg p-6 text-center transition-colors">
@@ -316,7 +328,7 @@ export default function ProductListingForm() {
               )}
             </div>
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Additional Image 2 (Optional)</label>
             <div className="border-2 border-dashed border-gray-300 hover:border-blue-400 rounded-lg p-6 text-center transition-colors">
@@ -339,7 +351,7 @@ export default function ProductListingForm() {
               )}
             </div>
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Additional Image 3 (Optional)</label>
             <div className="border-2 border-dashed border-gray-300 hover:border-blue-400 rounded-lg p-6 text-center transition-colors">
@@ -362,7 +374,7 @@ export default function ProductListingForm() {
               )}
             </div>
           </div>
-          
+
           <p className="text-xs text-gray-500">
             Select images from your device. Supported formats: JPG, PNG, GIF
           </p>

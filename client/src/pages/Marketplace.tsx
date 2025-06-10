@@ -338,6 +338,12 @@ export default function Marketplace() {
           <h2 className="text-xl font-semibold text-gray-900">
             {sortedProducts.length} Products Found
           </h2>
+          <a 
+            href="/listings"
+            className="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center gap-1"
+          >
+            View All Listings →
+          </a>
           {verificationFilter !== 'all' && (
             <div className="flex items-center gap-2 text-blue-600">
               <Shield size={18} />

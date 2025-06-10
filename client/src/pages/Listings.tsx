@@ -1,12 +1,23 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useLocation } from 'wouter';
 import ListingCard from '../components/ListingCard';
 
 export default function Listings() {
   const [category, setCategory] = useState("All");
+  const [location] = useLocation();
+
+  // Check URL parameters for category filter
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const categoryParam = urlParams.get('category');
+    if (categoryParam) {
+      setCategory(categoryParam);
+    }
+  }, [location]);
 
   // Fetch all products from the database
-  const { data: products = [], isLoading, error } = useQuery({
+  const { data: products = [], isLoading, error, refetch } = useQuery({
     queryKey: ['/api/products'],
     queryFn: async () => {
       const response = await fetch('/api/products');
@@ -14,8 +25,23 @@ export default function Listings() {
         throw new Error('Failed to fetch products');
       }
       return response.json();
-    }
+    },
+    refetchOnWindowFocus: true,
+    refetchInterval: 30000 // Refetch every 30 seconds to catch new products
   });
+
+  // Listen for storage events to refresh when products are added
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'product_added') {
+        refetch();
+        localStorage.removeItem('product_added');
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, [refetch]);
 
   const filteredProducts = category === "All"
     ? products
@@ -45,7 +71,22 @@ export default function Listings() {
     );
   }
 
-  const categories = ["All", "Electronics", "Fashion", "Home & Garden", "Sports", "Books", "Automotive", "Services"];
+  // Generate categories dynamically from products, plus common categories
+  const allCategories = ["All", "Electronics", "Fashion", "Home & Garden", "Sports", "Books", "Automotive", "Services"];
+  const productCategories = [...new Set(products.map((product: any) => product.category).filter(Boolean))];
+  const categories = [...new Set([...allCategories, ...productCategories])];
+
+  const handleCategoryChange = (newCategory: string) => {
+    setCategory(newCategory);
+    // Update URL to reflect category filter
+    const url = new URL(window.location.href);
+    if (newCategory === "All") {
+      url.searchParams.delete('category');
+    } else {
+      url.searchParams.set('category', newCategory);
+    }
+    window.history.pushState({}, '', url.toString());
+  };
 
   return (
     <div className="p-6">
@@ -55,7 +96,7 @@ export default function Listings() {
         {categories.map(cat => (
           <button
             key={cat}
-            onClick={() => setCategory(cat)}
+            onClick={() => handleCategoryChange(cat)}
             className={`px-4 py-2 rounded-lg font-semibold whitespace-nowrap ${
               category === cat 
                 ? 'bg-primary text-white shadow-lg' 
@@ -63,6 +104,11 @@ export default function Listings() {
             }`}
           >
             {cat}
+            {cat !== "All" && (
+              <span className="ml-2 text-xs opacity-75">
+                ({filteredProducts.filter((p: any) => p.category === cat).length})
+              </span>
+            )}
           </button>
         ))}
       </div>
