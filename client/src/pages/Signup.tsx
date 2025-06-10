@@ -21,7 +21,6 @@ interface SignupForm {
 }
 
 export default function Signup() {
-  const { login } = useAuth();
   const [form, setForm] = useState<SignupForm>({
     fullName: '',
     username: '',
@@ -40,6 +39,9 @@ export default function Signup() {
     physicalVerificationAvailable: false,
   });
   const [previewUrl, setPreviewUrl] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const { register } = useAuth();
 
   // Market data for location selection
   const marketData = {
@@ -71,59 +73,50 @@ export default function Signup() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+    setIsLoading(true);
+    setError("");
+
     // Validation
     if (!form.fullName || !form.username || !form.accountType || !form.location || !form.password) {
-      alert('Please fill in all required fields');
+      setError('Please fill in all required fields');
+      setIsLoading(false);
       return;
     }
 
     if ((form.accountType === 'professional' || form.accountType === 'shop_owner') && !form.specialization) {
-      alert('Please specify your specialization');
+      setError('Please specify your specialization');
+      setIsLoading(false);
       return;
     }
 
     try {
-      // Create user account
-      const response = await fetch('/api/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: form.username,
-          password: form.password,
-          email: form.email,
-          phone: form.phone,
-          location: form.location,
-          accountType: form.accountType,
-          specialization: form.specialization || null,
-        }),
+      const result = await register({
+        username: form.username,
+        email: form.email,
+        password: form.password,
+        accountType: form.accountType,
+        specialization: form.specialization || null,
+        phone: form.phone,
+        location: form.location,
+        fullName: form.fullName,
+        businessName: form.businessName,
+        marketLocation: form.marketLocation,
+        marketLine: form.marketLine,
+        shopNumber: form.shopNumber,
+        acceptTerms: form.acceptTerms,
+        physicalVerificationAvailable: form.physicalVerificationAvailable,
+        profilePicture: form.profilePicture
       });
 
-      if (!response.ok) {
-        const error = await response.json();
-        console.error('Registration failed:', error);
-        alert(error.message || 'Registration failed');
-        return;
-      }
-
-      const newUser = await response.json();
-      console.log('Registration successful:', newUser);
-      
-      // Auto-login the new user
-      login(newUser);
-      
-      // Redirect based on account type
-      if (form.accountType === 'user') {
+      if (result.success) {
         window.location.href = '/app';
       } else {
-        // Redirect to verification page for business accounts
-        window.location.href = '/vendor-register';
+        setError(result.message || "Registration failed");
       }
     } catch (error) {
-      console.error('Registration error:', error);
-      alert('Registration failed. Please try again.');
+      setError("Network error. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -136,6 +129,12 @@ export default function Signup() {
         </div>
 
         <form onSubmit={handleSubmit} className="bg-white p-8 rounded-xl shadow-lg space-y-6">
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl">
+              {error}
+            </div>
+          )}
+
           <div>
             <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">
               Full Name
@@ -456,10 +455,10 @@ export default function Signup() {
 
           <button
             type="submit"
-            disabled={!form.acceptTerms}
+            disabled={isLoading}
             className="w-full bg-gradient-to-r from-primary to-emerald text-white py-3 px-4 rounded-lg font-semibold hover:from-blue-700 hover:to-green-600 transition-all shadow-lg border-2 border-primary/20 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Create Account
+            {isLoading ? "Creating Account..." : "Create Account"}
           </button>
         </form>
 

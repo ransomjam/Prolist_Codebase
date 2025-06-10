@@ -9,6 +9,7 @@ interface User {
   firstName?: string;
   lastName?: string;
   profileImage?: string;
+  accountType?: string;
 }
 
 interface AuthState {
@@ -17,41 +18,11 @@ interface AuthState {
   isLoading: boolean;
 }
 
-// Demo users for the chat system
-const demoUsers: User[] = [
-  {
-    id: 1,
-    username: 'john_buyer',
-    email: 'john@example.com',
-    role: 'buyer',
-    verificationStatus: 'verified',
-    firstName: 'John',
-    lastName: 'Doe'
-  },
-  {
-    id: 2,
-    username: 'sarah_vendor',
-    email: 'sarah@example.com',
-    role: 'vendor',
-    verificationStatus: 'premium_verified',
-    firstName: 'Sarah',
-    lastName: 'Kimeng'
-  },
-  {
-    id: 3,
-    username: 'admin_user',
-    email: 'admin@prolist.com',
-    role: 'admin',
-    verificationStatus: 'verified',
-    firstName: 'Admin',
-    lastName: 'User'
-  }
-];
-
 export function useAuth(): AuthState & {
-  login: (userData: User) => void;
+  login: (username: string, password: string) => Promise<{ success: boolean; message?: string; user?: User }>;
+  register: (userData: any) => Promise<{ success: boolean; message?: string; user?: User }>;
   logout: () => void;
-  switchUser: (userId: number) => void;
+  setUser: (user: User) => void;
 } {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -68,13 +39,65 @@ export function useAuth(): AuthState & {
         localStorage.removeItem('prolist_user');
       }
     }
-    // Don't auto-login users - let them choose to login
     setIsLoading(false);
   }, []);
 
-  const login = (userData: User) => {
-    setUser(userData);
-    localStorage.setItem('prolist_user', JSON.stringify(userData));
+  const login = async (username: string, password: string) => {
+    try {
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        const userData = {
+          ...data,
+          role: data.accountType || data.role || 'user'
+        };
+        setUser(userData);
+        localStorage.setItem('prolist_user', JSON.stringify(userData));
+        return { success: true, user: userData };
+      } else {
+        return { success: false, message: data.message || 'Login failed' };
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      return { success: false, message: 'Network error. Please try again.' };
+    }
+  };
+
+  const register = async (userData: any) => {
+    try {
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        const user = {
+          ...data,
+          role: data.accountType || data.role || 'user'
+        };
+        setUser(user);
+        localStorage.setItem('prolist_user', JSON.stringify(user));
+        return { success: true, user };
+      } else {
+        return { success: false, message: data.message || 'Registration failed' };
+      }
+    } catch (error) {
+      console.error('Registration error:', error);
+      return { success: false, message: 'Network error. Please try again.' };
+    }
   };
 
   const logout = () => {
@@ -84,12 +107,9 @@ export function useAuth(): AuthState & {
     window.location.href = '/';
   };
 
-  const switchUser = (userId: number) => {
-    const foundUser = demoUsers.find(u => u.id === userId);
-    if (foundUser) {
-      setUser(foundUser);
-      localStorage.setItem('prolist_user', JSON.stringify(foundUser));
-    }
+  const setUserData = (userData: User) => {
+    setUser(userData);
+    localStorage.setItem('prolist_user', JSON.stringify(userData));
   };
 
   return {
@@ -97,7 +117,8 @@ export function useAuth(): AuthState & {
     isAuthenticated: !!user,
     isLoading,
     login,
+    register,
     logout,
-    switchUser
+    setUser: setUserData
   };
 }

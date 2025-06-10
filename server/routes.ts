@@ -49,7 +49,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: 'Username and password are required' });
       }
       
-      const user = await storage.getUserByUsername(username);
+      let user = await storage.getUserByUsername(username);
+      
+      // If not found by username, try to find by email
+      if (!user) {
+        const users = await storage.getAllUsers();
+        user = users.find(u => u.email === username);
+      }
       
       if (!user) {
         console.log(`Login attempt failed: User '${username}' not found`);
@@ -61,7 +67,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: 'Invalid credentials' });
       }
       
-      console.log(`✅ Successful login for user: ${username}`);
+      console.log(`✅ Successful login for user: ${user.username}`);
       const { password: _, ...userWithoutPassword } = user;
       res.json(userWithoutPassword);
     } catch (error) {
