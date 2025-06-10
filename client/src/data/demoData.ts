@@ -414,7 +414,7 @@ export const currentUser = {
   phone: "+237 674 532 891",
   joinDate: "January 2023",
   rating: 4.9,
-  profileViews: 2,100,
+  profileViews: 2100,
   languages: ["English", "French", "Pidgin"],
   specialties: ["Electronics", "Real Estate", "Tech Services"]
 };
