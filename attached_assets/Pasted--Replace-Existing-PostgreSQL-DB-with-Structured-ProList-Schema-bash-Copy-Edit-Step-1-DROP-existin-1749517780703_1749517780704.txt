@@ -1,0 +1,120 @@
+ Replace Existing PostgreSQL DB with Structured ProList Schema
+bash
+Copy
+Edit
+# Step 1: DROP existing tables (be sure you're okay with data loss)
+DROP TABLE IF EXISTS users, listings, markets, market_lines, professionals, orders, chat_messages, service_requests, reviews, verifications, categories CASCADE;
+
+# Step 2: CREATE all required tables for ProList
+
+-- USERS
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  full_name TEXT NOT NULL,
+  email TEXT UNIQUE NOT NULL,
+  password TEXT NOT NULL,
+  phone TEXT,
+  role TEXT CHECK (role IN ('buyer', 'vendor', 'admin', 'investor', 'professional')) NOT NULL,
+  is_verified BOOLEAN DEFAULT FALSE,
+  trust_score INT DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- LISTINGS
+CREATE TABLE listings (
+  id SERIAL PRIMARY KEY,
+  user_id INT REFERENCES users(id) ON DELETE CASCADE,
+  title TEXT,
+  description TEXT,
+  price NUMERIC,
+  category TEXT,
+  type TEXT CHECK (type IN ('market', 'auction', 'real_estate', 'service')),
+  is_verified BOOLEAN DEFAULT FALSE,
+  image_url TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- MARKETS
+CREATE TABLE markets (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  location TEXT NOT NULL,
+  description TEXT
+);
+
+-- MARKET LINES
+CREATE TABLE market_lines (
+  id SERIAL PRIMARY KEY,
+  market_id INT REFERENCES markets(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  description TEXT
+);
+
+-- PROFESSIONALS
+CREATE TABLE professionals (
+  id SERIAL PRIMARY KEY,
+  user_id INT REFERENCES users(id),
+  service_type TEXT,
+  bio TEXT,
+  verified BOOLEAN DEFAULT FALSE,
+  trust_score INT DEFAULT 0
+);
+
+-- ORDERS
+CREATE TABLE orders (
+  id SERIAL PRIMARY KEY,
+  listing_id INT REFERENCES listings(id),
+  buyer_id INT REFERENCES users(id),
+  status TEXT CHECK (status IN ('pending', 'paid', 'shipped', 'confirmed', 'cancelled')),
+  payment_method TEXT,
+  escrow BOOLEAN DEFAULT TRUE,
+  delivered BOOLEAN DEFAULT FALSE,
+  confirmation_photo TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- CHAT MESSAGES
+CREATE TABLE chat_messages (
+  id SERIAL PRIMARY KEY,
+  sender_id INT REFERENCES users(id),
+  receiver_id INT REFERENCES users(id),
+  message TEXT,
+  sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- SERVICE REQUESTS
+CREATE TABLE service_requests (
+  id SERIAL PRIMARY KEY,
+  professional_id INT REFERENCES professionals(id),
+  user_id INT REFERENCES users(id),
+  description TEXT,
+  status TEXT DEFAULT 'pending',
+  payment_status TEXT DEFAULT 'unpaid',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- REVIEWS
+CREATE TABLE reviews (
+  id SERIAL PRIMARY KEY,
+  user_id INT REFERENCES users(id),
+  reviewed_user_id INT REFERENCES users(id),
+  rating INT CHECK (rating BETWEEN 1 AND 5),
+  comment TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- VERIFICATIONS
+CREATE TABLE verifications (
+  id SERIAL PRIMARY KEY,
+  user_id INT REFERENCES users(id),
+  method TEXT CHECK (method IN ('video', 'document', 'field')),
+  status TEXT CHECK (status IN ('pending', 'approved', 'rejected')) DEFAULT 'pending',
+  updated_at TIMESTAMP
+);
+
+-- CATEGORIES
+CREATE TABLE categories (
+  id SERIAL PRIMARY KEY,
+  name TEXT UNIQUE NOT NULL
+);
+📝 Notes:
