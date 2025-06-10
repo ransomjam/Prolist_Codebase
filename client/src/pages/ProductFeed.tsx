@@ -77,31 +77,33 @@ export default function ProductFeed() {
     }
   });
 
-  // Transform demo data to match Product interface
+  // Transform demo data to match Product interface (for display only)
   const demoProducts = [
     ...listings.map(item => ({
-      id: item.id + 1000, // Offset to avoid ID conflicts
+      id: item.id + 10000, // High offset to avoid conflicts with real products
       title: item.title,
       category: item.category,
       price: item.price.replace(' FCFA', ''),
-      description: `Quality ${item.category.toLowerCase()} item available in ${item.location}`,
+      description: `Quality ${item.category.toLowerCase()} item available in ${item.location}. Demo listing.`,
       location: item.location,
       vendorId: 999, // Demo vendor ID
       viewCount: Math.floor(Math.random() * 100),
       createdAt: new Date().toISOString(),
-      image: item.image
+      image: item.image,
+      isDemo: true
     })),
     ...realEstate.map(item => ({
-      id: item.id + 2000, // Offset to avoid ID conflicts
+      id: item.id + 20000, // High offset to avoid conflicts
       title: item.title,
       category: 'Real Estate',
       price: item.price.replace(' FCFA', '').replace('/month', ''),
-      description: `Premium real estate property in ${item.location}`,
+      description: `Premium real estate property in ${item.location}. Demo listing.`,
       location: item.location,
       vendorId: 999, // Demo vendor ID
       viewCount: Math.floor(Math.random() * 150),
       createdAt: new Date().toISOString(),
-      image: item.image
+      image: item.image,
+      isDemo: true
     }))
   ];
 

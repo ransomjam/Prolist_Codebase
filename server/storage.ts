@@ -30,31 +30,31 @@ export interface IStorage {
   updateUser(id: number, updates: Partial<User>): Promise<User | undefined>;
   updateUserVerificationStatus(id: number, status: string): Promise<User | undefined>;
   getAllUsers(): Promise<User[]>;
-  
+
   // Comment methods
   getComments(listingId: string, listingType: string): Promise<Comment[]>;
   createComment(comment: InsertComment): Promise<Comment>;
-  
+
   // Vendor application methods
   createVendorApplication(application: InsertVendorApplication): Promise<VendorApplication>;
   getVendorApplication(userId: number): Promise<VendorApplication | undefined>;
   updateVendorApplicationStatus(id: number, status: string, adminNotes?: string): Promise<VendorApplication | undefined>;
   getAllVendorApplications(): Promise<VendorApplication[]>;
-  
+
   // Product methods
   createProduct(product: InsertProduct): Promise<Product>;
   getProduct(id: number): Promise<Product | undefined>;
   getProductsByVendor(vendorId: number): Promise<Product[]>;
   getAllProducts(): Promise<Product[]>;
   updateProductViewCount(id: number): Promise<void>;
-  
+
   // Order methods
   createOrder(order: InsertOrder): Promise<Order>;
   getOrder(id: number): Promise<Order | undefined>;
   getOrdersByBuyer(buyerId: number): Promise<Order[]>;
   getOrdersByVendor(vendorId: number): Promise<Order[]>;
   updateOrderStatus(id: number, updates: Partial<Order>): Promise<Order | undefined>;
-  
+
   // Rating methods
   createRating(rating: InsertRating): Promise<Rating>;
   getRatingsByUser(userId: number): Promise<Rating[]>;
@@ -123,7 +123,7 @@ export class MemStorage implements IStorage {
   async updateUser(id: number, updates: Partial<User>): Promise<User | undefined> {
     const user = this.users.get(id);
     if (!user) return undefined;
-    
+
     const updatedUser = { ...user, ...updates };
     this.users.set(id, updatedUser);
     return updatedUser;
@@ -149,12 +149,12 @@ export class MemStorage implements IStorage {
       id,
       createdAt: new Date(),
     };
-    
+
     const key = `${insertComment.listingType}_${insertComment.listingId}`;
     const existingComments = this.comments.get(key) || [];
     existingComments.push(comment);
     this.comments.set(key, existingComments);
-    
+
     return comment;
   }
 
@@ -311,14 +311,15 @@ export class MemStorage implements IStorage {
   async getAverageRating(userId: number): Promise<number> {
     const userRatings = await this.getRatingsByUser(userId);
     if (userRatings.length === 0) return 0;
-    
+
     const sum = userRatings.reduce((acc, rating) => acc + rating.rating, 0);
     return sum / userRatings.length;
   }
 }
 
 import { db } from "./db";
-import { eq } from "drizzle-orm";
+import type { User, VendorApplication, Product, Order, Comment, Rating, InsertVendorApplication, InsertProduct, InsertOrder, InsertComment, InsertRating } from "@shared/schema";
+import { users, vendorApplications, products, orders, comments, ratings } from "@shared/schema";
 
 export class DatabaseStorage implements IStorage {
   async getUser(id: number): Promise<User | undefined> {
@@ -388,6 +389,87 @@ export class DatabaseStorage implements IStorage {
   async createProduct(product: InsertProduct): Promise<Product> {
     const [newProduct] = await db.insert(products).values(product).returning();
     return newProduct;
+  }
+
+  async seedDummyProducts(): Promise<void> {
+    // Check if dummy products already exist
+    const existingProducts = await db.select().from(products).limit(1);
+    if (existingProducts.length > 0) {
+      return; // Already seeded
+    }
+
+    const dummyProducts: InsertProduct[] = [
+      {
+        vendorId: 1,
+        title: "Samsung Galaxy S23 Ultra",
+        category: "Phones",
+        price: "700000",
+        description: "Latest Samsung flagship with 256GB storage, excellent camera, and S-Pen functionality. Perfect condition.",
+        location: "Nkwen, Bamenda"
+      },
+      {
+        vendorId: 1,
+        title: "Nike Airforce 1",
+        category: "Shoes",
+        price: "45000",
+        description: "Classic white Nike Airforce 1 sneakers, size 42. Authentic and in excellent condition.",
+        location: "Main Market Bamenda"
+      },
+      {
+        vendorId: 1,
+        title: "iPhone 14 Pro Max",
+        category: "Phones",
+        price: "850000",
+        description: "Apple iPhone 14 Pro Max 256GB, unlocked, with original accessories and warranty.",
+        location: "Up Station, Bamenda"
+      },
+      {
+        vendorId: 1,
+        title: "MacBook Pro M2",
+        category: "Electronics",
+        price: "1200000",
+        description: "MacBook Pro 13-inch with M2 chip, 16GB RAM, 512GB SSD. Perfect for work and creativity.",
+        location: "Ntarikon, Bamenda"
+      },
+      {
+        vendorId: 1,
+        title: "Traditional Kaba",
+        category: "Clothes",
+        price: "25000",
+        description: "Beautiful handmade traditional Kaba dress, authentic African design with premium fabric.",
+        location: "Nkwen Market"
+      },
+      {
+        vendorId: 1,
+        title: "Toyota Camry 2020",
+        category: "Assets",
+        price: "18000000",
+        description: "Well-maintained Toyota Camry 2020, low mileage, full service history, clean documents.",
+        location: "Commercial Avenue"
+      },
+      {
+        vendorId: 1,
+        title: "Web Design Services",
+        category: "Services",
+        price: "50000",
+        description: "Professional web design and development services for small businesses and individuals.",
+        location: "Bamenda"
+      },
+      {
+        vendorId: 1,
+        title: "Duplex for Sale",
+        category: "Real Estate",
+        price: "60000000",
+        description: "Modern 4-bedroom duplex in prime location, fully furnished with modern amenities.",
+        location: "Commercial Avenue, Bamenda"
+      }
+    ];
+
+    for (const product of dummyProducts) {
+      await db.insert(products).values(product);
+    }
+
+    console.log("✅ Dummy products seeded successfully");
   }
 
   async getProduct(id: number): Promise<Product | undefined> {

@@ -65,31 +65,33 @@ export default function ProductDetail() {
     }
   });
 
-  // Transform demo data to match Product interface
+  // Transform demo data to match Product interface (for display only)
   const demoProducts = [
     ...listings.map(item => ({
-      id: item.id + 1000, // Offset to avoid ID conflicts
+      id: item.id + 10000, // High offset to avoid conflicts with real products
       title: item.title,
       category: item.category,
       price: item.price.replace(' FCFA', ''),
-      description: `Quality ${item.category.toLowerCase()} item available in ${item.location}`,
+      description: `Quality ${item.category.toLowerCase()} item available in ${item.location}. This is a demo listing for showcase purposes.`,
       location: item.location,
       vendorId: 999, // Demo vendor ID
       viewCount: Math.floor(Math.random() * 100),
       createdAt: new Date().toISOString(),
-      image: item.image
+      image: item.image,
+      isDemo: true
     })),
     ...realEstate.map(item => ({
-      id: item.id + 2000, // Offset to avoid ID conflicts
+      id: item.id + 20000, // High offset to avoid conflicts
       title: item.title,
       category: 'Real Estate',
       price: item.price.replace(' FCFA', '').replace('/month', ''),
-      description: `Premium real estate property in ${item.location}`,
+      description: `Premium real estate property in ${item.location}. This is a demo listing for showcase purposes.`,
       location: item.location,
       vendorId: 999, // Demo vendor ID
       viewCount: Math.floor(Math.random() * 150),
       createdAt: new Date().toISOString(),
-      image: item.image
+      image: item.image,
+      isDemo: true
     }))
   ];
 
@@ -154,6 +156,11 @@ export default function ProductDetail() {
   };
 
   const handlePlaceOrder = () => {
+    if (product?.isDemo) {
+      alert("This is a demo product. Please try ordering real products from our marketplace!");
+      return;
+    }
+    
     setOrderInProgress(true);
     // Brief loading state before navigation
     setTimeout(() => {
@@ -251,8 +258,15 @@ export default function ProductDetail() {
               </button>
             </div>
             
-            <div className="text-3xl font-bold text-green-600 mb-4">
-              {parseInt(product.price).toLocaleString()} XAF
+            <div className="flex items-center gap-3 mb-4">
+              <div className="text-3xl font-bold text-green-600">
+                {parseInt(product.price).toLocaleString()} XAF
+              </div>
+              {product.isDemo && (
+                <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded-full">
+                  DEMO
+                </span>
+              )}
             </div>
 
             {/* Product Info */}
