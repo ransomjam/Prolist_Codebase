@@ -391,7 +391,124 @@ export class DatabaseStorage implements IStorage {
     return newProduct;
   }
 
+  async seedDummyVendors(): Promise<void> {
+    // Check if vendors already exist
+    const existingVendors = await db.select().from(users).where(eq(users.accountType, 'vendor')).limit(1);
+    if (existingVendors.length > 0) {
+      return; // Already seeded
+    }
+
+    // Create verified vendor users
+    const vendorUsers = [
+      {
+        username: "sarahmbah_tech",
+        password: "vendor123",
+        email: "sarah@techbamenda.com",
+        phone: "+237678901234",
+        location: "Nkwen, Bamenda",
+        accountType: "vendor",
+        verificationStatus: "basic_verified",
+        salesCount: 15,
+        rating: "4.7"
+      },
+      {
+        username: "johnfru_fashion",
+        password: "vendor123",
+        email: "john@frusfashion.com",
+        phone: "+237677654321",
+        location: "Main Market Bamenda",
+        accountType: "vendor",
+        verificationStatus: "premium_verified",
+        salesCount: 28,
+        rating: "4.8"
+      },
+      {
+        username: "gracetanyi_electronics",
+        password: "vendor123",
+        email: "grace@electronicshub.com",
+        phone: "+237681234567",
+        location: "Up Station, Bamenda",
+        accountType: "vendor",
+        verificationStatus: "basic_verified",
+        salesCount: 42,
+        rating: "4.6"
+      },
+      {
+        username: "peterkum_services",
+        password: "vendor123",
+        email: "peter@kumservices.com",
+        phone: "+237679876543",
+        location: "Commercial Avenue",
+        accountType: "vendor",
+        verificationStatus: "premium_verified",
+        salesCount: 67,
+        rating: "4.9"
+      }
+    ];
+
+    for (const vendor of vendorUsers) {
+      await db.insert(users).values(vendor);
+    }
+
+    // Create corresponding vendor applications
+    const vendorApplications = [
+      {
+        userId: 1,
+        fullName: "Sarah Mbah",
+        phone: "+237678901234",
+        location: "Nkwen, Bamenda",
+        shopType: "physical",
+        businessName: "Tech Paradise Bamenda",
+        businessAddress: "Shop 15, Nkwen Tech Plaza",
+        businessDescription: "Premium electronics and phone accessories",
+        status: "Basic Verified"
+      },
+      {
+        userId: 2,
+        fullName: "John Fru",
+        phone: "+237677654321",
+        location: "Main Market Bamenda",
+        shopType: "physical",
+        businessName: "Fru's Fashion House",
+        businessAddress: "Stall 8, Main Market Fashion Line",
+        businessDescription: "Quality clothing and footwear for all ages",
+        status: "Premium Verified"
+      },
+      {
+        userId: 3,
+        fullName: "Grace Tanyi",
+        phone: "+237681234567",
+        location: "Up Station, Bamenda",
+        shopType: "physical",
+        businessName: "Electronics Hub",
+        businessAddress: "Block A, Up Station Commercial Center",
+        businessDescription: "Computers, gadgets and electronic repairs",
+        status: "Basic Verified"
+      },
+      {
+        userId: 4,
+        fullName: "Peter Kum",
+        phone: "+237679876543",
+        location: "Commercial Avenue",
+        shopType: "online",
+        businessName: "Kum Professional Services",
+        businessAddress: "Office 12, Commercial Avenue Plaza",
+        businessDescription: "Web development, digital services and consulting",
+        status: "Premium Verified"
+      }
+    ];
+
+    for (const application of vendorApplications) {
+      await db.insert(vendorApplications).values(application);
+    }
+
+    console.log("✅ Dummy vendors seeded successfully");
+  }
+
   async seedDummyProducts(): Promise<void> {
+    // First seed vendors
+    await this.seedDummyVendors();
+    
     // Check if dummy products already exist
     const existingProducts = await db.select().from(products).limit(1);
     if (existingProducts.length > 0) {
@@ -400,15 +517,15 @@ export class DatabaseStorage implements IStorage {
 
     const dummyProducts: InsertProduct[] = [
       {
-        vendorId: 1,
+        vendorId: 1, // Sarah Mbah - Tech Paradise
         title: "Samsung Galaxy S23 Ultra",
         category: "Phones",
         price: "700000",
-        description: "Latest Samsung flagship with 256GB storage, excellent camera, and S-Pen functionality. Perfect condition.",
+        description: "Latest Samsung flagship with 256GB storage, excellent camera, and S-Pen functionality. Perfect condition with warranty.",
         location: "Nkwen, Bamenda"
       },
       {
-        vendorId: 1,
+        vendorId: 2, // John Fru - Fashion House
         title: "Nike Airforce 1",
         category: "Shoes",
         price: "45000",
@@ -416,31 +533,31 @@ export class DatabaseStorage implements IStorage {
         location: "Main Market Bamenda"
       },
       {
-        vendorId: 1,
+        vendorId: 1, // Sarah Mbah - Tech Paradise
         title: "iPhone 14 Pro Max",
         category: "Phones",
         price: "850000",
         description: "Apple iPhone 14 Pro Max 256GB, unlocked, with original accessories and warranty.",
-        location: "Up Station, Bamenda"
+        location: "Nkwen, Bamenda"
       },
       {
-        vendorId: 1,
+        vendorId: 3, // Grace Tanyi - Electronics Hub
         title: "MacBook Pro M2",
         category: "Electronics",
         price: "1200000",
         description: "MacBook Pro 13-inch with M2 chip, 16GB RAM, 512GB SSD. Perfect for work and creativity.",
-        location: "Ntarikon, Bamenda"
+        location: "Up Station, Bamenda"
       },
       {
-        vendorId: 1,
+        vendorId: 2, // John Fru - Fashion House
         title: "Traditional Kaba",
         category: "Clothes",
         price: "25000",
         description: "Beautiful handmade traditional Kaba dress, authentic African design with premium fabric.",
-        location: "Nkwen Market"
+        location: "Main Market Bamenda"
       },
       {
-        vendorId: 1,
+        vendorId: 4, // Peter Kum - Professional Services
         title: "Toyota Camry 2020",
         category: "Assets",
         price: "18000000",
@@ -448,20 +565,20 @@ export class DatabaseStorage implements IStorage {
         location: "Commercial Avenue"
       },
       {
-        vendorId: 1,
+        vendorId: 4, // Peter Kum - Professional Services
         title: "Web Design Services",
         category: "Services",
         price: "50000",
         description: "Professional web design and development services for small businesses and individuals.",
-        location: "Bamenda"
+        location: "Commercial Avenue, Bamenda"
       },
       {
-        vendorId: 1,
-        title: "Duplex for Sale",
-        category: "Real Estate",
-        price: "60000000",
-        description: "Modern 4-bedroom duplex in prime location, fully furnished with modern amenities.",
-        location: "Commercial Avenue, Bamenda"
+        vendorId: 3, // Grace Tanyi - Electronics Hub
+        title: "Gaming Setup Complete",
+        category: "Electronics",
+        price: "250000",
+        description: "Complete gaming setup with RGB keyboard, gaming mouse, and headset. Perfect for gamers.",
+        location: "Up Station, Bamenda"
       }
     ];
 

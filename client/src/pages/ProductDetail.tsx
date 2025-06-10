@@ -102,7 +102,7 @@ export default function ProductDetail() {
   const product = allProducts.find(p => p.id === parseInt(id!));
   const productLoading = false;
 
-  // Fetch vendor info or use demo vendor for demo products
+  // Fetch vendor info
   const { data: vendor } = useQuery({
     queryKey: ['/api/vendor/application', product?.vendorId],
     queryFn: async () => {
@@ -121,7 +121,23 @@ export default function ProductDetail() {
       }
       
       const response = await fetch(`/api/vendor/application/${product.vendorId}`);
-      if (!response.ok) return null;
+      if (!response.ok) {
+        // If no vendor application found, try to get user info directly
+        const userResponse = await fetch(`/api/users/${product.vendorId}`);
+        if (userResponse.ok) {
+          const user = await userResponse.json();
+          return {
+            id: user.id,
+            userId: user.id,
+            fullName: user.username.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()),
+            phone: user.phone || "+237 6XX XXX XXX",
+            location: user.location || "Bamenda",
+            status: user.verificationStatus === "basic_verified" ? "Basic Verified" : 
+                   user.verificationStatus === "premium_verified" ? "Premium Verified" : "Pending"
+          };
+        }
+        return null;
+      }
       return response.json();
     },
     enabled: !!product?.vendorId
@@ -156,11 +172,6 @@ export default function ProductDetail() {
   };
 
   const handlePlaceOrder = () => {
-    if (product?.isDemo) {
-      alert("This is a demo product. Please try ordering real products from our marketplace!");
-      return;
-    }
-    
     setOrderInProgress(true);
     // Brief loading state before navigation
     setTimeout(() => {
