@@ -128,7 +128,7 @@ export default function ProductListingForm() {
         price: form.price,
         description: form.description,
         location: vendorApplication?.location || 'Bamenda',
-        image: imageUrl
+        imageUrls: imageUrl ? [imageUrl] : []
       };
 
       createProductMutation.mutate(productData);

@@ -217,11 +217,22 @@ export default function ProductFeed() {
           {filtered.map((product: Product) => (
             <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
               <div className="relative">
-                <img 
-                  src={product.image || "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300"} 
-                  alt={product.title}
-                  className="w-full h-48 object-cover"
-                />
+                {(product.imageUrls && product.imageUrls.length > 0) || product.image ? (
+                  <img 
+                    src={product.imageUrls?.[0] || product.image} 
+                    alt={product.title}
+                    className="w-full h-48 object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
+                    <div className="text-center">
+                      <svg className="w-12 h-12 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <p className="text-gray-500 text-sm">No image</p>
+                    </div>
+                  </div>
+                )}
                 <div className="absolute top-2 left-2">
                   <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
                     {product.category}

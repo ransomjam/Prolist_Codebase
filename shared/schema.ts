@@ -87,7 +87,8 @@ export const insertProductSchema = createInsertSchema(products).pick({
   price: true,
   description: true,
   location: true,
-  image: true,
+}).extend({
+  imageUrls: z.array(z.string()).optional(),
 });
 
 // Orders table
