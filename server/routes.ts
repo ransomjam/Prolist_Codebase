@@ -347,6 +347,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Auction endpoints
+  app.post('/api/auctions', async (req, res) => {
+    try {
+      const { vendorId, title, description, startingPrice, endDate, category, location, images } = req.body;
+      
+      if (!vendorId || !title || !startingPrice || !endDate) {
+        return res.status(400).json({ message: 'Missing required fields' });
+      }
+
+      const auction = await storage.createAuction({
+        vendorId,
+        title,
+        description,
+        startingPrice,
+        currentPrice: startingPrice,
+        endDate: new Date(endDate),
+        category,
+        location,
+        images: images || [],
+        status: 'active'
+      });
+
+      console.log(`✅ New auction created: ${auction.title} by vendor ${vendorId}`);
+      res.status(201).json(auction);
+    } catch (error: any) {
+      console.error("Error creating auction:", error);
+      res.status(500).json({ message: "Failed to create auction" });
+    }
+  });
+
+  app.get('/api/auctions', async (req, res) => {
+    try {
+      const auctions = await storage.getAllAuctions();
+      res.json(auctions);
+    } catch (error: any) {
+      console.error("Error fetching auctions:", error);
+      res.status(500).json({ message: "Failed to fetch auctions" });
+    }
+  });
+
+  app.get('/api/auctions/:id', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const auction = await storage.getAuction(id);
+      if (!auction) {
+        return res.status(404).json({ message: "Auction not found" });
+      }
+      res.json(auction);
+    } catch (error: any) {
+      console.error("Error fetching auction:", error);
+      res.status(500).json({ message: "Failed to fetch auction" });
+    }
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;

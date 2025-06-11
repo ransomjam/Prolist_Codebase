@@ -171,6 +171,19 @@ export const auctions = pgTable('auctions', {
   updatedAt: timestamp('updated_at').defaultNow()
 });
 
+export const insertAuctionSchema = createInsertSchema(auctions).pick({
+  vendorId: true,
+  title: true,
+  description: true,
+  startingPrice: true,
+  currentPrice: true,
+  endDate: true,
+  category: true,
+  location: true,
+}).extend({
+  images: z.array(z.string()).optional(),
+});
+
 export const notifications = pgTable('notifications', {
   id: serial('id').primaryKey(),
   userId: integer('user_id').references(() => users.id),

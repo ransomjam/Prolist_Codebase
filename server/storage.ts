@@ -6,6 +6,7 @@ import {
   orders,
   ratings,
   notifications,
+  auctions,
   type User, 
   type InsertUser, 
   type Comment, 
