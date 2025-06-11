@@ -155,6 +155,33 @@ export const insertRatingSchema = createInsertSchema(ratings).pick({
   comment: true,
 });
 
+export const auctions = pgTable('auctions', {
+  id: serial('id').primaryKey(),
+  vendorId: integer('vendor_id').references(() => users.id),
+  title: text('title').notNull(),
+  description: text('description'),
+  startingPrice: integer('starting_price').notNull(),
+  currentPrice: integer('current_price').default(0),
+  endDate: timestamp('end_date').notNull(),
+  status: text('status').default('active'), // active, ended, cancelled
+  images: text('images').array(),
+  category: text('category'),
+  location: text('location'),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow()
+});
+
+export const notifications = pgTable('notifications', {
+  id: serial('id').primaryKey(),
+  userId: integer('user_id').references(() => users.id),
+  type: text('type').notNull(), // new_order, listing_created, verification_approved, etc.
+  title: text('title').notNull(),
+  message: text('message').notNull(),
+  isRead: boolean('is_read').default(false),
+  data: text('data'), // JSON string for additional data
+  createdAt: timestamp('created_at').defaultNow()
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type VendorApplication = typeof vendorApplications.$inferSelect;

@@ -38,16 +38,18 @@ export default function NotificationDropdown() {
 
   const getNotificationColor = (type: string) => {
     switch (type) {
-      case 'bid_confirmed': return 'border-l-orange-500 bg-orange-50';
-      case 'listing_reply': return 'border-l-blue-500 bg-blue-50';
-      case 'account_verified': return 'border-l-green-500 bg-green-50';
+      case 'new_order': return 'border-l-green-500 bg-green-50';
+      case 'order_placed': return 'border-l-blue-500 bg-blue-50';
+      case 'listing_created': return 'border-l-purple-500 bg-purple-50';
+      case 'verification_approved': return 'border-l-green-500 bg-green-50';
+      case 'verification_rejected': return 'border-l-red-500 bg-red-50';
+      case 'verification_updated': return 'border-l-yellow-500 bg-yellow-50';
+      case 'product_approved': return 'border-l-green-500 bg-green-50';
+      case 'product_rejected': return 'border-l-red-500 bg-red-50';
+      case 'message_received': return 'border-l-blue-500 bg-blue-50';
+      case 'bid_placed': return 'border-l-orange-500 bg-orange-50';
       case 'auction_ending': return 'border-l-red-500 bg-red-50';
-      case 'new_follower': return 'border-l-purple-500 bg-purple-50';
       case 'payment_received': return 'border-l-emerald-500 bg-emerald-50';
-      case 'listing_featured': return 'border-l-yellow-500 bg-yellow-50';
-      case 'new_bid': return 'border-l-orange-500 bg-orange-50';
-      case 'message_reply': return 'border-l-blue-500 bg-blue-50';
-      case 'auction_won': return 'border-l-green-500 bg-green-50';
       default: return 'border-l-gray-500 bg-gray-50';
     }
   };

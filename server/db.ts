@@ -20,3 +20,5 @@ export const pool = new Pool({
 });
 
 export const db = drizzle({ client: pool, schema });
+
+export { users, products, orders, vendorApplications, bids, auctions, notifications } from '../shared/schema';

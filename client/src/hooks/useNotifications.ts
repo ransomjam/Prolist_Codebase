@@ -11,7 +11,26 @@ interface Notification {
   isRead: boolean;
   actionUrl?: string;
   data?: any;
+  icon?: string;
 }
+
+const getNotificationIcon = (type: string): string => {
+  switch (type) {
+    case 'new_order': return '💰';
+    case 'order_placed': return '📦';
+    case 'listing_created': return '📝';
+    case 'verification_approved': return '✅';
+    case 'verification_rejected': return '❌';
+    case 'verification_updated': return '🔄';
+    case 'product_approved': return '✅';
+    case 'product_rejected': return '❌';
+    case 'message_received': return '💬';
+    case 'bid_placed': return '🏷️';
+    case 'auction_ending': return '⏰';
+    case 'payment_received': return '💳';
+    default: return '🔔';
+  }
+};
 
 export function useNotifications() {
   const { user } = useAuth();
@@ -37,7 +56,8 @@ export function useNotifications() {
           timestamp: new Date(n.createdAt),
           isRead: n.isRead,
           actionUrl: n.actionUrl,
-          data: n.data
+          data: n.data ? JSON.parse(n.data) : null,
+          icon: getNotificationIcon(n.type)
         }));
         setNotifications(formattedNotifications);
       }
