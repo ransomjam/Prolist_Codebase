@@ -152,17 +152,6 @@ export default function Navbar() {
                         <div className="text-xs font-semibold text-teal-800 text-center">Services</div>
                       </Link>
                     </div>
-                    
-                    {/* Quick Category Links */}
-                    <div className="px-3 py-2">
-                      <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Browse Categories</h4>
-                      <div className="grid grid-cols-2 gap-2 text-xs">
-                        <Link href="/listings?category=Electronics" className="text-gray-600 hover:text-blue-600 py-1" onClick={() => setIsMenuOpen(false)}>Electronics</Link>
-                        <Link href="/listings?category=Fashion" className="text-gray-600 hover:text-blue-600 py-1" onClick={() => setIsMenuOpen(false)}>Fashion</Link>
-                        <Link href="/listings?category=Services" className="text-gray-600 hover:text-blue-600 py-1" onClick={() => setIsMenuOpen(false)}>Services</Link>
-                        <Link href="/listings?category=Home & Garden" className="text-gray-600 hover:text-blue-600 py-1" onClick={() => setIsMenuOpen(false)}>Home & Garden</Link>
-                      </div>
-                    </div>
                     <hr className="my-2" />
                     <Link href="/settings" className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg" onClick={() => setIsMenuOpen(false)}>
                       <Settings size={18} className="text-gray-600" />
