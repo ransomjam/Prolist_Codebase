@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { MapPin, Filter, Search, Home, Building, Calendar, SlidersHorizontal, Grid3X3, List, Eye, Heart, Share2, Wifi, Car, Bath, Bed, MapPin as LocationIcon, DollarSign, TrendingUp, Shield, Star } from 'lucide-react';
-import { realEstate } from '../data/demoData';
+import { useQuery } from '@tanstack/react-query';
 import RealEstateCard from '../components/RealEstateCard';
 
 export default function RealEstate() {
@@ -14,6 +14,19 @@ export default function RealEstate() {
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [showPropertyModal, setShowPropertyModal] = useState(false);
   const [favoriteProperties, setFavoriteProperties] = useState(new Set());
+
+  // Fetch real estate listings from API
+  const { data: allProducts = [], isLoading } = useQuery({
+    queryKey: ['/api/products'],
+    queryFn: async () => {
+      const response = await fetch('/api/products');
+      if (!response.ok) throw new Error('Failed to fetch products');
+      return response.json();
+    }
+  });
+
+  // Filter for real estate only
+  const realEstate = allProducts.filter((product: any) => product.category === 'Real Estate');
 
   const propertyTypes = [
     { id: 'all', label: 'All Properties', count: realEstate.length },

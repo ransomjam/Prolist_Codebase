@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { Gavel, Shield } from "lucide-react";
-import { auctions } from '../data/demoData';
+import { useQuery } from '@tanstack/react-query';
 import { useScrollAnimations } from '../hooks/useScrollAnimations';
 
 interface Countdown {
@@ -15,22 +15,32 @@ export default function Auctions() {
   const [countdowns, setCountdowns] = useState<{ [key: number]: Countdown | null }>({});
   const { setElementRef, getAnimationClass, getAnimationStyle } = useScrollAnimations();
 
+  // Fetch auctions from API
+  const { data: auctions = [], isLoading } = useQuery({
+    queryKey: ['/api/auctions'],
+    queryFn: async () => {
+      const response = await fetch('/api/auctions');
+      if (!response.ok) throw new Error('Failed to fetch auctions');
+      return response.json();
+    }
+  });
+
   useEffect(() => {
     const interval = setInterval(() => {
       const now = new Date().getTime();
       const newCountdowns: { [key: number]: Countdown | null } = {};
 
-      auctions.forEach(({ id, endTime }) => {
-        const distance = new Date(endTime).getTime() - now;
+      auctions.forEach((auction: any) => {
+        const distance = new Date(auction.endDate).getTime() - now;
         if (distance > 0) {
-          newCountdowns[id] = {
+          newCountdowns[auction.id] = {
             days: Math.floor(distance / (1000 * 60 * 60 * 24)),
             hours: Math.floor((distance / (1000 * 60 * 60)) % 24),
             minutes: Math.floor((distance / (1000 * 60)) % 60),
             seconds: Math.floor((distance / 1000) % 60),
           };
         } else {
-          newCountdowns[id] = null; // auction ended
+          newCountdowns[auction.id] = null; // auction ended
         }
       });
 
@@ -94,16 +104,14 @@ export default function Auctions() {
             >
               <div className="relative">
                 <img
-                  src={auction.product.image}
-                  alt={auction.product.title}
+                  src={auction.image || '/api/placeholder/300/200'}
+                  alt={auction.title}
                   className="h-48 w-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute top-3 right-3">
-                  {auction.verified && (
-                    <span className="bg-blue-600 text-white px-2 py-1 rounded-full text-xs font-medium">
-                      Verified
-                    </span>
-                  )}
+                  <span className="bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+                    Auction
+                  </span>
                 </div>
                 <div className="absolute bottom-3 left-3">
                   {!ended && timer && (
@@ -121,32 +129,32 @@ export default function Auctions() {
               
               <div className="p-4 flex flex-col flex-1">
                 <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2 leading-tight">
-                  {auction.product.title}
+                  {auction.title}
                 </h3>
                 
                 <p className="text-gray-600 text-sm mb-3 line-clamp-2 flex-1">
-                  {auction.product.description}
+                  {auction.description}
                 </p>
                 
                 <div className="space-y-2 mt-auto">
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-gray-500 uppercase tracking-wide">Starting Price</span>
                     <span className="text-sm font-bold text-emerald-600">
-                      {auction.startingPrice.toLocaleString()} CFA
+                      {parseFloat(auction.startingPrice).toLocaleString()} CFA
                     </span>
                   </div>
                   
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-gray-500 uppercase tracking-wide">Current Bid</span>
                     <span className="text-lg font-bold text-yellow-600">
-                      {auction.currentBid.toLocaleString()} CFA
+                      {parseFloat(auction.currentBid || auction.startingPrice).toLocaleString()} CFA
                     </span>
                   </div>
                   
                   <div className="pt-2 border-t border-gray-100">
                     <div className="flex items-center justify-between">
                       <span className="text-xs text-gray-700 font-medium">
-                        {auction.vendor}
+                        Verified Seller
                       </span>
                       <span className="text-xs text-gray-400">
                         #{auction.id}
