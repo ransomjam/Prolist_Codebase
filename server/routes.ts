@@ -883,7 +883,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { name, email, category, subject, message, priority } = req.body;
 
       // Basic validation
-      if (!name || !email || !category || !subject || !message) {        return res.status(400).json({ message: "All required fields must be filled" });
+      if (!name || !email || !category || !subject || !message) {
+        return res.status(400).json({ message: "All required fields must be filled" });
       }
 
       // Email validation
@@ -1452,138 +1453,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Product creation with notification
-  app.post('/api/products', async (req, res) => {
-    try {
-      const { vendorId, title, description, price, category, images, location } = req.body;
-
-      const validatedProduct = insertProductSchema.parse({
-        vendorId,
-        title,
-        description,
-        price,
-        category,
-        images,
-        location,
-        status: 'pending'
-      });
-      const product = await storage.createProduct(validatedProduct);
-
-      // Create notification for product listing
-      await storage.createNotification({
-        userId: vendorId,
-        type: 'listing_created',
-        title: 'Product listing submitted',
-        message: `Your product listing "${title}" has been submitted for review`,
-        actionUrl: `/product/${product.id}`
-      });
-
-      console.log('✅ Product created:', product);
-      res.status(201).json(product);
-    } catch (error) {
-      console.error('❌ Failed to create product:', error);
-      res.status(500).json({ message: 'Failed to create product' });
-    }
-  });
-
-  // Order creation with notification
-  app.post('/api/orders', async (req, res) => {
-    try {
-      const { buyerId, productId, quantity, totalAmount, deliveryMethod, deliveryAddress } = req.body;
-
-      // Get product details
-      const product = await storage.getProduct(productId);
-      if (!product) {
-        return res.status(404).json({ message: 'Product not found' });
-      }
-
-      const order = await storage.createOrder({
-        buyerId,
-        vendorId: product.vendorId,
-        productId,
-        quantity,
-        totalAmount,
-        deliveryMethod,
-        deliveryAddress,
-        status: 'pending'
-      });
-
-      // Create notification for vendor
-      await storage.createNotification({
-        userId: product.vendorId,
-        type: 'new_order',
-        title: 'New order received',
-        message: `You received a new order for ${totalAmount} FCFA`,
-        actionUrl: `/vendor/order/${order.id}`
-      });
-
-      // Create notification for buyer
-      await storage.createNotification({
-        userId: buyerId,
-        type: 'order_placed',
-        title: 'Order placed successfully',
-        message: `Your order for "${product.title}" has been placed`,
-        actionUrl: `/order/${order.id}`
-      });
-
-      console.log('✅ Order created:', order);
-      res.status(201).json(order);
-    } catch (error) {
-      console.error('❌ Failed to create order:', error);
-      res.status(500).json({ message: 'Failed to create order' });
-    }
-  });
-
-  // Vendor application status update with notification
-  app.patch('/api/vendor/applications/:id/status', async (req, res) => {
-    try {
-      const id = parseInt(req.params.id);
-      const { status, feedback } = req.body;
-
-      const updatedApplication = await storage.updateVendorApplicationStatus(id, status, feedback);
-
-      if (!updatedApplication) {
-        return res.status(404).json({ message: 'Application not found' });
-      }
-
-      // Create notification for verification status update
-      let notificationTitle = '';
-      let notificationMessage = '';
-      let notificationType = '';
-
-      if (status.includes('Verified')) {
-        notificationType = 'verification_approved';
-        notificationTitle = 'Verification approved';
-        notificationMessage = `Your vendor verification has been approved. Status: ${status}`;
-      } else if (status === 'Rejected') {
-        notificationType = 'verification_rejected';
-        notificationTitle = 'Verification rejected';
-        notificationMessage = `Your vendor verification was rejected. ${feedback || 'Please contact support for more details.'}`;
-      } else {
-        notificationType = 'verification_updated';
-        notificationTitle = 'Verification status updated';
-        notificationMessage = `Your vendor verification status has been updated to: ${status}`;
-      }
-
-      await storage.createNotification({
-        userId: updatedApplication.userId,
-        type: notificationType,
-        title: notificationTitle,
-        message: notificationMessage,
-        actionUrl: '/vendor/application'
-      });
-
-      console.log('✅ Vendor application status updated:', updatedApplication);
-      res.json({
-        ...updatedApplication,
-        message: `Vendor application ${status.toLowerCase()} successfully`,
-        userNotified: true
-      });
-    } catch (error) {
-      console.error('❌ Failed to update application status:', error);
-      res.status(500).json({ message: 'Failed to update application status' });
-    }
-  });
+  
 
   // use storage to perform CRUD operations on the storage interface
   // e.g. storage.insertUser(user) or storage.getUserByUsername(username)
