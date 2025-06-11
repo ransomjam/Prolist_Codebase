@@ -118,11 +118,17 @@ export default function Auctions() {
               style={getAnimationStyle(index + 4)}
             >
               <div className="relative">
-                <img
-                  src={auction.image || `https://picsum.photos/300/200?random=${auction.id}`}
-                  alt={auction.title}
-                  className="h-48 w-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
+                {auction.imageUrls && auction.imageUrls.length > 0 ? (
+                  <img
+                    src={auction.imageUrls[0]}
+                    alt={auction.title}
+                    className="h-48 w-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                ) : (
+                  <div className="h-48 w-full bg-gray-100 flex items-center justify-center">
+                    <span className="text-gray-400">No image available</span>
+                  </div>
+                )}
                 <div className="absolute top-3 right-3">
                   <span className="bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-medium">
                     Auction

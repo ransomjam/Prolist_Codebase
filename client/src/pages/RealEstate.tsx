@@ -322,11 +322,17 @@ export default function RealEstate() {
                 <div key={property.id} className="group">
                   <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100">
                     <div className="relative">
-                      <img 
-                        src={property.image || `https://picsum.photos/400/200?random=${property.id}`} 
-                        alt={property.title}
-                        className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
+                      {property.imageUrls && property.imageUrls.length > 0 ? (
+                        <img 
+                          src={property.imageUrls[0]} 
+                          alt={property.title}
+                          className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      ) : (
+                        <div className="w-full h-48 bg-gray-100 flex items-center justify-center">
+                          <span className="text-gray-400">No image available</span>
+                        </div>
+                      )}
                       <div className="absolute top-3 right-3 flex gap-2">
                         {property.verified && (
                           <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
@@ -513,11 +519,17 @@ export default function RealEstate() {
           <div className="bg-white rounded-xl max-w-4xl w-full max-h-[95vh] overflow-y-auto">
             {/* Modal Header */}
             <div className="relative">
-              <img 
-                src={selectedProperty.image} 
-                alt={selectedProperty.title}
-                className="w-full h-40 md:h-48 object-cover rounded-t-xl"
-              />
+              {selectedProperty.imageUrls && selectedProperty.imageUrls.length > 0 ? (
+                <img 
+                  src={selectedProperty.imageUrls[0]} 
+                  alt={selectedProperty.title}
+                  className="w-full h-40 md:h-48 object-cover rounded-t-xl"
+                />
+              ) : (
+                <div className="w-full h-40 md:h-48 bg-gray-100 flex items-center justify-center rounded-t-xl">
+                  <span className="text-gray-400">No image available</span>
+                </div>
+              )}
               <button 
                 onClick={() => setShowPropertyModal(false)}
                 className="absolute top-2 right-2 bg-white/90 hover:bg-white p-1.5 rounded-full transition-colors"

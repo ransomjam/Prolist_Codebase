@@ -322,11 +322,17 @@ export default function ProfessionalServices() {
                 >
                   {/* Service Image */}
                   <div>
-                    <img
-                      src={listing.image || `https://picsum.photos/400/250?random=${listing.id}`}
-                      alt={listing.title}
-                      className="w-full h-40 sm:h-48 object-cover"
-                    />
+                    {listing.imageUrls && listing.imageUrls.length > 0 ? (
+                      <img
+                        src={listing.imageUrls[0]}
+                        alt={listing.title}
+                        className="w-full h-40 sm:h-48 object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-40 sm:h-48 bg-gray-100 flex items-center justify-center">
+                        <span className="text-gray-400">No image available</span>
+                      </div>
+                    )}
                   </div>
 
                   {/* Service Info */}
