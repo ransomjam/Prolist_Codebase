@@ -10,11 +10,12 @@ interface Product {
   category: string;
   price: string;
   description: string;
-  location: string;
+  location?: string;
   vendorId: number;
-  viewCount: number;
+  viewCount?: number;
   createdAt: string;
-  image?: string;
+  imageUrls?: string[];
+  image?: string; // Keep for backwards compatibility
   marketId?: string;
   marketLine?: string;
 }

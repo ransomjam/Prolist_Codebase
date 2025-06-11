@@ -73,8 +73,8 @@ export default function Listings() {
 
   // Generate categories dynamically from products, plus common categories
   const allCategories = ["All", "Electronics", "Fashion", "Home & Garden", "Sports", "Books", "Automotive", "Services"];
-  const productCategories = [...new Set(products.map((product: any) => product.category).filter(Boolean))];
-  const categories = [...new Set([...allCategories, ...productCategories])];
+  const productCategories = Array.from(new Set(products.map((product: any) => product.category).filter(Boolean)));
+  const categories = Array.from(new Set([...allCategories, ...productCategories]));
 
   const handleCategoryChange = (newCategory: string) => {
     setCategory(newCategory);
@@ -93,7 +93,7 @@ export default function Listings() {
       <h2 className="text-3xl font-bold text-primary mb-4">Explore Listings</h2>
 
       <div className="flex gap-4 mb-6 overflow-x-auto">
-        {categories.map(cat => (
+        {categories.map((cat: string) => (
           <button
             key={cat}
             onClick={() => handleCategoryChange(cat)}
