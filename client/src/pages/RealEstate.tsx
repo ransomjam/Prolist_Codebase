@@ -32,9 +32,9 @@ export default function RealEstate() {
 
   const propertyTypes = [
     { id: 'all', label: 'All Properties', count: realEstate.length },
-    { id: 'apartment', label: 'Apartments', count: realEstate.filter(p => p.title.toLowerCase().includes('apartment')).length },
-    { id: 'house', label: 'Houses', count: realEstate.filter(p => p.title.toLowerCase().includes('house') || p.title.toLowerCase().includes('duplex')).length },
-    { id: 'commercial', label: 'Commercial', count: realEstate.filter(p => p.title.toLowerCase().includes('commercial') || p.title.toLowerCase().includes('building')).length }
+    { id: 'apartment', label: 'Apartments', count: realEstate.filter((p: any) => p.title.toLowerCase().includes('apartment')).length },
+    { id: 'house', label: 'Houses', count: realEstate.filter((p: any) => p.title.toLowerCase().includes('house') || p.title.toLowerCase().includes('duplex')).length },
+    { id: 'commercial', label: 'Commercial', count: realEstate.filter((p: any) => p.title.toLowerCase().includes('commercial') || p.title.toLowerCase().includes('building')).length }
   ];
 
   const priceRanges = [
