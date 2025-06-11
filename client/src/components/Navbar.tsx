@@ -19,9 +19,10 @@ export default function Navbar() {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
-      if (!target.closest('.dropdown-container') && !target.closest('.chat-container')) {
+      if (!target.closest('.dropdown-container') && !target.closest('.chat-container') && !target.closest('.relative')) {
         setIsNotificationsOpen(false);
         setIsSearchOpen(false);
+        setIsMenuOpen(false);
       }
     };
 
@@ -98,89 +99,97 @@ export default function Navbar() {
               <Search className="text-gray-700" size={20} />
             </button>
             
-            <div className="relative group">
-              <button className="w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center transition-colors">
+            <div className="relative">
+              <button 
+                className="w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center transition-colors"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
                 <Menu className="text-gray-700" size={20} />
               </button>
-              <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 border">
-                <div className="p-2">
-                  <Link href="/profile" className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg">
-                    {(user as any)?.profilePictureUrl ? (
-                      <img
-                        src={(user as any).profilePictureUrl}
-                        alt="Profile"
-                        className="w-8 h-8 rounded-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                        <User size={16} />
+              {isMenuOpen && (
+                <div className="absolute right-0 mt-2 w-72 sm:w-56 bg-white rounded-lg shadow-xl border z-50 max-h-[90vh] overflow-y-auto">
+                  <div className="p-2">
+                    <Link href="/profile" className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg">
+                      {(user as any)?.profilePictureUrl ? (
+                        <img
+                          src={(user as any).profilePictureUrl}
+                          alt="Profile"
+                          className="w-8 h-8 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                          <User size={16} />
+                        </div>
+                      )}
+                      <div>
+                        <div className="font-semibold text-sm">{user?.firstName ? `${user.firstName} ${user.lastName || ''}`.trim() : user?.username || 'User'}</div>
+                        <div className="text-xs text-gray-500">See your profile</div>
                       </div>
-                    )}
-                    <div>
-                      <div className="font-semibold text-sm">{user?.firstName ? `${user.firstName} ${user.lastName || ''}`.trim() : user?.username || 'User'}</div>
-                      <div className="text-xs text-gray-500">See your profile</div>
-                    </div>
-                  </Link>
-                  <hr className="my-2" />
+                    </Link>
+                    <hr className="my-2" />
                   
 
                   
                   <div className="grid grid-cols-2 gap-3 p-3">
-                    <a href="/listings" className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-blue-50 via-blue-100 to-blue-150 hover:from-blue-100 hover:via-blue-150 hover:to-blue-200 transition-all duration-300 border border-blue-200 shadow-sm hover:shadow-md">
-                      <ShoppingBag className="w-7 h-7 text-blue-600 group-hover:scale-110 transition-transform duration-200" />
-                      <div className="text-xs font-semibold text-blue-800 text-center">All Listings</div>
-                    </a>
-                    <a href="/markets" className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-green-50 via-green-100 to-green-150 hover:from-green-100 hover:via-green-150 hover:to-green-200 transition-all duration-300 border border-green-200 shadow-sm hover:shadow-md">
-                      <BuildingStorefrontIcon className="w-7 h-7 text-green-600 group-hover:scale-110 transition-transform duration-200" />
-                      <div className="text-xs font-semibold text-green-800 text-center">Markets</div>
-                    </a>
-                    <a href="/realestate" className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-purple-50 via-purple-100 to-purple-150 hover:from-purple-100 hover:via-purple-150 hover:to-purple-200 transition-all duration-300 border border-purple-200 shadow-sm hover:shadow-md">
-                      <HomeModernIcon className="w-7 h-7 text-purple-600 group-hover:scale-110 transition-transform duration-200" />
-                      <div className="text-xs font-semibold text-purple-800 text-center">Real Estate</div>
-                    </a>
-                    <a href="/auctions" className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-red-50 via-red-100 to-red-150 hover:from-red-100 hover:via-red-150 hover:to-red-200 transition-all duration-300 border border-red-200 shadow-sm hover:shadow-md">
-                      <CurrencyDollarIcon className="w-7 h-7 text-red-600 group-hover:scale-110 transition-transform duration-200" />
-                      <div className="text-xs font-semibold text-red-800 text-center">Auctions</div>
-                    </a>
-                    <a href="/professional-services" className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-teal-50 via-teal-100 to-teal-150 hover:from-teal-100 hover:via-teal-150 hover:to-teal-200 transition-all duration-300 border border-teal-200 shadow-sm hover:shadow-md">
-                      <div className="text-lg group-hover:scale-110 transition-transform duration-200">🔧</div>
-                      <div className="text-xs font-semibold text-teal-800 text-center">Services</div>
-                    </a>
-                  </div>
-                  
-                  {/* Quick Category Links */}
-                  <div className="px-3 py-2">
-                    <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Browse Categories</h4>
-                    <div className="grid grid-cols-2 gap-2 text-xs">
-                      <a href="/listings?category=Electronics" className="text-gray-600 hover:text-blue-600 py-1">Electronics</a>
-                      <a href="/listings?category=Fashion" className="text-gray-600 hover:text-blue-600 py-1">Fashion</a>
-                      <a href="/listings?category=Services" className="text-gray-600 hover:text-blue-600 py-1">Services</a>
-                      <a href="/listings?category=Home & Garden" className="text-gray-600 hover:text-blue-600 py-1">Home & Garden</a>
+                      <Link href="/listings" className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-blue-50 via-blue-100 to-blue-150 hover:from-blue-100 hover:via-blue-150 hover:to-blue-200 transition-all duration-300 border border-blue-200 shadow-sm hover:shadow-md" onClick={() => setIsMenuOpen(false)}>
+                        <ShoppingBag className="w-7 h-7 text-blue-600 group-hover:scale-110 transition-transform duration-200" />
+                        <div className="text-xs font-semibold text-blue-800 text-center">All Listings</div>
+                      </Link>
+                      <Link href="/markets" className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-green-50 via-green-100 to-green-150 hover:from-green-100 hover:via-green-150 hover:to-green-200 transition-all duration-300 border border-green-200 shadow-sm hover:shadow-md" onClick={() => setIsMenuOpen(false)}>
+                        <BuildingStorefrontIcon className="w-7 h-7 text-green-600 group-hover:scale-110 transition-transform duration-200" />
+                        <div className="text-xs font-semibold text-green-800 text-center">Markets</div>
+                      </Link>
+                      <Link href="/realestate" className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-purple-50 via-purple-100 to-purple-150 hover:from-purple-100 hover:via-purple-150 hover:to-purple-200 transition-all duration-300 border border-purple-200 shadow-sm hover:shadow-md" onClick={() => setIsMenuOpen(false)}>
+                        <HomeModernIcon className="w-7 h-7 text-purple-600 group-hover:scale-110 transition-transform duration-200" />
+                        <div className="text-xs font-semibold text-purple-800 text-center">Real Estate</div>
+                      </Link>
+                      <Link href="/auctions" className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-red-50 via-red-100 to-red-150 hover:from-red-100 hover:via-red-150 hover:to-red-200 transition-all duration-300 border border-red-200 shadow-sm hover:shadow-md" onClick={() => setIsMenuOpen(false)}>
+                        <CurrencyDollarIcon className="w-7 h-7 text-red-600 group-hover:scale-110 transition-transform duration-200" />
+                        <div className="text-xs font-semibold text-red-800 text-center">Auctions</div>
+                      </Link>
+                      <Link href="/professional-services" className="group flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-br from-teal-50 via-teal-100 to-teal-150 hover:from-teal-100 hover:via-teal-150 hover:to-teal-200 transition-all duration-300 border border-teal-200 shadow-sm hover:shadow-md" onClick={() => setIsMenuOpen(false)}>
+                        <div className="text-lg group-hover:scale-110 transition-transform duration-200">🔧</div>
+                        <div className="text-xs font-semibold text-teal-800 text-center">Services</div>
+                      </Link>
                     </div>
+                    
+                    {/* Quick Category Links */}
+                    <div className="px-3 py-2">
+                      <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Browse Categories</h4>
+                      <div className="grid grid-cols-2 gap-2 text-xs">
+                        <Link href="/listings?category=Electronics" className="text-gray-600 hover:text-blue-600 py-1" onClick={() => setIsMenuOpen(false)}>Electronics</Link>
+                        <Link href="/listings?category=Fashion" className="text-gray-600 hover:text-blue-600 py-1" onClick={() => setIsMenuOpen(false)}>Fashion</Link>
+                        <Link href="/listings?category=Services" className="text-gray-600 hover:text-blue-600 py-1" onClick={() => setIsMenuOpen(false)}>Services</Link>
+                        <Link href="/listings?category=Home & Garden" className="text-gray-600 hover:text-blue-600 py-1" onClick={() => setIsMenuOpen(false)}>Home & Garden</Link>
+                      </div>
+                    </div>
+                    <hr className="my-2" />
+                    <Link href="/settings" className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg" onClick={() => setIsMenuOpen(false)}>
+                      <Settings size={18} className="text-gray-600" />
+                      <span className="text-sm">Settings & Privacy</span>
+                    </Link>
+                    <Link href="/help" className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg" onClick={() => setIsMenuOpen(false)}>
+                      <Heart size={18} className="text-gray-600" />
+                      <span className="text-sm">Help & Support</span>
+                    </Link>
+                    <Link href="/about" className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg" onClick={() => setIsMenuOpen(false)}>
+                      <Shield size={18} className="text-gray-600" />
+                      <span className="text-sm">About</span>
+                    </Link>
+                    <hr className="my-2" />
+                    <button 
+                      onClick={() => {
+                        logout();
+                        setIsMenuOpen(false);
+                      }}
+                      className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg text-gray-700 w-full text-left"
+                    >
+                      <LogOut size={18} />
+                      <span className="text-sm">Log Out</span>
+                    </button>
                   </div>
-                  <hr className="my-2" />
-                  <Link href="/settings" className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg">
-                    <Settings size={18} className="text-gray-600" />
-                    <span className="text-sm">Settings & Privacy</span>
-                  </Link>
-                  <Link href="/help" className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg">
-                    <Heart size={18} className="text-gray-600" />
-                    <span className="text-sm">Help & Support</span>
-                  </Link>
-                  <Link href="/about" className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg">
-                    <Shield size={18} className="text-gray-600" />
-                    <span className="text-sm">About</span>
-                  </Link>
-                  <hr className="my-2" />
-                  <button 
-                    onClick={logout}
-                    className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg text-gray-700 w-full text-left"
-                  >
-                    <LogOut size={18} />
-                    <span className="text-sm">Log Out</span>
-                  </button>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
