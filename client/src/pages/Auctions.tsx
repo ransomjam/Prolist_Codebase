@@ -119,7 +119,7 @@ export default function Auctions() {
             >
               <div className="relative">
                 <img
-                  src={auction.image || '/api/placeholder/300/200'}
+                  src={auction.image || `https://picsum.photos/300/200?random=${auction.id}`}
                   alt={auction.title}
                   className="h-48 w-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />

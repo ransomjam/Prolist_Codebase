@@ -323,7 +323,7 @@ export default function RealEstate() {
                   <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100">
                     <div className="relative">
                       <img 
-                        src={property.image} 
+                        src={property.image || `https://picsum.photos/400/200?random=${property.id}`} 
                         alt={property.title}
                         className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                       />

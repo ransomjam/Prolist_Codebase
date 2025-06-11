@@ -322,17 +322,11 @@ export default function ProfessionalServices() {
                 >
                   {/* Service Image */}
                   <div>
-                    {listing.imageUrls && listing.imageUrls.length > 0 ? (
-                      <img
-                        src={listing.imageUrls[0]}
-                        alt={listing.title}
-                        className="w-full h-40 sm:h-48 object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-40 sm:h-48 bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center">
-                        <Package className="w-16 h-16 text-purple-400" />
-                      </div>
-                    )}
+                    <img
+                      src={listing.image || `https://picsum.photos/400/250?random=${listing.id}`}
+                      alt={listing.title}
+                      className="w-full h-40 sm:h-48 object-cover"
+                    />
                   </div>
 
                   {/* Service Info */}
