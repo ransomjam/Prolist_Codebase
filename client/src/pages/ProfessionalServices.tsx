@@ -401,7 +401,7 @@ export default function ProfessionalServices() {
       {/* Chat Component */}
       {chatOpen && selectedProfessional && (
         <ChatBox
-          vendorName={selectedProfessional.name}
+          vendorName="Professional Service Provider"
           buyerName="You"
           isOpen={chatOpen}
           onClose={() => setChatOpen(false)}
