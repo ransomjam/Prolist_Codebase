@@ -19,6 +19,8 @@ import {
   type InsertOrder,
   type Rating,
   type InsertRating,
+  type Auction,
+  type InsertAuction,
   type Notification,
   type InsertNotification
 } from "@shared/schema";
@@ -63,6 +65,13 @@ export interface IStorage {
   getRatingsByUser(userId: number): Promise<Rating[]>;
   getAverageRating(userId: number): Promise<number>;
 
+  // Auction methods
+  createAuction(auction: InsertAuction): Promise<Auction>;
+  getAuction(id: number): Promise<Auction | undefined>;
+  getAllAuctions(): Promise<Auction[]>;
+  getAuctionsByVendor(vendorId: number): Promise<Auction[]>;
+  updateAuctionStatus(id: number, status: string): Promise<Auction | undefined>;
+  
   // Notification methods
   getUserNotifications(userId: number): Promise<Notification[]>;
   createNotification(notification: InsertNotification): Promise<Notification>;
@@ -231,6 +240,37 @@ export class DatabaseStorage implements IStorage {
 
   async deleteNotification(id: number): Promise<void> {
     await db.delete(notifications).where(eq(notifications.id, id));
+  }
+
+  // Auction methods implementation
+  async createAuction(insertAuction: InsertAuction): Promise<Auction> {
+    const [auction] = await db
+      .insert(auctions)
+      .values(insertAuction)
+      .returning();
+    return auction;
+  }
+
+  async getAuction(id: number): Promise<Auction | undefined> {
+    const [auction] = await db.select().from(auctions).where(eq(auctions.id, id));
+    return auction || undefined;
+  }
+
+  async getAllAuctions(): Promise<Auction[]> {
+    return await db.select().from(auctions);
+  }
+
+  async getAuctionsByVendor(vendorId: number): Promise<Auction[]> {
+    return await db.select().from(auctions).where(eq(auctions.vendorId, vendorId));
+  }
+
+  async updateAuctionStatus(id: number, status: string): Promise<Auction | undefined> {
+    const [updatedAuction] = await db
+      .update(auctions)
+      .set({ status })
+      .where(eq(auctions.id, id))
+      .returning();
+    return updatedAuction;
   }
 }
 

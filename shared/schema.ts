@@ -178,6 +178,7 @@ export const insertAuctionSchema = createInsertSchema(auctions).pick({
   startingPrice: true,
   currentPrice: true,
   endDate: true,
+  status: true,
   category: true,
   location: true,
 }).extend({
@@ -217,5 +218,7 @@ export type Comment = typeof comments.$inferSelect;
 export type InsertComment = z.infer<typeof insertCommentSchema>;
 export type Rating = typeof ratings.$inferSelect;
 export type InsertRating = z.infer<typeof insertRatingSchema>;
+export type Auction = typeof auctions.$inferSelect;
+export type InsertAuction = z.infer<typeof insertAuctionSchema>;
 export type Notification = typeof notifications.$inferSelect;
 export type InsertNotification = z.infer<typeof insertNotificationSchema>;
