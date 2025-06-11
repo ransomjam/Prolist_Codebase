@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from './useAuth';
 
@@ -14,93 +15,115 @@ interface Notification {
 
 export function useNotifications() {
   const { user } = useAuth();
-  const [notifications, setNotifications] = useState<Notification[]>([
-    {
-      id: '1',
-      type: 'new_bid',
-      title: 'New Bid Received',
-      message: 'Someone placed a bid of 45,000 FCFA on your iPhone 14 Pro Max',
-      timestamp: new Date(Date.now() - 5 * 60 * 1000),
-      isRead: false,
-      actionUrl: '/auctions'
-    },
-    {
-      id: '2',
-      type: 'message_reply',
-      title: 'New Message',
-      message: 'Sarah Kimeng sent you a message about Nike Air Force',
-      timestamp: new Date(Date.now() - 15 * 60 * 1000),
-      isRead: false,
-      actionUrl: '/chat'
-    },
-    {
-      id: '3',
-      type: 'account_verified',
-      title: 'Account Verified',
-      message: 'Your vendor account has been approved as Premium Verified',
-      timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-      isRead: true,
-      actionUrl: '/profile'
-    },
-    {
-      id: '4',
-      type: 'auction_ending',
-      title: 'Auction Ending Soon',
-      message: 'Your bid on MacBook Air M2 auction ends in 30 minutes',
-      timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000),
-      isRead: false,
-      actionUrl: '/auctions'
-    },
-    {
-      id: '5',
-      type: 'payment_received',
-      title: 'Payment Received',
-      message: 'You received 25,000 FCFA for Samsung Galaxy S24',
-      timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000),
-      isRead: true,
-      actionUrl: '/orders'
-    }
-  ]);
-  
+  const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isConnected, setIsConnected] = useState(true);
   const [permissionGranted, setPermissionGranted] = useState(false);
 
   const unreadCount = notifications.filter(n => !n.isRead).length;
 
-  const addNotification = useCallback((notification: Omit<Notification, 'id' | 'timestamp' | 'isRead'>) => {
-    const newNotification: Notification = {
-      ...notification,
-      id: Date.now().toString(),
-      timestamp: new Date(),
-      isRead: false
-    };
+  // Fetch notifications from API
+  const fetchNotifications = useCallback(async () => {
+    if (!user?.id) return;
     
-    setNotifications(prev => [newNotification, ...prev]);
-    
-    // Show browser notification if permission granted
-    if (permissionGranted && 'Notification' in window) {
-      new Notification(notification.title, {
-        body: notification.message,
-        icon: '/favicon.ico',
-        tag: newNotification.id
-      });
+    try {
+      const response = await fetch(`/api/notifications/${user.id}`);
+      if (response.ok) {
+        const data = await response.json();
+        const formattedNotifications = data.map((n: any) => ({
+          id: n.id.toString(),
+          type: n.type,
+          title: n.title,
+          message: n.message,
+          timestamp: new Date(n.createdAt),
+          isRead: n.isRead,
+          actionUrl: n.actionUrl,
+          data: n.data
+        }));
+        setNotifications(formattedNotifications);
+      }
+    } catch (error) {
+      console.error('Failed to fetch notifications:', error);
+      setIsConnected(false);
     }
-  }, [permissionGranted]);
+  }, [user?.id]);
 
-  const markAsRead = useCallback((id: string) => {
-    setNotifications(prev => 
-      prev.map(n => n.id === id ? { ...n, isRead: true } : n)
-    );
+  const addNotification = useCallback(async (notification: Omit<Notification, 'id' | 'timestamp' | 'isRead'>) => {
+    if (!user?.id) return;
+
+    try {
+      const response = await fetch('/api/notifications', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          ...notification
+        })
+      });
+
+      if (response.ok) {
+        await fetchNotifications(); // Refresh notifications
+        
+        // Show browser notification if permission granted
+        if (permissionGranted && 'Notification' in window) {
+          new Notification(notification.title, {
+            body: notification.message,
+            icon: '/favicon.ico',
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Failed to create notification:', error);
+    }
+  }, [user?.id, permissionGranted, fetchNotifications]);
+
+  const markAsRead = useCallback(async (id: string) => {
+    try {
+      const response = await fetch(`/api/notifications/${id}/read`, {
+        method: 'PATCH'
+      });
+      
+      if (response.ok) {
+        setNotifications(prev => 
+          prev.map(n => n.id === id ? { ...n, isRead: true } : n)
+        );
+      }
+    } catch (error) {
+      console.error('Failed to mark notification as read:', error);
+    }
   }, []);
 
-  const markAllAsRead = useCallback(() => {
-    setNotifications(prev => 
-      prev.map(n => ({ ...n, isRead: true }))
-    );
-  }, []);
+  const markAllAsRead = useCallback(async () => {
+    if (!user?.id) return;
+    
+    try {
+      const response = await fetch(`/api/notifications/${user.id}/mark-all-read`, {
+        method: 'PATCH'
+      });
+      
+      if (response.ok) {
+        setNotifications(prev => 
+          prev.map(n => ({ ...n, isRead: true }))
+        );
+      }
+    } catch (error) {
+      console.error('Failed to mark all notifications as read:', error);
+    }
+  }, [user?.id]);
 
-  const removeNotification = useCallback((id: string) => {
-    setNotifications(prev => prev.filter(n => n.id !== id));
+  const removeNotification = useCallback(async (id: string) => {
+    try {
+      const response = await fetch(`/api/notifications/${id}`, {
+        method: 'DELETE'
+      });
+      
+      if (response.ok) {
+        setNotifications(prev => prev.filter(n => n.id !== id));
+      }
+    } catch (error) {
+      console.error('Failed to delete notification:', error);
+    }
   }, []);
 
   const requestNotificationPermission = useCallback(async () => {
@@ -112,46 +135,25 @@ export function useNotifications() {
     return false;
   }, []);
 
-  // Simulate real-time notifications
+  // Fetch notifications when user changes
   useEffect(() => {
-    if (!user) return;
+    if (user?.id) {
+      fetchNotifications();
+    } else {
+      setNotifications([]);
+    }
+  }, [user?.id, fetchNotifications]);
 
-    const simulateNotifications = () => {
-      const notificationTypes = [
-        {
-          type: 'new_bid',
-          title: 'New Bid Received',
-          message: 'Someone placed a higher bid on your item',
-          actionUrl: '/auctions'
-        },
-        {
-          type: 'message_reply',
-          title: 'New Message',
-          message: 'You have a new message from a potential buyer',
-          actionUrl: '/chat'
-        },
-        {
-          type: 'listing_featured',
-          title: 'Listing Featured',
-          message: 'Your product has been featured on the homepage',
-          actionUrl: '/marketplace'
-        }
-      ];
+  // Poll for new notifications every 30 seconds
+  useEffect(() => {
+    if (!user?.id) return;
 
-      // Randomly add notifications every 30-60 seconds for demo
-      const interval = setInterval(() => {
-        if (Math.random() > 0.7) { // 30% chance
-          const randomNotification = notificationTypes[Math.floor(Math.random() * notificationTypes.length)];
-          addNotification(randomNotification);
-        }
-      }, 45000);
+    const interval = setInterval(() => {
+      fetchNotifications();
+    }, 30000);
 
-      return () => clearInterval(interval);
-    };
-
-    const cleanup = simulateNotifications();
-    return cleanup;
-  }, [user, addNotification]);
+    return () => clearInterval(interval);
+  }, [user?.id, fetchNotifications]);
 
   return {
     notifications,

@@ -243,6 +243,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         accountType: 'vendor'
       });
 
+      // Create notification for successful vendor registration
+      await storage.createNotification({
+        userId,
+        type: 'account_verified',
+        title: 'Vendor Application Approved',
+        message: 'Congratulations! Your vendor application has been approved. You are now a verified vendor.',
+        actionUrl: '/profile'
+      });
+
       // Log the auto-approval
       console.log('✅ AUTO-APPROVED (MVP): Vendor registration for', {
         id: application.id,
@@ -363,6 +372,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/orders', async (req, res) => {
     try {
       const order = await storage.createOrder(req.body);
+      
+      // Create notification for vendor about new order
+      if (order.vendorId) {
+        await storage.createNotification({
+          userId: order.vendorId,
+          type: 'new_order',
+          title: 'New Order Received',
+          message: `You received a new order for ${order.productTitle}`,
+          actionUrl: '/vendor/orders'
+        });
+      }
+      
+      // Create notification for buyer about order confirmation
+      if (order.buyerId) {
+        await storage.createNotification({
+          userId: order.buyerId,
+          type: 'order_confirmed',
+          title: 'Order Confirmed',
+          message: `Your order for ${order.productTitle} has been confirmed`,
+          actionUrl: '/orders'
+        });
+      }
+      
       res.status(201).json(order);
     } catch (error) {
       console.error("Error creating order:", error);
@@ -567,6 +599,64 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error updating order status:", error);
       res.status(500).json({ message: "Failed to update order status" });
+    }
+  });
+
+  // Notification routes
+  app.get('/api/notifications/:userId', async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const notifications = await storage.getUserNotifications(userId);
+      res.json(notifications);
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+      res.status(500).json({ message: "Failed to fetch notifications" });
+    }
+  });
+
+  app.post('/api/notifications', async (req, res) => {
+    try {
+      const notification = await storage.createNotification(req.body);
+      res.status(201).json(notification);
+    } catch (error) {
+      console.error("Error creating notification:", error);
+      res.status(500).json({ message: "Failed to create notification" });
+    }
+  });
+
+  app.patch('/api/notifications/:id/read', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const notification = await storage.markNotificationAsRead(id);
+      if (!notification) {
+        return res.status(404).json({ message: "Notification not found" });
+      }
+      res.json(notification);
+    } catch (error) {
+      console.error("Error marking notification as read:", error);
+      res.status(500).json({ message: "Failed to mark notification as read" });
+    }
+  });
+
+  app.patch('/api/notifications/:userId/mark-all-read', async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      await storage.markAllNotificationsAsRead(userId);
+      res.json({ message: "All notifications marked as read" });
+    } catch (error) {
+      console.error("Error marking all notifications as read:", error);
+      res.status(500).json({ message: "Failed to mark all notifications as read" });
+    }
+  });
+
+  app.delete('/api/notifications/:id', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteNotification(id);
+      res.json({ message: "Notification deleted" });
+    } catch (error) {
+      console.error("Error deleting notification:", error);
+      res.status(500).json({ message: "Failed to delete notification" });
     }
   });
 

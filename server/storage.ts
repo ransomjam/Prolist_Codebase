@@ -188,7 +188,7 @@ export class DatabaseStorage implements IStorage {
   async getAverageRating(userId: number): Promise<number> {
     const userRatings = await this.getRatingsByUser(userId);
     if (userRatings.length === 0) return 0;
-    
+
     const sum = userRatings.reduce((acc, rating) => acc + rating.rating, 0);
     return sum / userRatings.length;
   }
