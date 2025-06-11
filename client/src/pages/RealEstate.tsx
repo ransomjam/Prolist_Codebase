@@ -14,6 +14,8 @@ export default function RealEstate() {
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [showPropertyModal, setShowPropertyModal] = useState(false);
   const [favoriteProperties, setFavoriteProperties] = useState(new Set());
+  const [showChatModal, setShowChatModal] = useState(false);
+  const [chatRecipient, setChatRecipient] = useState('');
 
   // Fetch real estate listings from API
   const { data: allProducts = [], isLoading } = useQuery({
@@ -122,10 +124,9 @@ export default function RealEstate() {
   };
 
   const handleContactOwner = (property) => {
-    // Simulate contacting property owner
-    const message = `Hi, I'm interested in your property: ${property.title}. Could you please provide more details?`;
-    const whatsappUrl = `https://wa.me/237670000000?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
+    // Open in-app messaging
+    setShowChatModal(true);
+    setChatRecipient(`Property Owner - ${property.title}`);
   };
 
   const handleScheduleViewing = (property) => {

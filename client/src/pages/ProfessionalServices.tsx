@@ -386,7 +386,10 @@ export default function ProfessionalServices() {
                         <MessageCircle size={16} />
                         Contact
                       </button>
-                      <button className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors">
+                      <button 
+                        onClick={() => openEscrow(listing)}
+                        className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors"
+                      >
                         Book Now
                       </button>
                     </div>

@@ -118,9 +118,9 @@ export default function Auctions() {
               style={getAnimationStyle(index + 4)}
             >
               <div className="relative">
-                {auction.imageUrls && auction.imageUrls.length > 0 ? (
+                {auction.images && auction.images.length > 0 ? (
                   <img
-                    src={auction.imageUrls[0]}
+                    src={auction.images[0]}
                     alt={auction.title}
                     className="h-48 w-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
