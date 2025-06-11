@@ -3,6 +3,7 @@ import { Search, Filter, Star, Shield, MessageCircle, Eye, Grid3X3, List, Slider
 import { Link } from 'wouter';
 import { ShieldCheckIcon } from '@heroicons/react/24/outline';
 import { serviceCategories, dummyProfessionals, type Professional } from '../data/professionalData';
+import { useQuery } from '@tanstack/react-query';
 import ChatBox from '../components/ChatBox';
 
 // Dummy service listings data
@@ -104,6 +105,19 @@ export default function ProfessionalServices() {
   const [chatOpen, setChatOpen] = useState(false);
   const [selectedProfessional, setSelectedProfessional] = useState<Professional | null>(null);
 
+  // Fetch service listings from API
+  const { data: allProducts = [], isLoading } = useQuery({
+    queryKey: ['/api/products'],
+    queryFn: async () => {
+      const response = await fetch('/api/products');
+      if (!response.ok) throw new Error('Failed to fetch products');
+      return response.json();
+    }
+  });
+
+  // Filter for services only
+  const serviceListings = allProducts.filter((product: any) => product.category === 'Services');
+
   const categoryTypes = [
     { id: 'all', label: 'All Services', count: dummyProfessionals.length },
     ...serviceCategories.map(cat => ({
@@ -159,7 +173,7 @@ export default function ProfessionalServices() {
   });
 
   // Filter service listings based on search and category
-  const filteredServiceListings = dummyServiceListings.filter(listing => {
+  const filteredServiceListings = serviceListings.filter((listing: any) => {
     const matchesSearch = listing.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          listing.description.toLowerCase().includes(searchTerm.toLowerCase());
     
@@ -167,7 +181,7 @@ export default function ProfessionalServices() {
     
     let matchesPrice = priceRange === 'all';
     if (priceRange !== 'all') {
-      const price = parseInt(listing.price.replace(/[^0-9]/g, ''));
+      const price = parseFloat(listing.price);
       switch (priceRange) {
         case 'under-25k':
           matchesPrice = price < 25000;
@@ -308,11 +322,17 @@ export default function ProfessionalServices() {
                 >
                   {/* Service Image */}
                   <div>
-                    <img
-                      src={listing.image}
-                      alt={listing.title}
-                      className="w-full h-40 sm:h-48 object-cover"
-                    />
+                    {listing.imageUrls && listing.imageUrls.length > 0 ? (
+                      <img
+                        src={listing.imageUrls[0]}
+                        alt={listing.title}
+                        className="w-full h-40 sm:h-48 object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-40 sm:h-48 bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center">
+                        <Package className="w-16 h-16 text-purple-400" />
+                      </div>
+                    )}
                   </div>
 
                   {/* Service Info */}
