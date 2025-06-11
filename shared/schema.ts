@@ -179,7 +179,17 @@ export const notifications = pgTable('notifications', {
   message: text('message').notNull(),
   isRead: boolean('is_read').default(false),
   data: text('data'), // JSON string for additional data
+  actionUrl: text('action_url'),
   createdAt: timestamp('created_at').defaultNow()
+});
+
+export const insertNotificationSchema = createInsertSchema(notifications).pick({
+  userId: true,
+  type: true,
+  title: true,
+  message: true,
+  data: true,
+  actionUrl: true,
 });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
@@ -194,3 +204,5 @@ export type Comment = typeof comments.$inferSelect;
 export type InsertComment = z.infer<typeof insertCommentSchema>;
 export type Rating = typeof ratings.$inferSelect;
 export type InsertRating = z.infer<typeof insertRatingSchema>;
+export type Notification = typeof notifications.$inferSelect;
+export type InsertNotification = z.infer<typeof insertNotificationSchema>;

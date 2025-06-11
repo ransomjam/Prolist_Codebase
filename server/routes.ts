@@ -727,16 +727,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   return httpServer;
 }
-```
-
-```tool_code
-<replit_final_file>
-import type { Express } from "express";
-import { createServer, type Server } from "http";
-import { storage } from "./storage";
-import { insertCommentSchema, insertVendorApplicationSchema, insertProductSchema, insertUserSchema } from "@shared/schema";
-
-export async function registerRoutes(app: Express): Promise<Server> {
   // User registration endpoint
   app.post('/api/users', async (req, res) => {
     try {
