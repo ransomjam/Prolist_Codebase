@@ -179,7 +179,7 @@ export default function Marketplace() {
     const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
     const matchesVerification = verificationFilter === 'all' || 
                                product.vendor.verificationStatus === verificationFilter;
-    
+
     return matchesSearch && matchesCategory && matchesVerification;
   });
 

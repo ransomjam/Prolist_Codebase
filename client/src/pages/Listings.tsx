@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useLocation } from 'wouter';
 import ListingCard from '../components/ListingCard';
+import { Filter, ShoppingBag, Search, Package, Star, Eye, MessageCircle, Shield } from 'lucide-react';
 
 export default function Listings() {
   const [category, setCategory] = useState("All");
@@ -160,9 +161,23 @@ export default function Listings() {
               </div>
               <div className="p-4">
                 <h3 className="font-semibold text-lg text-gray-900 mb-2">{product.title}</h3>
-                <p className="text-gray-600 text-sm mb-3 line-clamp-2">{product.description}</p>
+                <p className="text-sm text-gray-600 mb-2 line-clamp-2">{product.description}</p>
+
+                      {/* Vendor Verification Status */}
+                      <div className="mb-3">
+                        <div className="flex items-center gap-2">
+                          <Shield className="w-4 h-4 text-blue-600" />
+                          <span className="bg-gradient-to-r from-blue-500 to-emerald-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+                            Vendor #{product.vendorId} - Basic Verified
+                          </span>
+                        </div>
+                      </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-2xl font-bold text-primary">${product.price}</span>
+                  <span className="text-2xl font-bold text-primary">
+                  <p className="text-green-600 font-bold text-lg mb-2">
+                        {product.price.replace('$', '').includes('XAF') ? product.price.replace('$', '') : `${product.price.replace('$', '')} XAF`}
+                      </p>
+                    </span>
                   <span className="text-sm text-gray-500">{product.category}</span>
                 </div>
                 <div className="mt-3 flex items-center justify-between">

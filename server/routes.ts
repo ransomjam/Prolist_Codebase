@@ -585,7 +585,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/products', async (req, res) => {
     try {
       const products = await storage.getAllProducts();
-      res.json(products);
+      // Sort products by creation date (latest first)
+      const sortedProducts = products.sort((a, b) => 
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+      res.json(sortedProducts);
     } catch (error) {
       console.error("Error fetching products:", error);
       res.status(500).json({ message: "Failed to fetch products" });
@@ -615,7 +619,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const vendorId = parseInt(req.params.vendorId);
       const products = await storage.getProductsByVendor(vendorId);
-      res.json(products);
+      // Sort products by creation date (latest first)
+      const sortedProducts = products.sort((a, b) => 
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+      res.json(sortedProducts);
     } catch (error) {
       console.error("Error fetching vendor products:", error);
       res.status(500).json({ message: "Failed to fetch vendor products" });

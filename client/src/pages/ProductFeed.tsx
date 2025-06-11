@@ -108,8 +108,10 @@ export default function ProductFeed() {
     }))
   ];
 
-  // Combine database products with demo products
-  const allProducts = [...dbProducts, ...demoProducts];
+  // Combine database products with demo products and sort by latest first
+  const allProducts = [...dbProducts, ...demoProducts].sort((a, b) => 
+    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
 
   const filtered = allProducts.filter((p: Product) => {
     const categoryMatch = filter ? p.category === filter : true;
@@ -246,7 +248,7 @@ export default function ProductFeed() {
                 <p className="text-gray-600 text-sm mb-3 line-clamp-2">{product.description}</p>
                 
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-2xl font-bold text-blue-600">${product.price}</span>
+                  <span className="text-2xl font-bold text-blue-600">{product.price} XAF</span>
                   <div className="flex items-center text-gray-500 text-sm">
                     <Eye className="w-4 h-4 mr-1" />
                     {product.viewCount || 0}
@@ -256,6 +258,24 @@ export default function ProductFeed() {
                 <div className="flex items-center justify-between text-sm text-gray-500 mb-3">
                   <span>{product.location || 'Bamenda'}</span>
                   <span>{new Date(product.createdAt).toLocaleDateString()}</span>
+                </div>
+                
+                {/* Vendor Verification Status */}
+                <div className="mb-3">
+                  {vendors[product.vendorId] ? (
+                    <div className="flex items-center gap-2">
+                      <Shield className="w-4 h-4 text-blue-600" />
+                      <span className="bg-gradient-to-r from-blue-500 to-emerald-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+                        {vendors[product.vendorId].fullName} - Basic Verified
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <span className="bg-gray-200 text-gray-600 px-2 py-1 rounded-full text-xs font-medium">
+                        Vendor #${product.vendorId}
+                      </span>
+                    </div>
+                  )}
                 </div>
                 
                 <div className="flex gap-2">
