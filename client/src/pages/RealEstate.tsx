@@ -512,12 +512,11 @@ export default function RealEstate() {
             </div>
           </div>
         )}
-      </div>
 
-      {/* Property Detail Modal */}
-      {showPropertyModal && selectedProperty && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2">
-          <div className="bg-white rounded-xl max-w-4xl w-full max-h-[95vh] overflow-y-auto">
+        {/* Property Detail Modal */}
+        {showPropertyModal && selectedProperty && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2">
+            <div className="bg-white rounded-xl max-w-4xl w-full max-h-[95vh] overflow-y-auto">
             {/* Modal Header */}
             <div className="relative">
               {selectedProperty.imageUrls && selectedProperty.imageUrls.length > 0 ? (
@@ -700,13 +699,12 @@ export default function RealEstate() {
               </div>
             </div>
           </div>
-        </div>
-      )}
-
-      {/* Chat Modal */}
-      {showChatModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl max-w-md w-full max-h-[80vh] overflow-hidden">
+        )}
+        
+        {/* Chat Modal */}
+        {showChatModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-xl max-w-md w-full max-h-[80vh] overflow-hidden">
             <div className="p-4 border-b">
               <div className="flex items-center justify-between">
                 <h3 className="font-semibold text-gray-900">Message {chatRecipient}</h3>
