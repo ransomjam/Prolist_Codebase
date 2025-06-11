@@ -144,8 +144,9 @@ export default function RealEstate() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Compact Header */}
+    <>
+      <div className="min-h-screen bg-gray-50">
+        {/* Compact Header */}
       <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
         <div className="px-4 py-4">
           <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -703,39 +704,40 @@ export default function RealEstate() {
         </div>
       )}
 
-      {/* Chat Modal */}
-      {showChatModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl max-w-md w-full max-h-[80vh] overflow-hidden">
-            <div className="p-4 border-b">
-              <div className="flex items-center justify-between">
-                <h3 className="font-semibold text-gray-900">Message {chatRecipient}</h3>
-                <button 
-                  onClick={() => setShowChatModal(false)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  ×
-                </button>
+        {/* Chat Modal */}
+        {showChatModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-xl max-w-md w-full max-h-[80vh] overflow-hidden">
+              <div className="p-4 border-b">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-semibold text-gray-900">Message {chatRecipient}</h3>
+                  <button 
+                    onClick={() => setShowChatModal(false)}
+                    className="text-gray-400 hover:text-gray-600"
+                  >
+                    ×
+                  </button>
+                </div>
               </div>
-            </div>
-            <div className="p-4 h-64 overflow-y-auto bg-gray-50">
-              <div className="text-center text-gray-500 text-sm">Start a conversation...</div>
-            </div>
-            <div className="p-4 border-t">
-              <div className="flex gap-2">
-                <input 
-                  type="text" 
-                  placeholder="Type your message..."
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                  Send
-                </button>
+              <div className="p-4 h-64 overflow-y-auto bg-gray-50">
+                <div className="text-center text-gray-500 text-sm">Start a conversation...</div>
+              </div>
+              <div className="p-4 border-t">
+                <div className="flex gap-2">
+                  <input 
+                    type="text" 
+                    placeholder="Type your message..."
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                    Send
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </>
   );
 }
