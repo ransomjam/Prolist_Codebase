@@ -207,8 +207,8 @@ export default function ProfessionalServices() {
   };
 
   const openEscrow = (listing: any) => {
-    // Navigate to service checkout with escrow protection
-    window.location.href = `/service-checkout?serviceId=${listing.id}&title=${encodeURIComponent(listing.title)}&price=${listing.price}`;
+    // Navigate to product detail for order placement (same as listings)
+    window.location.href = `/product/${listing.id}`;
   };
 
   return (
@@ -386,16 +386,16 @@ export default function ProfessionalServices() {
                     {/* Action Buttons */}
                     <div className="flex gap-2">
                       <button
-                        className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+                        onClick={() => window.location.href = `/product/${listing.id}`}
+                        className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition-colors"
                       >
-                        <MessageCircle size={16} />
-                        Contact
+                        View Details
                       </button>
                       <button 
                         onClick={() => openEscrow(listing)}
                         className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors"
                       >
-                        Book Now
+                        Place Order
                       </button>
                     </div>
                   </div>

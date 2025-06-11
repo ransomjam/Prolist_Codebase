@@ -576,53 +576,33 @@ export default function RealEstate() {
                 <span className="text-sm">{selectedProperty.location}</span>
               </div>
 
-              {/* Vendor Information */}
+              {/* Property Description */}
+              <div className="mb-3">
+                <p className="text-gray-700 text-sm">{selectedProperty.description || 'No description available'}</p>
+              </div>
+
+              {/* Property Details */}
               <div className="bg-gray-50 rounded-lg p-3 mb-3">
-                <h3 className="text-base font-semibold text-gray-900 mb-2">Property Owner</h3>
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                    {selectedProperty.title.charAt(0)}
+                <h3 className="text-base font-semibold text-gray-900 mb-2">Property Details</h3>
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-600">Price:</span>
+                    <span className="text-sm font-medium text-gray-900">{selectedProperty.price}</span>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h4 className="font-medium text-gray-900 text-sm">Professional Property Owner</h4>
-                      {selectedProperty.verified && (
-                        <span className="bg-green-100 text-green-800 px-1.5 py-0.5 rounded-full text-xs font-medium flex items-center gap-1">
-                          <Shield size={10} />
-                          Verified
-                        </span>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-3 text-xs text-gray-600">
-                      <div className="flex items-center gap-1">
-                        <Star className="w-3 h-3 text-yellow-500 fill-current" />
-                        <span>4.8</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Home size={12} />
-                        <span>15+ Properties</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Eye size={12} />
-                        <span>{selectedProperty.trustCount}</span>
-                      </div>
-                    </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-600">Location:</span>
+                    <span className="text-sm font-medium text-gray-900">{selectedProperty.location}</span>
                   </div>
-                  <div className="flex flex-col gap-1">
-                    <button 
-                      onClick={() => handleContactOwner(selectedProperty)}
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded text-xs font-medium transition-colors"
-                    >
-                      Contact
-                    </button>
-                    <button 
-                      onClick={() => handleViewProfile(selectedProperty)}
-                      className="bg-gray-600 hover:bg-gray-700 text-white px-2 py-1 rounded text-xs font-medium transition-colors"
-                    >
-                      Profile
-                    </button>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-600">Category:</span>
+                    <span className="text-sm font-medium text-gray-900">{selectedProperty.category}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-600">Views:</span>
+                    <span className="text-sm font-medium text-gray-900">{selectedProperty.viewCount || 0}</span>
                   </div>
                 </div>
+              </div>
               </div>
 
               {/* Property Features */}
