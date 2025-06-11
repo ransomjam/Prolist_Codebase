@@ -89,8 +89,23 @@ export default function Auctions() {
         Only Premium Users Can Post Deals. All Prices Are in CFA.
       </p>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {auctions.map((auction, index) => {
+      {isLoading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[...Array(8)].map((_, i) => (
+            <div key={i} className="bg-white rounded-xl shadow-lg overflow-hidden animate-pulse">
+              <div className="h-48 bg-gray-200"></div>
+              <div className="p-4">
+                <div className="h-4 bg-gray-200 rounded mb-2"></div>
+                <div className="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
+                <div className="h-3 bg-gray-200 rounded mb-1"></div>
+                <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {auctions.map((auction: any, index: number) => {
           const timer = countdowns[auction.id];
           const ended = timer === null;
           return (
@@ -166,7 +181,8 @@ export default function Auctions() {
             </Link>
           );
         })}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
