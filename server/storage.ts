@@ -144,9 +144,13 @@ export class DatabaseStorage implements IStorage {
   }
 
   async updateProductViewCount(id: number): Promise<void> {
-    await db.update(products)
-      .set({ viewCount: products.viewCount + 1 })
-      .where(eq(products.id, id));
+    // Get current product to increment view count
+    const product = await this.getProduct(id);
+    if (product) {
+      await db.update(products)
+        .set({ viewCount: (product.viewCount || 0) + 1 })
+        .where(eq(products.id, id));
+    }
   }
 
   async createOrder(order: InsertOrder): Promise<Order> {
@@ -178,7 +182,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getRatingsByUser(userId: number): Promise<Rating[]> {
-    return await db.select().from(ratings).where(eq(ratings.rateeId, userId));
+    return await db.select().from(ratings).where(eq(ratings.ratedId, userId));
   }
 
   async getAverageRating(userId: number): Promise<number> {

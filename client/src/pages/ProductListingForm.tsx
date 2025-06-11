@@ -113,16 +113,29 @@ export default function ProductListingForm() {
       return;
     }
 
-    const productData = {
-      vendorId: user?.id || 1,
-      title: form.title,
-      category: form.category,
-      price: form.price,
-      description: form.description,
-      location: vendorApplication?.location || 'Bamenda'
-    };
+    try {
+      // Convert images to base64 if they exist
+      let imageUrl = null;
+      if (form.image1) {
+        const base64 = await fileToBase64(form.image1);
+        imageUrl = `data:${form.image1.type};base64,${base64}`;
+      }
 
-    createProductMutation.mutate(productData);
+      const productData = {
+        vendorId: user?.id || 1,
+        title: form.title,
+        category: form.category,
+        price: form.price,
+        description: form.description,
+        location: vendorApplication?.location || 'Bamenda',
+        image: imageUrl
+      };
+
+      createProductMutation.mutate(productData);
+    } catch (error) {
+      console.error('Error processing images:', error);
+      alert('Error processing images. Please try again.');
+    }
   };
 
   if (isLoading) {
