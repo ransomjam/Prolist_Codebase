@@ -206,6 +206,11 @@ export default function ProfessionalServices() {
     setChatOpen(true);
   };
 
+  const openEscrow = (listing: any) => {
+    // Navigate to service checkout with escrow protection
+    window.location.href = `/service-checkout?serviceId=${listing.id}&title=${encodeURIComponent(listing.title)}&price=${listing.price}`;
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Compact Header */}
