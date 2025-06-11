@@ -87,6 +87,7 @@ export const insertProductSchema = createInsertSchema(products).pick({
   price: true,
   description: true,
   location: true,
+  image: true,
 });
 
 // Orders table
