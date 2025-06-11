@@ -62,7 +62,7 @@ export default function Auctions() {
         <button 
           ref={(el) => setElementRef('post-auction-btn', el)}
           data-animation-id="post-auction-btn"
-          onClick={() => window.location.href = '/product-listing'}
+          onClick={() => window.location.href = '/auction-listing'}
           className={`bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 gpu-accelerated will-change-transform ${getAnimationClass('post-auction-btn', 2)}`}
           style={getAnimationStyle(2)}
         >

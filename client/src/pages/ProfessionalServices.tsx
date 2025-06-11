@@ -202,7 +202,7 @@ export default function ProfessionalServices() {
               <h1 className="text-2xl font-bold mb-1">Verified Services</h1>
               <p className="text-blue-100 text-sm">Trusted professionals offering quality services in Bamenda</p>
             </div>
-            <Link href="/product-listing">
+            <Link href="/service-listing">
               <button className="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 border border-white/30">
                 <Package size={20} />
                 List Service

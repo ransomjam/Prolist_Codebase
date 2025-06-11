@@ -90,6 +90,9 @@ function Router() {
       <Route path="/admin-verify" component={AdminVerifyPanel} />
       <Route path="/add-listing" component={ProductListingForm} />
       <Route path="/product-listing" component={ProductListingForm} />
+      <Route path="/service-listing" component={ServiceListingForm} />
+      <Route path="/property-listing" component={RealEstateListingForm} />
+      <Route path="/auction-listing" component={AuctionListingForm} />
       <Route path="/products" component={ProductFeed} />
       <Route path="/productfeed" component={ProductFeed} />
       <Route path="/product/:id" component={ProductDetail} />
