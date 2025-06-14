@@ -45,11 +45,13 @@ export default function AuctionDetail() {
   // Initialize current bid and bid history when auction data loads
   useEffect(() => {
     if (auction) {
-      setCurrentBid(parseFloat(auction.currentBid || auction.startingPrice));
+      const startingPrice = parseFloat(auction.startingPrice) || 0;
+      const currentBidAmount = parseFloat(auction.currentBid) || startingPrice;
+      setCurrentBid(currentBidAmount);
       setBidHistory([
-        { bidder: "User123", amount: parseFloat(auction.currentBid || auction.startingPrice), time: "2 minutes ago" },
-        { bidder: "BidMaster", amount: parseFloat(auction.currentBid || auction.startingPrice) - 500, time: "5 minutes ago" },
-        { bidder: "QuickBid", amount: parseFloat(auction.currentBid || auction.startingPrice) - 1000, time: "8 minutes ago" }
+        { bidder: "User123", amount: currentBidAmount, time: "2 minutes ago" },
+        { bidder: "BidMaster", amount: Math.max(currentBidAmount - 500, startingPrice), time: "5 minutes ago" },
+        { bidder: "QuickBid", amount: Math.max(currentBidAmount - 1000, startingPrice), time: "8 minutes ago" }
       ]);
     }
   }, [auction]);
@@ -78,8 +80,18 @@ export default function AuctionDetail() {
     return () => clearInterval(interval);
   }, [auction]);
 
-  if (!auction) {
-    return <p className="p-6 text-red-600">Auction not found.</p>;
+  if (!auction || !auction.startingPrice) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span className="text-gray-400">!</span>
+          </div>
+          <h3 className="text-xl font-semibold text-gray-700 mb-2">Auction not found</h3>
+          <p className="text-gray-500">The auction you're looking for doesn't exist or has been removed.</p>
+        </div>
+      </div>
+    );
   }
 
   const handleBidSubmit = async () => {
@@ -193,7 +205,7 @@ export default function AuctionDetail() {
                 <div className="text-center pb-4 border-b border-gray-200">
                   <div className="text-sm text-gray-500 uppercase tracking-wide mb-1">Starting Price</div>
                   <div className="text-xl font-bold text-emerald-600">
-                    {parseFloat(auction.startingPrice).toLocaleString()} CFA
+                    {(parseFloat(auction.startingPrice) || 0).toLocaleString()} CFA
                   </div>
                 </div>
                 

@@ -103,7 +103,7 @@ export default function ProfessionalServices() {
   });
 
   const openChat = (service: any) => {
-    setSelectedProfessional(professional);
+    setSelectedProfessional(service);
     setChatOpen(true);
   };
 
@@ -208,7 +208,7 @@ export default function ProfessionalServices() {
         </div>
 
         {/* Service Listings Display */}
-        {filteredServiceListings.length === 0 ? (
+        {filteredServices.length === 0 ? (
           <div className="text-center py-12 bg-white rounded-xl shadow-sm">
             <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
               <Package className="w-8 h-8 text-gray-400" />
@@ -218,7 +218,7 @@ export default function ProfessionalServices() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {filteredServiceListings.map((listing: any) => {
+            {filteredServices.map((listing: any) => {
               const category = serviceCategories.find(cat => cat.id === listing.category);
               
               return (
@@ -244,8 +244,8 @@ export default function ProfessionalServices() {
                   {/* Service Info */}
                   <div className="p-4 sm:p-6">
                     <div className="flex items-center gap-2 mb-3">
-                      <div className={`w-3 h-3 bg-gradient-to-r ${category?.color} rounded-full`}></div>
-                      <span className="text-sm text-gray-600">{category?.name}</span>
+                      <div className="w-3 h-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"></div>
+                      <span className="text-sm text-gray-600">{category?.name || 'Service'}</span>
                     </div>
 
                     <h3 className="font-bold text-gray-800 text-lg mb-2 line-clamp-2">{listing.title}</h3>
