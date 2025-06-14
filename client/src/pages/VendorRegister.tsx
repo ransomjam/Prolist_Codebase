@@ -24,6 +24,8 @@ interface VendorForm {
   idCard: File | null;
   photo: File | null;
   appointment: string;
+  physicalAppointment: string;
+  verificationType: 'video' | 'physical';
 }
 
 export default function VendorRegister() {
@@ -38,6 +40,8 @@ export default function VendorRegister() {
     idCard: null,
     photo: null,
     appointment: '',
+    physicalAppointment: '',
+    verificationType: 'video',
   });
 
   const submitMutation = useMutation({
@@ -78,7 +82,7 @@ export default function VendorRegister() {
     },
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
   };
@@ -92,7 +96,8 @@ export default function VendorRegister() {
     e.preventDefault();
     
     // Basic validation
-    if (!form.fullName || !form.phone || !form.location || !form.idCard || !form.photo || !form.appointment) {
+    const requiredAppointment = form.verificationType === 'video' ? form.appointment : form.physicalAppointment;
+    if (!form.fullName || !form.phone || !form.location || !form.idCard || !form.photo || !requiredAppointment) {
       alert('Please fill in all fields');
       return;
     }
@@ -106,7 +111,8 @@ export default function VendorRegister() {
         fullName: form.fullName,
         phone: form.phone,
         location: form.location,
-        appointment: form.appointment,
+        appointment: form.verificationType === 'video' ? form.appointment : form.physicalAppointment,
+        verificationType: form.verificationType,
         idCard: idCardUrl,
         photo: photoUrl
       });
@@ -177,7 +183,8 @@ export default function VendorRegister() {
           <ul className="text-sm text-blue-800 space-y-1">
             <li>• Valid government-issued ID</li>
             <li>• Clear photo of your shop or products</li>
-            <li>• Video verification appointment</li>
+            <li>• Physical verification appointment (Pro)</li>
+            <li>• Video verification (Basic)</li>
             <li>• Business location in Bamenda area</li>
           </ul>
         </div>
@@ -267,20 +274,69 @@ export default function VendorRegister() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Verification Appointment *</label>
-          <div className="flex gap-2">
-            <Calendar className="text-gray-400 mt-3" size={20} />
-            <input
-              name="appointment"
-              type="datetime-local"
-              value={form.appointment}
-              onChange={handleChange}
-              className="flex-1 border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              required
-            />
-          </div>
-          <p className="text-xs text-gray-500 mt-1">Choose your preferred date and time for video verification call</p>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Verification Type *</label>
+          <select
+            name="verificationType"
+            value={form.verificationType}
+            onChange={handleChange}
+            className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            required
+          >
+            <option value="video">Video Verification (Basic)</option>
+            <option value="physical">Physical Verification (Pro)</option>
+          </select>
+          <p className="text-xs text-gray-500 mt-1">
+            {form.verificationType === 'video' 
+              ? 'Basic verification via video call - suitable for most vendors'
+              : 'Premium verification with in-person visit - for enhanced credibility'
+            }
+          </p>
         </div>
+
+        {form.verificationType === 'video' && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Select Video Appointment Date *</label>
+            <div className="flex gap-2">
+              <Calendar className="text-gray-400 mt-3" size={20} />
+              <input
+                name="appointment"
+                type="datetime-local"
+                value={form.appointment}
+                onChange={handleChange}
+                className="flex-1 border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              />
+            </div>
+            <p className="text-xs text-gray-500 mt-1">Choose your preferred date and time for video verification call</p>
+          </div>
+        )}
+
+        {form.verificationType === 'physical' && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Select Physical Verification Appointment Date *</label>
+            <div className="flex gap-2">
+              <Calendar className="text-gray-400 mt-3" size={20} />
+              <input
+                name="physicalAppointment"
+                type="datetime-local"
+                value={form.physicalAppointment}
+                onChange={handleChange}
+                className="flex-1 border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              />
+            </div>
+            <p className="text-xs text-gray-500 mt-1">Choose your preferred date and time for in-person verification visit</p>
+            <div className="mt-2 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+              <p className="text-amber-800 text-sm font-medium">Physical Verification Benefits:</p>
+              <ul className="text-amber-700 text-xs mt-1 space-y-1">
+                <li>• Enhanced vendor credibility badge</li>
+                <li>• Priority listing placement</li>
+                <li>• Higher customer trust rating</li>
+                <li>• Access to premium vendor features</li>
+              </ul>
+            </div>
+          </div>
+        )}
 
         <button
           type="submit"
