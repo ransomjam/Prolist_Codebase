@@ -42,12 +42,24 @@ export default function AuctionDetail() {
   ]);
   const [isPlacingBid, setIsPlacingBid] = useState(false);
 
+  // Initialize current bid and bid history when auction data loads
+  useEffect(() => {
+    if (auction) {
+      setCurrentBid(parseFloat(auction.currentBid || auction.startingPrice));
+      setBidHistory([
+        { bidder: "User123", amount: parseFloat(auction.currentBid || auction.startingPrice), time: "2 minutes ago" },
+        { bidder: "BidMaster", amount: parseFloat(auction.currentBid || auction.startingPrice) - 500, time: "5 minutes ago" },
+        { bidder: "QuickBid", amount: parseFloat(auction.currentBid || auction.startingPrice) - 1000, time: "8 minutes ago" }
+      ]);
+    }
+  }, [auction]);
+
   useEffect(() => {
     if (!auction) return;
 
     const interval = setInterval(() => {
       const now = new Date().getTime();
-      const end = new Date(auction.endTime).getTime();
+      const end = new Date(auction.endDate).getTime();
       const diff = end - now;
 
       if (diff <= 0) {
@@ -81,12 +93,12 @@ export default function AuctionDetail() {
       return;
     }
     if (auctionEnded) {
-      setError('Auction has ended. You cannot place bids anymore.');
+      setErrorState('Auction has ended. You cannot place bids anymore.');
       return;
     }
     
     setIsPlacingBid(true);
-    setError('');
+    setErrorState('');
     
     try {
       // Simulate placing bid with realistic delay
@@ -103,9 +115,9 @@ export default function AuctionDetail() {
       setBidAmount('');
       
       // Show success notification
-      setError('');
+      setErrorState('');
     } catch (err) {
-      setError('Failed to place bid. Please try again.');
+      setErrorState('Failed to place bid. Please try again.');
     } finally {
       setIsPlacingBid(false);
     }
@@ -119,17 +131,15 @@ export default function AuctionDetail() {
           <div className="flex items-start justify-between mb-4">
             <div className="flex-1">
               <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight mb-2">
-                {auction.product.title}
+                {auction.title}
               </h1>
               <div className="flex items-center gap-4 text-sm text-gray-500">
                 <span>Auction #{auction.id}</span>
                 <span>•</span>
-                <span>Vendor: <span className="font-medium text-gray-700">{auction.vendor}</span></span>
-                {auction.verified && (
-                  <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
-                    Verified
-                  </span>
-                )}
+                <span>Vendor ID: <span className="font-medium text-gray-700">{auction.vendorId}</span></span>
+                <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
+                  Auction Item
+                </span>
               </div>
             </div>
           </div>
@@ -138,16 +148,16 @@ export default function AuctionDetail() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Product Image and Description */}
+            {/* Auction Image and Description */}
             <div className="bg-white rounded-xl shadow-sm overflow-hidden">
               <img 
-                src={auction.product.image} 
-                alt={auction.product.title} 
+                src={auction.images && auction.images[0] ? auction.images[0] : '/api/placeholder/400/320'} 
+                alt={auction.title} 
                 className="w-full h-80 object-cover" 
               />
               <div className="p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-3">Product Description</h2>
-                <p className="text-gray-700 leading-relaxed">{auction.product.description}</p>
+                <h2 className="text-xl font-semibold text-gray-900 mb-3">Description</h2>
+                <p className="text-gray-700 leading-relaxed">{auction.description}</p>
               </div>
             </div>
 
@@ -237,9 +247,9 @@ export default function AuctionDetail() {
                     >
                       {isPlacingBid ? 'Placing Bid...' : 'Place Bid'}
                     </button>
-                    {error && (
+                    {errorState && (
                       <div className="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-lg text-sm">
-                        {error}
+                        {errorState}
                       </div>
                     )}
                   </div>
