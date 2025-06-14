@@ -9,7 +9,7 @@ interface Product {
   category: string;
   price: string;
   description: string;
-  location: string;
+  location?: string;
   status?: string;
   viewCount: number;
   salesCount?: number;
