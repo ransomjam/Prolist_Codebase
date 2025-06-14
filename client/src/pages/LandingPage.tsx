@@ -64,7 +64,7 @@ export default function LandingPage() {
               href="/signup"
               className="bg-gradient-to-r from-emerald to-green-600 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 rounded-xl text-white font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-2xl border-2 border-emerald/50 text-sm sm:text-base lg:text-lg"
             >
-              Join ProList
+              Create Account Now
             </a>
             <a 
               href="/login" 

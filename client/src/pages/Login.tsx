@@ -24,7 +24,7 @@ export default function Login() {
       const result = await login(formData.username, formData.password);
 
       if (result.success) {
-        setLocation("/homepage");
+        setLocation("/app");
       } else {
         setError(result.message || "Login failed");
       }
