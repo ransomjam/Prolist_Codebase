@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useLocation } from 'wouter';
-import ListingCard from '../components/ListingCard';
+import OptimizedProductCard from '../components/OptimizedProductCard';
+import ProductCardSkeleton from '../components/ProductCardSkeleton';
 import { Filter, ShoppingBag, Search, Package, Star, Eye, MessageCircle, Shield } from 'lucide-react';
 
 export default function Listings() {
@@ -17,7 +18,7 @@ export default function Listings() {
     }
   }, [location]);
 
-  // Fetch all products from the database
+  // Fetch all products from the database with optimized settings
   const { data: products = [], isLoading, error, refetch } = useQuery({
     queryKey: ['/api/products'],
     queryFn: async () => {
@@ -27,8 +28,10 @@ export default function Listings() {
       }
       return response.json();
     },
-    refetchOnWindowFocus: true,
-    refetchInterval: 30000 // Refetch every 30 seconds to catch new products
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
+    refetchOnWindowFocus: false,
+    refetchInterval: false // Disable auto-refetch for better performance
   });
 
   // Listen for storage events to refresh when products are added
@@ -44,9 +47,12 @@ export default function Listings() {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, [refetch]);
 
-  const filteredProducts = category === "All"
-    ? products
-    : products.filter((product: any) => product.category === category);
+  // Memoize filtered products for better performance
+  const filteredProducts = useMemo(() => {
+    return category === "All"
+      ? products
+      : products.filter((product: any) => product.category === category);
+  }, [products, category]);
 
   if (isLoading) {
     return (
