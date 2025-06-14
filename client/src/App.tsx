@@ -92,6 +92,7 @@ function Router() {
       <Route path="/product-listing" component={ProductListingForm} />
       <Route path="/service-listing" component={ServiceListingForm} />
       <Route path="/property-listing" component={RealEstateListingForm} />
+      <Route path="/real-estate-listing" component={RealEstateListingForm} />
       <Route path="/auction-listing" component={AuctionListingForm} />
       <Route path="/products" component={ProductFeed} />
       <Route path="/productfeed" component={ProductFeed} />
