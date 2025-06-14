@@ -475,9 +475,9 @@ export default function ProductDetail() {
                   className="bg-gray-50 rounded-lg p-4 cursor-pointer hover:shadow-md transition-shadow"
                 >
                   <div className="h-32 bg-gray-200 rounded-lg mb-3 flex items-center justify-center overflow-hidden">
-                    {item.image ? (
+                    {item.imageUrls && item.imageUrls.length > 0 ? (
                       <img 
-                        src={item.image} 
+                        src={item.imageUrls[0]} 
                         alt={item.title}
                         className="w-full h-full object-cover"
                       />
@@ -512,9 +512,9 @@ export default function ProductDetail() {
                   className="bg-gray-50 rounded-lg p-4 cursor-pointer hover:shadow-md transition-shadow"
                 >
                   <div className="h-32 bg-gray-200 rounded-lg mb-3 flex items-center justify-center overflow-hidden">
-                    {item.image ? (
+                    {item.imageUrls && item.imageUrls.length > 0 ? (
                       <img 
-                        src={item.image} 
+                        src={item.imageUrls[0]} 
                         alt={item.title}
                         className="w-full h-full object-cover"
                       />
@@ -551,9 +551,9 @@ export default function ProductDetail() {
             {/* Image container */}
             <div className="bg-white rounded-lg overflow-hidden">
               <div className="flex items-center justify-center min-h-96">
-                {product.image ? (
+                {hasImages && currentImage ? (
                   <img 
-                    src={product.image} 
+                    src={currentImage} 
                     alt={product.title}
                     className="max-w-full max-h-96 object-contain"
                   />
@@ -579,9 +579,9 @@ export default function ProductDetail() {
                           : 'border-gray-200 hover:border-gray-300'
                       }`}
                     >
-                      {product.image ? (
+                      {productImages[index] ? (
                         <img 
-                          src={product.image} 
+                          src={productImages[index]} 
                           alt={`View ${index + 1}`}
                           className="w-full h-full object-cover"
                         />
