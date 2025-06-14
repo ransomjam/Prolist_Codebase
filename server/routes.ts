@@ -333,6 +333,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get all vendor applications (for admin panel and vendor data)
+  app.get('/api/vendor/applications', async (req, res) => {
+    try {
+      const applications = await storage.getAllVendorApplications();
+      res.json(applications);
+    } catch (error: any) {
+      console.error("Error fetching vendor applications:", error);
+      res.status(500).json({ message: "Failed to fetch vendor applications" });
+    }
+  });
+
   app.get('/api/vendor/application/:userId', async (req, res) => {
     try {
       const userId = parseInt(req.params.userId);
