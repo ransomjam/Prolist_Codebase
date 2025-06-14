@@ -1,5 +1,4 @@
 import { Shield, MessageSquare, Phone } from "lucide-react";
-import { useScrollAnimations } from "../hooks/useScrollAnimations";
 
 interface AuctionCardProps {
   item: {
@@ -17,15 +16,8 @@ interface AuctionCardProps {
 }
 
 export default function AuctionCard({ item }: AuctionCardProps) {
-  const { setElementRef, getAnimationClass, getAnimationStyle } = useScrollAnimations();
-
   return (
-    <div 
-      ref={(el) => setElementRef(`auction-card-${item.id}`, el)}
-      data-animation-id={`auction-card-${item.id}`}
-      className={`bg-white rounded-xl shadow-neonYellow hover:shadow-neonBlue hover:scale-105 transition-transform overflow-hidden cursor-pointer gpu-accelerated will-change-transform ${getAnimationClass(`auction-card-${item.id}`, item.id, 'slide')}`}
-      style={getAnimationStyle(0)}
-    >
+    <div className="bg-white rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-transform overflow-hidden cursor-pointer">
       <img src={item.image} alt={item.title} className="h-48 w-full object-cover" />
       <div className="p-4">
         <h3 className="font-bold text-primary">{item.title}</h3>
