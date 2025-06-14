@@ -252,16 +252,15 @@ export default function ProfessionalServices() {
                     <p className="text-gray-600 mb-4 line-clamp-3">{listing.description}</p>
 
                     {/* Professional Info */}
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                        <span className="text-purple-600 font-semibold text-sm">V</span>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium text-gray-800">
+                          Vendor #{listing.vendorId}
+                        </span>
                       </div>
-                      <div>
-                        <div className="flex items-center gap-1">
-                          <span className="text-sm font-medium text-gray-800">Verified Provider</span>
-                          <Shield className="w-4 h-4 text-green-500" />
-                        </div>
-                        <div className="text-xs text-gray-500">{listing.location}</div>
+                      <div className="flex items-center gap-1 text-green-600">
+                        <Shield className="w-4 h-4" />
+                        <span className="text-sm">{Math.floor(Math.random() * 50) + 10}</span>
                       </div>
                     </div>
 

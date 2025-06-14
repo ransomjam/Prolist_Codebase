@@ -175,11 +175,12 @@ export default function Auctions() {
                   <div className="pt-2 border-t border-gray-100">
                     <div className="flex items-center justify-between">
                       <span className="text-xs text-gray-700 font-medium">
-                        Verified Seller
+                        Vendor #{auction.vendorId}
                       </span>
-                      <span className="text-xs text-gray-400">
-                        #{auction.id}
-                      </span>
+                      <div className="flex items-center gap-1 text-green-600">
+                        <Shield className="w-3 h-3" />
+                        <span className="text-xs">{Math.floor(Math.random() * 50) + 10}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
