@@ -1,7 +1,5 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import OptimizedProductCard from '../components/OptimizedProductCard';
-import ProductCardSkeleton from '../components/ProductCardSkeleton';
 import { Filter, ShoppingBag, Shield, Star, Eye, MessageCircle } from 'lucide-react';
 import ChatBox from '@/components/ChatBox';
 
@@ -82,7 +80,7 @@ export default function ProductFeed() {
     }
   }, []);
 
-  // Fetch products from the API with optimization
+  // Fetch products from the API
   const { data: dbProducts = [], isLoading, error } = useQuery({
     queryKey: ['/api/products'],
     queryFn: async () => {
@@ -91,29 +89,21 @@ export default function ProductFeed() {
         throw new Error('Failed to fetch products');
       }
       return response.json();
-    },
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 10 * 60 * 1000, // 10 minutes
-    refetchOnWindowFocus: false,
-    refetchInterval: false
+    }
   });
 
   // Use only authentic database products and sort by latest first
-  const allProducts = useMemo(() => 
-    dbProducts.sort((a: any, b: any) => 
-      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    ), [dbProducts]
+  const allProducts = dbProducts.sort((a: any, b: any) => 
+    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
 
-  const filtered = useMemo(() => 
-    allProducts.filter((p: Product) => {
-      const categoryMatch = filter ? p.category === filter : true;
-      const marketLineMatch = marketLineFilter ? p.marketLine === marketLineFilter : true;
-      const marketMatch = marketFilter ? p.marketId === marketFilter : true;
-      
-      return categoryMatch && marketLineMatch && marketMatch;
-    }), [allProducts, filter, marketLineFilter, marketFilter]
-  );
+  const filtered = allProducts.filter((p: Product) => {
+    const categoryMatch = filter ? p.category === filter : true;
+    const marketLineMatch = marketLineFilter ? p.marketLine === marketLineFilter : true;
+    const marketMatch = marketFilter ? p.marketId === marketFilter : true;
+    
+    return categoryMatch && marketLineMatch && marketMatch;
+  });
 
   const categories = [
     { value: '', label: 'All Categories' },
@@ -210,14 +200,94 @@ export default function ProductFeed() {
           </a>
         </div>
       ) : (
-        <div className="optimized-grid mobile-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filtered.map((product: Product, index: number) => (
-            <OptimizedProductCard
-              key={product.id}
-              product={product}
-              priority={index < 8}
-              onProductClick={(id) => window.location.href = `/product/${id}`}
-            />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filtered.map((product: Product) => (
+            <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+              <div className="relative">
+                {(product.imageUrls && product.imageUrls.length > 0) || product.image ? (
+                  <img 
+                    src={product.imageUrls?.[0] || product.image} 
+                    alt={product.title}
+                    className="w-full h-48 object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
+                    <div className="text-center">
+                      <svg className="w-12 h-12 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <p className="text-gray-500 text-sm">No image</p>
+                    </div>
+                  </div>
+                )}
+                <div className="absolute top-2 left-2">
+                  {vendors[product.vendorId] && (
+                    <span className={`text-white text-xs px-2 py-1 rounded-full ${
+                      vendors[product.vendorId].status === 'Premium Verified' 
+                        ? 'bg-gradient-to-r from-purple-600 to-pink-600' 
+                        : 'bg-green-600'
+                    }`}>
+                      {vendors[product.vendorId].status === 'Premium Verified' ? 'Pro Verified' : 'Basic Verified'}
+                    </span>
+                  )}
+                </div>
+                <div className="absolute top-2 right-2">
+                  <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
+                    {product.category}
+                  </span>
+                </div>
+              </div>
+              
+              <div className="p-4">
+                <h3 className="font-semibold text-lg text-gray-900 mb-2 line-clamp-1">{product.title}</h3>
+                <p className="text-gray-600 text-sm mb-3 line-clamp-2">{product.description}</p>
+                
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-2xl font-bold text-blue-600">{product.price} XAF</span>
+                  <div className="flex items-center text-green-600 text-sm">
+                    <Shield className="w-4 h-4 mr-1" />
+                    {Math.floor(Math.random() * 50) + 10}
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between text-sm text-gray-500 mb-3">
+                  <span>{product.location || 'Bamenda'}</span>
+                  <span>{new Date(product.createdAt).toLocaleDateString()}</span>
+                </div>
+                
+                {/* Vendor Name */}
+                <div className="mb-3">
+                  {vendors[product.vendorId] ? (
+                    <div className="flex items-center gap-2">
+                      <span className="text-gray-700 font-medium text-sm">
+                        {vendors[product.vendorId].username || vendors[product.vendorId].fullName}
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <span className="text-gray-500 text-sm">
+                        Vendor #{product.vendorId}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                
+                <div className="flex gap-2">
+                  <a
+                    href={`/product/${product.id}`}
+                    className="flex-1 bg-blue-600 text-white py-2 px-3 rounded-lg text-center text-sm font-medium hover:bg-blue-700 transition-colors"
+                  >
+                    View Details
+                  </a>
+                  <button
+                    onClick={() => handleChatVendor(product)}
+                    className="bg-gray-100 text-gray-700 py-2 px-3 rounded-lg hover:bg-gray-200 transition-colors"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
           ))}
         </div>
       )}

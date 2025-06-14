@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useLocation } from 'wouter';
-import { Building, MapPin, Eye, MessageCircle, Shield, Star, MessageSquare, Phone } from 'lucide-react';
-import CommentsSection from '../components/CommentsSection';
+import { Building, MapPin, Eye, MessageCircle, Shield, Star } from 'lucide-react';
 
 export default function RealEstate() {
   const [category, setCategory] = useState("All");
   const [location] = useLocation();
-  const [showComments, setShowComments] = useState<{ [key: string]: boolean }>({});
 
   // Check URL parameters for category filter
   useEffect(() => {
@@ -171,7 +169,7 @@ export default function RealEstate() {
       {/* Content */}
       <div className="p-6">
         <div className="flex gap-4 mb-6 overflow-x-auto">
-          {categories.map((cat) => (
+          {categories.map((cat: string) => (
             <button
               key={cat}
               onClick={() => handleCategoryChange(cat)}
@@ -275,43 +273,14 @@ export default function RealEstate() {
                     </div>
                   </div>
                   
-                  <div className="flex items-center justify-between text-sm text-gray-500 mb-3">
-                    <div className="flex items-center space-x-3">
-                      <div className="flex items-center">
-                        <Eye className="w-4 h-4 mr-1" />
-                        <span>{property.viewCount || 0}</span>
-                      </div>
-                      <div className="flex items-center">
-                        <Star className="w-4 h-4 mr-1 text-yellow-500" />
-                        <span>5.0</span>
-                      </div>
+                  <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
+                    <div className="flex items-center">
+                      <Eye className="w-4 h-4 mr-1" />
+                      <span>{property.viewCount || 0} views</span>
                     </div>
-                    
-                    {/* Trust count */}
-                    <div className="flex items-center text-emerald font-semibold">
-                      <span className="mr-1">🛡️</span>{Math.floor(Math.random() * 50) + 10}
-                    </div>
-                  </div>
-
-                  {/* Action buttons */}
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex gap-2">
-                      <a 
-                        href={`https://wa.me/237670000000`} 
-                        target="_blank" 
-                        className="text-green-600 hover:underline text-sm font-medium"
-                      >
-                        WhatsApp
-                      </a>
-                      <button 
-                        onClick={() => setShowComments({...showComments, [property.id]: true})}
-                        className="text-blue-600 text-sm flex items-center gap-1 font-medium hover:text-blue-700"
-                      >
-                        <MessageSquare className="h-4 w-4" /> Comments
-                      </button>
-                      <button className="text-gray-600 text-sm flex items-center gap-1 hover:text-gray-700">
-                        <Phone className="h-4 w-4" /> Call
-                      </button>
+                    <div className="flex items-center">
+                      <Star className="w-4 h-4 mr-1 text-yellow-500" />
+                      <span>5.0</span>
                     </div>
                   </div>
                   
@@ -327,14 +296,6 @@ export default function RealEstate() {
                     </button>
                   </div>
                 </div>
-
-                {/* Comments Modal */}
-                <CommentsSection
-                  listingId={property.id.toString()}
-                  listingType="realestate"
-                  isOpen={showComments[property.id] || false}
-                  onClose={() => setShowComments({...showComments, [property.id]: false})}
-                />
               </div>
             ))}
           </div>

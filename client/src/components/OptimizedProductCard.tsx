@@ -1,7 +1,6 @@
-import { memo, useState } from 'react';
-import { Eye, MapPin, ShoppingBag, Star, Shield, MessageSquare, Phone } from 'lucide-react';
+import { memo } from 'react';
+import { Eye, MapPin, ShoppingBag, Star, Shield } from 'lucide-react';
 import OptimizedImage from './OptimizedImage';
-import CommentsSection from './CommentsSection';
 // Define Product interface locally to avoid import issues
 interface Product {
   id: number;
@@ -9,18 +8,13 @@ interface Product {
   title: string;
   category: string;
   price: string;
-  description?: string;
-  location?: string;
+  description: string;
+  location: string;
   status?: string;
-  viewCount?: number;
+  viewCount: number;
   salesCount?: number;
   createdAt: string;
   imageUrls?: string[];
-  image?: string;
-  marketId?: string;
-  marketLine?: string;
-  verified?: boolean;
-  trustCount?: number;
 }
 
 interface OptimizedProductCardProps {
@@ -30,8 +24,6 @@ interface OptimizedProductCardProps {
 }
 
 function OptimizedProductCard({ product, onProductClick, priority = false }: OptimizedProductCardProps) {
-  const [showComments, setShowComments] = useState(false);
-  
   const handleClick = () => {
     onProductClick?.(product.id);
   };
@@ -50,8 +42,9 @@ function OptimizedProductCard({ product, onProductClick, priority = false }: Opt
 
   return (
     <div 
-      className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-200 hover:shadow-lg hover:scale-[1.02] cursor-pointer optimized-grid-item mobile-optimized"
+      className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-200 hover:shadow-lg hover:scale-[1.02] cursor-pointer will-change-transform"
       onClick={handleClick}
+      style={{ contentVisibility: 'auto' }}
     >
       {/* Image Container */}
       <div className="relative h-48 overflow-hidden">
@@ -96,7 +89,7 @@ function OptimizedProductCard({ product, onProductClick, priority = false }: Opt
         </div>
 
         {/* Stats row */}
-        <div className="flex items-center justify-between text-sm text-gray-500 mb-3">
+        <div className="flex items-center justify-between text-sm text-gray-500">
           <div className="flex items-center space-x-3">
             <div className="flex items-center">
               <Eye className="w-4 h-4 mr-1" />
@@ -110,59 +103,12 @@ function OptimizedProductCard({ product, onProductClick, priority = false }: Opt
             )}
           </div>
           
-          {/* Trust count */}
-          <div className="flex items-center text-emerald font-semibold">
-            <span className="mr-1">🛡️</span>{product.trustCount || Math.floor(Math.random() * 50) + 10}
-          </div>
-        </div>
-
-        {/* Action buttons */}
-        <div className="flex items-center justify-between">
-          <div className="flex gap-2">
-            <a 
-              href={`https://wa.me/237670000000`} 
-              target="_blank" 
-              className="text-green-600 hover:underline text-sm font-medium"
-              onClick={(e) => e.stopPropagation()}
-            >
-              WhatsApp
-            </a>
-            <button 
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowComments(true);
-              }}
-              className="text-blue-600 text-sm flex items-center gap-1 font-medium hover:text-blue-700"
-            >
-              <MessageSquare className="h-4 w-4" /> Comments
-            </button>
-            <button 
-              className="text-gray-600 text-sm flex items-center gap-1 hover:text-gray-700"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Phone className="h-4 w-4" /> Call
-            </button>
-          </div>
-          
           {/* Verification status */}
-          {product.verified && (
-            <div className="flex items-center">
-              <span className="bg-emerald text-white px-2 py-1 rounded-full text-xs flex items-center gap-1">
-                <Shield size={12} />
-                Verified
-              </span>
-            </div>
-          )}
+          <div className="flex items-center">
+            <Shield className="w-4 h-4 text-green-500" />
+          </div>
         </div>
       </div>
-
-      {/* Comments Modal */}
-      <CommentsSection
-        listingId={product.id.toString()}
-        listingType="listing"
-        isOpen={showComments}
-        onClose={() => setShowComments(false)}
-      />
     </div>
   );
 }
