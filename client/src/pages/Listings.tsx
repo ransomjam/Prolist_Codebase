@@ -1,10 +1,8 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useLocation } from 'wouter';
-import OptimizedProductCard from '../components/OptimizedProductCard';
+import ProductListingCard from '../components/ProductListingCard';
 import ProductCardSkeleton from '../components/ProductCardSkeleton';
-import LazyGrid from '../components/LazyGrid';
-import { Filter, ShoppingBag, Search, Package, Star, Eye, MessageCircle, Shield } from 'lucide-react';
 
 export default function Listings() {
   const [category, setCategory] = useState("All");
@@ -147,12 +145,11 @@ export default function Listings() {
           </a>
         </div>
       ) : (
-        <div className="optimized-grid mobile-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProducts.map((product: any, index: number) => (
-            <OptimizedProductCard
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredProducts.map((product: any) => (
+            <ProductListingCard
               key={product.id}
               product={product}
-              priority={index < 6}
               onProductClick={(id) => window.location.href = `/product/${id}`}
             />
           ))}
