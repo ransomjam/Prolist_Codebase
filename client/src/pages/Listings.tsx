@@ -60,7 +60,7 @@ export default function Listings() {
         <h2 className="text-3xl font-bold text-primary mb-4">Explore Listings</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[...Array(6)].map((_, i) => (
-            <div key={i} className="bg-gray-200 animate-pulse rounded-lg h-64"></div>
+            <ProductCardSkeleton key={i} />
           ))}
         </div>
       </div>
@@ -78,10 +78,12 @@ export default function Listings() {
     );
   }
 
-  // Generate categories dynamically from products, plus common categories
-  const allCategories = ["All", "Electronics", "Fashion", "Home & Garden", "Sports", "Books", "Automotive", "Services"];
-  const productCategories = Array.from(new Set(products.map((product: any) => product.category).filter(Boolean)));
-  const categories = Array.from(new Set([...allCategories, ...productCategories]));
+  // Memoize categories for better performance
+  const categories = useMemo(() => {
+    const allCategories: string[] = ["All", "Electronics", "Fashion", "Home & Garden", "Sports", "Books", "Automotive", "Services"];
+    const productCategories = Array.from(new Set(products.map((product: any) => product.category).filter(Boolean)));
+    return Array.from(new Set([...allCategories, ...productCategories])) as string[];
+  }, [products]);
 
   const handleCategoryChange = (newCategory: string) => {
     setCategory(newCategory);
@@ -104,7 +106,7 @@ export default function Listings() {
           <button
             key={cat}
             onClick={() => handleCategoryChange(cat)}
-            className={`px-4 py-2 rounded-lg font-semibold whitespace-nowrap ${
+            className={`px-4 py-2 rounded-lg font-semibold whitespace-nowrap transition-colors ${
               category === cat 
                 ? 'bg-primary text-white shadow-lg' 
                 : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
@@ -113,7 +115,7 @@ export default function Listings() {
             {cat}
             {cat !== "All" && (
               <span className="ml-2 text-xs opacity-75">
-                ({filteredProducts.filter((p: any) => p.category === cat).length})
+                ({products.filter((p: any) => p.category === cat).length})
               </span>
             )}
           </button>
@@ -145,60 +147,13 @@ export default function Listings() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProducts.map((product: any) => (
-            <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-              <div className="aspect-w-16 aspect-h-9">
-                {product.imageUrls && product.imageUrls.length > 0 ? (
-                  <img 
-                    src={product.imageUrls[0]} 
-                    alt={product.title}
-                    className="w-full h-48 object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
-                    <div className="text-center">
-                      <svg className="w-12 h-12 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                      <p className="text-gray-500 text-sm">No image</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-              <div className="p-4">
-                <h3 className="font-semibold text-lg text-gray-900 mb-2">{product.title}</h3>
-                <p className="text-sm text-gray-600 mb-2 line-clamp-2">{product.description}</p>
-
-                      {/* Vendor Verification Status */}
-                      <div className="mb-3">
-                        <div className="flex items-center gap-2">
-                          <Shield className="w-4 h-4 text-blue-600" />
-                          <span className="bg-gradient-to-r from-blue-500 to-emerald-500 text-white px-2 py-1 rounded-full text-xs font-medium">
-                            Vendor #{product.vendorId} - Basic Verified
-                          </span>
-                        </div>
-                      </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-2xl font-bold text-primary">
-                  <p className="text-green-600 font-bold text-lg mb-2">
-                        {product.price.replace('$', '').includes('XAF') ? product.price.replace('$', '') : `${product.price.replace('$', '')} XAF`}
-                      </p>
-                    </span>
-                  <span className="text-sm text-gray-500">{product.category}</span>
-                </div>
-                <div className="mt-3 flex items-center justify-between">
-                  <span className="text-sm text-gray-500">
-                    {product.location || 'Bamenda'}
-                  </span>
-                  <a
-                    href={`/product/${product.id}`}
-                    className="text-primary hover:text-blue-700 font-medium text-sm"
-                  >
-                    View Details
-                  </a>
-                </div>
-              </div>
-            </div>
+          {filteredProducts.map((product: any, index: number) => (
+            <OptimizedProductCard
+              key={product.id}
+              product={product}
+              priority={index < 6}
+              onProductClick={(id) => window.location.href = `/product-detail/${id}`}
+            />
           ))}
         </div>
       )}

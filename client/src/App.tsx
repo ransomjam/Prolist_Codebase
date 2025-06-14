@@ -4,7 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/queryClient";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { auctions as initialAuctions } from "./data/demoData";
+// Removed demo data import for performance
 import { useAuth } from "./hooks/useAuth";
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
