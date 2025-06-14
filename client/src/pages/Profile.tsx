@@ -26,8 +26,10 @@ export default function Profile() {
     email: '',
     phone: '',
     location: '',
-    bio: ''
+    bio: '',
+    profilePicture: null as File | null
   });
+  const [profilePreviewUrl, setProfilePreviewUrl] = useState<string>('');
 
   // Fetch user's products
   const { data: userProducts = [] } = useQuery({
@@ -111,12 +113,32 @@ export default function Profile() {
   const updateProfileMutation = useMutation({
     mutationFn: async (updates: any) => {
       if (!user?.id) throw new Error('User not found');
+      
+      // Handle profile picture conversion
+      let profilePictureData = null;
+      if (updates.profilePicture) {
+        profilePictureData = await new Promise<string>((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            const base64 = reader.result as string;
+            resolve(base64.split(',')[1]); // Remove data:image/jpeg;base64, prefix
+          };
+          reader.readAsDataURL(updates.profilePicture);
+        });
+      }
+
+      const updateData = { ...updates };
+      if (profilePictureData) {
+        updateData.profilePictureUrl = `data:image/jpeg;base64,${profilePictureData}`;
+      }
+      delete updateData.profilePicture; // Remove file object
+
       const response = await fetch(`/api/users/${user.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(updates)
+        body: JSON.stringify(updateData)
       });
 
       if (!response.ok) {
@@ -284,98 +306,121 @@ export default function Profile() {
 
       <div className="max-w-4xl mx-auto px-4 pb-8">
         {/* Profile Card */}
-        <div className="bg-white rounded-xl shadow-lg -mt-16 relative z-10 p-6 mb-6">
-          <div className="flex flex-col sm:flex-row items-center gap-6">
-            <div className="relative">
+        <div className="bg-white rounded-xl shadow-lg -mt-16 relative z-10 p-4 sm:p-6 mb-6">
+          <div className="flex flex-col lg:flex-row items-center gap-4 lg:gap-6">
+            {/* Profile Picture */}
+            <div className="relative flex-shrink-0">
               {(profileUser as any).profilePictureUrl ? (
-                <img
-                  src={(profileUser as any).profilePictureUrl}
-                  alt={`${profileUser.username}'s profile`}
-                  className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg"
-                />
-              ) : (
-                <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-bold">
-                  {profileUser.username.charAt(0).toUpperCase()}
+                <div className="relative">
+                  <img
+                    src={(profileUser as any).profilePictureUrl}
+                    alt={`${profileUser.username}'s profile`}
+                    className="w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 rounded-full object-cover border-4 border-white shadow-lg"
+                    onError={(e) => {
+                      // Fallback to initial if image fails to load
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                      const fallback = target.parentElement?.nextElementSibling as HTMLElement;
+                      if (fallback) fallback.style.display = 'flex';
+                    }}
+                  />
                 </div>
-              )}
-              <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2">
+              ) : null}
+              <div 
+                className={`w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-xl sm:text-2xl lg:text-3xl font-bold ${
+                  (profileUser as any).profilePictureUrl ? 'hidden' : 'flex'
+                }`}
+              >
+                {profileUser.username.charAt(0).toUpperCase()}
+              </div>
+              <div className="absolute -bottom-1 sm:-bottom-2 left-1/2 transform -translate-x-1/2 whitespace-nowrap">
                 {getVerificationBadge()}
               </div>
             </div>
 
-            <div className="flex-1 text-center sm:text-left">
-              <h1 className="text-2xl font-bold text-gray-900">{profileUser.username}</h1>
-              <p className="text-gray-600">{profileUser.email}</p>
-              <div className="flex flex-wrap gap-4 mt-2 text-sm text-gray-500">
+            {/* User Info */}
+            <div className="flex-1 text-center lg:text-left min-w-0">
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-1 truncate">
+                {profileUser.username}
+              </h1>
+              <p className="text-sm sm:text-base text-gray-600 mb-2 truncate">{profileUser.email}</p>
+              <div className="flex flex-wrap justify-center lg:justify-start gap-3 sm:gap-4 text-xs sm:text-sm text-gray-500">
                 <span className="flex items-center gap-1">
-                  <MapPin size={14} />
-                  {(profileUser as any).location || 'No location set'}
+                  <MapPin size={12} className="sm:w-4 sm:h-4" />
+                  <span className="truncate max-w-32 sm:max-w-none">
+                    {(profileUser as any).location || 'No location set'}
+                  </span>
                 </span>
                 <span className="flex items-center gap-1">
-                  <Phone size={14} />
-                  {(profileUser as any).phone || 'No phone number'}
+                  <Phone size={12} className="sm:w-4 sm:h-4" />
+                  <span className="truncate max-w-32 sm:max-w-none">
+                    {(profileUser as any).phone || 'No phone number'}
+                  </span>
                 </span>
               </div>
             </div>
 
-            <button 
-              onClick={openEditModal}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition"
-            >
-              Edit Profile
-            </button>
-             {/* Upgrade to Premium Button */}
-             {!isPremiumUser && (
-               <button
-                 onClick={() => setShowUpgrade(true)}
-                 className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:from-yellow-600 hover:to-orange-600 transition shadow-lg"
-               >
-                 Upgrade to Premium
-               </button>
-             )}
-             
-             {isPremiumUser && (
-               <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-lg">
-                 Premium Member
-               </div>
-             )}
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full lg:w-auto">
+              <button 
+                onClick={openEditModal}
+                className="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-blue-700 transition"
+              >
+                Edit Profile
+              </button>
+              
+              {!isPremiumUser && (
+                <button
+                  onClick={() => setShowUpgrade(true)}
+                  className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold hover:from-yellow-600 hover:to-orange-600 transition shadow-lg"
+                >
+                  Upgrade to Premium
+                </button>
+              )}
+              
+              {isPremiumUser && (
+                <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold shadow-lg text-center">
+                  Premium Member
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Stats Row */}
-          <div className="grid grid-cols-4 gap-4 mt-6 pt-6 border-t">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mt-6 pt-6 border-t">
             <div className="text-center">
-              <span className="text-lg font-bold text-gray-900">{userProducts?.length || 0}</span>
-              <span className="text-gray-600 block text-xs">Posts</span>
+              <span className="text-base sm:text-lg font-bold text-gray-900">{userProducts?.length || 0}</span>
+              <span className="text-gray-600 block text-xs sm:text-sm">Posts</span>
             </div>
             <div className="text-center">
-              <span className="text-lg font-bold text-gray-900">0</span>
-              <span className="text-gray-600 block text-xs">Followers</span>
+              <span className="text-base sm:text-lg font-bold text-gray-900">0</span>
+              <span className="text-gray-600 block text-xs sm:text-sm">Followers</span>
             </div>
             <div className="text-center">
-              <span className="text-lg font-bold text-gray-900">0</span>
-              <span className="text-gray-600 block text-xs">Following</span>
+              <span className="text-base sm:text-lg font-bold text-gray-900">0</span>
+              <span className="text-gray-600 block text-xs sm:text-sm">Following</span>
             </div>
             <div className="text-center">
-              <span className="text-lg font-bold text-gray-900">{vendorStats?.totalSales || 0}</span>
-              <span className="text-gray-600 block text-xs">Sales</span>
+              <span className="text-base sm:text-lg font-bold text-gray-900">{vendorStats?.totalSales || 0}</span>
+              <span className="text-gray-600 block text-xs sm:text-sm">Sales</span>
             </div>
           </div>
 
           {/* Trust Score Box */}
-          <div className="bg-gradient-to-r from-green-100 to-blue-100 rounded-lg p-4 mt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <Shield className="text-green-600" size={18} />
-                  <span className="font-semibold text-gray-900">Trust Score</span>
+          <div className="bg-gradient-to-r from-green-100 to-blue-100 rounded-lg p-3 sm:p-4 mt-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
+              <div className="text-center sm:text-left">
+                <div className="flex items-center justify-center sm:justify-start gap-2 mb-1">
+                  <Shield className="text-green-600" size={16} />
+                  <span className="font-semibold text-gray-900 text-sm sm:text-base">Trust Score</span>
                 </div>
-                <div className="text-2xl font-bold text-green-600">0</div>
+                <div className="text-xl sm:text-2xl font-bold text-green-600">0</div>
               </div>
-              <div className="text-right">
-                <div className="text-sm text-gray-600">Rating</div>
-                <div className="flex items-center gap-1">
-                  <Star className="text-yellow-500 fill-current" size={16} />
-                  <span className="font-semibold">{vendorStats?.averageRating || 0}</span>
+              <div className="text-center sm:text-right">
+                <div className="text-xs sm:text-sm text-gray-600">Rating</div>
+                <div className="flex items-center justify-center sm:justify-end gap-1">
+                  <Star className="text-yellow-500 fill-current" size={14} />
+                  <span className="font-semibold text-sm sm:text-base">{vendorStats?.averageRating || 0}</span>
                 </div>
               </div>
             </div>
