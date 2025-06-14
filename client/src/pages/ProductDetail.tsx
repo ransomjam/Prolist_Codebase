@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams, useLocation } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
+import OptimizedImage from '../components/OptimizedImage';
 import { 
   Heart, 
   Shield, 
@@ -57,14 +58,18 @@ export default function ProductDetail() {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [showImageModal, setShowImageModal] = useState(false);
 
-  // Fetch database products
+  // Fetch database products with optimization
   const { data: dbProducts = [] } = useQuery({
     queryKey: ['/api/products'],
     queryFn: async () => {
       const response = await fetch('/api/products');
       if (!response.ok) return [];
       return response.json();
-    }
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
+    refetchOnWindowFocus: false,
+    refetchInterval: false
   });
 
   // Use only authentic database products
