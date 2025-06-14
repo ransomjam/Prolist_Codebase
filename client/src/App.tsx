@@ -4,7 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/queryClient";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-// Removed demo data import for performance
+import { auctions as initialAuctions } from "./data/demoData";
 import { useAuth } from "./hooks/useAuth";
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
@@ -126,7 +126,7 @@ function Router() {
 }
 
 function App() {
-  const [auctions, setAuctions] = useState<any[]>([]);
+  const [auctions, setAuctions] = useState(initialAuctions);
   const [location] = useLocation();
   const { isAuthenticated, isLoading } = useAuth();
 
