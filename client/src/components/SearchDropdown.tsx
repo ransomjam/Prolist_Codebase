@@ -12,6 +12,25 @@ export default function SearchDropdown() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [, setLocation] = useLocation();
 
+  // Fetch authentic data from APIs
+  const { data: products = [] } = useQuery({
+    queryKey: ['/api/products'],
+    queryFn: async () => {
+      const response = await fetch('/api/products');
+      if (!response.ok) return [];
+      return response.json();
+    }
+  });
+
+  const { data: auctions = [] } = useQuery({
+    queryKey: ['/api/auctions'],
+    queryFn: async () => {
+      const response = await fetch('/api/auctions');
+      if (!response.ok) return [];
+      return response.json();
+    }
+  });
+
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -30,37 +49,20 @@ export default function SearchDropdown() {
       const query = searchQuery.toLowerCase();
       const results = [];
 
-      // Search in listings
-      const matchingListings = listings.filter(item => 
+      // Search in products (Services and Real Estate)
+      const matchingProducts = products.filter((item: any) => 
         item.title.toLowerCase().includes(query) ||
         item.category.toLowerCase().includes(query) ||
-        item.location.toLowerCase().includes(query)
-      ).slice(0, 3).map(item => ({ ...item, type: 'listing' }));
-
-      // Search in markets
-      const matchingMarkets = markets.filter(item => 
-        item.name.toLowerCase().includes(query)
-      ).slice(0, 2).map(item => ({ ...item, type: 'market' }));
-
-      // Search in real estate
-      const matchingRealEstate = realEstate.filter(item => 
-        item.title.toLowerCase().includes(query) ||
-        item.location.toLowerCase().includes(query)
-      ).slice(0, 2).map(item => ({ ...item, type: 'realestate' }));
+        (item.location && item.location.toLowerCase().includes(query))
+      ).slice(0, 5).map((item: any) => ({ ...item, type: 'product' }));
 
       // Search in auctions
-      const matchingAuctions = auctions.filter(item => 
-        item.product.title.toLowerCase().includes(query) ||
-        item.vendor.toLowerCase().includes(query)
-      ).slice(0, 2).map(item => ({ ...item, type: 'auction' }));
+      const matchingAuctions = auctions.filter((item: any) => 
+        item.title.toLowerCase().includes(query) ||
+        (item.description && item.description.toLowerCase().includes(query))
+      ).slice(0, 3).map((item: any) => ({ ...item, type: 'auction' }));
 
-      // Search in verified businesses
-      const matchingBusinesses = verifiedBusinesses.filter(item => 
-        item.name.toLowerCase().includes(query) ||
-        item.location.toLowerCase().includes(query)
-      ).slice(0, 2).map(item => ({ ...item, type: 'business' }));
-
-      results.push(...matchingListings, ...matchingMarkets, ...matchingRealEstate, ...matchingAuctions, ...matchingBusinesses);
+      results.push(...matchingProducts, ...matchingAuctions);
       setSearchResults(results);
     } else {
       setSearchResults([]);
@@ -69,11 +71,11 @@ export default function SearchDropdown() {
 
   const getResultLink = (result: any) => {
     switch (result.type) {
-      case 'listing': return '/marketplace';
-      case 'market': return '/markets';
-      case 'realestate': return '/real-estate';
-      case 'auction': return '/auctions';
-      case 'business': return '/marketplace';
+      case 'product': 
+        if (result.category === 'Services') return '/services';
+        if (result.category === 'Real Estate') return '/real-estate';
+        return '/marketplace';
+      case 'auction': return `/auction/${result.id}`;
       default: return '/marketplace';
     }
   };
