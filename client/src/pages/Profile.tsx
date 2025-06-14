@@ -195,21 +195,9 @@ export default function Profile() {
       email: profileUser.email || '',
       phone: (profileUser as any).phone || '',
       location: (profileUser as any).location || '',
-      bio: (profileUser as any).bio || '',
-      profilePicture: null
+      bio: (profileUser as any).bio || ''
     });
-    setProfilePreviewUrl('');
     setShowEditModal(true);
-  };
-
-  // Handle profile picture file change
-  const handleProfilePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setEditForm({ ...editForm, profilePicture: file });
-      const url = URL.createObjectURL(file);
-      setProfilePreviewUrl(url);
-    }
   };
 
   const handleEditSubmit = async (e: React.FormEvent) => {
@@ -615,7 +603,7 @@ export default function Profile() {
       {/* Edit Profile Modal */}
       {showEditModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-4 sm:p-6">
+          <div className="bg-white rounded-xl max-w-md w-full p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold">Edit Profile</h3>
               <button 
@@ -627,41 +615,6 @@ export default function Profile() {
             </div>
 
             <form onSubmit={handleEditSubmit} className="space-y-4">
-              {/* Profile Picture Upload */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Profile Picture</label>
-                <div className="flex items-center space-x-4">
-                  <div className="flex-shrink-0">
-                    {profilePreviewUrl ? (
-                      <img
-                        className="h-16 w-16 rounded-full object-cover border-2 border-gray-300"
-                        src={profilePreviewUrl}
-                        alt="Profile preview"
-                      />
-                    ) : (profileUser as any).profilePictureUrl ? (
-                      <img
-                        className="h-16 w-16 rounded-full object-cover border-2 border-gray-300"
-                        src={(profileUser as any).profilePictureUrl}
-                        alt="Current profile"
-                      />
-                    ) : (
-                      <div className="h-16 w-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xl font-bold">
-                        {profileUser.username.charAt(0).toUpperCase()}
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex-1">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleProfilePictureChange}
-                      className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-600 file:text-white hover:file:bg-blue-700"
-                    />
-                    <p className="text-xs text-gray-500 mt-1">PNG, JPG up to 2MB</p>
-                  </div>
-                </div>
-              </div>
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
                 <input
@@ -712,7 +665,7 @@ export default function Profile() {
                 />
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-3 pt-4">
+              <div className="flex gap-3 pt-4">
                 <button
                   type="button"
                   onClick={() => setShowEditModal(false)}
