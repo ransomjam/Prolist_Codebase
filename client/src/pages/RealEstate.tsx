@@ -132,9 +132,9 @@ export default function RealEstate() {
   }
 
   // Property categories based on actual data
-  const allCategories: string[] = ["All", "Houses", "Apartments", "Commercial", "Land"];
-  const productCategories = Array.from(new Set(realEstateProducts.map((product: any) => product.subcategory).filter(Boolean))) as string[];
-  const categories: string[] = Array.from(new Set([...allCategories, ...productCategories]));
+  const allCategories = ["All", "Houses", "Apartments", "Commercial", "Land"];
+  const productCategories = Array.from(new Set(realEstateProducts.map((product: any) => product.subcategory).filter(Boolean)));
+  const categories = Array.from(new Set([...allCategories, ...productCategories]));
 
   const handleCategoryChange = (newCategory: string) => {
     setCategory(newCategory);
@@ -171,7 +171,7 @@ export default function RealEstate() {
       {/* Content */}
       <div className="p-6">
         <div className="flex gap-4 mb-6 overflow-x-auto">
-          {categories.map((cat: string) => (
+          {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => handleCategoryChange(cat)}
