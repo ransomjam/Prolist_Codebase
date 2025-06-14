@@ -58,14 +58,17 @@ export default function ProductDetail() {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [showImageModal, setShowImageModal] = useState(false);
 
-  // Fetch database products
+  // Fetch database products with performance optimizations
   const { data: dbProducts = [] } = useQuery({
     queryKey: ['/api/products'],
     queryFn: async () => {
       const response = await fetch('/api/products');
       if (!response.ok) return [];
       return response.json();
-    }
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
+    refetchOnWindowFocus: false
   });
 
   // Use only authentic database products
@@ -187,18 +190,18 @@ export default function ProductDetail() {
               className="h-96 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center cursor-pointer relative group"
               onClick={() => setShowImageModal(true)}
             >
-              {hasImages && currentImage ? (
-                <img 
-                  src={currentImage} 
-                  alt={product.title}
-                  className="w-full h-full object-cover transition-transform group-hover:scale-105"
-                />
-              ) : (
-                <div className="flex flex-col items-center justify-center">
-                  <Package className="w-24 h-24 text-gray-400 mb-4" />
-                  <p className="text-gray-500 text-sm">Click to view image</p>
-                </div>
-              )}
+              <OptimizedImage
+                src={currentImage}
+                alt={product.title}
+                className="w-full h-full transition-transform group-hover:scale-105"
+                priority={true}
+                fallbackIcon={
+                  <div className="flex flex-col items-center justify-center">
+                    <Package className="w-24 h-24 text-gray-400 mb-4" />
+                    <p className="text-gray-500 text-sm">Click to view image</p>
+                  </div>
+                }
+              />
               {/* Zoom overlay */}
               <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300 flex items-center justify-center">
                 <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white rounded-full p-2">
@@ -225,18 +228,18 @@ export default function ProductDetail() {
                   }
                 }}
               >
-                {productImages[index] ? (
-                  <img 
-                    src={productImages[index]} 
-                    alt={`${product.title} view ${index + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="flex flex-col items-center">
-                    <Package className="w-6 h-6 text-gray-400 mb-1" />
-                    <span className="text-xs text-gray-400">{index + 1}</span>
-                  </div>
-                )}
+                <OptimizedImage
+                  src={productImages[index]}
+                  alt={`${product.title} view ${index + 1}`}
+                  className="w-full h-full"
+                  priority={index < 3}
+                  fallbackIcon={
+                    <div className="flex flex-col items-center">
+                      <Package className="w-6 h-6 text-gray-400 mb-1" />
+                      <span className="text-xs text-gray-400">{index + 1}</span>
+                    </div>
+                  }
+                />
               </div>
             ))}
           </div>

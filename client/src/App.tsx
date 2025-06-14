@@ -126,7 +126,7 @@ function Router() {
 }
 
 function App() {
-  const [auctions, setAuctions] = useState(initialAuctions);
+  const [auctions, setAuctions] = useState<any[]>([]);
   const [location] = useLocation();
   const { isAuthenticated, isLoading } = useAuth();
 
