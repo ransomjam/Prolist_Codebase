@@ -143,6 +143,17 @@ export default function Auctions() {
                     <span className="text-gray-400">No image available</span>
                   </div>
                 )}
+                <div className="absolute top-3 left-3">
+                  {vendors[auction.vendorId] && (
+                    <span className={`text-white text-xs px-2 py-1 rounded-full ${
+                      vendors[auction.vendorId].status === 'Premium Verified' 
+                        ? 'bg-gradient-to-r from-purple-600 to-pink-600' 
+                        : 'bg-green-600'
+                    }`}>
+                      {vendors[auction.vendorId].status === 'Premium Verified' ? 'Pro Verified' : 'Basic Verified'}
+                    </span>
+                  )}
+                </div>
                 <div className="absolute top-3 right-3">
                   <span className="bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-medium">
                     Auction
@@ -189,7 +200,10 @@ export default function Auctions() {
                   <div className="pt-2 border-t border-gray-100">
                     <div className="flex items-center justify-between">
                       <span className="text-xs text-gray-700 font-medium">
-                        Vendor #{auction.vendorId}
+                        {vendors[auction.vendorId] ? 
+                          (vendors[auction.vendorId].username || vendors[auction.vendorId].fullName) : 
+                          `Vendor #${auction.vendorId}`
+                        }
                       </span>
                       <div className="flex items-center gap-1 text-green-600">
                         <Shield className="w-3 h-3" />
