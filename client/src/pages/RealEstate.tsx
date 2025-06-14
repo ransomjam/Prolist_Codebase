@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useLocation } from 'wouter';
-import { Building, MapPin, Eye, MessageCircle, Shield, Star } from 'lucide-react';
+import { Building, MapPin, Eye, MessageCircle, Shield, Star, MessageSquare, Phone } from 'lucide-react';
+import CommentsSection from '../components/CommentsSection';
 
 export default function RealEstate() {
   const [category, setCategory] = useState("All");
