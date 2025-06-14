@@ -7,10 +7,10 @@ export default function BottomNavigation() {
 
   const navItems = [
     {
-      href: "/",
+      href: "/app",
       icon: HomeIcon,
       label: "Home",
-      active: location === "/"
+      active: location === "/app"
     },
     {
       href: "/products",

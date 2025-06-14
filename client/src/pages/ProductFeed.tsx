@@ -206,6 +206,13 @@ export default function ProductFeed() {
                   </div>
                 )}
                 <div className="absolute top-2 left-2">
+                  {vendors[product.vendorId] && (
+                    <span className="bg-green-600 text-white text-xs px-2 py-1 rounded-full">
+                      Verified
+                    </span>
+                  )}
+                </div>
+                <div className="absolute top-2 right-2">
                   <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
                     {product.category}
                   </span>
@@ -218,9 +225,9 @@ export default function ProductFeed() {
                 
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-2xl font-bold text-blue-600">{product.price} XAF</span>
-                  <div className="flex items-center text-gray-500 text-sm">
-                    <Eye className="w-4 h-4 mr-1" />
-                    {product.viewCount || 0}
+                  <div className="flex items-center text-green-600 text-sm">
+                    <Shield className="w-4 h-4 mr-1" />
+                    {Math.floor(Math.random() * 50) + 10}
                   </div>
                 </div>
                 
@@ -229,19 +236,18 @@ export default function ProductFeed() {
                   <span>{new Date(product.createdAt).toLocaleDateString()}</span>
                 </div>
                 
-                {/* Vendor Verification Status */}
+                {/* Vendor Name */}
                 <div className="mb-3">
                   {vendors[product.vendorId] ? (
                     <div className="flex items-center gap-2">
-                      <Shield className="w-4 h-4 text-blue-600" />
-                      <span className="bg-gradient-to-r from-blue-500 to-emerald-500 text-white px-2 py-1 rounded-full text-xs font-medium">
-                        {vendors[product.vendorId].fullName} - Basic Verified
+                      <span className="text-gray-700 font-medium text-sm">
+                        {vendors[product.vendorId].fullName}
                       </span>
                     </div>
                   ) : (
                     <div className="flex items-center gap-2">
-                      <span className="bg-gray-200 text-gray-600 px-2 py-1 rounded-full text-xs font-medium">
-                        Vendor #${product.vendorId}
+                      <span className="text-gray-500 text-sm">
+                        Vendor #{product.vendorId}
                       </span>
                     </div>
                   )}

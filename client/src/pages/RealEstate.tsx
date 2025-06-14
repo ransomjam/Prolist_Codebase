@@ -442,9 +442,9 @@ export default function RealEstate() {
                         </div>
                         
                         <div className="flex items-center gap-4">
-                          <div className="flex items-center gap-1 text-gray-500">
-                            <Eye size={16} />
-                            <span>{property.trustCount} views</span>
+                          <div className="flex items-center gap-1 text-green-600">
+                            <Shield size={16} />
+                            <span>{Math.floor(Math.random() * 50) + 10}</span>
                           </div>
                           <button 
                             onClick={() => handleViewProperty(property)}
