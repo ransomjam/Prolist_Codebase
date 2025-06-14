@@ -32,7 +32,7 @@ interface Product {
   viewCount: number;
   salesCount?: number;
   createdAt: string;
-  image?: string;
+  imageUrls?: string[];
 }
 
 interface VendorApplication {
@@ -70,6 +70,11 @@ export default function ProductDetail() {
   // Use only authentic database products
   const product = dbProducts.find((p: any) => p.id === parseInt(id!));
   const productLoading = false;
+
+  // Get product images array, fallback to empty array if none
+  const productImages = product?.imageUrls && product.imageUrls.length > 0 ? product.imageUrls : [];
+  const currentImage = productImages[selectedImageIndex];
+  const hasImages = productImages.length > 0;
 
   // Fetch vendor info
   const { data: vendor } = useQuery({
@@ -184,9 +189,9 @@ export default function ProductDetail() {
               className="h-96 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center cursor-pointer relative group"
               onClick={() => setShowImageModal(true)}
             >
-              {product.image ? (
+              {hasImages && currentImage ? (
                 <img 
-                  src={product.image} 
+                  src={currentImage} 
                   alt={product.title}
                   className="w-full h-full object-cover transition-transform group-hover:scale-105"
                 />
@@ -217,12 +222,14 @@ export default function ProductDetail() {
                 }`}
                 onClick={() => {
                   setSelectedImageIndex(index);
-                  setShowImageModal(true);
+                  if (hasImages || index < productImages.length) {
+                    setShowImageModal(true);
+                  }
                 }}
               >
-                {product.image ? (
+                {productImages[index] ? (
                   <img 
-                    src={product.image} 
+                    src={productImages[index]} 
                     alt={`${product.title} view ${index + 1}`}
                     className="w-full h-full object-cover"
                   />
