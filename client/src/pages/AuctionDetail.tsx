@@ -193,7 +193,7 @@ export default function AuctionDetail() {
                 <div className="text-center pb-4 border-b border-gray-200">
                   <div className="text-sm text-gray-500 uppercase tracking-wide mb-1">Starting Price</div>
                   <div className="text-xl font-bold text-emerald-600">
-                    {auction.startingPrice.toLocaleString()} CFA
+                    {parseFloat(auction.startingPrice).toLocaleString()} CFA
                   </div>
                 </div>
                 
@@ -262,13 +262,11 @@ export default function AuctionDetail() {
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Seller Information</h3>
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                  {auction.vendor.charAt(0)}
+                  V
                 </div>
                 <div className="flex-1">
-                  <div className="font-medium text-gray-900">{auction.vendor}</div>
-                  {auction.verified && (
-                    <div className="text-sm text-blue-600 font-medium">Verified Seller</div>
-                  )}
+                  <div className="font-medium text-gray-900">Vendor #{auction.vendorId}</div>
+                  <div className="text-sm text-blue-600 font-medium">Auction Seller</div>
                 </div>
               </div>
               <button className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors">

@@ -2,90 +2,20 @@ import { useState, useEffect } from 'react';
 import { Search, Filter, Star, Shield, MessageCircle, Eye, Grid3X3, List, SlidersHorizontal, Package, ArrowUpDown } from 'lucide-react';
 import { Link } from 'wouter';
 import { ShieldCheckIcon } from '@heroicons/react/24/outline';
-import { serviceCategories, dummyProfessionals, type Professional } from '../data/professionalData';
 import { useQuery } from '@tanstack/react-query';
 import ChatBox from '../components/ChatBox';
 
-// Dummy service listings data
-const dummyServiceListings = [
-  {
-    id: 'logo-design-1',
-    title: 'Professional Logo Design Package',
-    description: 'Get a unique, memorable logo that represents your brand identity. Includes 3 concepts, unlimited revisions, and source files.',
-    professional: dummyProfessionals[0],
-    category: 'graphic-design',
-    price: '25,000 FCFA',
-    deliveryTime: '3-5 days',
-    features: ['3 Logo Concepts', 'Unlimited Revisions', 'Source Files', 'Commercial License'],
-    rating: 4.9,
-    orders: 156,
-    image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?w=400'
-  },
-  {
-    id: 'business-card-1',
-    title: 'Business Card Design',
-    description: 'Professional business card design that matches your brand identity. Print-ready files included.',
-    professional: dummyProfessionals[0],
-    category: 'graphic-design',
-    price: '15,000 FCFA',
-    deliveryTime: '2-3 days',
-    features: ['Front & Back Design', 'Print-Ready Files', 'Multiple Formats', 'Revisions'],
-    rating: 4.8,
-    orders: 89,
-    image: '@assets/Stylish Business Cards _ _ Graphic Design Junction.jfif'
-  },
-  {
-    id: 'video-edit-1',
-    title: 'Social Media Video Editing',
-    description: 'Transform your raw footage into engaging social media content. Perfect for Instagram, TikTok, and Facebook.',
-    professional: dummyProfessionals[1],
-    category: 'video-editing',
-    price: '35,000 FCFA',
-    deliveryTime: '2-4 days',
-    features: ['Color Correction', 'Motion Graphics', 'Sound Design', 'Multiple Formats'],
-    rating: 4.7,
-    orders: 203,
-    image: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=400'
-  },
-  {
-    id: 'website-basic-1',
-    title: 'Business Website Development',
-    description: 'Professional responsive website with modern design, contact forms, and mobile optimization.',
-    professional: dummyProfessionals[2],
-    category: 'web-development',
-    price: '85,000 FCFA',
-    deliveryTime: '7-10 days',
-    features: ['Responsive Design', 'Contact Forms', 'SEO Optimized', '1 Year Support'],
-    rating: 4.8,
-    orders: 67,
-    image: 'https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=400'
-  },
-  {
-    id: 'resume-pro-1',
-    title: 'Professional Resume & Cover Letter',
-    description: 'ATS-friendly resume design with keyword optimization and compelling cover letter.',
-    professional: dummyProfessionals[3],
-    category: 'resume-writing',
-    price: '15,000 FCFA',
-    deliveryTime: '1-2 days',
-    features: ['ATS-Friendly Format', 'Keyword Optimization', 'Cover Letter', 'LinkedIn Profile'],
-    rating: 4.9,
-    orders: 234,
-    image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=400'
-  },
-  {
-    id: 'data-analysis-1',
-    title: 'Business Data Analysis Report',
-    description: 'Comprehensive data analysis with visualizations and actionable insights for business decisions.',
-    professional: dummyProfessionals[4],
-    category: 'data-analysis',
-    price: '45,000 FCFA',
-    deliveryTime: '3-5 days',
-    features: ['Data Visualization', 'Trend Analysis', 'Report Creation', 'Recommendations'],
-    rating: 4.6,
-    orders: 78,
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400'
-  }
+// Service categories for filtering
+const serviceCategories = [
+  { id: 'all', name: 'All Services', icon: Package },
+  { id: 'graphic-design', name: 'Graphic Design', icon: Package },
+  { id: 'web-development', name: 'Web Development', icon: Package },
+  { id: 'digital-marketing', name: 'Digital Marketing', icon: Package },
+  { id: 'content-writing', name: 'Content Writing', icon: Package },
+  { id: 'video-editing', name: 'Video Editing', icon: Package },
+  { id: 'photography', name: 'Photography', icon: Package },
+  { id: 'consulting', name: 'Business Consulting', icon: Package },
+  { id: 'tutoring', name: 'Tutoring', icon: Package }
 ];
 
 export default function ProfessionalServices() {
@@ -103,7 +33,7 @@ export default function ProfessionalServices() {
   const [priceRange, setPriceRange] = useState('all');
   const [sortBy, setSortBy] = useState('newest');
   const [chatOpen, setChatOpen] = useState(false);
-  const [selectedProfessional, setSelectedProfessional] = useState<Professional | null>(null);
+  const [selectedProfessional, setSelectedProfessional] = useState<any>(null);
 
   // Fetch service listings from API
   const { data: allProducts = [], isLoading } = useQuery({
@@ -119,11 +49,11 @@ export default function ProfessionalServices() {
   const serviceListings = allProducts.filter((product: any) => product.category === 'Services');
 
   const categoryTypes = [
-    { id: 'all', label: 'All Services', count: dummyProfessionals.length },
+    { id: 'all', label: 'All Services', count: serviceListings.length },
     ...serviceCategories.map(cat => ({
       id: cat.id,
       label: cat.name,
-      count: dummyProfessionals.filter(p => p.category === cat.id).length
+      count: serviceListings.filter((service: any) => service.subcategory === cat.id).length
     }))
   ];
 
@@ -143,16 +73,16 @@ export default function ProfessionalServices() {
     { id: 'price-high', label: 'Price: High to Low' }
   ];
 
-  // Filter professionals based on search and category
-  const filteredProfessionals = dummyProfessionals.filter(professional => {
-    const matchesSearch = professional.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         professional.bio.toLowerCase().includes(searchTerm.toLowerCase());
+  // Filter services based on search and category
+  const filteredServices = serviceListings.filter((service: any) => {
+    const matchesSearch = service.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         service.description.toLowerCase().includes(searchTerm.toLowerCase());
     
-    const matchesCategory = selectedCategory === 'all' || professional.category === selectedCategory;
+    const matchesCategory = selectedCategory === 'all' || service.subcategory === selectedCategory;
     
     let matchesPrice = priceRange === 'all';
     if (priceRange !== 'all') {
-      const price = parseInt(professional.rate.replace(/[^0-9]/g, ''));
+      const price = parseFloat(service.price);
       switch (priceRange) {
         case 'under-25k':
           matchesPrice = price < 25000;
@@ -172,36 +102,7 @@ export default function ProfessionalServices() {
     return matchesSearch && matchesCategory && matchesPrice;
   });
 
-  // Filter service listings based on search and category
-  const filteredServiceListings = serviceListings.filter((listing: any) => {
-    const matchesSearch = listing.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         listing.description.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesCategory = selectedCategory === 'all' || listing.category === selectedCategory;
-    
-    let matchesPrice = priceRange === 'all';
-    if (priceRange !== 'all') {
-      const price = parseFloat(listing.price);
-      switch (priceRange) {
-        case 'under-25k':
-          matchesPrice = price < 25000;
-          break;
-        case '25k-50k':
-          matchesPrice = price >= 25000 && price <= 50000;
-          break;
-        case '50k-100k':
-          matchesPrice = price >= 50000 && price <= 100000;
-          break;
-        case 'above-100k':
-          matchesPrice = price > 100000;
-          break;
-      }
-    }
-    
-    return matchesSearch && matchesCategory && matchesPrice;
-  });
-
-  const openChat = (professional: Professional) => {
+  const openChat = (service: any) => {
     setSelectedProfessional(professional);
     setChatOpen(true);
   };
