@@ -25,19 +25,35 @@ export default function Auctions() {
     }
   });
 
-  // Fetch vendor applications for verification status and usernames
-  const { data: vendors = {} } = useQuery({
+  // Fetch vendor applications and users data
+  const { data: vendorApplications = [] } = useQuery({
     queryKey: ['/api/vendor/applications'],
     queryFn: async () => {
       const response = await fetch('/api/vendor/applications');
-      if (!response.ok) return {};
-      const vendorList = await response.json();
-      return vendorList.reduce((acc: any, vendor: any) => {
-        acc[vendor.userId] = vendor;
-        return acc;
-      }, {});
+      if (!response.ok) return [];
+      return response.json();
     }
   });
+
+  const { data: users = [] } = useQuery({
+    queryKey: ['/api/users'],
+    queryFn: async () => {
+      const response = await fetch('/api/users');
+      if (!response.ok) return [];
+      return response.json();
+    }
+  });
+
+  // Combine vendor applications with user data
+  const vendors = vendorApplications.reduce((acc: any, vendor: any) => {
+    const user = users.find((u: any) => u.id === vendor.userId);
+    acc[vendor.userId] = {
+      ...vendor,
+      username: user?.username || vendor.fullName,
+      fullName: vendor.fullName
+    };
+    return acc;
+  }, {});
 
   useEffect(() => {
     const interval = setInterval(() => {
