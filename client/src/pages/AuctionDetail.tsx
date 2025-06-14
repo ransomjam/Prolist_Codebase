@@ -1,6 +1,6 @@
 import { useRoute } from 'wouter';
 import { useState, useEffect } from 'react';
-import { auctions } from '../data/demoData';
+import { useQuery } from '@tanstack/react-query';
 
 interface Countdown {
   days: number;
@@ -11,17 +11,34 @@ interface Countdown {
 
 export default function AuctionDetail() {
   const [match, params] = useRoute('/auction/:id');
-  const auction = auctions.find(a => a.id === parseInt(params?.id || '0'));
+  const auctionId = parseInt(params?.id || '0');
+  
+  // Fetch auction from API
+  const { data: auction, isLoading, error } = useQuery({
+    queryKey: ['/api/auctions', auctionId],
+    queryFn: async () => {
+      const response = await fetch(`/api/auctions/${auctionId}`);
+      if (!response.ok) {
+        // If individual auction endpoint doesn't exist, fetch all and find the one
+        const allResponse = await fetch('/api/auctions');
+        if (!allResponse.ok) throw new Error('Failed to fetch auctions');
+        const allAuctions = await allResponse.json();
+        return allAuctions.find((a: any) => a.id === auctionId);
+      }
+      return response.json();
+    },
+    enabled: !!auctionId
+  });
 
   const [countdown, setCountdown] = useState<Countdown>({} as Countdown);
   const [bidAmount, setBidAmount] = useState('');
-  const [error, setError] = useState('');
+  const [errorState, setErrorState] = useState('');
   const [auctionEnded, setAuctionEnded] = useState(false);
-  const [currentBid, setCurrentBid] = useState(auction?.currentBid || 0);
+  const [currentBid, setCurrentBid] = useState(0);
   const [bidHistory, setBidHistory] = useState([
-    { bidder: "User123", amount: auction?.currentBid || 0, time: "2 minutes ago" },
-    { bidder: "BidMaster", amount: (auction?.currentBid || 0) - 500, time: "5 minutes ago" },
-    { bidder: "QuickBid", amount: (auction?.currentBid || 0) - 1000, time: "8 minutes ago" }
+    { bidder: "User123", amount: 0, time: "2 minutes ago" },
+    { bidder: "BidMaster", amount: 0, time: "5 minutes ago" },
+    { bidder: "QuickBid", amount: 0, time: "8 minutes ago" }
   ]);
   const [isPlacingBid, setIsPlacingBid] = useState(false);
 
@@ -56,11 +73,11 @@ export default function AuctionDetail() {
   const handleBidSubmit = async () => {
     const bidValue = parseInt(bidAmount);
     if (isNaN(bidValue)) {
-      setError('Please enter a valid number.');
+      setErrorState('Please enter a valid number.');
       return;
     }
     if (bidValue <= currentBid) {
-      setError(`Your bid must be higher than the current highest bid (${currentBid.toLocaleString()} CFA).`);
+      setErrorState(`Your bid must be higher than the current highest bid (${currentBid.toLocaleString()} CFA).`);
       return;
     }
     if (auctionEnded) {
