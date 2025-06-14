@@ -109,7 +109,7 @@ export default function Navbar() {
               {isMenuOpen && (
                 <div className="absolute right-0 mt-2 w-72 sm:w-56 bg-white rounded-lg shadow-xl border z-50 max-h-[90vh] overflow-y-auto">
                   <div className="p-2">
-                    <Link href="/profile" className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg">
+                    <Link href="/profile" className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg" onClick={() => setIsMenuOpen(false)}>
                       {(user as any)?.profilePictureUrl ? (
                         <img
                           src={(user as any).profilePictureUrl}
