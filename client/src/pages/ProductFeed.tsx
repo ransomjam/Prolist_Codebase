@@ -1,5 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import OptimizedProductCard from '../components/OptimizedProductCard';
+import ProductCardSkeleton from '../components/ProductCardSkeleton';
 import { Filter, ShoppingBag, Shield, Star, Eye, MessageCircle } from 'lucide-react';
 import ChatBox from '@/components/ChatBox';
 
