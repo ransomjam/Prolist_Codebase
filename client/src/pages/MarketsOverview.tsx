@@ -109,14 +109,56 @@ const marketGroups = [
   }
 ];
 
-// Sample available shops data for forms
-const availableShops = [
-  { id: 1, name: "Shop A-12", market: "Main Market", line: "Electronics Line", rent: 50000, size: "12m²" },
-  { id: 2, name: "Shop B-8", market: "Main Market", line: "Fashion Line", rent: 45000, size: "10m²" },
-  { id: 3, name: "Shop C-15", market: "Food Market", line: "Fresh Produce", rent: 35000, size: "8m²" },
-  { id: 4, name: "Shop D-3", market: "Nkwen Market", line: "Household Items", rent: 25000, size: "6m²" },
-  { id: 5, name: "Shop E-7", market: "Mile 4 Market", line: "General Goods", rent: 40000, size: "15m²" }
-];
+// Organized shop data by market sections
+const marketSections = {
+  "Main Market": {
+    "Electronics Line": [
+      { id: 1, name: "Shop A-12", rent: 50000, size: "12m²", status: "available" },
+      { id: 2, name: "Shop A-15", rent: 55000, size: "14m²", status: "available" },
+      { id: 3, name: "Shop A-8", rent: 45000, size: "10m²", status: "occupied" }
+    ],
+    "Fashion Line": [
+      { id: 4, name: "Shop B-3", rent: 45000, size: "10m²", status: "available" },
+      { id: 5, name: "Shop B-7", rent: 48000, size: "11m²", status: "available" },
+      { id: 6, name: "Shop B-12", rent: 42000, size: "9m²", status: "occupied" }
+    ],
+    "Food & Provisions": [
+      { id: 7, name: "Shop C-5", rent: 40000, size: "8m²", status: "available" },
+      { id: 8, name: "Shop C-9", rent: 43000, size: "9m²", status: "available" }
+    ]
+  },
+  "Food Market": {
+    "Fresh Produce": [
+      { id: 9, name: "Shop D-4", rent: 35000, size: "8m²", status: "available" },
+      { id: 10, name: "Shop D-7", rent: 38000, size: "9m²", status: "available" },
+      { id: 11, name: "Shop D-12", rent: 40000, size: "10m²", status: "occupied" }
+    ],
+    "Meat & Fish": [
+      { id: 12, name: "Shop E-2", rent: 42000, size: "10m²", status: "available" },
+      { id: 13, name: "Shop E-6", rent: 45000, size: "11m²", status: "available" }
+    ]
+  },
+  "Nkwen Market": {
+    "Household Items": [
+      { id: 14, name: "Shop F-1", rent: 25000, size: "6m²", status: "available" },
+      { id: 15, name: "Shop F-4", rent: 28000, size: "7m²", status: "available" }
+    ],
+    "Local Crafts": [
+      { id: 16, name: "Shop G-2", rent: 22000, size: "5m²", status: "available" },
+      { id: 17, name: "Shop G-5", rent: 24000, size: "6m²", status: "occupied" }
+    ]
+  },
+  "Mile 4 Market": {
+    "General Goods": [
+      { id: 18, name: "Shop H-3", rent: 40000, size: "15m²", status: "available" },
+      { id: 19, name: "Shop H-8", rent: 38000, size: "13m²", status: "available" }
+    ],
+    "Clothing": [
+      { id: 20, name: "Shop I-1", rent: 35000, size: "10m²", status: "available" },
+      { id: 21, name: "Shop I-6", rent: 37000, size: "11m²", status: "occupied" }
+    ]
+  }
+};
 
 // Flatten markets for filtering
 const markets = marketGroups.flatMap(group => 
@@ -129,8 +171,9 @@ export default function MarketsOverview() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
   const [showListingForm, setShowListingForm] = useState(false);
-  const [listingFormType, setListingFormType] = useState<'choose-shop' | 'add-line' | null>(null);
+  const [listingFormType, setListingFormType] = useState<'choose-shop' | 'add-line' | 'appointment' | null>(null);
   const [selectedShop, setSelectedShop] = useState<any>(null);
+  const [showRegistrationMessage, setShowRegistrationMessage] = useState(false);
 
   const filteredMarkets = useMemo(() => {
     return markets.filter(market => {
@@ -149,16 +192,27 @@ export default function MarketsOverview() {
     setListingFormType(null);
   };
 
-  const handleChooseShop = (shop: any) => {
-    setSelectedShop(shop);
-    // In real app, this would redirect to shop claiming form
-    alert(`Selected: ${shop.name} in ${shop.market}\nRent: ${shop.rent} FCFA/month\nSize: ${shop.size}\n\nProceed to claim this shop?`);
+  const handleChooseShop = (market: string, line: string, shop: any) => {
+    setSelectedShop({ ...shop, market, line });
+    setShowRegistrationMessage(true);
+    setTimeout(() => {
+      setShowRegistrationMessage(false);
+      setListingFormType('appointment');
+    }, 2000);
   };
 
   const handleAddNewLine = (formData: any) => {
-    // In real app, this would submit to backend
-    alert(`New market line request submitted:\nMarket: ${formData.market}\nLine Name: ${formData.lineName}\nShop Count: ${formData.shopCount}`);
+    setShowRegistrationMessage(true);
+    setTimeout(() => {
+      setShowRegistrationMessage(false);
+      setListingFormType('appointment');
+    }, 2000);
+  };
+
+  const handleBookAppointment = (appointmentData: any) => {
+    alert(`Appointment booked successfully!\n\nAgent: ${appointmentData.agent}\nDate: ${appointmentData.date}\nTime: ${appointmentData.time}\nLocation: ${appointmentData.location}\n\nYou will receive a confirmation SMS shortly.`);
     setShowListingForm(false);
+    setListingFormType(null);
   };
 
   return (
@@ -219,39 +273,7 @@ export default function MarketsOverview() {
           </div>
         </div>
 
-        {/* Regional Markets Header */}
-        <div className="text-center mb-6">
-          <h1 className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 mb-2">
-            Regional Markets
-          </h1>
-          <p className="text-gray-600">Authentic local markets with verified vendors across Cameroon</p>
-        </div>
 
-        {/* Statistics Dashboard */}
-        <div className="bg-white rounded-2xl shadow-lg p-4 mb-6">
-          <div className="text-center mb-3">
-            <h2 className="text-lg font-bold text-gray-800 mb-1">Marketplace Statistics</h2>
-            <p className="text-xs text-gray-500">Real-time data from regional markets</p>
-          </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            <div className="bg-gray-50 rounded-xl p-3 text-center">
-              <div className="text-xl font-bold text-blue-600 mb-1">7</div>
-              <div className="text-xs text-gray-600">Total Markets</div>
-            </div>
-            <div className="bg-gray-50 rounded-xl p-3 text-center">
-              <div className="text-xl font-bold text-emerald-600 mb-1">1,650+</div>
-              <div className="text-xs text-gray-600">Verified Vendors</div>
-            </div>
-            <div className="bg-gray-50 rounded-xl p-3 text-center">
-              <div className="text-xl font-bold text-purple-600 mb-1">2</div>
-              <div className="text-xs text-gray-600">Market Regions</div>
-            </div>
-            <div className="bg-gray-50 rounded-xl p-3 text-center">
-              <div className="text-xl font-bold text-teal-600 mb-1">4.6★</div>
-              <div className="text-xs text-gray-600">Avg Rating</div>
-            </div>
-          </div>
-        </div>
 
         {/* Market Groups Display */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -293,35 +315,36 @@ export default function MarketsOverview() {
                       </div>
                     </div>
 
-                    {/* Market Group Title Overlay */}
-                    <div className="absolute bottom-4 left-4 right-4">
-                      <h2 className="text-2xl font-bold text-white mb-2 group-hover:text-blue-200">
-                        {group.name}
-                      </h2>
-                      <p className="text-white/90 text-sm mb-3">{group.description}</p>
-                      <div className="flex gap-4">
-                        <div className="text-center">
-                          <div className="text-lg font-bold text-white">{group.markets.length}</div>
-                          <div className="text-xs text-white/80">Markets</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="text-lg font-bold text-white">{group.totalVendors}+</div>
-                          <div className="text-xs text-white/80">Vendors</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="text-lg font-bold text-white">
-                            {group.markets.reduce((acc, market) => acc + (market.availableShops || 0), 0)}
-                          </div>
-                          <div className="text-xs text-white/80">Available</div>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                   
-                  {/* Action Button */}
-                  <div className="p-6 text-center">
-                    <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-full text-sm font-semibold group-hover:from-blue-700 group-hover:to-purple-700 shadow-lg inline-block">
-                      Explore {group.name} →
+                  {/* Market Group Details Below Image */}
+                  <div className="p-6">
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-blue-600">
+                      {group.name}
+                    </h2>
+                    <p className="text-gray-600 text-sm mb-4">{group.description}</p>
+                    
+                    <div className="flex justify-between items-center mb-4">
+                      <div className="flex gap-4">
+                        <div className="text-center">
+                          <div className="text-lg font-bold text-gray-900">{group.markets.length}</div>
+                          <div className="text-xs text-gray-600">Markets</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-lg font-bold text-gray-900">{group.totalVendors}+</div>
+                          <div className="text-xs text-gray-600">Vendors</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-lg font-bold text-gray-900">
+                            {group.markets.reduce((acc, market) => acc + (market.availableShops || 0), 0)}
+                          </div>
+                          <div className="text-xs text-gray-600">Available</div>
+                        </div>
+                      </div>
+                      
+                      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold group-hover:from-blue-700 group-hover:to-purple-700 shadow-lg">
+                        Explore →
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -346,7 +369,16 @@ export default function MarketsOverview() {
                 </button>
               </div>
 
-              {!listingFormType ? (
+              {showRegistrationMessage ? (
+                <div className="text-center py-12">
+                  <div className="bg-orange-100 text-orange-800 p-6 rounded-xl mb-4">
+                    <h3 className="text-xl font-bold mb-2">Physical Registration Required</h3>
+                    <p className="text-sm">To complete your shop registration, you need to visit our office with required documents for verification.</p>
+                  </div>
+                  <div className="animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full mx-auto"></div>
+                  <p className="text-gray-600 mt-4">Redirecting to appointment booking...</p>
+                </div>
+              ) : !listingFormType ? (
                 <div className="space-y-4">
                   <p className="text-gray-600 mb-6">Choose how you'd like to list your shop:</p>
                   
@@ -381,34 +413,17 @@ export default function MarketsOverview() {
                   </button>
                 </div>
               ) : listingFormType === 'choose-shop' ? (
-                <div>
-                  <h3 className="text-lg font-semibold mb-4">Available Shops</h3>
-                  <div className="space-y-3 max-h-96 overflow-y-auto">
-                    {availableShops.map(shop => (
-                      <div key={shop.id} className="border rounded-lg p-4 hover:bg-gray-50">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <h4 className="font-semibold">{shop.name}</h4>
-                            <p className="text-sm text-gray-600">{shop.market} - {shop.line}</p>
-                            <p className="text-sm text-gray-500">Size: {shop.size} | Rent: {shop.rent.toLocaleString()} FCFA/month</p>
-                          </div>
-                          <button
-                            onClick={() => handleChooseShop(shop)}
-                            className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700"
-                          >
-                            Select
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <button
-                    onClick={() => setListingFormType(null)}
-                    className="mt-4 text-gray-600 hover:text-gray-800"
-                  >
-                    ← Back to options
-                  </button>
-                </div>
+                <ShopSelectionForm 
+                  marketSections={marketSections}
+                  onSelectShop={handleChooseShop}
+                  onBack={() => setListingFormType(null)}
+                />
+              ) : listingFormType === 'appointment' ? (
+                <AppointmentBookingForm 
+                  selectedShop={selectedShop}
+                  onBookAppointment={handleBookAppointment}
+                  onBack={() => setListingFormType(null)}
+                />
               ) : (
                 <AddMarketLineForm 
                   onSubmit={handleAddNewLine}
@@ -419,6 +434,239 @@ export default function MarketsOverview() {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+// Shop Selection Form Component
+function ShopSelectionForm({ marketSections, onSelectShop, onBack }: { 
+  marketSections: any, 
+  onSelectShop: (market: string, line: string, shop: any) => void, 
+  onBack: () => void 
+}) {
+  return (
+    <div>
+      <h3 className="text-lg font-semibold mb-4">Available Shops by Market</h3>
+      <div className="space-y-6 max-h-96 overflow-y-auto">
+        {Object.entries(marketSections).map(([marketName, lines]: [string, any]) => (
+          <div key={marketName} className="border rounded-lg p-4">
+            <h4 className="text-md font-semibold text-gray-900 mb-3">{marketName}</h4>
+            
+            {Object.entries(lines).map(([lineName, shops]: [string, any]) => (
+              <div key={lineName} className="mb-4">
+                <h5 className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+                  <Store size={16} className="text-blue-600" />
+                  {lineName}
+                  <span className="text-xs text-gray-500">
+                    ({shops.filter((s: any) => s.status === 'available').length} available)
+                  </span>
+                </h5>
+                
+                <div className="grid grid-cols-1 gap-2 ml-6">
+                  {shops
+                    .filter((shop: any) => shop.status === 'available')
+                    .map((shop: any) => (
+                    <div key={shop.id} className="border rounded-lg p-3 bg-gray-50 hover:bg-blue-50">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h6 className="font-medium text-sm">{shop.name}</h6>
+                          <p className="text-xs text-gray-600">
+                            Size: {shop.size} | Rent: {shop.rent.toLocaleString()} FCFA/month
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => onSelectShop(marketName, lineName, shop)}
+                          className="bg-blue-600 text-white px-3 py-1 rounded text-xs font-semibold hover:bg-blue-700"
+                        >
+                          Select
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+      <button
+        onClick={onBack}
+        className="mt-4 text-gray-600 hover:text-gray-800"
+      >
+        ← Back to options
+      </button>
+    </div>
+  );
+}
+
+// Appointment Booking Form Component
+function AppointmentBookingForm({ selectedShop, onBookAppointment, onBack }: { 
+  selectedShop: any, 
+  onBookAppointment: (data: any) => void, 
+  onBack: () => void 
+}) {
+  const [formData, setFormData] = useState({
+    fullName: '',
+    phone: '',
+    email: '',
+    agent: '',
+    date: '',
+    time: '',
+    location: 'ProList Office - Commercial Avenue'
+  });
+
+  const agents = [
+    'Agent Sarah Mbah - Main Market Specialist',
+    'Agent Paul Che - Food Market Expert', 
+    'Agent Grace Nkeng - General Markets',
+    'Agent John Tah - New Registrations'
+  ];
+
+  const timeSlots = [
+    '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM',
+    '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM'
+  ];
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onBookAppointment(formData);
+  };
+
+  return (
+    <div>
+      <h3 className="text-lg font-semibold mb-4">Book Agent Appointment</h3>
+      
+      {selectedShop && (
+        <div className="bg-blue-50 p-4 rounded-lg mb-4">
+          <h4 className="font-semibold text-blue-900">Selected Shop</h4>
+          <p className="text-sm text-blue-800">
+            {selectedShop.name} - {selectedShop.market} ({selectedShop.line})
+          </p>
+          <p className="text-xs text-blue-700">
+            Rent: {selectedShop.rent?.toLocaleString()} FCFA/month | Size: {selectedShop.size}
+          </p>
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+            <input
+              type="text"
+              value={formData.fullName}
+              onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+            <input
+              type="tel"
+              value={formData.phone}
+              onChange={(e) => setFormData({...formData, phone: e.target.value})}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="6XX XXX XXX"
+              required
+            />
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+          <input
+            type="email"
+            value={formData.email}
+            onChange={(e) => setFormData({...formData, email: e.target.value})}
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Preferred Agent</label>
+          <select
+            value={formData.agent}
+            onChange={(e) => setFormData({...formData, agent: e.target.value})}
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            required
+          >
+            <option value="">Select an agent</option>
+            {agents.map(agent => (
+              <option key={agent} value={agent}>{agent}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Appointment Date</label>
+            <input
+              type="date"
+              value={formData.date}
+              onChange={(e) => setFormData({...formData, date: e.target.value})}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              min={new Date().toISOString().split('T')[0]}
+              required
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Time Slot</label>
+            <select
+              value={formData.time}
+              onChange={(e) => setFormData({...formData, time: e.target.value})}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+            >
+              <option value="">Select time</option>
+              {timeSlots.map(time => (
+                <option key={time} value={time}>{time}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Meeting Location</label>
+          <input
+            type="text"
+            value={formData.location}
+            onChange={(e) => setFormData({...formData, location: e.target.value})}
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            required
+          />
+        </div>
+
+        <div className="bg-yellow-50 p-4 rounded-lg">
+          <h4 className="font-semibold text-yellow-800 mb-2">Required Documents</h4>
+          <ul className="text-sm text-yellow-700 space-y-1">
+            <li>• National ID Card or Passport</li>
+            <li>• Business Registration Certificate (if applicable)</li>
+            <li>• Tax Clearance Certificate</li>
+            <li>• 2 Passport Photos</li>
+            <li>• Proof of Address</li>
+          </ul>
+        </div>
+
+        <div className="flex gap-3 pt-4">
+          <button
+            type="button"
+            onClick={onBack}
+            className="flex-1 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg font-semibold hover:bg-gray-50"
+          >
+            Back
+          </button>
+          <button
+            type="submit"
+            className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700"
+          >
+            Book Appointment
+          </button>
+        </div>
+      </form>
     </div>
   );
 }
