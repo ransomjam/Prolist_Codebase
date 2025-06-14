@@ -26,6 +26,7 @@ export const insertUserSchema = createInsertSchema(users).pick({
   location: true,
   accountType: true,
   specialization: true,
+  profilePictureUrl: true,
 });
 
 // Vendor applications table

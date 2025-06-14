@@ -214,7 +214,8 @@ export default function Profile() {
     // Check if user is premium
     if (isPremiumUser || user?.accountType === 'premium') {
       return (
-        <div className="flex items-center gap-1 text-purple-600">
+        <div className="flex items-center justify-center gap-1 bg-purple-100 text-purple-700 px-3 py-1 rounded-full">
+          <Shield size={12} />
           <span className="text-xs font-medium">Premium Member</span>
         </div>
       );
@@ -223,17 +224,18 @@ export default function Profile() {
     // Check if user is a verified vendor
     if (user?.accountType === 'vendor' && user?.verificationStatus === 'basic_verified') {
       return (
-        <div className="flex items-center gap-1 text-green-600">
-          <span className="text-xs font-medium">Verified Vendor</span>
+        <div className="flex items-center justify-center gap-1 bg-green-100 text-green-700 px-3 py-1 rounded-full">
+          <CheckCircle size={12} />
+          <span className="text-xs font-medium">Verified</span>
         </div>
       );
     }
 
     if (!vendorApplication) {
       return (
-        <div className="flex items-center gap-1 text-gray-500">
-          <Clock size={14} />
-          <span className="text-xs">Unverified</span>
+        <div className="flex items-center justify-center gap-1 bg-gray-100 text-gray-600 px-3 py-1 rounded-full">
+          <Clock size={12} />
+          <span className="text-xs font-medium">Unverified</span>
         </div>
       );
     }
@@ -241,37 +243,37 @@ export default function Profile() {
     switch (vendorApplication.status) {
       case 'Basic Verified':
         return (
-          <div className="flex items-center gap-1 text-green-600">
-            <CheckCircle size={14} />
-            <span className="text-xs font-medium">✅ Verified Vendor</span>
+          <div className="flex items-center justify-center gap-1 bg-green-100 text-green-700 px-3 py-1 rounded-full">
+            <CheckCircle size={12} />
+            <span className="text-xs font-medium">Verified</span>
           </div>
         );
       case 'Premium Verified':
         return (
-          <div className="flex items-center gap-1 text-purple-600">
-            <Shield size={14} />
+          <div className="flex items-center justify-center gap-1 bg-purple-100 text-purple-700 px-3 py-1 rounded-full">
+            <Shield size={12} />
             <span className="text-xs font-medium">Premium Verified</span>
           </div>
         );
       case 'pending':
         return (
-          <div className="flex items-center gap-1 text-yellow-600">
-            <Clock size={14} />
-            <span className="text-xs font-medium">Pending Verification</span>
+          <div className="flex items-center justify-center gap-1 bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full">
+            <Clock size={12} />
+            <span className="text-xs font-medium">Pending</span>
           </div>
         );
       case 'Rejected':
         return (
-          <div className="flex items-center gap-1 text-red-600">
-            <XCircle size={14} />
-            <span className="text-xs font-medium">Verification Rejected</span>
+          <div className="flex items-center justify-center gap-1 bg-red-100 text-red-700 px-3 py-1 rounded-full">
+            <XCircle size={12} />
+            <span className="text-xs font-medium">Rejected</span>
           </div>
         );
       default:
         return (
-          <div className="flex items-center gap-1 text-gray-500">
-            <Clock size={14} />
-            <span className="text-xs">Unverified</span>
+          <div className="flex items-center justify-center gap-1 bg-gray-100 text-gray-600 px-3 py-1 rounded-full">
+            <Clock size={12} />
+            <span className="text-xs font-medium">Unverified</span>
           </div>
         );
     }
@@ -286,7 +288,7 @@ export default function Profile() {
         {/* Profile Card */}
         <div className="bg-white rounded-xl shadow-lg -mt-16 relative z-10 p-6 mb-6">
           <div className="flex flex-col sm:flex-row items-center gap-6">
-            <div className="relative">
+            <div className="relative flex flex-col items-center">
               {(profileUser as any).profilePictureUrl ? (
                 <img
                   src={(profileUser as any).profilePictureUrl}
@@ -298,7 +300,7 @@ export default function Profile() {
                   {profileUser.username.charAt(0).toUpperCase()}
                 </div>
               )}
-              <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2">
+              <div className="mt-2 flex justify-center">
                 {getVerificationBadge()}
               </div>
             </div>
@@ -309,7 +311,7 @@ export default function Profile() {
               <div className="flex flex-wrap gap-4 mt-2 text-sm text-gray-500">
                 <span className="flex items-center gap-1">
                   <MapPin size={14} />
-                  {(profileUser as any).location || 'No location set'}
+                  {(profileUser as any).location || 'Bambili'}
                 </span>
                 <span className="flex items-center gap-1">
                   <Phone size={14} />
