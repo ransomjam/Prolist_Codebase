@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { MapPin, Store, Search, Users, Clock, Star } from 'lucide-react';
-import { markets } from '../data/demoData';
+import { useQuery } from '@tanstack/react-query';
 import MarketCard from '../components/MarketCard';
 
 export default function Markets() {
@@ -15,13 +15,34 @@ export default function Markets() {
     }
   }, []);
 
-  const filteredMarkets = markets.filter(market =>
+  // Fetch real market data from API
+  const { data: products = [], isLoading } = useQuery({
+    queryKey: ['/api/products'],
+    queryFn: async () => {
+      const response = await fetch('/api/products');
+      if (!response.ok) throw new Error('Failed to fetch products');
+      return response.json();
+    }
+  });
+
+  // Create market data from actual product locations
+  const marketLocations = [...new Set(products.map((p: any) => p.location).filter(Boolean))] as string[];
+  const markets = marketLocations.map((location: string, index: number) => ({
+    id: index + 1,
+    name: `${location} Market`,
+    location: location,
+    vendors: products.filter((p: any) => p.location === location).length,
+    description: `Local market serving the ${location} community`,
+    image: '/api/placeholder/600/300'
+  }));
+
+  const filteredMarkets = markets.filter((market: any) =>
     market.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const totalMarkets = markets.length;
-  const activeMarkets = markets.length; // All markets are active in demo
-  const totalVendors = markets.length * 25; // Estimated vendors per market
+  const activeMarkets = markets.length;
+  const totalVendors = products.length;
 
   return (
     <div className="min-h-screen bg-gray-50">

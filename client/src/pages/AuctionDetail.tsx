@@ -229,7 +229,7 @@ export default function AuctionDetail() {
                   <div className="bg-gray-100 p-4 rounded-lg text-center">
                     <div className="text-gray-600 font-semibold mb-1">Auction Ended</div>
                     <div className="text-sm text-gray-500">
-                      Winning bid: {auction.currentBid.toLocaleString()} CFA
+                      Winning bid: {(parseFloat(auction.currentBid) || parseFloat(auction.startingPrice) || 0).toLocaleString()} CFA
                     </div>
                   </div>
                 )}

@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Search, X, MapPin, Star, Shield, ShoppingBag } from "lucide-react";
 import { BuildingStorefrontIcon, HomeModernIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
-import { listings, markets, realEstate, auctions, verifiedBusinesses } from "../data/demoData";
+import { useQuery } from '@tanstack/react-query';
 
 export default function SearchDropdown() {
   const [isOpen, setIsOpen] = useState(false);

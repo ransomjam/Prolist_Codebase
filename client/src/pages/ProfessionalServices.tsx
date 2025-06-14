@@ -49,8 +49,8 @@ export default function ProfessionalServices() {
   const serviceListings = allProducts.filter((product: any) => product.category === 'Services');
 
   const categoryTypes = [
-    { id: 'all', label: 'All Services', count: serviceListings.length },
-    ...serviceCategories.map(cat => ({
+    { id: 'all-services', label: 'All Services', count: serviceListings.length },
+    ...serviceCategories.filter(cat => cat.id !== 'all').map(cat => ({
       id: cat.id,
       label: cat.name,
       count: serviceListings.filter((service: any) => service.subcategory === cat.id).length

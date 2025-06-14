@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { currentUser } from '../data/demoData';
+import { useQuery } from '@tanstack/react-query';
 
 export default function NewListing() {
   const [form, setForm] = useState({
@@ -14,7 +14,17 @@ export default function NewListing() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const canPost = currentUser.accountType === 'premium' || currentUser.listingsPosted < 1;
+  // Get current user session to check posting permissions
+  const { data: userSession } = useQuery({
+    queryKey: ['/api/user/session'],
+    queryFn: async () => {
+      const response = await fetch('/api/user/session');
+      if (!response.ok) return null;
+      return response.json();
+    }
+  });
+
+  const canPost = userSession?.accountType === 'premium' || (userSession?.listingsPosted || 0) < 1;
 
   return (
     <div className="p-6">
