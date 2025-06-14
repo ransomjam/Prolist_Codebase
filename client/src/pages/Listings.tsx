@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useLocation } from 'wouter';
 import OptimizedProductCard from '../components/OptimizedProductCard';
 import ProductCardSkeleton from '../components/ProductCardSkeleton';
+import LazyGrid from '../components/LazyGrid';
 import { Filter, ShoppingBag, Search, Package, Star, Eye, MessageCircle, Shield } from 'lucide-react';
 
 export default function Listings() {
@@ -146,16 +147,26 @@ export default function Listings() {
           </a>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProducts.map((product: any, index: number) => (
+        <LazyGrid
+          items={filteredProducts}
+          itemsPerPage={12}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          renderItem={(product: any, index: number) => (
             <OptimizedProductCard
               key={product.id}
               product={product}
               priority={index < 6}
               onProductClick={(id) => window.location.href = `/product/${id}`}
             />
-          ))}
-        </div>
+          )}
+          loadingComponent={
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[...Array(6)].map((_, i) => (
+                <ProductCardSkeleton key={i} />
+              ))}
+            </div>
+          }
+        />
       )}
     </div>
   );

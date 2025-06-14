@@ -8,13 +8,16 @@ interface Product {
   title: string;
   category: string;
   price: string;
-  description: string;
-  location: string;
+  description?: string;
+  location?: string;
   status?: string;
-  viewCount: number;
+  viewCount?: number;
   salesCount?: number;
   createdAt: string;
   imageUrls?: string[];
+  image?: string;
+  marketId?: string;
+  marketLine?: string;
 }
 
 interface OptimizedProductCardProps {
