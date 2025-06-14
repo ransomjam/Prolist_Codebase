@@ -54,6 +54,8 @@ export default function ProductDetail() {
   const [trusted, setTrusted] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [orderInProgress, setOrderInProgress] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [showImageModal, setShowImageModal] = useState(false);
 
   // Fetch database products
   const { data: dbProducts = [] } = useQuery({
@@ -174,34 +176,61 @@ export default function ProductDetail() {
       </div>
 
       <div className="max-w-6xl mx-auto p-4 grid lg:grid-cols-2 gap-8">
-        {/* Left Column - Product Image */}
+        {/* Left Column - Product Images */}
         <div className="space-y-4">
+          {/* Main Image */}
           <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-            <div className="h-96 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+            <div 
+              className="h-96 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center cursor-pointer relative group"
+              onClick={() => setShowImageModal(true)}
+            >
               {product.image ? (
                 <img 
                   src={product.image} 
                   alt={product.title}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transition-transform group-hover:scale-105"
                 />
               ) : (
-                <Package className="w-24 h-24 text-gray-400" />
+                <div className="flex flex-col items-center justify-center">
+                  <Package className="w-24 h-24 text-gray-400 mb-4" />
+                  <p className="text-gray-500 text-sm">Click to view image</p>
+                </div>
               )}
+              {/* Zoom overlay */}
+              <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300 flex items-center justify-center">
+                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white rounded-full p-2">
+                  <Eye className="w-6 h-6 text-gray-700" />
+                </div>
+              </div>
             </div>
           </div>
           
           {/* Thumbnail images */}
           <div className="grid grid-cols-3 gap-2">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="h-20 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
+            {[0, 1, 2].map((index) => (
+              <div 
+                key={index} 
+                className={`h-20 rounded-lg flex items-center justify-center overflow-hidden cursor-pointer transition-all duration-300 border-2 ${
+                  selectedImageIndex === index 
+                    ? 'border-blue-500 bg-blue-50' 
+                    : 'border-gray-200 bg-gray-100 hover:border-gray-300'
+                }`}
+                onClick={() => {
+                  setSelectedImageIndex(index);
+                  setShowImageModal(true);
+                }}
+              >
                 {product.image ? (
                   <img 
                     src={product.image} 
-                    alt={`${product.title} view ${i}`}
+                    alt={`${product.title} view ${index + 1}`}
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <Package className="w-8 h-8 text-gray-400" />
+                  <div className="flex flex-col items-center">
+                    <Package className="w-6 h-6 text-gray-400 mb-1" />
+                    <span className="text-xs text-gray-400">{index + 1}</span>
+                  </div>
                 )}
               </div>
             ))}
@@ -493,6 +522,77 @@ export default function ProductDetail() {
                   <p className="text-gray-500 text-xs capitalize">{item.category}</p>
                 </div>
               ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Image Modal */}
+      {showImageModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4">
+          <div className="relative max-w-4xl max-h-full">
+            {/* Close button */}
+            <button
+              onClick={() => setShowImageModal(false)}
+              className="absolute top-4 right-4 bg-white rounded-full p-2 hover:bg-gray-100 transition-colors z-10"
+            >
+              <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            
+            {/* Image container */}
+            <div className="bg-white rounded-lg overflow-hidden">
+              <div className="flex items-center justify-center min-h-96">
+                {product.image ? (
+                  <img 
+                    src={product.image} 
+                    alt={product.title}
+                    className="max-w-full max-h-96 object-contain"
+                  />
+                ) : (
+                  <div className="flex flex-col items-center justify-center p-12">
+                    <Package className="w-32 h-32 text-gray-300 mb-4" />
+                    <h3 className="text-xl font-semibold text-gray-700 mb-2">{product.title}</h3>
+                    <p className="text-gray-500">No image available</p>
+                  </div>
+                )}
+              </div>
+              
+              {/* Image navigation */}
+              <div className="p-4 bg-gray-50 border-t">
+                <div className="flex justify-center space-x-2">
+                  {[0, 1, 2].map((index) => (
+                    <button
+                      key={index}
+                      onClick={() => setSelectedImageIndex(index)}
+                      className={`w-12 h-12 rounded-lg border-2 overflow-hidden transition-all ${
+                        selectedImageIndex === index 
+                          ? 'border-blue-500 ring-2 ring-blue-200' 
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                    >
+                      {product.image ? (
+                        <img 
+                          src={product.image} 
+                          alt={`View ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+                          <Package className="w-4 h-4 text-gray-400" />
+                        </div>
+                      )}
+                    </button>
+                  ))}
+                </div>
+                
+                <div className="text-center mt-3">
+                  <p className="text-sm text-gray-600">
+                    Image {selectedImageIndex + 1} of 3
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
