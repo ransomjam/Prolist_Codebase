@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Filter, ShoppingBag, Shield, Star, Eye, MessageCircle } from 'lucide-react';
 import ChatBox from '@/components/ChatBox';
-import { listings, realEstate } from '../data/demoData';
 
 interface Product {
   id: number;
@@ -78,38 +77,8 @@ export default function ProductFeed() {
     }
   });
 
-  // Transform demo data to match Product interface (for display only)
-  const demoProducts = [
-    ...listings.map(item => ({
-      id: item.id + 10000, // High offset to avoid conflicts with real products
-      title: item.title,
-      category: item.category,
-      price: item.price.replace(' FCFA', ''),
-      description: `Quality ${item.category.toLowerCase()} item available in ${item.location}. Demo listing.`,
-      location: item.location,
-      vendorId: 999, // Demo vendor ID
-      viewCount: Math.floor(Math.random() * 100),
-      createdAt: new Date().toISOString(),
-      image: item.image,
-      isDemo: true
-    })),
-    ...realEstate.map(item => ({
-      id: item.id + 20000, // High offset to avoid conflicts
-      title: item.title,
-      category: 'Real Estate',
-      price: item.price.replace(' FCFA', '').replace('/month', ''),
-      description: `Premium real estate property in ${item.location}. Demo listing.`,
-      location: item.location,
-      vendorId: 999, // Demo vendor ID
-      viewCount: Math.floor(Math.random() * 150),
-      createdAt: new Date().toISOString(),
-      image: item.image,
-      isDemo: true
-    }))
-  ];
-
-  // Combine database products with demo products and sort by latest first
-  const allProducts = [...dbProducts, ...demoProducts].sort((a, b) => 
+  // Use only authentic database products and sort by latest first
+  const allProducts = dbProducts.sort((a: any, b: any) => 
     new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
 

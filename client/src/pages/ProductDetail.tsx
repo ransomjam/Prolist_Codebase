@@ -18,7 +18,7 @@ import {
 import ShareButton from '@/components/ShareButton';
 import VendorSalesStats from '@/components/VendorSalesStats';
 import ChatBox from '@/components/ChatBox';
-import { listings, realEstate } from '../data/demoData';
+
 
 interface Product {
   id: number;
@@ -65,41 +65,8 @@ export default function ProductDetail() {
     }
   });
 
-  // Transform demo data to match Product interface (for display only)
-  const demoProducts = [
-    ...listings.map(item => ({
-      id: item.id + 10000, // High offset to avoid conflicts with real products
-      title: item.title,
-      category: item.category,
-      price: item.price.replace(' FCFA', ''),
-      description: `Quality ${item.category.toLowerCase()} item available in ${item.location}. This is a demo listing for showcase purposes.`,
-      location: item.location,
-      vendorId: 999, // Demo vendor ID
-      viewCount: Math.floor(Math.random() * 100),
-      createdAt: new Date().toISOString(),
-      image: item.image,
-      isDemo: true
-    })),
-    ...realEstate.map(item => ({
-      id: item.id + 20000, // High offset to avoid conflicts
-      title: item.title,
-      category: 'Real Estate',
-      price: item.price.replace(' FCFA', '').replace('/month', ''),
-      description: `Premium real estate property in ${item.location}. This is a demo listing for showcase purposes.`,
-      location: item.location,
-      vendorId: 999, // Demo vendor ID
-      viewCount: Math.floor(Math.random() * 150),
-      createdAt: new Date().toISOString(),
-      image: item.image,
-      isDemo: true
-    }))
-  ];
-
-  // Combine database products with demo products
-  const allProducts = [...dbProducts, ...demoProducts];
-
-  // Find the specific product
-  const product = allProducts.find(p => p.id === parseInt(id!));
+  // Use only authentic database products
+  const product = dbProducts.find((p: any) => p.id === parseInt(id!));
   const productLoading = false;
 
   // Fetch vendor info
@@ -107,18 +74,6 @@ export default function ProductDetail() {
     queryKey: ['/api/vendor/application', product?.vendorId],
     queryFn: async () => {
       if (!product?.vendorId) return null;
-      
-      // For demo products, return a demo vendor
-      if (product.vendorId === 999) {
-        return {
-          id: 999,
-          userId: 999,
-          fullName: "Demo Vendor",
-          phone: "+237 6XX XXX XXX",
-          location: "Bamenda",
-          status: "Basic Verified"
-        };
-      }
       
       const response = await fetch(`/api/vendor/application/${product.vendorId}`);
       if (!response.ok) {
@@ -129,7 +84,7 @@ export default function ProductDetail() {
           return {
             id: user.id,
             userId: user.id,
-            fullName: user.username.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()),
+            fullName: user.username.replace('_', ' ').replace(/\b\w/g, (letter: string) => letter.toUpperCase()),
             phone: user.phone || "+237 6XX XXX XXX",
             location: user.location || "Bamenda",
             status: user.verificationStatus === "basic_verified" ? "Basic Verified" : 
@@ -144,12 +99,12 @@ export default function ProductDetail() {
   });
 
   // Get similar products by category
-  const similarProducts = allProducts.filter((p: Product) => 
+  const similarProducts = dbProducts.filter((p: any) => 
     p.category === product?.category && p.id !== parseInt(id!)
   ).slice(0, 3);
 
   // Get other products from same vendor
-  const otherVendorProducts = allProducts.filter((p: Product) => 
+  const otherVendorProducts = dbProducts.filter((p: any) => 
     p.vendorId === product?.vendorId && p.id !== parseInt(id!)
   ).slice(0, 3);
 
