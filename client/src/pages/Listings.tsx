@@ -147,26 +147,16 @@ export default function Listings() {
           </a>
         </div>
       ) : (
-        <LazyGrid
-          items={filteredProducts}
-          itemsPerPage={12}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          renderItem={(product: any, index: number) => (
+        <div className="optimized-grid mobile-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredProducts.map((product: any, index: number) => (
             <OptimizedProductCard
               key={product.id}
               product={product}
               priority={index < 6}
               onProductClick={(id) => window.location.href = `/product/${id}`}
             />
-          )}
-          loadingComponent={
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[...Array(6)].map((_, i) => (
-                <ProductCardSkeleton key={i} />
-              ))}
-            </div>
-          }
-        />
+          ))}
+        </div>
       )}
     </div>
   );

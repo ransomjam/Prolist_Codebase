@@ -1,8 +1,8 @@
 export default function ProductCardSkeleton() {
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
+    <div className="bg-white rounded-lg shadow-md overflow-hidden optimized-grid-item">
       {/* Image skeleton */}
-      <div className="h-48 bg-gray-200" />
+      <div className="h-48 bg-gray-200 skeleton-shimmer" />
       
       {/* Content skeleton */}
       <div className="p-4 space-y-3">

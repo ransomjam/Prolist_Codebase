@@ -45,9 +45,8 @@ function OptimizedProductCard({ product, onProductClick, priority = false }: Opt
 
   return (
     <div 
-      className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-200 hover:shadow-lg hover:scale-[1.02] cursor-pointer will-change-transform"
+      className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-200 hover:shadow-lg hover:scale-[1.02] cursor-pointer optimized-grid-item mobile-optimized"
       onClick={handleClick}
-      style={{ contentVisibility: 'auto' }}
     >
       {/* Image Container */}
       <div className="relative h-48 overflow-hidden">
