@@ -207,8 +207,12 @@ export default function ProductFeed() {
                 )}
                 <div className="absolute top-2 left-2">
                   {vendors[product.vendorId] && (
-                    <span className="bg-green-600 text-white text-xs px-2 py-1 rounded-full">
-                      Verified
+                    <span className={`text-white text-xs px-2 py-1 rounded-full ${
+                      vendors[product.vendorId].status === 'Premium Verified' 
+                        ? 'bg-gradient-to-r from-purple-600 to-pink-600' 
+                        : 'bg-green-600'
+                    }`}>
+                      {vendors[product.vendorId].status === 'Premium Verified' ? 'Pro Verified' : 'Basic Verified'}
                     </span>
                   )}
                 </div>
@@ -241,7 +245,7 @@ export default function ProductFeed() {
                   {vendors[product.vendorId] ? (
                     <div className="flex items-center gap-2">
                       <span className="text-gray-700 font-medium text-sm">
-                        {vendors[product.vendorId].fullName}
+                        {vendors[product.vendorId].username || vendors[product.vendorId].fullName}
                       </span>
                     </div>
                   ) : (

@@ -45,6 +45,20 @@ export default function ProfessionalServices() {
     }
   });
 
+  // Fetch vendor applications for verification status and usernames
+  const { data: vendors = {} } = useQuery({
+    queryKey: ['/api/vendor/applications'],
+    queryFn: async () => {
+      const response = await fetch('/api/vendor/applications');
+      if (!response.ok) return {};
+      const vendorList = await response.json();
+      return vendorList.reduce((acc: any, vendor: any) => {
+        acc[vendor.userId] = vendor;
+        return acc;
+      }, {});
+    }
+  });
+
   // Filter for services only
   const serviceListings = allProducts.filter((product: any) => product.category === 'Services');
 
@@ -227,7 +241,7 @@ export default function ProfessionalServices() {
                   className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-500 border border-gray-100 overflow-hidden transform hover:scale-105 hover:-translate-y-2 animate-fade-in-up"
                 >
                   {/* Service Image */}
-                  <div>
+                  <div className="relative">
                     {listing.imageUrls && listing.imageUrls.length > 0 ? (
                       <img
                         src={listing.imageUrls[0]}
@@ -239,6 +253,17 @@ export default function ProfessionalServices() {
                         <span className="text-gray-400">No image available</span>
                       </div>
                     )}
+                    <div className="absolute top-2 left-2">
+                      {vendors[listing.vendorId] && (
+                        <span className={`text-white text-xs px-2 py-1 rounded-full ${
+                          vendors[listing.vendorId].status === 'Premium Verified' 
+                            ? 'bg-gradient-to-r from-purple-600 to-pink-600' 
+                            : 'bg-green-600'
+                        }`}>
+                          {vendors[listing.vendorId].status === 'Premium Verified' ? 'Pro Verified' : 'Basic Verified'}
+                        </span>
+                      )}
+                    </div>
                   </div>
 
                   {/* Service Info */}
@@ -255,7 +280,10 @@ export default function ProfessionalServices() {
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-medium text-gray-800">
-                          Vendor #{listing.vendorId}
+                          {vendors[listing.vendorId] ? 
+                            (vendors[listing.vendorId].username || vendors[listing.vendorId].fullName) : 
+                            `Vendor #${listing.vendorId}`
+                          }
                         </span>
                       </div>
                       <div className="flex items-center gap-1 text-green-600">

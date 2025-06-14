@@ -25,6 +25,20 @@ export default function Auctions() {
     }
   });
 
+  // Fetch vendor applications for verification status and usernames
+  const { data: vendors = {} } = useQuery({
+    queryKey: ['/api/vendor/applications'],
+    queryFn: async () => {
+      const response = await fetch('/api/vendor/applications');
+      if (!response.ok) return {};
+      const vendorList = await response.json();
+      return vendorList.reduce((acc: any, vendor: any) => {
+        acc[vendor.userId] = vendor;
+        return acc;
+      }, {});
+    }
+  });
+
   useEffect(() => {
     const interval = setInterval(() => {
       const now = new Date().getTime();
