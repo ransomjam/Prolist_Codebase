@@ -641,58 +641,78 @@ export async function registerRoutes(app: Express): Promise<Server> {
   wss.on('connection', (ws: WebSocket) => {
     let userId: number | null = null;
 
-    ws.on('message', async (data) => {
-      try {
-        const message = JSON.parse(data.toString());
-        
-        if (message.type === 'authenticate') {
-          userId = parseInt(message.userId);
-          if (userId && !isNaN(userId)) {
-            clients.set(userId, ws);
-            ws.send(JSON.stringify({ type: 'authenticated', userId }));
+    ws.on('message', (data) => {
+      (async () => {
+        try {
+          const message = JSON.parse(data.toString());
+          
+          if (message.type === 'authenticate') {
+            userId = parseInt(message.userId);
+            if (userId && !isNaN(userId)) {
+              clients.set(userId, ws);
+              ws.send(JSON.stringify({ type: 'authenticated', userId }));
+            }
+          } else if (message.type === 'send_message' && userId) {
+            // Save message to database
+            const messageData = {
+              senderId: userId,
+              receiverId: message.receiverId,
+              productId: message.productId,
+              content: message.content,
+              messageType: message.messageType || 'text',
+              imageUrl: message.imageUrl
+            };
+            
+            const savedMessage = await storage.sendMessage(messageData);
+            
+            // Send to receiver if they're online
+            const receiverWs = clients.get(message.receiverId);
+            if (receiverWs && receiverWs.readyState === WebSocket.OPEN) {
+              try {
+                receiverWs.send(JSON.stringify({
+                  type: 'new_message',
+                  message: savedMessage
+                }));
+              } catch (sendError) {
+                console.error('Error sending message to receiver:', sendError);
+              }
+            }
+            
+            // Send confirmation to sender
+            try {
+              ws.send(JSON.stringify({
+                type: 'message_sent',
+                message: savedMessage
+              }));
+            } catch (sendError) {
+              console.error('Error sending confirmation to sender:', sendError);
+            }
+            
+            // Create notification for receiver
+            try {
+              await storage.createNotification({
+                userId: message.receiverId,
+                type: 'new_message',
+                title: 'New Message',
+                message: `You have a new message`,
+                data: JSON.stringify({ messageId: savedMessage.id, senderId: userId }),
+                actionUrl: `/messages`
+              });
+            } catch (notificationError) {
+              console.error('Error creating notification:', notificationError);
+            }
           }
-        } else if (message.type === 'send_message' && userId) {
-          // Save message to database
-          const messageData = {
-            senderId: userId,
-            receiverId: message.receiverId,
-            productId: message.productId,
-            content: message.content,
-            messageType: message.messageType || 'text',
-            imageUrl: message.imageUrl
-          };
-          
-          const savedMessage = await storage.sendMessage(messageData);
-          
-          // Send to receiver if they're online
-          const receiverWs = clients.get(message.receiverId);
-          if (receiverWs && receiverWs.readyState === WebSocket.OPEN) {
-            receiverWs.send(JSON.stringify({
-              type: 'new_message',
-              message: savedMessage
-            }));
+        } catch (error) {
+          console.error('WebSocket message error:', error);
+          try {
+            ws.send(JSON.stringify({ type: 'error', message: 'Invalid message format' }));
+          } catch (sendError) {
+            console.error('Error sending error message:', sendError);
           }
-          
-          // Send confirmation to sender
-          ws.send(JSON.stringify({
-            type: 'message_sent',
-            message: savedMessage
-          }));
-          
-          // Create notification for receiver
-          await storage.createNotification({
-            userId: message.receiverId,
-            type: 'new_message',
-            title: 'New Message',
-            message: `You have a new message`,
-            data: JSON.stringify({ messageId: savedMessage.id, senderId: userId }),
-            actionUrl: `/messages`
-          });
         }
-      } catch (error) {
-        console.error('WebSocket message error:', error);
-        ws.send(JSON.stringify({ type: 'error', message: 'Invalid message format' }));
-      }
+      })().catch(error => {
+        console.error('Unhandled promise rejection in WebSocket handler:', error);
+      });
     });
 
     ws.on('close', () => {

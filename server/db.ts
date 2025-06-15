@@ -17,6 +17,14 @@ if (!process.env.DATABASE_URL) {
 export const pool = new Pool({ 
   connectionString: process.env.DATABASE_URL,
   max: 1, // Limit connections for serverless
+  maxUses: Infinity,
+  allowExitOnIdle: false,
+  idleTimeoutMillis: 10000,
+});
+
+// Add connection error handling
+pool.on('error', (err) => {
+  console.error('Database pool error:', err);
 });
 
 export const db = drizzle({ client: pool, schema });
