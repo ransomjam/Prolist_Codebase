@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { MessageCircle, Search, Users, Clock, CheckCheck, X } from 'lucide-react';
-import ChatBox from './ChatBox';
+import RealChatBox from './RealChatBox';
 import { useAuth } from '../hooks/useAuth';
 
 interface ChatContact {
@@ -167,9 +167,9 @@ export default function ChatList({ isOpen, onClose }: ChatListProps) {
 
       {/* Active Chat */}
       {activeChat && (
-        <ChatBox
+        <RealChatBox
           vendorName={activeChat.name}
-          vendorId={activeChat.userId}
+          vendorId={activeChat.userId || 0}
           productTitle={activeChat.productTitle}
           buyerName={user?.username || 'You'}
           isOpen={true}
