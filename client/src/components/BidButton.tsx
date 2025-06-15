@@ -46,8 +46,8 @@ export default function BidButton({ productId, currentPrice, onBidSubmit }: BidB
           setBidAmount('');
           
           toast({
-            title: "Bid successful submitted",
-            description: `Your bid of ${amount.toLocaleString()} XAF has been submitted! The vendor will be notified and you'll receive a notification when they respond.`,
+            title: "Price offer successfully submitted",
+            description: `Your offer of ${amount.toLocaleString()} XAF has been submitted! The vendor will review and respond to your offer.`,
             variant: "default",
           });
           
@@ -55,11 +55,17 @@ export default function BidButton({ productId, currentPrice, onBidSubmit }: BidB
             onBidSubmit(productId, amount);
           }
         } else {
-          const error = await response.json();
-          console.error('Failed to submit bid:', error);
+          let errorMessage = "Please try again.";
+          try {
+            const error = await response.json();
+            errorMessage = error.message || errorMessage;
+          } catch (e) {
+            // Response might not be JSON
+          }
+          console.error('Failed to submit bid:', errorMessage);
           toast({
-            title: "Failed to submit bid",
-            description: "Please try again.",
+            title: "Failed to submit offer",
+            description: errorMessage,
             variant: "destructive",
           });
         }
@@ -87,7 +93,7 @@ export default function BidButton({ productId, currentPrice, onBidSubmit }: BidB
         <form onSubmit={handleSubmitBid} className="bg-white border border-gray-300 rounded-md p-3 shadow-lg absolute bottom-8 right-0 z-10 min-w-48">
           <div className="mb-2">
             <label className="block text-xs font-medium text-gray-700 mb-1">
-              Your Bid (XAF)
+              Your Price Offer (XAF)
             </label>
             <input
               type="number"
@@ -112,7 +118,7 @@ export default function BidButton({ productId, currentPrice, onBidSubmit }: BidB
                   Submitting...
                 </>
               ) : (
-                'Submit Bid'
+                'Submit Offer'
               )}
             </button>
             <button
@@ -134,7 +140,7 @@ export default function BidButton({ productId, currentPrice, onBidSubmit }: BidB
       onClick={handleClick}
     >
       <DollarSign className="w-3 h-3" />
-      Bid
+      Your Price
     </button>
   );
 }
