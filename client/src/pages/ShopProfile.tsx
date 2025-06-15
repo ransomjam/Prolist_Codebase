@@ -17,6 +17,7 @@ interface ShopData {
   name: string;
   number: string;
   vendor: string;
+  vendorId: number;
   trustScore: number;
   rating: number;
   bio: string;
@@ -37,6 +38,7 @@ const shopsData: { [key: string]: ShopData } = {
     name: 'Ngwa Electronics',
     number: 'A12',
     vendor: 'Emmanuel Ngwa',
+    vendorId: 1,
     trustScore: 95,
     rating: 4.7,
     bio: 'Leading electronics vendor in Back Market specializing in mobile phones, repairs, and accessories. With over 8 years of experience, we provide quality products and reliable after-sales service to customers across Bamenda.',
@@ -62,6 +64,7 @@ const shopsData: { [key: string]: ShopData } = {
     name: 'Mama\'s Fabrics',
     number: 'B5',
     vendor: 'Theresa Mbi',
+    vendorId: 2,
     trustScore: 98,
     rating: 4.9,
     bio: 'Premier fabric store and tailoring service in Back Market. Specializing in traditional African fabrics, custom tailoring, and modern fashion designs. Known for exceptional quality and attention to detail.',
@@ -86,6 +89,7 @@ const shopsData: { [key: string]: ShopData } = {
     name: 'Onitsha Imports',
     number: 'E3',
     vendor: 'Pierre Fotso',
+    vendorId: 5,
     trustScore: 92,
     rating: 4.8,
     bio: 'Authorized dealer of imported electronics and technology products. Direct partnerships with international suppliers ensure authentic products at competitive prices. Specializing in laptops, smartphones, and business equipment.',
@@ -110,6 +114,7 @@ const shopsData: { [key: string]: ShopData } = {
     name: 'Bali Fresh Fruits',
     number: 'L1',
     vendor: 'Sophie Atanga',
+    vendorId: 12,
     trustScore: 96,
     rating: 4.9,
     bio: 'Family-owned business providing the freshest organic fruits and vegetables from local farms. Direct farm-to-market supply chain ensures quality and freshness. Supporting local farmers and promoting healthy eating in Bamenda.',

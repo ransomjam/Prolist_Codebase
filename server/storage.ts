@@ -338,19 +338,18 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getConversationMessages(senderId: number, receiverId: number, productId?: number): Promise<Message[]> {
-    const baseConditions = or(
+    let conditions = or(
       and(eq(messages.senderId, senderId), eq(messages.receiverId, receiverId)),
       and(eq(messages.senderId, receiverId), eq(messages.receiverId, senderId))
     );
     
-    const query = db.select().from(messages).where(baseConditions);
-    
     if (productId) {
-      return await query.where(and(baseConditions, eq(messages.productId, productId)))
-        .orderBy(asc(messages.createdAt));
+      conditions = and(conditions, eq(messages.productId, productId));
     }
     
-    return await query.orderBy(asc(messages.createdAt));
+    return await db.select().from(messages)
+      .where(conditions)
+      .orderBy(asc(messages.createdAt));
   }
 
   async markMessagesAsRead(conversationId: number, userId: number): Promise<void> {
@@ -387,23 +386,20 @@ export class DatabaseStorage implements IStorage {
 
   async createOrGetConversation(buyerId: number, vendorId: number, productId?: number): Promise<Conversation> {
     // Check if conversation already exists
-    let conditions = and(
+    let whereClause = and(
       eq(conversations.buyerId, buyerId),
       eq(conversations.vendorId, vendorId)
     );
     
     if (productId) {
-      conditions = and(
-        conditions,
-        eq(conversations.productId, productId)
-      );
+      whereClause = and(whereClause, eq(conversations.productId, productId));
     }
     
-    const [existingConversation] = await db.select().from(conversations)
-      .where(conditions);
+    const existingConversations = await db.select().from(conversations)
+      .where(whereClause);
     
-    if (existingConversation) {
-      return existingConversation;
+    if (existingConversations.length > 0) {
+      return existingConversations[0];
     }
 
     // Create new conversation
