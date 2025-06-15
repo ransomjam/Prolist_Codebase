@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertCommentSchema, insertVendorApplicationSchema, insertProductSchema, insertUserSchema } from "@shared/schema";
+import { insertCommentSchema, insertVendorApplicationSchema, insertProductSchema, insertUserSchema, insertBidSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // User registration endpoint
@@ -199,6 +199,92 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error: any) {
       console.error("Error deleting notification:", error);
       res.status(500).json({ message: "Failed to delete notification" });
+    }
+  });
+
+  // Bid submission endpoint
+  app.post('/api/bids', async (req, res) => {
+    try {
+      const { productId, buyerId, amount, message } = req.body;
+      
+      // Get product to find vendor
+      const product = await storage.getProduct(productId);
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+
+      const bidData = insertBidSchema.parse({
+        productId,
+        buyerId,
+        vendorId: product.vendorId,
+        amount,
+        message
+      });
+
+      // Create the bid
+      const bid = await storage.createBid(bidData);
+
+      // Create notification for vendor
+      await storage.createNotification({
+        userId: product.vendorId,
+        type: 'bid_received',
+        title: 'New Bid Received',
+        message: `You received a bid of ${parseFloat(amount).toLocaleString()} XAF for "${product.title}"`,
+        data: JSON.stringify({ bidId: bid.id, productId, amount }),
+        actionUrl: `/vendor/bids/${bid.id}`
+      });
+
+      console.log(`✅ Bid submitted: ${amount} XAF for product ${productId} by user ${buyerId}`);
+      res.status(201).json(bid);
+    } catch (error: any) {
+      console.error("Error creating bid:", error);
+      res.status(400).json({ message: "Invalid bid data" });
+    }
+  });
+
+  // Get bids for vendor
+  app.get('/api/vendor/:vendorId/bids', async (req, res) => {
+    try {
+      const vendorId = parseInt(req.params.vendorId);
+      const bids = await storage.getBidsByVendor(vendorId);
+      res.json(bids);
+    } catch (error: any) {
+      console.error("Error fetching vendor bids:", error);
+      res.status(500).json({ message: "Failed to fetch bids" });
+    }
+  });
+
+  // Approve/reject bid
+  app.patch('/api/bids/:id/status', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const { status } = req.body; // 'approved' or 'rejected'
+      
+      const bid = await storage.updateBidStatus(id, status);
+      if (!bid) {
+        return res.status(404).json({ message: "Bid not found" });
+      }
+
+      // Create notification for buyer
+      const notificationType = status === 'approved' ? 'bid_approved' : 'bid_rejected';
+      const notificationMessage = status === 'approved' 
+        ? `Your bid of ${parseFloat(bid.amount.toString()).toLocaleString()} XAF has been approved!`
+        : `Your bid of ${parseFloat(bid.amount.toString()).toLocaleString()} XAF has been rejected.`;
+
+      await storage.createNotification({
+        userId: bid.buyerId,
+        type: notificationType,
+        title: status === 'approved' ? 'Bid Approved' : 'Bid Rejected',
+        message: notificationMessage,
+        data: JSON.stringify({ bidId: bid.id, productId: bid.productId, amount: bid.amount }),
+        actionUrl: `/product/${bid.productId}`
+      });
+
+      console.log(`✅ Bid ${status}: ${bid.amount} XAF for product ${bid.productId}`);
+      res.json(bid);
+    } catch (error: any) {
+      console.error("Error updating bid status:", error);
+      res.status(500).json({ message: "Failed to update bid status" });
     }
   });
 

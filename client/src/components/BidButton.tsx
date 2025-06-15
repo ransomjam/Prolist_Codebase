@@ -11,19 +11,49 @@ export default function BidButton({ productId, currentPrice, onBidSubmit }: BidB
   const [showBidForm, setShowBidForm] = useState(false);
   const [bidAmount, setBidAmount] = useState('');
 
-  const handleSubmitBid = (e: React.FormEvent) => {
+  const handleSubmitBid = async (e: React.FormEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
     const amount = parseFloat(bidAmount);
     if (amount && amount > 0) {
-      if (onBidSubmit) {
-        onBidSubmit(productId, amount);
+      try {
+        // Get current user ID (for demo purposes, using 1)
+        // In production, this would come from authentication context
+        const buyerId = 1;
+        
+        const response = await fetch('/api/bids', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            productId,
+            buyerId,
+            amount: amount.toString(),
+            message: `Bid offer for ${amount.toLocaleString()} XAF`
+          }),
+        });
+
+        if (response.ok) {
+          const bid = await response.json();
+          console.log('Bid submitted successfully:', bid);
+          setShowBidForm(false);
+          setBidAmount('');
+          alert(`Your bid of ${amount.toLocaleString()} XAF has been submitted! The vendor will be notified and you'll receive a notification when they respond. Check your notifications for updates.`);
+          
+          if (onBidSubmit) {
+            onBidSubmit(productId, amount);
+          }
+        } else {
+          const error = await response.json();
+          console.error('Failed to submit bid:', error);
+          alert('Failed to submit bid. Please try again.');
+        }
+      } catch (error) {
+        console.error('Error submitting bid:', error);
+        alert('Error submitting bid. Please check your connection and try again.');
       }
-      console.log(`Bid submitted for product ${productId}: ${amount} XAF`);
-      setShowBidForm(false);
-      setBidAmount('');
-      alert(`Your bid of ${amount.toLocaleString()} XAF has been submitted!`);
     }
   };
 
