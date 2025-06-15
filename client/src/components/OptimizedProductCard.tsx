@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Eye, MapPin, ShoppingBag, Star, Shield } from 'lucide-react';
-import OptimizedImage from './OptimizedImage';
+import SimpleImageDisplay from './SimpleImageDisplay';
 // Define Product interface locally to avoid import issues
 interface Product {
   id: number;
@@ -54,12 +54,10 @@ function OptimizedProductCard({ product, onProductClick, priority = false }: Opt
     >
       {/* Image Container */}
       <div className="relative h-48 overflow-hidden">
-        <OptimizedImage
+        <SimpleImageDisplay
           src={getImageUrl()}
           alt={product.title}
           className="h-full w-full"
-          priority={priority}
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           fallbackIcon={<ShoppingBag className="w-12 h-12 text-gray-400" />}
         />
         

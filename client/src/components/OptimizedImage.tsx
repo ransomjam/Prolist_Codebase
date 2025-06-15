@@ -33,6 +33,12 @@ export default function OptimizedImage({
 
   useEffect(() => {
     if (priority) return;
+    
+    // For base64 data URLs, load immediately since data is embedded
+    if (src && src.startsWith('data:')) {
+      setIsInView(true);
+      return;
+    }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -52,7 +58,7 @@ export default function OptimizedImage({
     }
 
     return () => observer.disconnect();
-  }, [priority]);
+  }, [priority, src]);
 
   const handleLoad = () => {
     setIsLoaded(true);
@@ -77,7 +83,10 @@ export default function OptimizedImage({
   const imageSrc = isDataURL ? src : src;
 
   return (
-    <div className={`relative overflow-hidden ${className}`}>
+    <div 
+      ref={imgRef}
+      className={`relative overflow-hidden ${className}`}
+    >
       {/* Placeholder blur effect */}
       {placeholder === 'blur' && !isLoaded && (
         <div className="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300 animate-pulse" />
@@ -86,7 +95,6 @@ export default function OptimizedImage({
       {/* Actual image */}
       {isInView && (
         <img
-          ref={imgRef}
           src={imageSrc}
           alt={alt}
           className={`w-full h-full object-cover transition-opacity duration-300 ${
