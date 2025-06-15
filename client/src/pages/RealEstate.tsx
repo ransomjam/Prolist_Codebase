@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useLocation } from 'wouter';
-import { Building, MapPin, Eye, MessageCircle, Shield, Star } from 'lucide-react';
+import { Building, MapPin, Eye, MessageCircle, Shield, Star, ExternalLink } from 'lucide-react';
 
 export default function RealEstate() {
   const [category, setCategory] = useState("All");
@@ -229,7 +229,7 @@ export default function RealEstate() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProducts.map((property: any) => (
               <div key={property.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-                <div className="aspect-w-16 aspect-h-9">
+                <div className="relative aspect-w-16 aspect-h-9">
                   {property.imageUrls && property.imageUrls.length > 0 ? (
                     <img 
                       src={property.imageUrls[0]} 
@@ -241,59 +241,64 @@ export default function RealEstate() {
                       <Building className="w-12 h-12 text-gray-400" />
                     </div>
                   )}
+                  
+                  {/* Verification status - Top Left */}
+                  <div className="absolute top-2 left-2 bg-green-500 text-white px-2 py-1 text-xs font-medium rounded-md flex items-center gap-1">
+                    <Shield className="w-3 h-3" />
+                    Verified
+                  </div>
+                  
+                  {/* Category - Top Right */}
+                  <div className="absolute top-2 right-2 bg-orange-500 text-white px-2 py-1 text-xs font-medium rounded-md">
+                    Real Estate
+                  </div>
                 </div>
                 
                 <div className="p-4">
-                  <div className="flex items-start justify-between mb-2">
-                    <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">
-                      {property.title}
-                    </h3>
-                    {property.verified && (
-                      <Shield className="w-5 h-5 text-green-500 flex-shrink-0 ml-2" />
-                    )}
+                  <h3 className="text-lg font-semibold text-gray-900 line-clamp-2 mb-2">
+                    {property.title}
+                  </h3>
+                  
+                  <div className="text-lg font-bold text-green-600 mb-3">
+                    {parseInt(property.price).toLocaleString()} XAF
                   </div>
                   
-                  <div className="flex items-center text-gray-600 text-sm mb-2">
+                  <div className="flex items-center text-gray-600 text-sm mb-3">
                     <MapPin className="w-4 h-4 mr-1" />
                     <span className="truncate">{property.location}</span>
                   </div>
                   
-                  {property.description && (
-                    <p className="text-gray-600 text-sm mb-3 line-clamp-2">
-                      {property.description}
-                    </p>
-                  )}
-                  
+                  {/* Trust score row */}
                   <div className="flex items-center justify-between mb-3">
-                    <div className="text-lg font-bold text-green-600">
-                      {parseInt(property.price).toLocaleString()} XAF
+                    <div className="flex items-center text-sm text-gray-600">
+                      <Shield className="w-4 h-4 mr-1 text-blue-500" />
+                      Trusted by: 20
                     </div>
-                    <div className="text-xs text-gray-500">
-                      {property.category}
+                    <div className="flex items-center text-sm text-gray-500">
+                      <Eye className="w-4 h-4 mr-1" />
+                      {property.viewCount || 0} views
                     </div>
                   </div>
                   
-                  <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
-                    <div className="flex items-center">
-                      <Eye className="w-4 h-4 mr-1" />
-                      <span>{property.viewCount || 0} views</span>
-                    </div>
+                  {/* Action buttons row */}
+                  <div className="flex items-center justify-between">
                     <div className="flex items-center">
                       <Star className="w-4 h-4 mr-1 text-yellow-500" />
-                      <span>5.0</span>
+                      <span className="text-sm text-gray-500">4.8 (15)</span>
                     </div>
-                  </div>
-                  
-                  <div className="flex gap-2">
-                    <a
-                      href={`/product/${property.id}`}
-                      className="flex-1 bg-primary text-white px-4 py-2 rounded-lg text-center text-sm font-semibold hover:bg-blue-700 transition-colors"
-                    >
-                      View Details
-                    </a>
-                    <button className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors">
-                      <MessageCircle className="w-4 h-4" />
-                    </button>
+                    <div className="flex gap-2">
+                      <a
+                        href={`/product/${property.id}`}
+                        className="flex items-center gap-1 px-3 py-1 bg-blue-500 text-white text-xs rounded-md hover:bg-blue-600 transition-colors"
+                      >
+                        <ExternalLink className="w-3 h-3" />
+                        View Details
+                      </a>
+                      <button className="flex items-center gap-1 px-3 py-1 bg-gray-500 text-white text-xs rounded-md hover:bg-gray-600 transition-colors">
+                        <MessageCircle className="w-3 h-3" />
+                        Comments
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

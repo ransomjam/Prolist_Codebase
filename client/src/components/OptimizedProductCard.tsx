@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Eye, MapPin, ShoppingBag, Star, Shield } from 'lucide-react';
+import { Eye, MapPin, ShoppingBag, Star, Shield, MessageCircle, ExternalLink } from 'lucide-react';
 import SimpleImageDisplay from './SimpleImageDisplay';
 // Define Product interface locally to avoid import issues
 interface Product {
@@ -61,12 +61,16 @@ function OptimizedProductCard({ product, onProductClick, priority = false }: Opt
           fallbackIcon={<ShoppingBag className="w-12 h-12 text-gray-400" />}
         />
         
-        {/* Status badge */}
-        {product.status === 'featured' && (
-          <div className="absolute top-2 left-2 bg-yellow-500 text-white px-2 py-1 text-xs font-medium rounded-md">
-            Featured
-          </div>
-        )}
+        {/* Verification status - Top Left */}
+        <div className="absolute top-2 left-2 bg-green-500 text-white px-2 py-1 text-xs font-medium rounded-md flex items-center gap-1">
+          <Shield className="w-3 h-3" />
+          Verified
+        </div>
+        
+        {/* Category - Top Right */}
+        <div className="absolute top-2 right-2 bg-blue-500 text-white px-2 py-1 text-xs font-medium rounded-md">
+          {product.category || 'General'}
+        </div>
       </div>
 
       {/* Content */}
@@ -75,11 +79,6 @@ function OptimizedProductCard({ product, onProductClick, priority = false }: Opt
         <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 leading-tight">
           {product.title}
         </h3>
-
-        {/* Category */}
-        <p className="text-sm text-gray-600 mb-2 capitalize">
-          {product.category}
-        </p>
 
         {/* Price */}
         <div className="text-lg font-bold text-green-600 mb-3">
@@ -92,24 +91,45 @@ function OptimizedProductCard({ product, onProductClick, priority = false }: Opt
           <span className="truncate">{product.location}</span>
         </div>
 
-        {/* Stats row */}
-        <div className="flex items-center justify-between text-sm text-gray-500">
-          <div className="flex items-center space-x-3">
-            <div className="flex items-center">
-              <Eye className="w-4 h-4 mr-1" />
-              <span>{product.viewCount || 0}</span>
-            </div>
-            {product.salesCount && product.salesCount > 0 && (
-              <div className="flex items-center">
-                <Star className="w-4 h-4 mr-1 text-yellow-500" />
-                <span>{product.salesCount}</span>
-              </div>
-            )}
+        {/* Trust score row */}
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center text-sm text-gray-600">
+            <Shield className="w-4 h-4 mr-1 text-blue-500" />
+            Trusted by: 20
           </div>
-          
-          {/* Verification status */}
+          <div className="flex items-center text-sm text-gray-500">
+            <Eye className="w-4 h-4 mr-1" />
+            {product.viewCount || 0} views
+          </div>
+        </div>
+
+        {/* Action buttons row */}
+        <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <Shield className="w-4 h-4 text-green-500" />
+            <Star className="w-4 h-4 mr-1 text-yellow-500" />
+            <span className="text-sm text-gray-500">4.5 (23)</span>
+          </div>
+          <div className="flex gap-2">
+            <button 
+              className="flex items-center gap-1 px-3 py-1 bg-blue-500 text-white text-xs rounded-md hover:bg-blue-600 transition-colors"
+              onClick={(e) => {
+                e.stopPropagation();
+                // Handle view details
+              }}
+            >
+              <ExternalLink className="w-3 h-3" />
+              View Details
+            </button>
+            <button 
+              className="flex items-center gap-1 px-3 py-1 bg-gray-500 text-white text-xs rounded-md hover:bg-gray-600 transition-colors"
+              onClick={(e) => {
+                e.stopPropagation();
+                // Handle public comments
+              }}
+            >
+              <MessageCircle className="w-3 h-3" />
+              Comments
+            </button>
           </div>
         </div>
       </div>
