@@ -39,15 +39,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const user = await storage.createUser(userData);
       console.log(`✅ New user registered: ${user.username} (ID: ${user.id})`);
 
-      // Create welcome notification
-      await storage.createNotification({
-        userId: user.id,
-        type: 'account_created',
-        title: 'Welcome to ProList!',
-        message: `Welcome ${user.username}! Your account has been successfully created. Complete your profile to get started.`,
-        actionUrl: '/profile'
-      });
-
       const { password, ...userWithoutPassword } = user;
       res.status(201).json(userWithoutPassword);
     } catch (error: any) {
@@ -436,15 +427,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         accountType: 'vendor'
       });
 
-      // Create notification for successful vendor registration
-      await storage.createNotification({
-        userId,
-        type: 'account_verified',
-        title: 'Vendor Application Approved',
-        message: 'Congratulations! Your vendor application has been approved. You are now a verified vendor.',
-        actionUrl: '/profile'
-      });
-
       // Log the auto-approval
       console.log('✅ AUTO-APPROVED (MVP): Vendor registration for', {
         id: application.id,
@@ -547,73 +529,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Create sample notifications for demonstration
-  app.post('/api/notifications/seed/:userId', async (req, res) => {
-    try {
-      const userId = parseInt(req.params.userId);
-      
-      const sampleNotifications = [
-        {
-          userId,
-          type: 'account_created',
-          title: 'Welcome to ProList!',
-          message: 'Your account has been successfully created. Complete your profile to get started selling.',
-          actionUrl: '/profile'
-        },
-        {
-          userId,
-          type: 'verification_approved',
-          title: 'Vendor Verification Approved',
-          message: 'Congratulations! Your vendor application has been approved. You can now start listing products.',
-          actionUrl: '/product-listing'
-        },
-        {
-          userId,
-          type: 'listing_created',
-          title: 'Product Listed Successfully',
-          message: 'Your product "Premium Smartphone" has been listed and is now visible to buyers.',
-          actionUrl: '/listings'
-        },
-        {
-          userId,
-          type: 'bid_received',
-          title: 'New Bid Received',
-          message: 'You received a bid of 85,000 XAF for your "Laptop Computer" listing.',
-          actionUrl: '/vendor/bids'
-        },
-        {
-          userId,
-          type: 'new_follower',
-          title: 'New Follower',
-          message: 'John Doe is now following your vendor profile. You have 12 total followers.',
-          actionUrl: '/profile'
-        },
-        {
-          userId,
-          type: 'trust_rating',
-          title: 'New Trust Rating',
-          message: 'You received a 5-star rating from a buyer. Your trust score is now 4.8/5.0.',
-          actionUrl: '/profile'
-        },
-        {
-          userId,
-          type: 'message_received',
-          title: 'New Message',
-          message: 'Sarah asked a question about your "Office Chair" listing.',
-          actionUrl: '/chat'
-        }
-      ];
 
-      for (const notification of sampleNotifications) {
-        await storage.createNotification(notification);
-      }
-
-      res.json({ message: `Created ${sampleNotifications.length} sample notifications` });
-    } catch (error: any) {
-      console.error("Error creating sample notifications:", error);
-      res.status(500).json({ message: "Failed to create sample notifications" });
-    }
-  });
 
   const httpServer = createServer(app);
 

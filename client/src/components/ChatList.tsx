@@ -34,56 +34,6 @@ export default function ChatList({ isOpen, onClose }: ChatListProps) {
       isOnline: true,
       productTitle: 'Customer Support',
       userId: 0
-    },
-    {
-      id: '1',
-      name: 'Sarah Kimeng',
-      lastMessage: 'Great! I can offer you a special discount on bulk orders.',
-      timestamp: '2 min ago',
-      unreadCount: 2,
-      isOnline: true,
-      productTitle: 'iPhone 14 Pro Max',
-      userId: 1
-    },
-    {
-      id: '2',
-      name: 'John Tabe',
-      lastMessage: 'The delivery can be arranged for tomorrow morning',
-      timestamp: '15 min ago',
-      unreadCount: 0,
-      isOnline: true,
-      productTitle: 'MacBook Air M2',
-      userId: 2
-    },
-    {
-      id: '3',
-      name: 'Grace Nfor',
-      lastMessage: 'Yes, all items are in stock and ready for pickup',
-      timestamp: '1 hour ago',
-      unreadCount: 1,
-      isOnline: false,
-      productTitle: 'Samsung Galaxy S24',
-      userId: 3
-    },
-    {
-      id: '4',
-      name: 'Peter Foncha',
-      lastMessage: 'Thank you for your order! I\'ll prepare it right away.',
-      timestamp: '2 hours ago',
-      unreadCount: 0,
-      isOnline: false,
-      productTitle: 'Nike Air Jordan',
-      userId: 4
-    },
-    {
-      id: '5',
-      name: 'Mary Nkeng',
-      lastMessage: 'The price includes warranty and free delivery within Bamenda',
-      timestamp: '1 day ago',
-      unreadCount: 3,
-      isOnline: true,
-      productTitle: 'HP Laptop',
-      userId: 5
     }
   ]);
 

@@ -24,51 +24,7 @@ interface ChatBoxProps {
 
 export default function ChatBox({ vendorName, vendorId, productTitle, buyerName = 'You', isOpen, onClose }: ChatBoxProps) {
   const { user } = useAuth();
-  const [messages, setMessages] = useState<Message[]>(() => {
-    if (vendorName === 'ProList Support') {
-      return [
-        {
-          id: '1',
-          sender: 'ProList Support',
-          text: 'Hello! Welcome to ProList support. How can we help you today?',
-          time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
-          isBuyer: false,
-          delivered: true,
-          read: true
-        },
-        {
-          id: '2',
-          sender: 'ProList Support',
-          text: 'We can help with account issues, verification questions, payment problems, or any other concerns.',
-          time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
-          isBuyer: false,
-          delivered: true,
-          read: true
-        }
-      ];
-    }
-    
-    return [
-      {
-        id: '1',
-        sender: vendorName,
-        text: `Hello! Welcome to my shop. I see you're interested in ${productTitle || 'my products'}. How can I assist you today?`,
-        time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
-        isBuyer: false,
-        delivered: true,
-        read: true
-      },
-      {
-        id: '2',
-        sender: vendorName,
-        text: 'Feel free to ask about pricing, availability, delivery options, or any specifications you need.',
-        time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
-        isBuyer: false,
-        delivered: true,
-        read: true
-      }
-    ];
-  });
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [isOnline, setIsOnline] = useState(true);
