@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import ShareButton from '@/components/ShareButton';
 import VendorSalesStats from '@/components/VendorSalesStats';
-import ChatBox from '@/components/ChatBox';
+import RealChatBox from '@/components/RealChatBox';
 
 
 interface Product {
@@ -446,10 +446,11 @@ export default function ProductDetail() {
           </div>
 
           {/* Chat Component */}
-          <ChatBox
+          <RealChatBox
             vendorName={vendor?.fullName || 'Vendor'}
-            vendorId={product?.vendorId}
+            vendorId={product?.vendorId || 0}
             productTitle={product?.title}
+            productId={product?.id}
             buyerName="Buyer"
             isOpen={showChat}
             onClose={() => setShowChat(false)}

@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Filter, ShoppingBag, Shield, Star, Eye, MessageCircle } from 'lucide-react';
-import ChatBox from '@/components/ChatBox';
+import RealChatBox from '@/components/RealChatBox';
 import OptimizedProductCard from '../components/OptimizedProductCard';
 import ProductCardSkeleton from '../components/ProductCardSkeleton';
 
@@ -230,7 +230,7 @@ export default function ProductFeed() {
 
       {/* Chat Component */}
       {showChat && selectedVendor && (
-        <ChatBox
+        <RealChatBox
           isOpen={showChat}
           onClose={() => setShowChat(false)}
           vendorId={selectedVendor.vendorId}

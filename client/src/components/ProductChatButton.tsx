@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { MessageCircle } from 'lucide-react';
-import ChatBox from './ChatBox';
+import RealChatBox from './RealChatBox';
 import { useAuth } from '../hooks/useAuth';
 
 interface ProductChatButtonProps {
@@ -39,10 +39,11 @@ export default function ProductChatButton({
 
       {isChatOpen && (
         <div className="chat-container">
-          <ChatBox
+          <RealChatBox
             vendorName={vendorName}
-            vendorId={vendorId}
+            vendorId={vendorId || 0}
             productTitle={productTitle}
+            productId={productId ? parseInt(productId) : undefined}
             buyerName={user?.firstName || user?.username || 'You'}
             isOpen={isChatOpen}
             onClose={() => setIsChatOpen(false)}

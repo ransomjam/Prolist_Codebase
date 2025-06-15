@@ -338,21 +338,19 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getConversationMessages(senderId: number, receiverId: number, productId?: number): Promise<Message[]> {
-    let conditions = or(
+    const baseConditions = or(
       and(eq(messages.senderId, senderId), eq(messages.receiverId, receiverId)),
       and(eq(messages.senderId, receiverId), eq(messages.receiverId, senderId))
     );
     
+    const query = db.select().from(messages).where(baseConditions);
+    
     if (productId) {
-      conditions = and(
-        conditions,
-        eq(messages.productId, productId)
-      );
+      return await query.where(and(baseConditions, eq(messages.productId, productId)))
+        .orderBy(asc(messages.createdAt));
     }
     
-    return await db.select().from(messages)
-      .where(conditions)
-      .orderBy(asc(messages.createdAt));
+    return await query.orderBy(asc(messages.createdAt));
   }
 
   async markMessagesAsRead(conversationId: number, userId: number): Promise<void> {

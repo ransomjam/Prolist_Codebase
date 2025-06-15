@@ -390,8 +390,9 @@ export default function ShopProfile() {
         </div>
 
         {/* Chat Component */}
-        <ChatBox
+        <RealChatBox
           vendorName={shop.vendor}
+          vendorId={shop.vendorId || 1}
           buyerName="Customer"
           isOpen={isChatOpen}
           onClose={() => setIsChatOpen(false)}
