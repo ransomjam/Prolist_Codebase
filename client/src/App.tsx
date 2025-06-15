@@ -4,7 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/queryClient";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { auctions as initialAuctions } from "./data/demoData";
+
 import { useAuth } from "./hooks/useAuth";
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
@@ -125,8 +125,25 @@ function Router() {
   );
 }
 
+// Define Auction interface locally
+interface Auction {
+  id: number;
+  product: {
+    title: string;
+    description: string;
+    image: string;
+  };
+  vendor: string;
+  verified: boolean;
+  startingPrice: number;
+  currentBid: number;
+  endTime: string;
+  status?: string;
+  highestBidder?: string;
+}
+
 function App() {
-  const [auctions, setAuctions] = useState(initialAuctions);
+  const [auctions, setAuctions] = useState<Auction[]>([]);
   const [location] = useLocation();
   const { isAuthenticated, isLoading } = useAuth();
 
