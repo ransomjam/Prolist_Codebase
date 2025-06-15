@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { DollarSign } from 'lucide-react';
+import { DollarSign, CheckCircle } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 interface BidButtonProps {
   productId: number;
@@ -10,6 +11,8 @@ interface BidButtonProps {
 export default function BidButton({ productId, currentPrice, onBidSubmit }: BidButtonProps) {
   const [showBidForm, setShowBidForm] = useState(false);
   const [bidAmount, setBidAmount] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
 
   const handleSubmitBid = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,6 +20,7 @@ export default function BidButton({ productId, currentPrice, onBidSubmit }: BidB
     
     const amount = parseFloat(bidAmount);
     if (amount && amount > 0) {
+      setIsSubmitting(true);
       try {
         // Get current user ID (for demo purposes, using 1)
         // In production, this would come from authentication context
@@ -40,7 +44,12 @@ export default function BidButton({ productId, currentPrice, onBidSubmit }: BidB
           console.log('Bid submitted successfully:', bid);
           setShowBidForm(false);
           setBidAmount('');
-          alert(`Your bid of ${amount.toLocaleString()} XAF has been submitted! The vendor will be notified and you'll receive a notification when they respond. Check your notifications for updates.`);
+          
+          toast({
+            title: "Bid successful submitted",
+            description: `Your bid of ${amount.toLocaleString()} XAF has been submitted! The vendor will be notified and you'll receive a notification when they respond.`,
+            variant: "default",
+          });
           
           if (onBidSubmit) {
             onBidSubmit(productId, amount);
@@ -48,11 +57,21 @@ export default function BidButton({ productId, currentPrice, onBidSubmit }: BidB
         } else {
           const error = await response.json();
           console.error('Failed to submit bid:', error);
-          alert('Failed to submit bid. Please try again.');
+          toast({
+            title: "Failed to submit bid",
+            description: "Please try again.",
+            variant: "destructive",
+          });
         }
       } catch (error) {
         console.error('Error submitting bid:', error);
-        alert('Error submitting bid. Please check your connection and try again.');
+        toast({
+          title: "Error submitting bid",
+          description: "Please check your connection and try again.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsSubmitting(false);
       }
     }
   };
@@ -84,9 +103,17 @@ export default function BidButton({ productId, currentPrice, onBidSubmit }: BidB
           <div className="flex gap-2">
             <button
               type="submit"
-              className="flex-1 bg-green-500 text-white px-2 py-1 text-xs rounded hover:bg-green-600 transition-colors"
+              disabled={isSubmitting}
+              className="flex-1 bg-green-500 text-white px-2 py-1 text-xs rounded hover:bg-green-600 transition-colors disabled:bg-green-400 disabled:cursor-not-allowed flex items-center justify-center gap-1"
             >
-              Submit Bid
+              {isSubmitting ? (
+                <>
+                  <div className="w-3 h-3 border border-white border-t-transparent rounded-full animate-spin"></div>
+                  Submitting...
+                </>
+              ) : (
+                'Submit Bid'
+              )}
             </button>
             <button
               type="button"
