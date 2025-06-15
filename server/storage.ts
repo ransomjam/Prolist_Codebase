@@ -7,6 +7,7 @@ import {
   ratings,
   notifications,
   auctions,
+  bids,
   type User, 
   type InsertUser, 
   type Comment, 
@@ -21,6 +22,8 @@ import {
   type InsertRating,
   type Auction,
   type InsertAuction,
+  type Bid,
+  type InsertBid,
   type Notification,
   type InsertNotification
 } from "@shared/schema";
@@ -72,6 +75,14 @@ export interface IStorage {
   getAuctionsByVendor(vendorId: number): Promise<Auction[]>;
   updateAuctionStatus(id: number, status: string): Promise<Auction | undefined>;
   
+  // Bid methods
+  createBid(bid: InsertBid): Promise<Bid>;
+  getBid(id: number): Promise<Bid | undefined>;
+  getBidsByProduct(productId: number): Promise<Bid[]>;
+  getBidsByBuyer(buyerId: number): Promise<Bid[]>;
+  getBidsByVendor(vendorId: number): Promise<Bid[]>;
+  updateBidStatus(id: number, status: string): Promise<Bid | undefined>;
+
   // Notification methods
   getUserNotifications(userId: number): Promise<Notification[]>;
   createNotification(notification: InsertNotification): Promise<Notification>;
@@ -271,6 +282,40 @@ export class DatabaseStorage implements IStorage {
       .where(eq(auctions.id, id))
       .returning();
     return updatedAuction;
+  }
+
+  async createBid(insertBid: InsertBid): Promise<Bid> {
+    const [bid] = await db
+      .insert(bids)
+      .values(insertBid)
+      .returning();
+    return bid;
+  }
+
+  async getBid(id: number): Promise<Bid | undefined> {
+    const [bid] = await db.select().from(bids).where(eq(bids.id, id));
+    return bid || undefined;
+  }
+
+  async getBidsByProduct(productId: number): Promise<Bid[]> {
+    return await db.select().from(bids).where(eq(bids.productId, productId));
+  }
+
+  async getBidsByBuyer(buyerId: number): Promise<Bid[]> {
+    return await db.select().from(bids).where(eq(bids.buyerId, buyerId));
+  }
+
+  async getBidsByVendor(vendorId: number): Promise<Bid[]> {
+    return await db.select().from(bids).where(eq(bids.vendorId, vendorId));
+  }
+
+  async updateBidStatus(id: number, status: string): Promise<Bid | undefined> {
+    const [bid] = await db
+      .update(bids)
+      .set({ status, updatedAt: new Date() })
+      .where(eq(bids.id, id))
+      .returning();
+    return bid || undefined;
   }
 }
 

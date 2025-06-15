@@ -186,10 +186,30 @@ export const insertAuctionSchema = createInsertSchema(auctions).pick({
   images: z.array(z.string()).optional(),
 });
 
+export const bids = pgTable('bids', {
+  id: serial('id').primaryKey(),
+  productId: integer('product_id').references(() => products.id).notNull(),
+  buyerId: integer('buyer_id').references(() => users.id).notNull(),
+  vendorId: integer('vendor_id').references(() => users.id).notNull(),
+  amount: decimal('amount', { precision: 10, scale: 2 }).notNull(),
+  status: varchar('status', { length: 50 }).default('pending'), // pending, approved, rejected
+  message: text('message'),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow()
+});
+
+export const insertBidSchema = createInsertSchema(bids).pick({
+  productId: true,
+  buyerId: true,
+  vendorId: true,
+  amount: true,
+  message: true,
+});
+
 export const notifications = pgTable('notifications', {
   id: serial('id').primaryKey(),
   userId: integer('user_id').references(() => users.id),
-  type: text('type').notNull(), // new_order, listing_created, verification_approved, etc.
+  type: text('type').notNull(), // new_order, listing_created, verification_approved, bid_received, bid_approved, etc.
   title: text('title').notNull(),
   message: text('message').notNull(),
   isRead: boolean('is_read').default(false),
@@ -221,5 +241,7 @@ export type Rating = typeof ratings.$inferSelect;
 export type InsertRating = z.infer<typeof insertRatingSchema>;
 export type Auction = typeof auctions.$inferSelect;
 export type InsertAuction = z.infer<typeof insertAuctionSchema>;
+export type Bid = typeof bids.$inferSelect;
+export type InsertBid = z.infer<typeof insertBidSchema>;
 export type Notification = typeof notifications.$inferSelect;
 export type InsertNotification = z.infer<typeof insertNotificationSchema>;
