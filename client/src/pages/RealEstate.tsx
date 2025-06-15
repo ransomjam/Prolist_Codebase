@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useLocation } from 'wouter';
-import { Building, MapPin, Eye, MessageCircle, Shield, Star, ExternalLink } from 'lucide-react';
+import { Building, MapPin, Users, MessageCircle, Shield, ExternalLink } from 'lucide-react';
 
 export default function RealEstate() {
   const [category, setCategory] = useState("All");
@@ -259,8 +259,26 @@ export default function RealEstate() {
                     {property.title}
                   </h3>
                   
-                  <div className="text-lg font-bold text-green-600 mb-3">
-                    {parseInt(property.price).toLocaleString()} XAF
+                  {/* Description */}
+                  <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                    {property.description || "Premium real estate property available"}
+                  </p>
+                  
+                  {/* Price with Trust and Followers */}
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="text-lg font-bold text-green-600">
+                      {parseFloat(property.price.toString()).toLocaleString()} XAF
+                    </div>
+                    <div className="flex items-center gap-3 text-sm text-gray-500">
+                      <div className="flex items-center">
+                        <Shield className="w-4 h-4 mr-1 text-blue-500" />
+                        Trust: {Math.floor(Math.random() * 450) + 50}
+                      </div>
+                      <div className="flex items-center">
+                        <Users className="w-4 h-4 mr-1" />
+                        {Math.floor(Math.random() * 1900) + 100}
+                      </div>
+                    </div>
                   </div>
                   
                   <div className="flex items-center text-gray-600 text-sm mb-3">
@@ -268,37 +286,36 @@ export default function RealEstate() {
                     <span className="truncate">{property.location}</span>
                   </div>
                   
-                  {/* Trust score row */}
+                  {/* User profile row */}
                   <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center text-sm text-gray-600">
-                      <Shield className="w-4 h-4 mr-1 text-blue-500" />
-                      Trusted by: 20
-                    </div>
-                    <div className="flex items-center text-sm text-gray-500">
-                      <Eye className="w-4 h-4 mr-1" />
-                      {property.viewCount || 0} views
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center">
+                        <span className="text-white text-xs font-semibold">
+                          {property.vendorId?.toString().slice(-1) || 'A'}
+                        </span>
+                      </div>
+                      <span className="text-sm text-gray-700 font-medium">
+                        Agent {property.vendorId}
+                      </span>
                     </div>
                   </div>
                   
                   {/* Action buttons row */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <Star className="w-4 h-4 mr-1 text-yellow-500" />
-                      <span className="text-sm text-gray-500">4.8 (15)</span>
-                    </div>
-                    <div className="flex gap-2">
-                      <a
-                        href={`/product/${property.id}`}
-                        className="flex items-center gap-1 px-3 py-1 bg-blue-500 text-white text-xs rounded-md hover:bg-blue-600 transition-colors"
-                      >
-                        <ExternalLink className="w-3 h-3" />
-                        View Details
-                      </a>
-                      <button className="flex items-center gap-1 px-3 py-1 bg-gray-500 text-white text-xs rounded-md hover:bg-gray-600 transition-colors">
-                        <MessageCircle className="w-3 h-3" />
-                        Comments
-                      </button>
-                    </div>
+                  <div className="flex gap-2">
+                    <button
+                      className="flex items-center gap-1 px-3 py-1 bg-blue-500 text-white text-xs rounded-md hover:bg-blue-600 transition-colors flex-1 justify-center"
+                      onClick={() => window.location.href = `/product/${property.id}`}
+                    >
+                      <ExternalLink className="w-3 h-3" />
+                      View Details
+                    </button>
+                    <button 
+                      className="flex items-center gap-1 px-3 py-1 bg-gray-500 text-white text-xs rounded-md hover:bg-gray-600 transition-colors"
+                      onClick={() => console.log('Opening comments for property:', property.id)}
+                    >
+                      <MessageCircle className="w-3 h-3" />
+                      Comments
+                    </button>
                   </div>
                 </div>
               </div>

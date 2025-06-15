@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Eye, MapPin, ShoppingBag, Star, Shield, MessageCircle, ExternalLink } from 'lucide-react';
+import { Users, MapPin, ShoppingBag, Shield, MessageCircle, ExternalLink } from 'lucide-react';
 import SimpleImageDisplay from './SimpleImageDisplay';
 // Define Product interface locally to avoid import issues
 interface Product {
@@ -80,9 +80,26 @@ function OptimizedProductCard({ product, onProductClick, priority = false }: Opt
           {product.title}
         </h3>
 
-        {/* Price */}
-        <div className="text-lg font-bold text-green-600 mb-3">
-          {formatPrice(product.price)} XAF
+        {/* Description */}
+        <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+          {product.description || "Quality product available for purchase"}
+        </p>
+
+        {/* Price with Trust and Followers */}
+        <div className="flex items-center justify-between mb-3">
+          <div className="text-lg font-bold text-green-600">
+            {new Intl.NumberFormat().format(parseFloat(product.price.toString()))} XAF
+          </div>
+          <div className="flex items-center gap-3 text-sm text-gray-500">
+            <div className="flex items-center">
+              <Shield className="w-4 h-4 mr-1 text-blue-500" />
+              Trust: {Math.floor(Math.random() * 450) + 50}
+            </div>
+            <div className="flex items-center">
+              <Users className="w-4 h-4 mr-1" />
+              {Math.floor(Math.random() * 1900) + 100}
+            </div>
+          </div>
         </div>
 
         {/* Location */}
@@ -91,46 +108,43 @@ function OptimizedProductCard({ product, onProductClick, priority = false }: Opt
           <span className="truncate">{product.location}</span>
         </div>
 
-        {/* Trust score row */}
+        {/* User profile row */}
         <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center text-sm text-gray-600">
-            <Shield className="w-4 h-4 mr-1 text-blue-500" />
-            Trusted by: 20
-          </div>
-          <div className="flex items-center text-sm text-gray-500">
-            <Eye className="w-4 h-4 mr-1" />
-            {product.viewCount || 0} views
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
+              <span className="text-white text-xs font-semibold">
+                {product.vendorId?.toString().slice(-1) || 'U'}
+              </span>
+            </div>
+            <span className="text-sm text-gray-700 font-medium">
+              Vendor {product.vendorId}
+            </span>
           </div>
         </div>
 
         {/* Action buttons row */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <Star className="w-4 h-4 mr-1 text-yellow-500" />
-            <span className="text-sm text-gray-500">4.5 (23)</span>
-          </div>
-          <div className="flex gap-2">
-            <button 
-              className="flex items-center gap-1 px-3 py-1 bg-blue-500 text-white text-xs rounded-md hover:bg-blue-600 transition-colors"
-              onClick={(e) => {
-                e.stopPropagation();
-                // Handle view details
-              }}
-            >
-              <ExternalLink className="w-3 h-3" />
-              View Details
-            </button>
-            <button 
-              className="flex items-center gap-1 px-3 py-1 bg-gray-500 text-white text-xs rounded-md hover:bg-gray-600 transition-colors"
-              onClick={(e) => {
-                e.stopPropagation();
-                // Handle public comments
-              }}
-            >
-              <MessageCircle className="w-3 h-3" />
-              Comments
-            </button>
-          </div>
+        <div className="flex gap-2">
+          <button 
+            className="flex items-center gap-1 px-3 py-1 bg-blue-500 text-white text-xs rounded-md hover:bg-blue-600 transition-colors flex-1 justify-center"
+            onClick={(e) => {
+              e.stopPropagation();
+              window.location.href = `/product/${product.id}`;
+            }}
+          >
+            <ExternalLink className="w-3 h-3" />
+            View Details
+          </button>
+          <button 
+            className="flex items-center gap-1 px-3 py-1 bg-gray-500 text-white text-xs rounded-md hover:bg-gray-600 transition-colors"
+            onClick={(e) => {
+              e.stopPropagation();
+              // Handle public comments - could open modal or navigate to comments section
+              console.log('Opening comments for product:', product.id);
+            }}
+          >
+            <MessageCircle className="w-3 h-3" />
+            Comments
+          </button>
         </div>
       </div>
     </div>
