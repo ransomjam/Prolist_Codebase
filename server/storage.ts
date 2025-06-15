@@ -338,17 +338,21 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getConversationMessages(senderId: number, receiverId: number, productId?: number): Promise<Message[]> {
-    let query = db.select().from(messages)
-      .where(or(
-        and(eq(messages.senderId, senderId), eq(messages.receiverId, receiverId)),
-        and(eq(messages.senderId, receiverId), eq(messages.receiverId, senderId))
-      ));
+    let conditions = or(
+      and(eq(messages.senderId, senderId), eq(messages.receiverId, receiverId)),
+      and(eq(messages.senderId, receiverId), eq(messages.receiverId, senderId))
+    );
     
     if (productId) {
-      query = query.where(eq(messages.productId, productId));
+      conditions = and(
+        conditions,
+        eq(messages.productId, productId)
+      );
     }
     
-    return await query.orderBy(asc(messages.createdAt));
+    return await db.select().from(messages)
+      .where(conditions)
+      .orderBy(asc(messages.createdAt));
   }
 
   async markMessagesAsRead(conversationId: number, userId: number): Promise<void> {
@@ -385,17 +389,20 @@ export class DatabaseStorage implements IStorage {
 
   async createOrGetConversation(buyerId: number, vendorId: number, productId?: number): Promise<Conversation> {
     // Check if conversation already exists
-    let query = db.select().from(conversations)
-      .where(and(
-        eq(conversations.buyerId, buyerId),
-        eq(conversations.vendorId, vendorId)
-      ));
+    let conditions = and(
+      eq(conversations.buyerId, buyerId),
+      eq(conversations.vendorId, vendorId)
+    );
     
     if (productId) {
-      query = query.where(eq(conversations.productId, productId));
+      conditions = and(
+        conditions,
+        eq(conversations.productId, productId)
+      );
     }
     
-    const [existingConversation] = await query;
+    const [existingConversation] = await db.select().from(conversations)
+      .where(conditions);
     
     if (existingConversation) {
       return existingConversation;

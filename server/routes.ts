@@ -1,7 +1,8 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
-import { insertCommentSchema, insertVendorApplicationSchema, insertProductSchema, insertUserSchema, insertBidSchema } from "@shared/schema";
+import { insertCommentSchema, insertVendorApplicationSchema, insertProductSchema, insertUserSchema, insertBidSchema, insertMessageSchema, insertConversationSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // User registration endpoint
@@ -570,7 +571,64 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Messaging API routes
+  app.post('/api/messages', async (req, res) => {
+    try {
+      const messageData = insertMessageSchema.parse(req.body);
+      const message = await storage.sendMessage(messageData);
+      
+      // Create notification for the receiver
+      await storage.createNotification({
+        userId: messageData.receiverId,
+        type: 'new_message',
+        title: 'New Message',
+        message: `You have a new message about a product`,
+        data: JSON.stringify({ messageId: message.id, senderId: messageData.senderId }),
+        actionUrl: `/messages`
+      });
 
+      res.status(201).json(message);
+    } catch (error: any) {
+      console.error("Error sending message:", error);
+      res.status(500).json({ message: "Failed to send message" });
+    }
+  });
+
+  app.get('/api/messages/:senderId/:receiverId', async (req, res) => {
+    try {
+      const senderId = parseInt(req.params.senderId);
+      const receiverId = parseInt(req.params.receiverId);
+      const productId = req.query.productId ? parseInt(req.query.productId as string) : undefined;
+      
+      const messages = await storage.getConversationMessages(senderId, receiverId, productId);
+      res.json(messages);
+    } catch (error: any) {
+      console.error("Error fetching messages:", error);
+      res.status(500).json({ message: "Failed to fetch messages" });
+    }
+  });
+
+  app.get('/api/conversations/:userId', async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const conversations = await storage.getUserConversations(userId);
+      res.json(conversations);
+    } catch (error: any) {
+      console.error("Error fetching conversations:", error);
+      res.status(500).json({ message: "Failed to fetch conversations" });
+    }
+  });
+
+  app.post('/api/conversations', async (req, res) => {
+    try {
+      const { buyerId, vendorId, productId } = req.body;
+      const conversation = await storage.createOrGetConversation(buyerId, vendorId, productId);
+      res.json(conversation);
+    } catch (error: any) {
+      console.error("Error creating conversation:", error);
+      res.status(500).json({ message: "Failed to create conversation" });
+    }
+  });
 
   const httpServer = createServer(app);
 
