@@ -228,6 +228,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get products with vendor information
+  app.get('/api/products/with-vendors', async (req, res) => {
+    try {
+      const products = await storage.getAllProducts();
+      const users = await storage.getAllUsers();
+      
+      const productsWithVendors = products.map(product => {
+        const vendor = users.find(user => user.id === product.vendorId);
+        return {
+          ...product,
+          vendor: vendor ? {
+            id: vendor.id,
+            username: vendor.username,
+            profilePictureUrl: vendor.profilePictureUrl
+          } : null
+        };
+      });
+      
+      const sortedProducts = productsWithVendors.sort((a, b) => 
+        new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
+      );
+      
+      res.json(sortedProducts);
+    } catch (error: any) {
+      console.error("Error fetching products with vendors:", error);
+      res.status(500).json({ message: "Failed to fetch products with vendors" });
+    }
+  });
+
   app.get('/api/products/:id', async (req, res) => {
     try {
       const id = parseInt(req.params.id);

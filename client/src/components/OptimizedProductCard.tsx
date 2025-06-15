@@ -1,6 +1,7 @@
 import { memo } from 'react';
-import { Users, MapPin, ShoppingBag, Shield, MessageCircle, ExternalLink } from 'lucide-react';
+import { Users, MapPin, ShoppingBag, Shield, ExternalLink } from 'lucide-react';
 import SimpleImageDisplay from './SimpleImageDisplay';
+import BidButton from './BidButton';
 // Define Product interface locally to avoid import issues
 interface Product {
   id: number;
@@ -111,13 +112,21 @@ function OptimizedProductCard({ product, onProductClick, priority = false }: Opt
         {/* User profile row */}
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
-              <span className="text-white text-xs font-semibold">
-                {product.vendorId?.toString().slice(-1) || 'U'}
-              </span>
-            </div>
+            {product.vendor?.profilePictureUrl ? (
+              <img 
+                src={product.vendor.profilePictureUrl} 
+                alt={product.vendor.username}
+                className="w-6 h-6 rounded-full object-cover"
+              />
+            ) : (
+              <div className="w-6 h-6 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
+                <span className="text-white text-xs font-semibold">
+                  {product.vendor?.username?.charAt(0).toUpperCase() || product.vendorId?.toString().slice(-1) || 'U'}
+                </span>
+              </div>
+            )}
             <span className="text-sm text-gray-700 font-medium">
-              Vendor {product.vendorId}
+              {product.vendor?.username || `Vendor ${product.vendorId}`}
             </span>
           </div>
         </div>
@@ -134,17 +143,10 @@ function OptimizedProductCard({ product, onProductClick, priority = false }: Opt
             <ExternalLink className="w-3 h-3" />
             View Details
           </button>
-          <button 
-            className="flex items-center gap-1 px-3 py-1 bg-gray-500 text-white text-xs rounded-md hover:bg-gray-600 transition-colors"
-            onClick={(e) => {
-              e.stopPropagation();
-              // Handle public comments - could open modal or navigate to comments section
-              console.log('Opening comments for product:', product.id);
-            }}
-          >
-            <MessageCircle className="w-3 h-3" />
-            Comments
-          </button>
+          <BidButton 
+            productId={product.id}
+            currentPrice={parseFloat(product.price.toString())}
+          />
         </div>
       </div>
     </div>
