@@ -8,6 +8,8 @@ import {
   notifications,
   auctions,
   bids,
+  messages,
+  conversations,
   type User, 
   type InsertUser, 
   type Comment, 
@@ -25,10 +27,14 @@ import {
   type Bid,
   type InsertBid,
   type Notification,
-  type InsertNotification
+  type InsertNotification,
+  type Message,
+  type InsertMessage,
+  type Conversation,
+  type InsertConversation
 } from "@shared/schema";
 import { db } from "./db";
-import { eq } from "drizzle-orm";
+import { eq, and, or, asc, desc } from "drizzle-orm";
 
 export interface IStorage {
   // User methods
@@ -89,6 +95,13 @@ export interface IStorage {
   markNotificationAsRead(id: number): Promise<Notification | undefined>;
   markAllNotificationsAsRead(userId: number): Promise<void>;
   deleteNotification(id: number): Promise<void>;
+
+  // Message methods
+  sendMessage(message: InsertMessage): Promise<Message>;
+  getConversationMessages(senderId: number, receiverId: number, productId?: number): Promise<Message[]>;
+  markMessagesAsRead(conversationId: number, userId: number): Promise<void>;
+  getUserConversations(userId: number): Promise<(Conversation & { otherUser: User; product?: Product; lastMessage?: Message })[]>;
+  createOrGetConversation(buyerId: number, vendorId: number, productId?: number): Promise<Conversation>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -316,6 +329,86 @@ export class DatabaseStorage implements IStorage {
       .where(eq(bids.id, id))
       .returning();
     return bid || undefined;
+  }
+
+  // Message methods implementation
+  async sendMessage(insertMessage: InsertMessage): Promise<Message> {
+    const [message] = await db.insert(messages).values(insertMessage).returning();
+    return message;
+  }
+
+  async getConversationMessages(senderId: number, receiverId: number, productId?: number): Promise<Message[]> {
+    let query = db.select().from(messages)
+      .where(or(
+        and(eq(messages.senderId, senderId), eq(messages.receiverId, receiverId)),
+        and(eq(messages.senderId, receiverId), eq(messages.receiverId, senderId))
+      ));
+    
+    if (productId) {
+      query = query.where(eq(messages.productId, productId));
+    }
+    
+    return await query.orderBy(asc(messages.createdAt));
+  }
+
+  async markMessagesAsRead(conversationId: number, userId: number): Promise<void> {
+    await db.update(messages)
+      .set({ isRead: true })
+      .where(and(eq(messages.receiverId, userId), eq(messages.isRead, false)));
+  }
+
+  async getUserConversations(userId: number): Promise<(Conversation & { otherUser: User; product?: Product; lastMessage?: Message })[]> {
+    const conversationsData = await db
+      .select({
+        conversation: conversations,
+        otherUser: users,
+        product: products,
+        lastMessage: messages,
+      })
+      .from(conversations)
+      .leftJoin(users, or(
+        and(eq(conversations.buyerId, userId), eq(users.id, conversations.vendorId)),
+        and(eq(conversations.vendorId, userId), eq(users.id, conversations.buyerId))
+      ))
+      .leftJoin(products, eq(conversations.productId, products.id))
+      .leftJoin(messages, eq(conversations.lastMessageId, messages.id))
+      .where(or(eq(conversations.buyerId, userId), eq(conversations.vendorId, userId)))
+      .orderBy(desc(conversations.lastMessageAt));
+
+    return conversationsData.map(row => ({
+      ...row.conversation,
+      otherUser: row.otherUser!,
+      product: row.product || undefined,
+      lastMessage: row.lastMessage || undefined,
+    }));
+  }
+
+  async createOrGetConversation(buyerId: number, vendorId: number, productId?: number): Promise<Conversation> {
+    // Check if conversation already exists
+    let query = db.select().from(conversations)
+      .where(and(
+        eq(conversations.buyerId, buyerId),
+        eq(conversations.vendorId, vendorId)
+      ));
+    
+    if (productId) {
+      query = query.where(eq(conversations.productId, productId));
+    }
+    
+    const [existingConversation] = await query;
+    
+    if (existingConversation) {
+      return existingConversation;
+    }
+
+    // Create new conversation
+    const [newConversation] = await db.insert(conversations).values({
+      buyerId,
+      vendorId,
+      productId,
+    }).returning();
+    
+    return newConversation;
   }
 }
 

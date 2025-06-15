@@ -227,6 +227,45 @@ export const insertNotificationSchema = createInsertSchema(notifications).pick({
   actionUrl: true,
 });
 
+// Messages table for real-time chat
+export const messages = pgTable('messages', {
+  id: serial('id').primaryKey(),
+  senderId: integer('sender_id').references(() => users.id).notNull(),
+  receiverId: integer('receiver_id').references(() => users.id).notNull(),
+  productId: integer('product_id').references(() => products.id),
+  content: text('content').notNull(),
+  messageType: varchar('message_type', { length: 20 }).default('text'), // text, image
+  imageUrl: text('image_url'),
+  isRead: boolean('is_read').default(false),
+  createdAt: timestamp('created_at').defaultNow(),
+});
+
+export const insertMessageSchema = createInsertSchema(messages).pick({
+  senderId: true,
+  receiverId: true,
+  productId: true,
+  content: true,
+  messageType: true,
+  imageUrl: true,
+});
+
+// Conversations table to track chat sessions
+export const conversations = pgTable('conversations', {
+  id: serial('id').primaryKey(),
+  buyerId: integer('buyer_id').references(() => users.id).notNull(),
+  vendorId: integer('vendor_id').references(() => users.id).notNull(),
+  productId: integer('product_id').references(() => products.id),
+  lastMessageId: integer('last_message_id').references(() => messages.id),
+  lastMessageAt: timestamp('last_message_at').defaultNow(),
+  createdAt: timestamp('created_at').defaultNow(),
+});
+
+export const insertConversationSchema = createInsertSchema(conversations).pick({
+  buyerId: true,
+  vendorId: true,
+  productId: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type VendorApplication = typeof vendorApplications.$inferSelect;
@@ -245,3 +284,7 @@ export type Bid = typeof bids.$inferSelect;
 export type InsertBid = z.infer<typeof insertBidSchema>;
 export type Notification = typeof notifications.$inferSelect;
 export type InsertNotification = z.infer<typeof insertNotificationSchema>;
+export type Message = typeof messages.$inferSelect;
+export type InsertMessage = z.infer<typeof insertMessageSchema>;
+export type Conversation = typeof conversations.$inferSelect;
+export type InsertConversation = z.infer<typeof insertConversationSchema>;
