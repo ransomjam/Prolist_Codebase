@@ -39,6 +39,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const user = await storage.createUser(userData);
       console.log(`✅ New user registered: ${user.username} (ID: ${user.id})`);
 
+      // Create welcome notification
+      await storage.createNotification({
+        userId: user.id,
+        type: 'account_created',
+        title: 'Welcome to ProList!',
+        message: `Welcome ${user.username}! Your account has been successfully created. Complete your profile to get started.`,
+        actionUrl: '/profile'
+      });
+
       const { password, ...userWithoutPassword } = user;
       res.status(201).json(userWithoutPassword);
     } catch (error: any) {
