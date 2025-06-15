@@ -40,6 +40,9 @@ function OptimizedProductCard({ product, onProductClick, priority = false }: Opt
     if (product.imageUrls && product.imageUrls.length > 0) {
       return product.imageUrls[0];
     }
+    if (product.image) {
+      return product.image;
+    }
     return undefined;
   };
 

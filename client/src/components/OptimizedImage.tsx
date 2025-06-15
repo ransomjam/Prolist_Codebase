@@ -72,6 +72,10 @@ export default function OptimizedImage({
     );
   }
 
+  // Handle base64 data URLs properly
+  const isDataURL = src.startsWith('data:');
+  const imageSrc = isDataURL ? src : src;
+
   return (
     <div className={`relative overflow-hidden ${className}`}>
       {/* Placeholder blur effect */}
@@ -83,7 +87,7 @@ export default function OptimizedImage({
       {isInView && (
         <img
           ref={imgRef}
-          src={src}
+          src={imageSrc}
           alt={alt}
           className={`w-full h-full object-cover transition-opacity duration-300 ${
             isLoaded ? 'opacity-100' : 'opacity-0'
