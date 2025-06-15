@@ -82,13 +82,13 @@ export default function ProductFeed() {
     }
   }, []);
 
-  // Fetch products from the API with optimized settings
+  // Fetch products with vendor information from the API with optimized settings
   const { data: dbProducts = [], isLoading, error } = useQuery({
-    queryKey: ['/api/products'],
+    queryKey: ['/api/products/with-vendors'],
     queryFn: async () => {
-      const response = await fetch('/api/products');
+      const response = await fetch('/api/products/with-vendors');
       if (!response.ok) {
-        throw new Error('Failed to fetch products');
+        throw new Error('Failed to fetch products with vendors');
       }
       return response.json();
     },

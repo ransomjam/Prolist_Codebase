@@ -19,6 +19,11 @@ interface Product {
   image?: string;
   marketId?: string;
   marketLine?: string;
+  vendor?: {
+    id: number;
+    username: string;
+    profilePictureUrl?: string;
+  };
 }
 
 interface OptimizedProductCardProps {

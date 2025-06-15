@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useLocation } from 'wouter';
-import { Building, MapPin, Users, MessageCircle, Shield, ExternalLink } from 'lucide-react';
+import { Building, MapPin, Users, Shield, ExternalLink } from 'lucide-react';
+import BidButton from '../components/BidButton';
 
 export default function RealEstate() {
   const [category, setCategory] = useState("All");
@@ -16,13 +17,13 @@ export default function RealEstate() {
     }
   }, [location]);
 
-  // Fetch all products from the database
+  // Fetch all products with vendor information from the database
   const { data: products = [], isLoading, error, refetch } = useQuery({
-    queryKey: ['/api/products'],
+    queryKey: ['/api/products/with-vendors'],
     queryFn: async () => {
-      const response = await fetch('/api/products');
+      const response = await fetch('/api/products/with-vendors');
       if (!response.ok) {
-        throw new Error('Failed to fetch products');
+        throw new Error('Failed to fetch products with vendors');
       }
       return response.json();
     },
@@ -289,13 +290,21 @@ export default function RealEstate() {
                   {/* User profile row */}
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center">
-                        <span className="text-white text-xs font-semibold">
-                          {property.vendorId?.toString().slice(-1) || 'A'}
-                        </span>
-                      </div>
+                      {property.vendor?.profilePictureUrl ? (
+                        <img 
+                          src={property.vendor.profilePictureUrl} 
+                          alt={property.vendor.username}
+                          className="w-6 h-6 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-6 h-6 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center">
+                          <span className="text-white text-xs font-semibold">
+                            {property.vendor?.username?.charAt(0).toUpperCase() || property.vendorId?.toString().slice(-1) || 'A'}
+                          </span>
+                        </div>
+                      )}
                       <span className="text-sm text-gray-700 font-medium">
-                        Agent {property.vendorId}
+                        {property.vendor?.username || `Agent ${property.vendorId}`}
                       </span>
                     </div>
                   </div>
@@ -309,13 +318,10 @@ export default function RealEstate() {
                       <ExternalLink className="w-3 h-3" />
                       View Details
                     </button>
-                    <button 
-                      className="flex items-center gap-1 px-3 py-1 bg-gray-500 text-white text-xs rounded-md hover:bg-gray-600 transition-colors"
-                      onClick={() => console.log('Opening comments for property:', property.id)}
-                    >
-                      <MessageCircle className="w-3 h-3" />
-                      Comments
-                    </button>
+                    <BidButton 
+                      productId={property.id}
+                      currentPrice={parseFloat(property.price.toString())}
+                    />
                   </div>
                 </div>
               </div>
