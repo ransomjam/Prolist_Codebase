@@ -26,6 +26,16 @@ export default function ChatList({ isOpen, onClose }: ChatListProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [conversations, setConversations] = useState<ChatContact[]>([
     {
+      id: 'support',
+      name: 'ProList Support',
+      lastMessage: 'Hello! How can we help you today?',
+      timestamp: 'Always available',
+      unreadCount: 0,
+      isOnline: true,
+      productTitle: 'Customer Support',
+      userId: 0
+    },
+    {
       id: '1',
       name: 'Sarah Kimeng',
       lastMessage: 'Great! I can offer you a special discount on bulk orders.',
