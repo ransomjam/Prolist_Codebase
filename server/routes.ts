@@ -354,6 +354,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Optimized endpoint for services with all vendor data
+  app.get('/api/services/complete', async (req, res) => {
+    try {
+      const [products, vendorApplications, users] = await Promise.all([
+        storage.getAllProducts(),
+        storage.getAllVendorApplications(),
+        storage.getAllUsers()
+      ]);
+      
+      // Filter for services only
+      const serviceProducts = products.filter(product => product.category === 'Services');
+      
+      // Create vendor lookup map for faster access
+      const vendorMap = vendorApplications.reduce((acc, vendor) => {
+        const user = users.find(u => u.id === vendor.userId);
+        acc[vendor.userId] = {
+          ...vendor,
+          username: user?.username || vendor.fullName,
+          fullName: vendor.fullName
+        };
+        return acc;
+      }, {} as any);
+      
+      // Combine service data with vendor information
+      const servicesWithVendors = serviceProducts.map(service => ({
+        ...service,
+        vendorInfo: vendorMap[service.vendorId] || null
+      }));
+      
+      // Sort by creation date (latest first)
+      const sortedServices = servicesWithVendors.sort((a, b) => 
+        new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
+      );
+      
+      res.json(sortedServices);
+    } catch (error: any) {
+      console.error("Error fetching complete services data:", error);
+      res.status(500).json({ message: "Failed to fetch services data" });
+    }
+  });
+
   app.get('/api/products/:id', async (req, res) => {
     try {
       const id = parseInt(req.params.id);

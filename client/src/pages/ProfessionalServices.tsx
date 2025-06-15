@@ -35,48 +35,15 @@ export default function ProfessionalServices() {
   const [chatOpen, setChatOpen] = useState(false);
   const [selectedProfessional, setSelectedProfessional] = useState<any>(null);
 
-  // Fetch service listings from API
-  const { data: allProducts = [], isLoading } = useQuery({
-    queryKey: ['/api/products'],
+  // Fetch service listings with complete vendor data from optimized endpoint
+  const { data: serviceListings = [], isLoading } = useQuery({
+    queryKey: ['/api/services/complete'],
     queryFn: async () => {
-      const response = await fetch('/api/products');
-      if (!response.ok) throw new Error('Failed to fetch products');
+      const response = await fetch('/api/services/complete');
+      if (!response.ok) throw new Error('Failed to fetch services');
       return response.json();
     }
   });
-
-  // Fetch vendor applications and users data
-  const { data: vendorApplications = [] } = useQuery({
-    queryKey: ['/api/vendor/applications'],
-    queryFn: async () => {
-      const response = await fetch('/api/vendor/applications');
-      if (!response.ok) return [];
-      return response.json();
-    }
-  });
-
-  const { data: users = [] } = useQuery({
-    queryKey: ['/api/users'],
-    queryFn: async () => {
-      const response = await fetch('/api/users');
-      if (!response.ok) return [];
-      return response.json();
-    }
-  });
-
-  // Combine vendor applications with user data
-  const vendors = vendorApplications.reduce((acc: any, vendor: any) => {
-    const user = users.find((u: any) => u.id === vendor.userId);
-    acc[vendor.userId] = {
-      ...vendor,
-      username: user?.username || vendor.fullName,
-      fullName: vendor.fullName
-    };
-    return acc;
-  }, {});
-
-  // Filter for services only
-  const serviceListings = allProducts.filter((product: any) => product.category === 'Services');
 
   const categoryTypes = [
     { id: 'all-services', label: 'All Services', count: serviceListings.length },
@@ -238,13 +205,44 @@ export default function ProfessionalServices() {
         </div>
 
         {/* Service Listings Display */}
-        {filteredServices.length === 0 ? (
+        {isLoading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-pulse">
+                <div className="w-full h-40 sm:h-48 bg-gray-200"></div>
+                <div className="p-4 sm:p-6">
+                  <div className="h-4 bg-gray-200 rounded mb-3"></div>
+                  <div className="h-6 bg-gray-200 rounded mb-2"></div>
+                  <div className="h-4 bg-gray-200 rounded mb-4"></div>
+                  <div className="flex justify-between mb-4">
+                    <div className="h-4 bg-gray-200 rounded w-20"></div>
+                    <div className="h-4 bg-gray-200 rounded w-16"></div>
+                  </div>
+                  <div className="flex gap-2">
+                    <div className="flex-1 h-8 bg-gray-200 rounded"></div>
+                    <div className="w-24 h-8 bg-gray-200 rounded"></div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : filteredServices.length === 0 ? (
           <div className="text-center py-12 bg-white rounded-xl shadow-sm">
             <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
               <Package className="w-8 h-8 text-gray-400" />
             </div>
             <h3 className="text-xl font-semibold text-gray-700 mb-2">No service listings found</h3>
-            <p className="text-gray-500">Try adjusting your search or filter criteria</p>
+            <p className="text-gray-500 mb-4">Try adjusting your search or filter criteria</p>
+            <button
+              onClick={() => {
+                setSearchTerm('');
+                setSelectedCategory('all');
+                setPriceRange('all');
+              }}
+              className="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
+            >
+              Clear All Filters
+            </button>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -270,13 +268,13 @@ export default function ProfessionalServices() {
                       </div>
                     )}
                     <div className="absolute top-2 left-2">
-                      {vendors[listing.vendorId] && (
+                      {listing.vendorInfo && (
                         <span className={`text-white text-xs px-2 py-1 rounded-full ${
-                          vendors[listing.vendorId].status === 'Premium Verified' 
+                          listing.vendorInfo.status === 'Premium Verified' 
                             ? 'bg-gradient-to-r from-purple-600 to-pink-600' 
                             : 'bg-green-600'
                         }`}>
-                          {vendors[listing.vendorId].status === 'Premium Verified' ? 'Pro Verified' : 'Basic Verified'}
+                          {listing.vendorInfo.status === 'Premium Verified' ? 'Pro Verified' : 'Basic Verified'}
                         </span>
                       )}
                     </div>
@@ -296,8 +294,8 @@ export default function ProfessionalServices() {
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-medium text-gray-800">
-                          {vendors[listing.vendorId] ? 
-                            (vendors[listing.vendorId].username || vendors[listing.vendorId].fullName) : 
+                          {listing.vendorInfo ? 
+                            (listing.vendorInfo.username || listing.vendorInfo.fullName) : 
                             `Vendor #${listing.vendorId}`
                           }
                         </span>
