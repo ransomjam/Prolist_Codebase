@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams, useLocation } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
+import OptimizedImage from '../components/OptimizedImage';
 import { 
   Heart, 
   Shield, 
