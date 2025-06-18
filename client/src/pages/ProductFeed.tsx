@@ -41,16 +41,16 @@ export default function ProductFeed() {
     refetchOnWindowFocus: false
   });
 
-  // Combine vendor applications with user data
-  const vendors = vendorApplications.reduce((acc: any, vendor: any) => {
-    const user = users.find((u: any) => u.id === vendor.userId);
+  // Combine vendor applications with user data (with type safety)
+  const vendors = Array.isArray(vendorApplications) ? vendorApplications.reduce((acc: any, vendor: any) => {
+    const user = Array.isArray(users) ? users.find((u: any) => u.id === vendor.userId) : null;
     acc[vendor.userId] = {
       ...vendor,
       username: user?.username || vendor.fullName,
       fullName: vendor.fullName
     };
     return acc;
-  }, {});
+  }, {}) : {};
 
   const handleChatVendor = (product: Product) => {
     const vendor = vendors[product.vendorId];
@@ -76,31 +76,34 @@ export default function ProductFeed() {
     }
   }, []);
 
-  // Fetch products with vendor information from the API with optimized settings
-  const { data: dbProducts = [], isLoading, error } = useQuery({
+  // Fetch products with vendor information from the API with pagination
+  const { data: productsData, isLoading, error } = useQuery({
     queryKey: ['/api/products/with-vendors'],
     queryFn: async () => {
       try {
-        const response = await fetch('/api/products/with-vendors');
+        const response = await fetch('/api/products/with-vendors?limit=50');
         if (!response.ok) {
           console.error('Products API error:', response.status, response.statusText);
           throw new Error(`Failed to fetch products: ${response.status}`);
         }
         const data = await response.json();
-        console.log('Products fetched successfully:', data.length, 'products');
+        console.log('Products fetched successfully:', data.products?.length || data.length, 'products');
         return data;
       } catch (err) {
         console.error('Error fetching products:', err);
         throw err;
       }
     },
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 10 * 60 * 1000, // 10 minutes
+    staleTime: 2 * 60 * 1000, // 2 minutes
+    gcTime: 5 * 60 * 1000, // 5 minutes
     refetchOnWindowFocus: false,
     refetchInterval: false,
-    retry: 3,
+    retry: 2,
     retryDelay: 1000
   });
+
+  // Handle both paginated and non-paginated responses
+  const dbProducts = productsData?.products || productsData || [];
 
   // Memoize sorted products for better performance
   const allProducts = useMemo(() => 
@@ -139,9 +142,13 @@ export default function ProductFeed() {
             <div className="h-8 bg-gray-200 rounded w-48 mb-2 animate-pulse"></div>
             <div className="h-4 bg-gray-200 rounded w-64 animate-pulse"></div>
           </div>
+          <div className="flex items-center gap-2 text-blue-600">
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+            <span className="text-sm">Loading products...</span>
+          </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {[...Array(8)].map((_, i) => (
+          {[...Array(12)].map((_, i) => (
             <ProductCardSkeleton key={i} />
           ))}
         </div>

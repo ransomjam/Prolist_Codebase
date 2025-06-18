@@ -326,25 +326,43 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get products with vendor information (optimized)
+  // Get products with vendor information (optimized with pagination)
   app.get('/api/products/with-vendors', async (req, res) => {
     try {
-      const products = await storage.getAllProducts();
-      const users = await storage.getAllUsers();
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 20;
+      const offset = (page - 1) * limit;
       
-      const productsWithVendors = products.map(product => {
-        const vendor = users.find(user => user.id === product.vendorId);
+      console.log(`Fetching products page ${page}, limit ${limit}`);
+      
+      const [products, users] = await Promise.all([
+        storage.getAllProducts(),
+        storage.getAllUsers()
+      ]);
+      
+      // Create user lookup map for better performance
+      const userMap = new Map(users.map(user => [user.id, user]));
+      
+      // Products are already sorted by createdAt from DB
+      const sortedProducts = products.reverse(); // Reverse to get newest first
+      
+      const paginatedProducts = sortedProducts.slice(offset, offset + limit);
+      
+      const productsWithVendors = paginatedProducts.map(product => {
+        const vendor = userMap.get(product.vendorId);
         return {
           id: product.id,
           title: product.title,
           category: product.category,
           price: product.price,
-          description: product.description?.substring(0, 200) + (product.description?.length > 200 ? '...' : ''), // Truncate long descriptions
+          description: product.description && product.description.length > 150 
+            ? product.description.substring(0, 150) + '...' 
+            : product.description,
           location: product.location,
           vendorId: product.vendorId,
-          viewCount: product.viewCount,
+          viewCount: product.viewCount || 0,
           createdAt: product.createdAt,
-          imageUrls: product.imageUrls?.slice(0, 2), // Limit to first 2 images
+          imageUrls: product.imageUrls?.slice(0, 1), // Only first image for feed
           marketId: product.marketId,
           marketLine: product.marketLine,
           vendor: vendor ? {
@@ -355,11 +373,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         };
       });
       
-      const sortedProducts = productsWithVendors.sort((a, b) => 
-        new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
-      );
-      
-      res.json(sortedProducts);
+      res.json({
+        products: productsWithVendors,
+        pagination: {
+          page,
+          limit,
+          total: products.length,
+          totalPages: Math.ceil(products.length / limit),
+          hasMore: offset + limit < products.length
+        }
+      });
     } catch (error: any) {
       console.error("Error fetching products with vendors:", error);
       res.status(500).json({ message: "Failed to fetch products with vendors" });
