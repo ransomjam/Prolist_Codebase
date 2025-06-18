@@ -16,6 +16,11 @@ import Homepage from './pages/Homepage';
 import ProductFeed from "./pages/ProductFeed";
 import Auctions from "./pages/Auctions";
 import Profile from "./pages/Profile";
+import MarketsOverview from "./pages/MarketsOverview";
+import MarketGroupDetail from "./pages/MarketGroupDetail";
+import MarketDetails from "./pages/MarketDetails";
+import RealEstate from "./pages/RealEstate";
+import ProfessionalServices from "./pages/ProfessionalServices";
 
 function Router() {
   return (
@@ -27,6 +32,12 @@ function Router() {
       <Route path="/products" component={ProductFeed} />
       <Route path="/auctions" component={Auctions} />  
       <Route path="/profile" component={Profile} />
+      <Route path="/markets" component={MarketsOverview} />
+      <Route path="/markets/:groupId" component={MarketGroupDetail} />
+      <Route path="/markets/:groupId/:marketId" component={MarketDetails} />
+      <Route path="/realestate" component={RealEstate} />
+      <Route path="/professional-services" component={ProfessionalServices} />
+      <Route path="/services" component={ProfessionalServices} />
       <Route component={() => <div className="p-8 text-center"><h1 className="text-2xl font-bold">Page Not Found</h1><p>The page you're looking for doesn't exist.</p></div>} />
     </Switch>
   );
