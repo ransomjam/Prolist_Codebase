@@ -1,10 +1,7 @@
 import { Shield, Star, Gavel } from "lucide-react";
 import heroImage from "@assets/upstation-hill.jpg";
-import { useAuth } from "../hooks/useAuth";
-import { useScrollAnimations } from "../hooks/useScrollAnimations";
 
 export default function LandingPage() {
-  const { setElementRef, getAnimationClass, getAnimationStyle } = useScrollAnimations();
 
   return (
     <div className="bg-white text-primary scroll-smooth">
@@ -17,36 +14,16 @@ export default function LandingPage() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/50 to-black/70"></div>
         
-        {/* Animated hero content positioned within the image */}
-        <div 
-          ref={(el) => setElementRef('hero-content', el)}
-          data-animation-id="hero-content"
-          className={`relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 transform gpu-accelerated will-change-transform ${getAnimationClass('hero-content', 0, 'always-visible')}`}
-          style={getAnimationStyle(0)}
-        >
-          <h1 
-            ref={(el) => setElementRef('hero-title', el)}
-            data-animation-id="hero-title"
-            className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold drop-shadow-2xl mb-4 sm:mb-6 leading-tight max-w-4xl mx-auto gpu-accelerated will-change-transform ${getAnimationClass('hero-title', 1, 'always-visible')}`}
-            style={getAnimationStyle(1)}
-          >
-            Welcome to <span className="text-neonGreen">ProList</span>
+        {/* Hero content */}
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold drop-shadow-2xl mb-4 sm:mb-6 leading-tight max-w-4xl mx-auto">
+            Welcome to <span className="text-green-400">ProList</span>
           </h1>
-          <p 
-            ref={(el) => setElementRef('hero-subtitle', el)}
-            data-animation-id="hero-subtitle"
-            className={`text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl mb-4 sm:mb-6 lg:mb-8 drop-shadow-lg max-w-3xl mx-auto leading-relaxed gpu-accelerated will-change-transform ${getAnimationClass('hero-subtitle', 2, 'always-visible')}`}
-            style={getAnimationStyle(2)}
-          >
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl mb-4 sm:mb-6 lg:mb-8 drop-shadow-lg max-w-3xl mx-auto leading-relaxed">
             Connecting Cameroon's Business Communities with Trust, Opportunity, and Growth
           </p>
 
-          <div 
-            ref={(el) => setElementRef('about-link', el)}
-            data-animation-id="about-link"
-            className={`mb-6 sm:mb-8 lg:mb-10 gpu-accelerated will-change-transform ${getAnimationClass('about-link', 3.5, 'always-visible')}`}
-            style={getAnimationStyle(3.5)}
-          >
+          <div className="mb-6 sm:mb-8 lg:mb-10">
             <a 
               href="/about"
               className="text-neonGreen hover:text-green-300 font-medium text-sm sm:text-base underline transition-colors duration-300 drop-shadow-md"
