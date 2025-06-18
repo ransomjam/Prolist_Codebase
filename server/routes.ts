@@ -326,66 +326,80 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get products with vendor information (optimized with pagination)
+  // Global cache for better performance
+  const cache = new Map();
+
+  // Fast products endpoint with aggressive caching
   app.get('/api/products/with-vendors', async (req, res) => {
+    const cacheKey = 'products-with-vendors';
+    const cachedData = cache.get(cacheKey);
+    
+    // Serve from cache if available and less than 30 seconds old
+    if (cachedData && (Date.now() - cachedData.timestamp) < 30000) {
+      console.log('⚡ Cache hit - serving immediately');
+      const limit = Math.min(parseInt(req.query.limit as string) || 20, 50);
+      return res.json({
+        products: cachedData.data.slice(0, limit),
+        pagination: {
+          total: cachedData.data.length,
+          limit,
+          hasMore: cachedData.data.length > limit
+        }
+      });
+    }
+
     try {
-      const page = parseInt(req.query.page as string) || 1;
-      const limit = parseInt(req.query.limit as string) || 20;
-      const offset = (page - 1) * limit;
-      
-      console.log(`Fetching products page ${page}, limit ${limit}`);
+      console.log('💾 Cache miss - querying database');
+      const startTime = Date.now();
       
       const [products, users] = await Promise.all([
         storage.getAllProducts(),
         storage.getAllUsers()
       ]);
       
-      // Create user lookup map for better performance
       const userMap = new Map(users.map(user => [user.id, user]));
       
-      // Products are already sorted by createdAt from DB
-      const sortedProducts = products.reverse(); // Reverse to get newest first
-      
-      const paginatedProducts = sortedProducts.slice(offset, offset + limit);
-      
-      const productsWithVendors = paginatedProducts.map(product => {
-        const vendor = userMap.get(product.vendorId);
-        return {
-          id: product.id,
-          title: product.title,
-          category: product.category,
-          price: product.price,
-          description: product.description && product.description.length > 150 
-            ? product.description.substring(0, 150) + '...' 
-            : product.description,
-          location: product.location,
-          vendorId: product.vendorId,
-          viewCount: product.viewCount || 0,
-          createdAt: product.createdAt,
-          imageUrls: product.imageUrls?.slice(0, 1), // Only first image for feed
-          marketId: product.marketId,
-          marketLine: product.marketLine,
-          vendor: vendor ? {
-            id: vendor.id,
-            username: vendor.username,
-            profilePictureUrl: vendor.profilePictureUrl
-          } : null
-        };
+      // Minimal processing for speed
+      const processedProducts = products
+        .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime())
+        .map(product => {
+          const vendor = userMap.get(product.vendorId);
+          return {
+            id: product.id,
+            title: product.title,
+            category: product.category,
+            price: product.price,
+            description: product.description?.slice(0, 80) || '',
+            location: product.location,
+            vendorId: product.vendorId,
+            createdAt: product.createdAt,
+            imageUrls: product.imageUrls?.[0] ? [product.imageUrls[0]] : [],
+            marketId: product.marketId,
+            marketLine: product.marketLine,
+            vendor: vendor ? { id: vendor.id, username: vendor.username } : null
+          };
+        });
+
+      // Cache the result
+      cache.set(cacheKey, {
+        data: processedProducts,
+        timestamp: Date.now()
       });
+
+      const limit = Math.min(parseInt(req.query.limit as string) || 20, 50);
+      console.log(`✅ Query completed in ${Date.now() - startTime}ms`);
       
       res.json({
-        products: productsWithVendors,
+        products: processedProducts.slice(0, limit),
         pagination: {
-          page,
+          total: processedProducts.length,
           limit,
-          total: products.length,
-          totalPages: Math.ceil(products.length / limit),
-          hasMore: offset + limit < products.length
+          hasMore: processedProducts.length > limit
         }
       });
     } catch (error: any) {
-      console.error("Error fetching products with vendors:", error);
-      res.status(500).json({ message: "Failed to fetch products with vendors" });
+      console.error("❌ Error fetching products:", error);
+      res.status(500).json({ message: "Failed to fetch products" });
     }
   });
 

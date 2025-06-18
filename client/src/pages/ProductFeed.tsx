@@ -81,7 +81,7 @@ export default function ProductFeed() {
     queryKey: ['/api/products/with-vendors'],
     queryFn: async () => {
       try {
-        const response = await fetch('/api/products/with-vendors?limit=50');
+        const response = await fetch('/api/products/with-vendors?limit=30');
         if (!response.ok) {
           console.error('Products API error:', response.status, response.statusText);
           throw new Error(`Failed to fetch products: ${response.status}`);
@@ -94,12 +94,12 @@ export default function ProductFeed() {
         throw err;
       }
     },
-    staleTime: 2 * 60 * 1000, // 2 minutes
-    gcTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 30 * 1000, // 30 seconds
+    gcTime: 2 * 60 * 1000, // 2 minutes
     refetchOnWindowFocus: false,
     refetchInterval: false,
-    retry: 2,
-    retryDelay: 1000
+    retry: 1,
+    retryDelay: 500
   });
 
   // Handle both paginated and non-paginated responses
