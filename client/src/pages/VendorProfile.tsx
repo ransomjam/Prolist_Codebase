@@ -50,12 +50,16 @@ export default function VendorProfile() {
   });
 
   // Fetch vendor application data
-  const { data: vendorApp } = useQuery<VendorApplication>({
+  const { data: vendorApp } = useQuery<VendorApplication | null>({
     queryKey: ['/api/vendor/application', vendorId],
     queryFn: async () => {
-      const response = await fetch(`/api/vendor/application/${vendorId}`);
-      if (!response.ok) return null;
-      return response.json();
+      try {
+        const response = await fetch(`/api/vendor/application/${vendorId}`);
+        if (!response.ok) return null;
+        return response.json();
+      } catch (error) {
+        return null;
+      }
     },
     enabled: !!vendorId
   });
@@ -289,12 +293,11 @@ export default function VendorProfile() {
       {/* Chat Component */}
       {showChat && user && vendor && (
         <RealChatBox
+          vendorName={displayName}
+          vendorId={vendor.id}
+          buyerName={user.username}
           isOpen={showChat}
           onClose={() => setShowChat(false)}
-          otherUserId={vendor.id}
-          otherUserName={displayName}
-          currentUserId={user.id}
-          currentUserName={user.username}
         />
       )}
     </div>
