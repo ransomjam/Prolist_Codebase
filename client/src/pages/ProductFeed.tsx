@@ -31,20 +31,14 @@ export default function ProductFeed() {
   // Fetch vendor applications and users data
   const { data: vendorApplications = [] } = useQuery({
     queryKey: ['/api/vendor/applications'],
-    queryFn: async () => {
-      const response = await fetch('/api/vendor/applications');
-      if (!response.ok) return [];
-      return response.json();
-    }
+    retry: 2,
+    refetchOnWindowFocus: false
   });
 
   const { data: users = [] } = useQuery({
     queryKey: ['/api/users'],
-    queryFn: async () => {
-      const response = await fetch('/api/users');
-      if (!response.ok) return [];
-      return response.json();
-    }
+    retry: 2,
+    refetchOnWindowFocus: false
   });
 
   // Combine vendor applications with user data
@@ -86,16 +80,26 @@ export default function ProductFeed() {
   const { data: dbProducts = [], isLoading, error } = useQuery({
     queryKey: ['/api/products/with-vendors'],
     queryFn: async () => {
-      const response = await fetch('/api/products/with-vendors');
-      if (!response.ok) {
-        throw new Error('Failed to fetch products with vendors');
+      try {
+        const response = await fetch('/api/products/with-vendors');
+        if (!response.ok) {
+          console.error('Products API error:', response.status, response.statusText);
+          throw new Error(`Failed to fetch products: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log('Products fetched successfully:', data.length, 'products');
+        return data;
+      } catch (err) {
+        console.error('Error fetching products:', err);
+        throw err;
       }
-      return response.json();
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes
     refetchOnWindowFocus: false,
-    refetchInterval: false
+    refetchInterval: false,
+    retry: 3,
+    retryDelay: 1000
   });
 
   // Memoize sorted products for better performance
@@ -146,12 +150,19 @@ export default function ProductFeed() {
   }
 
   if (error) {
+    console.error('ProductFeed error:', error);
     return (
       <div className="p-4">
         <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
           <ShoppingBag className="w-16 h-16 text-red-400 mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-red-900 mb-2">Failed to load products</h3>
-          <p className="text-red-700">Please try refreshing the page</p>
+          <p className="text-red-700 mb-4">There was an issue loading the products. This might be due to a network timeout.</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+          >
+            Refresh Page
+          </button>
         </div>
       </div>
     );

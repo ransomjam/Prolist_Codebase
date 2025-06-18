@@ -326,7 +326,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get products with vendor information
+  // Get products with vendor information (optimized)
   app.get('/api/products/with-vendors', async (req, res) => {
     try {
       const products = await storage.getAllProducts();
@@ -335,7 +335,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const productsWithVendors = products.map(product => {
         const vendor = users.find(user => user.id === product.vendorId);
         return {
-          ...product,
+          id: product.id,
+          title: product.title,
+          category: product.category,
+          price: product.price,
+          description: product.description?.substring(0, 200) + (product.description?.length > 200 ? '...' : ''), // Truncate long descriptions
+          location: product.location,
+          vendorId: product.vendorId,
+          viewCount: product.viewCount,
+          createdAt: product.createdAt,
+          imageUrls: product.imageUrls?.slice(0, 2), // Limit to first 2 images
+          marketId: product.marketId,
+          marketLine: product.marketLine,
           vendor: vendor ? {
             id: vendor.id,
             username: vendor.username,
