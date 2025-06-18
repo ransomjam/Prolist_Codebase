@@ -241,6 +241,7 @@ export default function ProductFeed() {
               product={product}
               priority={index < 4}
               onProductClick={(id) => window.location.href = `/product/${id}`}
+              onProductDeleted={() => window.location.reload()}
             />
           ))}
         </div>

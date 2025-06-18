@@ -1,11 +1,19 @@
-import { Compass, Store, MapPin, Building, Gavel, Utensils, Shirt, Laptop, Wrench, ShoppingBag, Plus, Users } from "lucide-react";
+import { Compass, Store, MapPin, Building, Gavel, Utensils, Shirt, Laptop, Wrench, ShoppingBag, Plus, Users, Star, Shield } from "lucide-react";
 import Card from "../components/Card";
 import Button from "../components/Button";
 import { useAuth } from "../hooks/useAuth";
+import { useQuery } from "@tanstack/react-query";
 import heroImage from "@assets/upstation-hill.jpg";
 
 export default function Homepage() {
   const { user } = useAuth();
+
+  // Fetch top vendors
+  const { data: topVendors = [], isLoading: vendorsLoading } = useQuery<any[]>({
+    queryKey: ['/api/top-vendors'],
+    retry: 2,
+    refetchOnWindowFocus: false
+  });
 
   const quickActions = [
     { icon: ShoppingBag, label: "Browse Products", href: "/products", color: "from-blue-500 to-blue-600" },
@@ -144,6 +152,102 @@ export default function Homepage() {
             ))}
           </div>
         </div>
+      </section>
+
+      {/* Top Vendors Directory */}
+      <section className="relative max-w-7xl mx-auto py-12 sm:py-16 lg:py-20">
+        <div className="text-center mb-8 lg:mb-12 px-4">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-3 lg:mb-4 max-w-4xl mx-auto">
+            Top Vendors
+          </h2>
+          <p className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto">
+            Meet our most active vendors with the highest number of product listings
+          </p>
+        </div>
+        
+        {vendorsLoading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6 px-4 sm:px-0">
+            {[...Array(10)].map((_, i) => (
+              <div key={i} className="bg-white rounded-2xl p-6 text-center shadow-lg animate-pulse">
+                <div className="w-16 h-16 bg-gray-200 rounded-full mx-auto mb-4"></div>
+                <div className="h-4 bg-gray-200 rounded w-3/4 mx-auto mb-2"></div>
+                <div className="h-3 bg-gray-200 rounded w-1/2 mx-auto mb-4"></div>
+                <div className="h-8 bg-gray-200 rounded w-full"></div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6 px-4 sm:px-0">
+            {topVendors.slice(0, 10).map((vendor: any, index: number) => (
+              <div 
+                key={vendor.id}
+                className="group bg-white rounded-2xl p-6 text-center shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 cursor-pointer border border-gray-100 relative overflow-hidden"
+              >
+                {/* Rank Badge */}
+                <div className="absolute top-2 left-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                  #{index + 1}
+                </div>
+                
+                {/* Profile Picture */}
+                <div className="relative mb-4">
+                  {vendor.profilePictureUrl ? (
+                    <img 
+                      src={vendor.profilePictureUrl} 
+                      alt={vendor.username}
+                      className="w-16 h-16 rounded-full mx-auto object-cover border-4 border-blue-100 group-hover:border-blue-300 transition-colors"
+                    />
+                  ) : (
+                    <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full mx-auto flex items-center justify-center border-4 border-blue-100 group-hover:border-blue-300 transition-colors">
+                      <span className="text-white text-xl font-bold">
+                        {vendor.username.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                  )}
+                  
+                  {/* Verification Badge */}
+                  {vendor.verificationStatus === 'verified' && (
+                    <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full p-1">
+                      <Shield className="w-3 h-3 text-white" />
+                    </div>
+                  )}
+                </div>
+                
+                {/* Vendor Info */}
+                <h3 className="text-sm font-bold text-gray-800 mb-1 group-hover:text-blue-600 transition-colors truncate">
+                  {vendor.fullName}
+                </h3>
+                <p className="text-xs text-gray-500 mb-2 flex items-center justify-center">
+                  <MapPin className="w-3 h-3 mr-1" />
+                  {vendor.location}
+                </p>
+                
+                {/* Stats */}
+                <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-3 mb-3">
+                  <div className="text-lg font-bold text-blue-600 mb-1">
+                    {vendor.productCount}
+                  </div>
+                  <div className="text-xs text-gray-600">Products Listed</div>
+                </div>
+                
+                {/* Rating */}
+                <div className="flex items-center justify-center mb-3">
+                  <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                  <span className="text-sm font-medium text-gray-700 ml-1">
+                    {parseFloat(vendor.rating).toFixed(1)}
+                  </span>
+                </div>
+                
+                {/* View Profile Button */}
+                <button 
+                  className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-medium py-2 px-4 rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-300 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0"
+                  onClick={() => window.location.href = `/shop/${vendor.id}`}
+                >
+                  View Profile
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Popular Categories */}

@@ -151,6 +151,7 @@ export default function Listings() {
               product={product}
               priority={index < 3}
               onProductClick={(id) => window.location.href = `/product/${id}`}
+              onProductDeleted={() => window.location.reload()}
             />
           ))}
         </div>
