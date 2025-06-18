@@ -1,7 +1,9 @@
-import { memo } from 'react';
-import { Users, MapPin, ShoppingBag, Shield, ExternalLink } from 'lucide-react';
+import { memo, useState } from 'react';
+import { Users, MapPin, ShoppingBag, Shield, ExternalLink, Trash2 } from 'lucide-react';
 import SimpleImageDisplay from './SimpleImageDisplay';
 import BidButton from './BidButton';
+import { useAuth } from '../hooks/useAuth';
+import { useToast } from '../hooks/use-toast';
 // Define Product interface locally to avoid import issues
 interface Product {
   id: number;
@@ -30,11 +32,70 @@ interface OptimizedProductCardProps {
   product: Product;
   onProductClick?: (id: number) => void;
   priority?: boolean;
+  onProductDeleted?: () => void;
 }
 
-function OptimizedProductCard({ product, onProductClick, priority = false }: OptimizedProductCardProps) {
+function OptimizedProductCard({ product, onProductClick, priority = false, onProductDeleted }: OptimizedProductCardProps) {
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const handleClick = () => {
     onProductClick?.(product.id);
+  };
+
+  const handleDelete = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    if (!user) {
+      toast({
+        title: "Authentication Required",
+        description: "Please log in to delete products.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (product.vendorId !== user.id) {
+      toast({
+        title: "Permission Denied",
+        description: "You can only delete your own products.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (window.confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
+      setIsDeleting(true);
+      try {
+        const response = await fetch(`/api/products/${product.id}?userId=${user.id}`, {
+          method: 'DELETE',
+        });
+
+        if (response.ok) {
+          toast({
+            title: "Product Deleted",
+            description: "Your product has been successfully deleted.",
+          });
+          onProductDeleted?.();
+        } else {
+          const error = await response.json();
+          toast({
+            title: "Delete Failed",
+            description: error.message || "Failed to delete product.",
+            variant: "destructive"
+          });
+        }
+      } catch (error) {
+        toast({
+          title: "Delete Failed",
+          description: "Network error. Please try again.",
+          variant: "destructive"
+        });
+      } finally {
+        setIsDeleting(false);
+      }
+    }
   };
 
   const formatPrice = (price: string | number) => {
@@ -148,6 +209,19 @@ function OptimizedProductCard({ product, onProductClick, priority = false }: Opt
             <ExternalLink className="w-3 h-3" />
             View Details
           </button>
+          
+          {user && user.id === product.vendorId && (
+            <button 
+              className="flex items-center gap-1 px-3 py-1 bg-red-500 text-white text-xs rounded-md hover:bg-red-600 transition-colors disabled:opacity-50"
+              onClick={handleDelete}
+              disabled={isDeleting}
+              title="Delete Product"
+            >
+              <Trash2 className="w-3 h-3" />
+              {isDeleting ? 'Deleting...' : 'Delete'}
+            </button>
+          )}
+          
           <BidButton 
             productId={product.id}
             currentPrice={parseFloat(product.price.toString())}

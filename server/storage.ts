@@ -61,6 +61,7 @@ export interface IStorage {
   getProductsByVendor(vendorId: number): Promise<Product[]>;
   getAllProducts(): Promise<Product[]>;
   updateProductViewCount(id: number): Promise<void>;
+  deleteProduct(id: number): Promise<boolean>;
 
   // Order methods
   createOrder(order: InsertOrder): Promise<Order>;

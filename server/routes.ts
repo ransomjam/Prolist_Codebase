@@ -403,6 +403,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Top vendors endpoint
+  app.get('/api/top-vendors', async (req, res) => {
+    try {
+      const [products, users, vendorApplications] = await Promise.all([
+        storage.getAllProducts(),
+        storage.getAllUsers(),
+        storage.getAllVendorApplications()
+      ]);
+      
+      // Count products per vendor
+      const vendorProductCounts = products.reduce((acc, product) => {
+        acc[product.vendorId] = (acc[product.vendorId] || 0) + 1;
+        return acc;
+      }, {} as Record<number, number>);
+      
+      // Create vendor lookup map
+      const vendorMap = vendorApplications.reduce((acc, app) => {
+        acc[app.userId] = app;
+        return acc;
+      }, {} as Record<number, any>);
+      
+      // Create top vendors list
+      const topVendors = Object.entries(vendorProductCounts)
+        .map(([vendorId, productCount]) => {
+          const user = users.find(u => u.id === parseInt(vendorId));
+          const vendorApp = vendorMap[parseInt(vendorId)];
+          
+          return {
+            id: parseInt(vendorId),
+            username: user?.username || `User ${vendorId}`,
+            fullName: vendorApp?.fullName || user?.username || `User ${vendorId}`,
+            profilePictureUrl: user?.profilePictureUrl,
+            productCount,
+            location: user?.location || vendorApp?.location || 'Unknown',
+            rating: user?.rating || '0.00',
+            verificationStatus: user?.verificationStatus || 'pending'
+          };
+        })
+        .sort((a, b) => b.productCount - a.productCount)
+        .slice(0, 10); // Top 10 vendors
+      
+      res.json(topVendors);
+    } catch (error: any) {
+      console.error("Error fetching top vendors:", error);
+      res.status(500).json({ message: "Failed to fetch top vendors" });
+    }
+  });
+
   // Optimized endpoint for services with all vendor data
   app.get('/api/services/complete', async (req, res) => {
     try {
@@ -441,6 +489,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error: any) {
       console.error("Error fetching complete services data:", error);
       res.status(500).json({ message: "Failed to fetch services data" });
+    }
+  });
+
+  // Delete product endpoint
+  app.delete('/api/products/:id', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = parseInt(req.query.userId as string);
+      
+      if (!userId) {
+        return res.status(400).json({ message: "User ID is required" });
+      }
+      
+      // Get the product to verify ownership
+      const product = await storage.getProduct(id);
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+      
+      // Check if the user owns the product
+      if (product.vendorId !== userId) {
+        return res.status(403).json({ message: "You can only delete your own products" });
+      }
+      
+      const deleted = await storage.deleteProduct(id);
+      if (deleted) {
+        res.json({ message: "Product deleted successfully" });
+      } else {
+        res.status(500).json({ message: "Failed to delete product" });
+      }
+    } catch (error: any) {
+      console.error("Error deleting product:", error);
+      res.status(500).json({ message: "Failed to delete product" });
     }
   });
 
