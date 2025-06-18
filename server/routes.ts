@@ -87,6 +87,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get specific user by ID
+  app.get('/api/users/:id', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const user = await storage.getUser(id);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      const { password, ...userWithoutPassword } = user;
+      res.json(userWithoutPassword);
+    } catch (error: any) {
+      console.error("Error fetching user:", error);
+      res.status(500).json({ message: 'Failed to fetch user' });
+    }
+  });
+
   // Get all users (admin only)
   app.get('/api/users', async (req, res) => {
     try {
@@ -400,6 +416,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error: any) {
       console.error("❌ Error fetching products:", error);
       res.status(500).json({ message: "Failed to fetch products" });
+    }
+  });
+
+  // Get vendor application by user ID
+  app.get('/api/vendor/application/:userId', async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const application = await storage.getVendorApplication(userId);
+      if (!application) {
+        return res.status(404).json({ message: 'Vendor application not found' });
+      }
+      res.json(application);
+    } catch (error: any) {
+      console.error("Error fetching vendor application:", error);
+      res.status(500).json({ message: "Failed to fetch vendor application" });
+    }
+  });
+
+  // Get products by vendor ID
+  app.get('/api/products/vendor/:vendorId', async (req, res) => {
+    try {
+      const vendorId = parseInt(req.params.vendorId);
+      const products = await storage.getProductsByVendor(vendorId);
+      res.json(products);
+    } catch (error: any) {
+      console.error("Error fetching vendor products:", error);
+      res.status(500).json({ message: "Failed to fetch vendor products" });
     }
   });
 
