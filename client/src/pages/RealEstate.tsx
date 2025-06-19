@@ -18,7 +18,7 @@ export default function RealEstate() {
   }, [location]);
 
   // Fetch all products with vendor information from the database
-  const { data: products = [], isLoading, error, refetch } = useQuery({
+  const { data: productsResponse = { products: [] }, isLoading, error, refetch } = useQuery({
     queryKey: ['/api/products/with-vendors'],
     queryFn: async () => {
       const response = await fetch('/api/products/with-vendors');
@@ -30,6 +30,8 @@ export default function RealEstate() {
     refetchOnWindowFocus: true,
     refetchInterval: 30000
   });
+
+  const products = Array.isArray(productsResponse) ? productsResponse : (productsResponse.products || []);
 
   // Listen for storage events to refresh when properties are added
   useEffect(() => {
