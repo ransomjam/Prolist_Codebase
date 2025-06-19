@@ -133,9 +133,9 @@ export default function RealEstate() {
   }
 
   // Property categories based on actual data
-  const allCategories = ["All", "Houses", "Apartments", "Commercial", "Land"];
-  const productCategories = Array.from(new Set(realEstateProducts.map((product: any) => product.subcategory).filter(Boolean)));
-  const categories = Array.from(new Set([...allCategories, ...productCategories]));
+  const allCategories: string[] = ["All", "Houses", "Apartments", "Commercial", "Land"];
+  const productCategories = Array.from(new Set(realEstateProducts.map((product: any) => product.subcategory).filter((cat): cat is string => Boolean(cat))));
+  const categories: string[] = Array.from(new Set([...allCategories, ...productCategories]));
 
   const handleCategoryChange = (newCategory: string) => {
     setCategory(newCategory);
