@@ -45,7 +45,7 @@ function Router() {
       <Route path="/professional-services" component={ProfessionalServices} />
       <Route path="/services" component={ProfessionalServices} />
       <Route path="/listings" component={Listings} />
-      <Route path="/add-product" component={ProductListingForm} />
+      <Route path="/product-listing" component={ProductListingForm} />
       <Route path="/shop/:vendorId" component={VendorProfile} />
       <Route path="/product/:id" component={ProductDetail} />
       <Route path="/professional/:id" component={ProfessionalProfile} />
