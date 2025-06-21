@@ -25,6 +25,7 @@ import VendorProfile from "./pages/VendorProfile";
 import ProductDetail from "./pages/ProductDetail";
 import ProfessionalProfile from "./pages/ProfessionalProfile";
 import ServiceCheckout from "./pages/ServiceCheckout";
+import Listings from "./pages/Listings";
 
 function Router() {
   return (
@@ -42,6 +43,7 @@ function Router() {
       <Route path="/realestate" component={RealEstate} />
       <Route path="/professional-services" component={ProfessionalServices} />
       <Route path="/services" component={ProfessionalServices} />
+      <Route path="/listings" component={Listings} />
       <Route path="/shop/:vendorId" component={VendorProfile} />
       <Route path="/product/:id" component={ProductDetail} />
       <Route path="/professional/:id" component={ProfessionalProfile} />
