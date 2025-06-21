@@ -9,9 +9,7 @@ interface ProductForm {
   category: string;
   description: string;
   price: string;
-  image1: File | null;
-  image2: File | null;
-  image3: File | null;
+  image: File | null;
 }
 
 export default function ProductListingForm() {
@@ -40,9 +38,7 @@ export default function ProductListingForm() {
     category: '',
     description: '',
     price: '',
-    image1: null,
-    image2: null,
-    image3: null
+    image: null
   });
 
   const createProductMutation = useMutation({
@@ -208,9 +204,7 @@ export default function ProductListingForm() {
                   category: '',
                   description: '',
                   price: '',
-                  image1: null,
-                  image2: null,
-                  image3: null
+                  image: null
                 });
               }}
               className="bg-gray-100 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-200 transition-colors"
@@ -324,76 +318,30 @@ export default function ProductListingForm() {
           </h3>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Main Product Image</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Product Image *</label>
             <div className="border-2 border-dashed border-gray-300 hover:border-blue-400 rounded-lg p-6 text-center transition-colors">
               <input
                 type="file"
                 accept="image/*"
-                onChange={(e) => handleFileChange(e, 'image1')}
+                onChange={(e) => handleFileChange(e, 'image')}
                 className="hidden"
-                id="image1-upload"
+                id="image-upload"
               />
               <Image className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-              <p className="text-sm text-gray-600 mb-3">Upload main product image</p>
-              <label htmlFor="image1-upload" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm cursor-pointer transition-colors">
+              <p className="text-sm text-gray-600 mb-3">Upload product image</p>
+              <label htmlFor="image-upload" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm cursor-pointer transition-colors">
                 Choose from Device
               </label>
-              {form.image1 && (
+              {form.image && (
                 <div className="mt-3 p-2 bg-green-50 border border-green-200 rounded text-sm text-green-700">
-                  ✓ {form.image1.name}
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Additional Image 2 (Optional)</label>
-            <div className="border-2 border-dashed border-gray-300 hover:border-blue-400 rounded-lg p-6 text-center transition-colors">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => handleFileChange(e, 'image2')}
-                className="hidden"
-                id="image2-upload"
-              />
-              <Image className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-              <p className="text-sm text-gray-600 mb-3">Upload additional product image</p>
-              <label htmlFor="image2-upload" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm cursor-pointer transition-colors">
-                Choose from Device
-              </label>
-              {form.image2 && (
-                <div className="mt-3 p-2 bg-green-50 border border-green-200 rounded text-sm text-green-700">
-                  ✓ {form.image2.name}
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Additional Image 3 (Optional)</label>
-            <div className="border-2 border-dashed border-gray-300 hover:border-blue-400 rounded-lg p-6 text-center transition-colors">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => handleFileChange(e, 'image3')}
-                className="hidden"
-                id="image3-upload"
-              />
-              <Image className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-              <p className="text-sm text-gray-600 mb-3">Upload additional product image</p>
-              <label htmlFor="image3-upload" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm cursor-pointer transition-colors">
-                Choose from Device
-              </label>
-              {form.image3 && (
-                <div className="mt-3 p-2 bg-green-50 border border-green-200 rounded text-sm text-green-700">
-                  ✓ {form.image3.name}
+                  ✓ {form.image.name}
                 </div>
               )}
             </div>
           </div>
 
           <p className="text-xs text-gray-500">
-            Select images from your device. Supported formats: JPG, PNG, GIF
+            Select an image from your device. Supported formats: JPG, PNG, GIF
           </p>
         </div>
 
