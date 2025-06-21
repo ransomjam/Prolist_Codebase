@@ -311,6 +311,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const validatedProduct = insertProductSchema.parse(req.body);
       const product = await storage.createProduct(validatedProduct);
       
+      // Clear cache when new product is created
+      cache.delete('basic-products');
+      cache.delete('products-with-vendors');
+      
       // Create notification for successful product listing
       await storage.createNotification({
         userId: product.vendorId,
@@ -329,12 +333,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.get('/api/products', async (req, res) => {
+    const cacheKey = 'basic-products';
+    const cachedData = cache.get(cacheKey);
+    
+    // Serve from cache if available and less than 30 seconds old
+    if (cachedData && (Date.now() - cachedData.timestamp) < 30000) {
+      console.log('⚡ Cache hit - serving basic products immediately');
+      return res.json(cachedData.data);
+    }
+
     try {
+      console.log('💾 Cache miss - querying database for basic products');
+      const startTime = Date.now();
+      
       const products = await storage.getAllProducts();
+      
       // Sort products by creation date (latest first)
       const sortedProducts = products.sort((a, b) => 
         new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
       );
+
+      // Cache the result
+      cache.set(cacheKey, {
+        data: sortedProducts,
+        timestamp: Date.now()
+      });
+
+      console.log(`✅ Basic products query completed in ${Date.now() - startTime}ms`);
       res.json(sortedProducts);
     } catch (error: any) {
       console.error("Error fetching products:", error);
