@@ -110,11 +110,11 @@ export default function ProductListingForm() {
     }
 
     try {
-      // Convert images to base64 if they exist
+      // Convert image to base64 if it exists
       let imageUrl = null;
-      if (form.image1) {
-        const base64 = await fileToBase64(form.image1);
-        imageUrl = `data:${form.image1.type};base64,${base64}`;
+      if (form.image) {
+        const base64 = await fileToBase64(form.image);
+        imageUrl = `data:${form.image.type};base64,${base64}`;
       }
 
       const productData = {
@@ -314,7 +314,7 @@ export default function ProductListingForm() {
         <div className="space-y-4">
           <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-900">
             <Image size={20} />
-            Product Images
+            Product Image
           </h3>
 
           <div>
