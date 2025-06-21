@@ -27,6 +27,7 @@ import ProfessionalProfile from "./pages/ProfessionalProfile";
 import ServiceCheckout from "./pages/ServiceCheckout";
 import Listings from "./pages/Listings";
 import ProductListingForm from "./pages/ProductListingForm";
+import VendorRegistration from "./pages/VendorRegistration";
 
 function Router() {
   return (
@@ -46,6 +47,7 @@ function Router() {
       <Route path="/services" component={ProfessionalServices} />
       <Route path="/listings" component={Listings} />
       <Route path="/product-listing" component={ProductListingForm} />
+      <Route path="/vendor-register" component={VendorRegistration} />
       <Route path="/shop/:vendorId" component={VendorProfile} />
       <Route path="/product/:id" component={ProductDetail} />
       <Route path="/professional/:id" component={ProfessionalProfile} />
