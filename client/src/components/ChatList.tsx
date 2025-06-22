@@ -79,12 +79,6 @@ export default function ChatList({ isOpen, onClose }: ChatListProps) {
 
   const handleChatSelect = (chat: ChatContact) => {
     setActiveChat(chat);
-    // Mark messages as read
-    setConversations(prev => 
-      prev.map(c => 
-        c.id === chat.id ? { ...c, unreadCount: 0 } : c
-      )
-    );
   };
 
   const closeChatBox = () => {
@@ -199,15 +193,38 @@ export default function ChatList({ isOpen, onClose }: ChatListProps) {
       )}
 
       {/* Active Chat */}
-      {activeChat && (
+      {activeChat && activeChat.userId !== 0 && (
         <RealChatBox
           vendorName={activeChat.name}
-          vendorId={activeChat.userId || 0}
+          vendorId={activeChat.userId}
           productTitle={activeChat.productTitle}
           buyerName={user?.username || 'You'}
           isOpen={true}
           onClose={closeChatBox}
         />
+      )}
+      
+      {/* Support Chat (mock for now) */}
+      {activeChat && activeChat.userId === 0 && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md h-[600px] flex flex-col overflow-hidden">
+            <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 text-white p-4 flex items-center justify-between">
+              <div>
+                <h3 className="font-semibold text-lg">ProList Support</h3>
+                <div className="text-sm opacity-90">Always available</div>
+              </div>
+              <button onClick={closeChatBox} className="text-white hover:bg-white/20 p-2 rounded-full">
+                <X size={20} />
+              </button>
+            </div>
+            <div className="flex-1 flex items-center justify-center text-gray-500">
+              <div className="text-center">
+                <MessageCircle size={48} className="mx-auto mb-4 opacity-50" />
+                <p>Support chat coming soon!</p>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );

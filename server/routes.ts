@@ -885,6 +885,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
               console.error('Error sending confirmation to sender:', sendError);
             }
             
+            // Create or update conversation
+            try {
+              await storage.createOrGetConversation(
+                Math.min(userId, message.receiverId),
+                Math.max(userId, message.receiverId),
+                message.productId
+              );
+            } catch (convError) {
+              console.error('Error updating conversation:', convError);
+            }
+
             // Create notification for receiver
             try {
               await storage.createNotification({

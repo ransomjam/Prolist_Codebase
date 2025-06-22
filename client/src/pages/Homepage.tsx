@@ -1,6 +1,7 @@
 import { Compass, Store, MapPin, Building, Gavel, Utensils, Shirt, Laptop, Wrench, ShoppingBag, Plus, Users, Star, Shield } from "lucide-react";
 import Card from "../components/Card";
 import Button from "../components/Button";
+import MessagingDemo from "../components/MessagingDemo";
 import { useAuth } from "../hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import heroImage from "@assets/upstation-hill.jpg";
@@ -291,6 +292,11 @@ export default function Homepage() {
             );
           })}
         </div>
+      </section>
+
+      {/* Messaging Demo Section */}
+      <section className="max-w-7xl mx-auto py-12 px-4">
+        <MessagingDemo />
       </section>
 
       {/* Call to Action */}
