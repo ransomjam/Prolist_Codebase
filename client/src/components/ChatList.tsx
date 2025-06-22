@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { MessageCircle, Search, Users, Clock, CheckCheck, X } from 'lucide-react';
 import RealChatBox from './RealChatBox';
 import { useAuth } from '../hooks/useAuth';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 interface ChatContact {
   id: string;
@@ -25,23 +24,7 @@ export default function ChatList({ isOpen, onClose }: ChatListProps) {
   const { user } = useAuth();
   const [activeChat, setActiveChat] = useState<ChatContact | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const queryClient = useQueryClient();
-
-  // Fetch real conversations from backend
-  const { data: backendConversations = [] } = useQuery({
-    queryKey: ['conversations', user?.id],
-    queryFn: async () => {
-      if (!user?.id) return [];
-      const response = await fetch(`/api/conversations/${user.id}`);
-      return response.json();
-    },
-    enabled: !!user?.id && isOpen,
-    refetchInterval: 10000, // Refetch every 10 seconds
-  });
-
-  // Transform conversations to chat contacts
-  const conversations: ChatContact[] = [
-    // Support chat always available
+  const [conversations, setConversations] = useState<ChatContact[]>([
     {
       id: 'support',
       name: 'ProList Support',
@@ -51,24 +34,8 @@ export default function ChatList({ isOpen, onClose }: ChatListProps) {
       isOnline: true,
       productTitle: 'Customer Support',
       userId: 0
-    },
-    // Real conversations
-    ...backendConversations.map((conv: any) => ({
-      id: conv.id.toString(),
-      name: conv.otherUser?.username || 'Unknown User',
-      lastMessage: conv.lastMessage?.content || 'No messages yet',
-      timestamp: conv.lastMessage?.createdAt 
-        ? new Date(conv.lastMessage.createdAt).toLocaleTimeString('en-US', { 
-            hour: '2-digit', 
-            minute: '2-digit' 
-          })
-        : '',
-      unreadCount: 0, // TODO: Implement unread count
-      isOnline: true, // TODO: Implement online status
-      productTitle: conv.product?.title,
-      userId: conv.otherUser?.id
-    }))
-  ];
+    }
+  ]);
 
   const filteredConversations = conversations.filter(chat =>
     chat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -79,6 +46,12 @@ export default function ChatList({ isOpen, onClose }: ChatListProps) {
 
   const handleChatSelect = (chat: ChatContact) => {
     setActiveChat(chat);
+    // Mark messages as read
+    setConversations(prev => 
+      prev.map(c => 
+        c.id === chat.id ? { ...c, unreadCount: 0 } : c
+      )
+    );
   };
 
   const closeChatBox = () => {
@@ -193,38 +166,15 @@ export default function ChatList({ isOpen, onClose }: ChatListProps) {
       )}
 
       {/* Active Chat */}
-      {activeChat && activeChat.userId !== 0 && (
+      {activeChat && (
         <RealChatBox
           vendorName={activeChat.name}
-          vendorId={activeChat.userId}
+          vendorId={activeChat.userId || 0}
           productTitle={activeChat.productTitle}
           buyerName={user?.username || 'You'}
           isOpen={true}
           onClose={closeChatBox}
         />
-      )}
-      
-      {/* Support Chat (mock for now) */}
-      {activeChat && activeChat.userId === 0 && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md h-[600px] flex flex-col overflow-hidden">
-            <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 text-white p-4 flex items-center justify-between">
-              <div>
-                <h3 className="font-semibold text-lg">ProList Support</h3>
-                <div className="text-sm opacity-90">Always available</div>
-              </div>
-              <button onClick={closeChatBox} className="text-white hover:bg-white/20 p-2 rounded-full">
-                <X size={20} />
-              </button>
-            </div>
-            <div className="flex-1 flex items-center justify-center text-gray-500">
-              <div className="text-center">
-                <MessageCircle size={48} className="mx-auto mb-4 opacity-50" />
-                <p>Support chat coming soon!</p>
-              </div>
-            </div>
-          </div>
-        </div>
       )}
     </>
   );

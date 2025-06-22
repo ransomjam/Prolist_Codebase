@@ -6,7 +6,6 @@ import NotificationDropdown from "./NotificationDropdown";
 import EnhancedSearch from "./EnhancedSearch";
 import ChatList from "./ChatList";
 import { useAuth } from "../hooks/useAuth";
-import { useMessageNotifications } from "../hooks/useMessageNotifications";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -15,7 +14,6 @@ export default function Navbar() {
 
   const [location] = useLocation();
   const { logout, isAuthenticated, user } = useAuth();
-  const { unreadMessageCount, markAllMessagesAsRead } = useMessageNotifications();
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -68,19 +66,12 @@ export default function Navbar() {
             {/* Chat Button */}
             <button 
               className="relative w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center transition-colors"
-              onClick={() => {
-                setIsChatListOpen(!isChatListOpen);
-                if (!isChatListOpen) {
-                  markAllMessagesAsRead();
-                }
-              }}
+              onClick={() => setIsChatListOpen(!isChatListOpen)}
             >
               <MessageSquare className="text-gray-700" size={20} />
-              {unreadMessageCount > 0 && (
-                <div className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
-                  {unreadMessageCount > 9 ? '9+' : unreadMessageCount}
-                </div>
-              )}
+              <div className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                3
+              </div>
             </button>
 
             {/* Notifications Button */}

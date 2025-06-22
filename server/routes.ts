@@ -885,17 +885,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
               console.error('Error sending confirmation to sender:', sendError);
             }
             
-            // Create or update conversation
-            try {
-              await storage.createOrGetConversation(
-                Math.min(userId, message.receiverId),
-                Math.max(userId, message.receiverId),
-                message.productId
-              );
-            } catch (convError) {
-              console.error('Error updating conversation:', convError);
-            }
-
             // Create notification for receiver
             try {
               await storage.createNotification({
@@ -909,20 +898,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
             } catch (notificationError) {
               console.error('Error creating notification:', notificationError);
             }
-
-            // Broadcast to all connected clients for message notifications update
-            clients.forEach((clientWs, clientUserId) => {
-              if (clientUserId === message.receiverId && clientWs.readyState === WebSocket.OPEN) {
-                try {
-                  clientWs.send(JSON.stringify({
-                    type: 'message_notification_update',
-                    hasNewMessages: true
-                  }));
-                } catch (broadcastError) {
-                  console.error('Error broadcasting message notification:', broadcastError);
-                }
-              }
-            });
           }
         } catch (error) {
           console.error('WebSocket message error:', error);
