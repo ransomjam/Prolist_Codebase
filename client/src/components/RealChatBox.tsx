@@ -81,10 +81,13 @@ export default function RealChatBox({
         console.log('WebSocket authenticated');
       } else if (data.type === 'new_message') {
         setMessages(prev => [...prev, data.message]);
-        // Refresh notifications
+        // Refresh notifications and conversations
         queryClient.invalidateQueries({ queryKey: ['notifications', user.id] });
+        queryClient.invalidateQueries({ queryKey: ['conversations', user.id] });
       } else if (data.type === 'message_sent') {
         setMessages(prev => [...prev, data.message]);
+        // Refresh conversations to update last message
+        queryClient.invalidateQueries({ queryKey: ['conversations', user.id] });
       }
     };
 

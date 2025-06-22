@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { MessageCircle, Search, Users, Clock, CheckCheck, X } from 'lucide-react';
 import RealChatBox from './RealChatBox';
 import { useAuth } from '../hooks/useAuth';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 interface ChatContact {
   id: string;
@@ -24,7 +25,23 @@ export default function ChatList({ isOpen, onClose }: ChatListProps) {
   const { user } = useAuth();
   const [activeChat, setActiveChat] = useState<ChatContact | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [conversations, setConversations] = useState<ChatContact[]>([
+  const queryClient = useQueryClient();
+
+  // Fetch real conversations from backend
+  const { data: backendConversations = [] } = useQuery({
+    queryKey: ['conversations', user?.id],
+    queryFn: async () => {
+      if (!user?.id) return [];
+      const response = await fetch(`/api/conversations/${user.id}`);
+      return response.json();
+    },
+    enabled: !!user?.id && isOpen,
+    refetchInterval: 10000, // Refetch every 10 seconds
+  });
+
+  // Transform conversations to chat contacts
+  const conversations: ChatContact[] = [
+    // Support chat always available
     {
       id: 'support',
       name: 'ProList Support',
@@ -34,8 +51,24 @@ export default function ChatList({ isOpen, onClose }: ChatListProps) {
       isOnline: true,
       productTitle: 'Customer Support',
       userId: 0
-    }
-  ]);
+    },
+    // Real conversations
+    ...backendConversations.map((conv: any) => ({
+      id: conv.id.toString(),
+      name: conv.otherUser?.username || 'Unknown User',
+      lastMessage: conv.lastMessage?.content || 'No messages yet',
+      timestamp: conv.lastMessage?.createdAt 
+        ? new Date(conv.lastMessage.createdAt).toLocaleTimeString('en-US', { 
+            hour: '2-digit', 
+            minute: '2-digit' 
+          })
+        : '',
+      unreadCount: 0, // TODO: Implement unread count
+      isOnline: true, // TODO: Implement online status
+      productTitle: conv.product?.title,
+      userId: conv.otherUser?.id
+    }))
+  ];
 
   const filteredConversations = conversations.filter(chat =>
     chat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
