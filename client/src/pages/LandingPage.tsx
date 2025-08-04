@@ -32,11 +32,11 @@ export default function LandingPage() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <a 
-              href="/login" 
+            <a
+              href="/login"
               className="bg-white text-blue-600 px-6 sm:px-8 py-3 sm:py-4 rounded-2xl font-bold text-base sm:text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 hover:bg-gray-50 active:scale-95"
             >
-              Get Started
+              Login
             </a>
             <a 
               href="/signup" 
