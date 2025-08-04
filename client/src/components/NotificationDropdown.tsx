@@ -109,7 +109,7 @@ export default function NotificationDropdown() {
                 <div
                   key={notification.id}
                   className={`p-4 border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer border-l-4 ${getNotificationColor(notification.type)} ${
-                    !notification.read ? 'bg-blue-50' : 'bg-white'
+                    !notification.isRead ? 'bg-blue-50' : 'bg-white'
                   }`}
                   onClick={() => markAsRead(notification.id)}
                 >
@@ -118,10 +118,10 @@ export default function NotificationDropdown() {
                       <span className="text-lg">{notification.icon}</span>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center space-x-2">
-                          <h4 className={`font-medium text-sm ${!notification.read ? 'text-gray-900' : 'text-gray-700'}`}>
+                          <h4 className={`font-medium text-sm ${!notification.isRead ? 'text-gray-900' : 'text-gray-700'}`}>
                             {notification.title}
                           </h4>
-                          {!notification.read && (
+                          {!notification.isRead && (
                             <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                           )}
                         </div>
@@ -134,7 +134,7 @@ export default function NotificationDropdown() {
                       </div>
                     </div>
                     <div className="flex items-center space-x-1 ml-2">
-                      {!notification.read && (
+                      {!notification.isRead && (
                         <button
                           onClick={(e) => {
                             e.stopPropagation();

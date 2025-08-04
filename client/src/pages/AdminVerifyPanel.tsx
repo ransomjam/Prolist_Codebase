@@ -102,7 +102,7 @@ export default function AdminVerifyPanel() {
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {vendorApplications.map((vendor) => (
+        {vendorApplications.map((vendor: VendorApplication) => (
           <div
             key={vendor.id}
             className="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-transparent hover:border-blue-300"
