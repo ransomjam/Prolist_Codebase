@@ -90,8 +90,15 @@ export default function ProductFeed() {
         console.log('Products fetched successfully:', data.products?.length || data.length, 'products');
         return data;
       } catch (err) {
-        console.error('Error fetching products:', err);
-        throw err;
+        console.warn('Primary products endpoint failed, attempting fallback:', err);
+        const fallbackRes = await fetch('/api/products');
+        if (!fallbackRes.ok) {
+          console.error('Fallback products API error:', fallbackRes.status, fallbackRes.statusText);
+          throw err;
+        }
+        const fallbackData = await fallbackRes.json();
+        console.log('Fallback products fetched:', fallbackData.length, 'products');
+        return { products: fallbackData };
       }
     },
     staleTime: 30 * 1000, // 30 seconds
