@@ -10,6 +10,9 @@ interface User {
   lastName?: string;
   profileImage?: string;
   accountType?: string;
+  phone?: string;
+  location?: string;
+  specialization?: string;
 }
 
 interface AuthState {
