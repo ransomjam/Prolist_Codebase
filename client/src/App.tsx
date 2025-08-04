@@ -28,6 +28,7 @@ import ServiceCheckout from "./pages/ServiceCheckout";
 import Listings from "./pages/Listings";
 import ProductListingForm from "./pages/ProductListingForm";
 import VendorRegister from "./pages/VendorRegister";
+import HelpSupport from "./pages/HelpSupport";
 
 function Router() {
   return (
@@ -53,6 +54,7 @@ function Router() {
       <Route path="/professional/:id" component={ProfessionalProfile} />
       <Route path="/professional-profile/:username" component={ProfessionalProfile} />
       <Route path="/service-checkout/:professionalId" component={ServiceCheckout} />
+      <Route path="/help" component={HelpSupport} />
       <Route component={() => <div className="p-8 text-center"><h1 className="text-2xl font-bold">Page Not Found</h1><p>The page you're looking for doesn't exist.</p></div>} />
     </Switch>
   );
