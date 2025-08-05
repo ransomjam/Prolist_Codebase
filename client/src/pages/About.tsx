@@ -1,6 +1,23 @@
 import { Shield, CheckCircle, Users, Globe, Heart, Star } from "lucide-react";
 
 export default function About() {
+  const teamMembers = [
+    {
+      name: "Ransom Jam",
+      role: "Founder & CEO",
+      image: "https://images.unsplash.com/photo-1502685104226-ee32379fefbe?w=200"
+    },
+    {
+      name: "Jane Doe",
+      role: "Lead Developer",
+      image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200"
+    },
+    {
+      name: "Samuel Lee",
+      role: "Product Designer",
+      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200"
+    }
+  ];
   return (
     <div className="min-h-screen bg-white">
       {/* Header Section */}
@@ -134,6 +151,24 @@ export default function About() {
                 Continuously improving our platform with cutting-edge features and user experience.
               </p>
             </div>
+          </div>
+        </div>
+
+        {/* Team Section */}
+        <div className="mb-12">
+          <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">Meet Our Team</h2>
+          <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
+            {teamMembers.map((member) => (
+              <div key={member.name} className="text-center">
+                <img
+                  src={member.image}
+                  alt={member.name}
+                  className="w-32 h-32 rounded-full object-cover mx-auto mb-4"
+                />
+                <h3 className="text-xl font-semibold text-gray-900">{member.name}</h3>
+                <p className="text-gray-600">{member.role}</p>
+              </div>
+            ))}
           </div>
         </div>
 
