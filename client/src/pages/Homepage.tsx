@@ -1,19 +1,29 @@
-import { Compass, Store, MapPin, Building, Gavel, Utensils, Shirt, Laptop, Wrench, ShoppingBag, Plus, Users, Star, Shield } from "lucide-react";
-import Card from "../components/Card";
+import {
+  Compass,
+  Store,
+  MapPin,
+  Building,
+  Gavel,
+  Utensils,
+  Shirt,
+  Laptop,
+  Wrench,
+  ShoppingBag,
+  Plus,
+  Users,
+  Star,
+  Shield,
+} from "lucide-react";
 import Button from "../components/Button";
 import { useAuth } from "../hooks/useAuth";
-import { useQuery } from "@tanstack/react-query";
 import heroImage from "@assets/upstation-hill.jpg";
+import AnimatedNumber from "../components/AnimatedNumber";
+import demoTopVendors from "../data/demoTopVendors";
 
 export default function Homepage() {
   const { user } = useAuth();
 
-  // Fetch top vendors
-  const { data: topVendors = [], isLoading: vendorsLoading } = useQuery<any[]>({
-    queryKey: ['/api/top-vendors'],
-    retry: 2,
-    refetchOnWindowFocus: false
-  });
+  const topVendors = demoTopVendors;
 
   const quickActions = [
     { icon: ShoppingBag, label: "Browse Products", href: "/products", color: "from-blue-500 to-blue-600" },
@@ -23,10 +33,10 @@ export default function Homepage() {
   ];
 
   const stats = [
-    { label: "Local Businesses", value: "150+", color: "text-primary", icon: Store },
-    { label: "Products Listed", value: "1.2K+", color: "text-emerald", icon: ShoppingBag },
-    { label: "Active Auctions", value: "45+", color: "text-neonBlue", icon: Gavel },
-    { label: "Satisfied Users", value: "850+", color: "text-teal", icon: Users }
+    { label: "Local Businesses", value: 150, color: "text-primary", icon: Store },
+    { label: "Products Listed", value: 1200, color: "text-emerald", icon: ShoppingBag },
+    { label: "Active Auctions", value: 45, color: "text-neonBlue", icon: Gavel },
+    { label: "Satisfied Users", value: 850, color: "text-teal", icon: Users },
   ];
 
   const categories = [
@@ -123,28 +133,20 @@ export default function Homepage() {
           
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 px-4 sm:px-0">
             {stats.map((stat, index) => (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className="group bg-white rounded-3xl p-4 sm:p-6 lg:p-8 shadow-2xl border border-gray-100 text-center transition-all duration-500 relative overflow-hidden"
               >
                 <div className="relative z-10">
-                  <div className={`text-2xl sm:text-3xl lg:text-4xl xl:text-6xl font-bold ${stat.color} mb-2 lg:mb-3 group-hover:scale-125 transition-all duration-500 relative`}>
-                    {stat.value}
+                  <div className={`text-2xl sm:text-3xl lg:text-4xl xl:text-6xl font-bold ${stat.color} mb-2 lg:mb-3`}>
+                    <AnimatedNumber value={stat.value} suffix="+" />
                   </div>
-                  <div className="text-xs sm:text-sm lg:text-base font-semibold text-gray-700 uppercase tracking-wider leading-tight group-hover:text-gray-900 transition-colors duration-300">{stat.label}</div>
-                  
-                  <div className="mt-3 lg:mt-4 w-full bg-gray-200 rounded-full h-2 lg:h-3 overflow-hidden shadow-inner">
-                    <div 
-                      className={`h-full bg-gradient-to-r ${stat.color === 'text-primary' ? 'from-blue-400 via-blue-500 to-blue-600' : stat.color === 'text-emerald' ? 'from-emerald-400 via-emerald-500 to-emerald-600' : stat.color === 'text-neonBlue' ? 'from-cyan-400 via-cyan-500 to-cyan-600' : 'from-teal-400 via-teal-500 to-teal-600'} rounded-full transition-all duration-1000 ease-out relative`}
-                      style={{ width: `${75 + index * 5}%` }}
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-r from-white/30 to-transparent rounded-full"></div>
-                    </div>
+                  <div className="text-xs sm:text-sm lg:text-base font-semibold text-gray-700 uppercase tracking-wider leading-tight group-hover:text-gray-900 transition-colors duration-300">
+                    {stat.label}
                   </div>
-
                   <div className="absolute top-3 right-3 opacity-40 group-hover:opacity-80 transition-all duration-500">
                     <div className="w-10 h-10 bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-white/20">
-                      <stat.icon className={`w-5 h-5 ${stat.color.replace('text-', 'text-')}`} />
+                      <stat.icon className={`w-5 h-5 ${stat.color}`} />
                     </div>
                   </div>
                 </div>
@@ -165,21 +167,9 @@ export default function Homepage() {
           </p>
         </div>
         
-        {vendorsLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6 px-4 sm:px-0">
-            {[...Array(10)].map((_, i) => (
-              <div key={i} className="bg-white rounded-2xl p-6 text-center shadow-lg animate-pulse">
-                <div className="w-16 h-16 bg-gray-200 rounded-full mx-auto mb-4"></div>
-                <div className="h-4 bg-gray-200 rounded w-3/4 mx-auto mb-2"></div>
-                <div className="h-3 bg-gray-200 rounded w-1/2 mx-auto mb-4"></div>
-                <div className="h-8 bg-gray-200 rounded w-full"></div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6 px-4 sm:px-0">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6 px-4 sm:px-0">
             {topVendors.slice(0, 10).map((vendor: any, index: number) => (
-              <div 
+              <div
                 key={vendor.id}
                 className="group bg-white rounded-2xl p-6 text-center shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 cursor-pointer border border-gray-100 relative overflow-hidden"
               >
@@ -246,8 +236,7 @@ export default function Homepage() {
                 </button>
               </div>
             ))}
-          </div>
-        )}
+        </div>
       </section>
 
       {/* Popular Categories */}
