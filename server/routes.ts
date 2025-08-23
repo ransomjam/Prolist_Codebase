@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
-import { insertCommentSchema, insertVendorApplicationSchema, insertProductSchema, insertUserSchema, insertBidSchema, insertMessageSchema, insertConversationSchema } from "@shared/schema";
+import { insertCommentSchema, insertVendorApplicationSchema, insertProductSchema, insertUserSchema, insertBidSchema, insertMessageSchema, insertConversationSchema } from "../shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // User registration endpoint
