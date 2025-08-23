@@ -32,7 +32,7 @@ import {
   type InsertMessage,
   type Conversation,
   type InsertConversation
-} from "@shared/schema";
+} from "../shared/schema";
 import { db } from "./db";
 import { eq, and, or, asc, desc } from "drizzle-orm";
 
